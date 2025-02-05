@@ -1,7 +1,7 @@
-[![Build Status](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/publish.yml/badge.svg)](https://github.com/krkabol/jacq-image-curator/actions/workflows/publish.yml?query=branch%3Amain++)
-[![GitHub Container Registry](https://ghcr-badge.egpl.dev/biodiversity-cz/jacq-cz-repository/latest_tag?trim=major&label=latest)](https://github.com/krkabol/jacq-image-curator/pkgs/container/jacq-image-curator)
-[![Build Status](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/tests.yml/badge.svg)](https://github.com/krkabol/jacq-image-curator/actions/workflows/tests.yml?query=branch%3Amain++)
-[![codecov](https://codecov.io/gh/biodiversity-cz/jacq-cz-repository/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/krkabol/jacq-image-curator)
+[![Build Status](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/publish.yml/badge.svg)](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/publish.yml?query=branch%3Amain++)
+[![GitHub Container Registry](https://ghcr-badge.egpl.dev/biodiversity-cz/jacq-cz-repository/latest_tag?trim=major&label=latest)](https://github.com/biodiversity-cz/jacq-cz-repository/pkgs/container/jacq-image-curator)
+[![Build Status](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/tests.yml/badge.svg)](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/tests.yml?query=branch%3Amain++)
+[![codecov](https://codecov.io/gh/biodiversity-cz/jacq-cz-repository/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/biodiversity-cz/jacq-cz-repository)
 
 [//]: # (![PHPStan]&#40;https://img.shields.io/badge/style-level%207-brightgreen.svg?&label=phpstan&#41;)
 
