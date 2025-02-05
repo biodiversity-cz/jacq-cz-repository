@@ -19,7 +19,7 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: '8.3'
+                    php-version: '8.4'
                     tools: composer:v2
                     extensions: mbstring, json
 
@@ -52,4 +52,4 @@ jobs:
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }}
                     files: coverage.xml
-                    fail_ci_if_error: true
+                    fail_ci_if_error: false

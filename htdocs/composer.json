@@ -11,7 +11,7 @@
     }
   ],
 	"require": {
-		"php": ">= 8.3",
+		"php": ">= 8.4",
     "ext-imagick": "*",
     "ext-intl": "*",
     "ext-exif": "*",
@@ -56,7 +56,7 @@
 	"minimum-stability": "stable",
 	"config": {
     "platform": {
-      "php": "8.3",
+      "php": "8.4",
       "ext-imagick": "3",
       "ext-intl": "3",
       "ext-exif": "3"
