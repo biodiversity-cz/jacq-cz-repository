@@ -1,0 +1,4 @@
+aws:
+    credentials:
+        key: xx
+        secret: yy

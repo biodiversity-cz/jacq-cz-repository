@@ -1,0 +1,64 @@
+{block content}
+<div class="container" xmlns:n="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <p>The internal process of the repository is ilustrated at figure below. A curator uploads an Archive Master files (large resolution TIF) via general S3 client (<a href="https://du.cesnet.cz/cs/navody/object_storage/cesnet_s3/winscp/start">WinSCP</a>, <a href="https://du.cesnet.cz/cs/navody/object_storage/s3browser/start">S3Browser</a>, <a href="https://www.crossftp.com/">CrossFTP</a> or other according to CESNET <a href="https://du.cesnet.cz/cs/navody/object_storage/cesnet_s3/start">documentation</a>. Every participating herbarium has its own S3 access provided by central coordinator.</p>
+        <p>When uploaded, the files are listed <a n:href="Import:">in this repository application</a> as "waiting before control" (see bellow). The curator starts the import process - it is proceeded by asynchronous runner processing the prepared files. Successfully processed files are transferred immediately into the repository. Files those did not pass some of the automatic control are listed to the curator and requires her/his decision. </p>
+        <p></p>
+
+        <figure class="figure">
+            <svg viewbox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+                <!-- background -->
+                <rect x="0" y="0" width="1000" height="500" fill="#7fa660"></rect>
+                <rect x="4" y="4" width="992" height="492" fill="#dedede"></rect>
+
+                <!-- S3 -->
+                <ellipse cx="370" cy="225" rx="300" ry="200" fill="red" fill-opacity="0.5" />
+                <text x="300" y="450" font-family="Arial" font-size="25" fill="#555555" text-anchor="middle">
+                    <tspan dy="1em">Curator S3 bucket, </tspan><tspan font-style="italic">e.g. herbarium-prc</tspan>
+                </text>
+                <text x="200" y="210" font-family="Arial" font-size="26" fill="#212121" text-anchor="middle">
+                    <tspan dy="1em">"zero status"</tspan>
+                </text>
+
+                <!-- repository -->
+                <ellipse cx="630" cy="225" rx="300" ry="200" fill="#054205" fill-opacity="0.7" />
+                <text x="700" y="450" font-family="Arial" font-size="25" fill="#333333" text-anchor="middle">
+                    <tspan dy="1em">Repository</tspan>
+                </text>
+                <text x="500" y="180" font-family="Arial" font-size="26" fill="#dddddd" text-anchor="middle">
+                    <tspan dy="1em">waiting before control</tspan>
+                </text>
+                <text x="500" y="240" font-family="Arial" font-size="26" fill="#dddddd" text-anchor="middle">
+                    <tspan dy="1em">control error</tspan>
+                </text>
+
+                <text x="750" y="150" font-family="Arial" font-size="26" fill="#dddddd" text-anchor="middle">
+                    <tspan dy="1em">control ok</tspan>
+                </text>
+                <text x="750" y="210" font-family="Arial" font-size="26" fill="#dddddd" text-anchor="middle">
+                    <tspan dy="1em">published</tspan>
+                </text>
+                <text x="750" y="270" font-family="Arial" font-size="26" fill="#dddddd" text-anchor="middle">
+                    <tspan dy="1em">hidden</tspan>
+                </text>
+            </svg>
+
+
+            <figcaption class="figure-caption text-end">Files processing schema {*(<a href="https://editsvgcode.com/">editor</a> )*}</figcaption>
+        </figure>
+
+
+    </div>
+    <hr>
+    <div class="row">
+        <h4>Possible statuses of photos in the repository</h4>
+        <dl class="row">
+            <dt class="col-sm-3">"zero status"</dt>
+            <dd class="col-sm-9">Files uploaded to the S3 bucket and not marked to be imported yet. These files are just resting in the folder, and the repository does not keep any evidence about them.</dd>
+            {foreach $statuses as $status}
+            <dt class="col-sm-3">{$status->getName()}</dt>
+            <dd class="col-sm-9">{$status->getDescription()}</dd>
+            {/foreach}
+        </dl>
+    </div>
+</div>

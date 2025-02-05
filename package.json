@@ -1,0 +1,33 @@
+{
+  "title": "JACQ CZ repository",
+  "description": "JACQ - Czech integration",
+  "keywords": [
+    "jacq"
+  ],
+  "browserslist": [
+    "> 5%"
+  ],
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6",
+    "bootstrap": "^5.3.3",
+    "@popperjs/core": "^2.11.8",
+    "@contributte/datagrid": "git+ssh://git@github.com:contributte/datagrid.git#v6.10.0",
+    "jquery": "^3",
+    "naja": "^3"
+  },
+  "devDependencies": {
+    "core-js": "^3",
+    "mini-css-extract-plugin": "^2",
+    "sass": "^1",
+    "postcss-loader": "^7",
+    "postcss-preset-env": "^9",
+    "sass-loader": "^16",
+    "@symfony/webpack-encore": "^5",
+    "webpack-notifier": "^1"
+  },
+  "scripts": {
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
+  }
+}

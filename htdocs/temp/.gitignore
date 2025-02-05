@@ -1,0 +1,4 @@
+!proxies
+*
+!.gitignore
+!curator/.gitignore

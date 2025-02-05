@@ -1,0 +1,69 @@
+{
+	"name": "biodiversity-cz/jacq-cz-repository",
+	"description": "JACQ - Czech integration",
+	"keywords": ["jacq", "repository", "NRP"],
+	"type": "project",
+	"license": ["MIT"],
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/krkabol/iiif-manifest-generator"
+    }
+  ],
+	"require": {
+		"php": ">= 8.3",
+    "ext-imagick": "*",
+    "ext-intl": "*",
+    "ext-exif": "*",
+		"nette/application": "^3.2.3",
+		"nette/bootstrap": "^3.2",
+		"nette/caching": "^3.2",
+		"nette/database": "^3.2",
+		"nette/di": "^3.2",
+		"nette/forms": "^3.2",
+		"nette/http": "^3.3",
+		"nette/mail": "^4.0",
+		"nette/robot-loader": "^4.0",
+		"nette/security": "^3.2",
+		"nette/utils": "^4.0",
+		"latte/latte": "^3.0",
+		"tracy/tracy": "^2.10",
+    "league/pipeline": "1.0.0",
+    "guzzlehttp/guzzle": "7.8.1",
+		"ublaboo/aws-sdk-nette-extension": "dev-master",
+
+    "contributte/console": "^v0.9",
+    "contributte/console-extra": "^v0.7",
+    "nettrine/orm": "^0.8",
+    "nettrine/dbal": "^v0.8.2",
+    "nettrine/cache": "^0.3",
+    "nettrine/migrations": "^v0.9",
+    "ublaboo/datagrid": "^v6.10",
+    "yale-web-technologies/iiif-manifest-generator": "dev-develop"
+  },
+	"require-dev": {
+		"nette/tester": "^2.5",
+		"symfony/thanks": "^1",
+    "contributte/qa": "v0.3",
+		"phpstan/phpstan": "^1.12"
+	},
+	"autoload": {
+		"psr-4": {
+			"App\\": "App",
+      "Tests\\": "tests"
+		}
+	},
+	"minimum-stability": "stable",
+	"config": {
+    "platform": {
+      "php": "8.3",
+      "ext-imagick": "3",
+      "ext-intl": "3",
+      "ext-exif": "3"
+    },
+		"allow-plugins": {
+			"symfony/thanks": true,
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}
