@@ -2,6 +2,7 @@
 [![GitHub Container Registry](https://ghcr-badge.egpl.dev/biodiversity-cz/jacq-cz-repository/latest_tag?color=%2344cc11&ignore=sha256*%2Clatest%2Ctest&label=version&trim=)](https://github.com/biodiversity-cz/jacq-cz-repository/pkgs/container/jacq-cz-repository)
 [![Build Status](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/tests.yml/badge.svg)](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/tests.yml?query=branch%3Amain++)
 [![codecov](https://codecov.io/gh/biodiversity-cz/jacq-cz-repository/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/biodiversity-cz/jacq-cz-repository)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbiodiversity-cz%2Fjacq-cz-repository.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbiodiversity-cz%2Fjacq-cz-repository?ref=badge_shield)
 
 [//]: # (![PHPStan]&#40;https://img.shields.io/badge/style-level%207-brightgreen.svg?&label=phpstan&#41;)
 
@@ -16,3 +17,7 @@ JACQ CZ repository handles primary data management of specimen scans from herbar
 * IIIF manifest only in v2
 
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbiodiversity-cz%2Fjacq-cz-repository.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbiodiversity-cz%2Fjacq-cz-repository?ref=badge_large)
