@@ -2,7 +2,7 @@
 <div class="container" xmlns:n="http://www.w3.org/1999/xhtml">
     <div class="row">
         <p>The internal process of the repository is ilustrated at figure below. A curator uploads an Archive Master files (large resolution TIF) via general S3 client (<a href="https://du.cesnet.cz/cs/navody/object_storage/cesnet_s3/winscp/start">WinSCP</a>, <a href="https://du.cesnet.cz/cs/navody/object_storage/s3browser/start">S3Browser</a>, <a href="https://www.crossftp.com/">CrossFTP</a> or other according to CESNET <a href="https://du.cesnet.cz/cs/navody/object_storage/cesnet_s3/start">documentation</a>. Every participating herbarium has its own S3 access provided by central coordinator.</p>
-        <p>When uploaded, the files are listed <a n:href="Import:">in this repository application</a> as "waiting before control" (see bellow). The curator starts the import process - it is proceeded by asynchronous runner processing the prepared files. Successfully processed files are transferred immediately into the repository. Files those did not pass some of the automatic control are listed to the curator and requires her/his decision. </p>
+        <p>When uploaded, the files are listed <a n:href="ImportBarcode:">in this repository application</a> as "waiting before control" (see bellow). The curator starts the import process - it is proceeded by asynchronous runner processing the prepared files. Successfully processed files are transferred immediately into the repository. Files those did not pass some of the automatic control are listed to the curator and requires her/his decision. </p>
         <p></p>
 
         <figure class="figure">

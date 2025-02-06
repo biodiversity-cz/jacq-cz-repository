@@ -7,6 +7,7 @@ parameters:
         host: curator-db
         user: jacq
         password: jacq
+        dbname: jacq_test
     storage:
         archiveBucket: test-archive
         jp2Bucket: test-iiif

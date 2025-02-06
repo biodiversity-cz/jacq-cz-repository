@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace App\UI\Admin\Import;
+namespace App\UI\Admin\ImportBarcode;
 
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
@@ -9,7 +9,7 @@ use App\UI\Base\SecuredPresenter;
 use Nette\Application\Responses\CallbackResponse;
 use Nette\Application\UI\Form;
 
-final class ImportPresenter extends SecuredPresenter
+final class ImportBarcodePresenter extends SecuredPresenter
 {
 
     /** @inject */
