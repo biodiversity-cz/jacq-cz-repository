@@ -25,6 +25,12 @@ class Herbaria
     #[Column(unique: true, nullable: false, options: ['comment' => 'S3 bucket where are stored new images before imported to the repository'])]
     protected string $bucket;
 
+    #[Column(unique: false, nullable: false, options: ['comment' => 'RegEx for barcode on the specimen'])]
+    protected string $regexBarcode;
+
+    #[Column(unique: false, nullable: false, options: ['comment' => 'RegEx for image filenames'])]
+    protected string $regexFilename;
+
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'logo URL'])]
     protected ?string $logo;
 
@@ -108,5 +114,28 @@ class Herbaria
         $this->contacts = $contacts;
         return $this;
     }
+
+    public function getRegexBarcode(): string
+    {
+        return $this->regexBarcode;
+    }
+
+    public function setRegexBarcode(string $regexBarcode): Herbaria
+    {
+        $this->regexBarcode = $regexBarcode;
+        return $this;
+    }
+
+    public function getRegexFilename(): string
+    {
+        return $this->regexFilename;
+    }
+
+    public function setRegexFilename(string $regexFilename): Herbaria
+    {
+        $this->regexFilename = $regexFilename;
+        return $this;
+    }
+
 
 }

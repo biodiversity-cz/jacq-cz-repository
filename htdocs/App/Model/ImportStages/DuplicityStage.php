@@ -32,10 +32,10 @@ readonly class DuplicityStage implements StageInterface
                  if ($imagickNewFile->getImageSignature() === $imagickFromDuplicateCandidate->getImageSignature()) {
                     $this->informAboutDuplicity($duplicate);
                 }
-                $imagickFromDuplicateCandidate->destroy();
+                $imagickFromDuplicateCandidate->clear();
                 unset($imagickFromDuplicateCandidate);
             }
-            $imagickNewFile->destroy();
+            $imagickNewFile->clear();
             unset($imagickNewFile);
         }
 

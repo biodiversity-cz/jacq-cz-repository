@@ -29,7 +29,7 @@ class BarcodeStage implements StageInterface
         // adaptive threshold had worse results than unmodified image        * $imagick->adaptiveThresholdImage(150, 150, 1);
         $imagick->setImageFormat('png');
         $imagick->writeImage($this->repositoryConfiguration->getImportTempZbarPath($this->item));
-        $imagick->destroy();
+        $imagick->clear();
         unset($imagick);
     }
 
@@ -60,7 +60,7 @@ class BarcodeStage implements StageInterface
         $isValid = false;
         foreach ($this->barcodes as $code) {
             $parts = [];
-            if (preg_match($this->repositoryConfiguration->getBarcodeRegex(), $code, $parts)) {
+            if (preg_match($this->item->getHerbarium()->getRegexBarcode(), $code, $parts)) {
                 if ($this->item->getHerbarium()->getAcronym() === strtoupper($parts['herbarium']) && $parts['specimenId'] !== '') {
                     $isValid = true;
                     $this->item->setSpecimenId($parts['specimenId']);

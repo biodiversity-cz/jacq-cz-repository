@@ -8,13 +8,14 @@ use App\Services\EntityServices\PhotoService;
 use App\Services\ImageService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
+use App\Services\SpecimenIdService;
 use App\Services\TempDir;
 use Nette\Application\LinkGenerator;
 
 readonly class StageFactory
 {
 
-    public function __construct(protected S3Service $s3Service, protected TempDir $tempDir, protected EntityManager $entityManager, protected RepositoryConfiguration $repositoryConfiguration, protected ImageService $imageService, protected LinkGenerator $linkGenerator, protected PhotoService $photoService, protected AppConfiguration $appConfiguration)
+    public function __construct(protected S3Service $s3Service, protected TempDir $tempDir, protected EntityManager $entityManager, protected RepositoryConfiguration $repositoryConfiguration, protected ImageService $imageService, protected LinkGenerator $linkGenerator, protected PhotoService $photoService, protected AppConfiguration $appConfiguration, protected SpecimenIdService $specimenIdService)
     {
     }
 
@@ -51,6 +52,11 @@ readonly class StageFactory
     public function createTransferStage(): TransferStage
     {
         return new TransferStage($this->s3Service, $this->repositoryConfiguration, $this->appConfiguration);
+    }
+
+    public function createFilenameStage(): FilenameStage
+    {
+        return new FilenameStage($this->specimenIdService);
     }
 
 }

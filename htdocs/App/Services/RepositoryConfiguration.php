@@ -34,29 +34,6 @@ final readonly class RepositoryConfiguration
         return $this->getKey('jp2Quality', 'Compression for image server files not set.');
     }
 
-    /**
-     * used only for migrations, where tif Archive Master already exists
-     */
-    public function getPhotoNameRegex(): string
-    {
-        return $this->config['photoRegex'];
-    }
-
-    public function getBarcodeRegex(): string
-    {
-        return $this->getKey('barcodeRegex');
-    }
-
-    public function getRegexSpecimenPartName(): string
-    {
-        return $this->getKey('regexSpecimenPartName');
-    }
-
-    public function getRegexHerbariumPartName(): string
-    {
-        return $this->getKey('regexHerbariumPartName');
-    }
-
     public function getImageServerInfoUrl(string $jp2ObjectName): string
     {
         return $this->getImageServerBaseUrl() . $jp2ObjectName;
@@ -85,11 +62,6 @@ final readonly class RepositoryConfiguration
     public function getImageServerUrlThumbnail(string $jp2ObjectName): string
     {
         return $this->getImageServerBaseUrl() . $jp2ObjectName . '/full/' . $this->getThumbnailSize() . ',/0/default.jpg';
-    }
-
-    public function getSpecimenNameRegex(): string
-    {
-        return $this->getKey('specimenRegex');
     }
 
     public function getImportTempPath(Photos $photo): string

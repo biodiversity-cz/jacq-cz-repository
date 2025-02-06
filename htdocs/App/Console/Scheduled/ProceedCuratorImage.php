@@ -64,7 +64,11 @@ class ProceedCuratorImage extends Command
             $output->write("\n filename: s3://" . $photo->getHerbarium()->getBucket() . '/' . $photo->getOriginalFilename() . "\n");
             $photo->setLastEditAt();
             $photo->setMessage(null);
-            $this->curatorService->importNewFiles()->process($photo);
+            if($photo->isUseBarcode()){
+                $this->curatorService->importNewFilesByBarcode()->process($photo);
+            }else{
+                $this->curatorService->importNewFilesByFilename()->process($photo);
+            }
             $photo->setThumbnail(null);
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_OK));
         } catch (ImportStageException $e) {

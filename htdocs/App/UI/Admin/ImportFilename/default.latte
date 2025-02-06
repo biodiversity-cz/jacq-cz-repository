@@ -1,7 +1,10 @@
 {block content}
 <div class="container" id="autorefresh">
 
-    <h2>Files in the "new" bucket</h2>
+    <h2>Files in the <i>{$herbarium->getBucket()}</i> bucket</h2>
+    <p>This import does not attempt to read a barcode from the file, it simply checks filename pattern, please do not overuse it. If the filename fits to your herbarium settings, it is imported. Control for the similarity with already imported files is similar as in barcode pipeline.</p>
+    <p>Validity of the filename is compared using a regular expression assigned to your herbarium: <br> <code>{$herbarium->getRegexFilename()}</code></p>
+    <p>You can understand it easily with the ChatGPT, an online <a href="https://regex101.com/">tool</a>, or ask administrator of the repository to fit it according your needs.</p>
     <div class="row">
         <div class="col-sm-12 col-md-2">
             <table class="table">
@@ -26,10 +29,6 @@
                         <td>Import error</td>
                         <td>{$erroneous}</td>
                     </tr>
-                <tr>
-                    <td>Precontrol error</td>
-                    <td>{$preliminaryError}</td>
-                </tr>
 
             </table>
 

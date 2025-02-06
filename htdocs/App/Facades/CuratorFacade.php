@@ -1,8 +1,7 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Facades;
 
-use App\Exceptions\SpecimenIdException;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
@@ -13,13 +12,14 @@ use App\Services\EntityServices\HerbariumService;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
+use App\Services\SpecimenIdService;
 use League\Pipeline\Pipeline;
 use Nette\Security\AuthenticationException;
 
 readonly class CuratorFacade
 {
 
-    public function __construct(protected EntityManager $entityManager, protected S3Service $s3Service, protected StageFactory $stageFactory, protected RepositoryConfiguration $repositoryConfiguration, protected PhotoService $photoService, protected HerbariumService $herbariumService)
+    public function __construct(protected EntityManager $entityManager, protected S3Service $s3Service, protected StageFactory $stageFactory, protected RepositoryConfiguration $repositoryConfiguration, protected PhotoService $photoService, protected HerbariumService $herbariumService, protected SpecimenIdService $specimenIdService)
     {
     }
 
@@ -56,33 +56,57 @@ readonly class CuratorFacade
     /**
      * @return FileInsideCuratorBucket[]
      */
-    public function getAllCuratorBucketFiles(): array
+    protected function getEligibleCuratorBucketFiles(): array
+    {
+        return array_filter($this->getAllCuratorBucketFiles(), fn($item) => $item->isEligibleToBeImported() === true);
+    }
+
+    /**
+     * @return FileInsideCuratorBucket[]
+     */
+    public function getAllCuratorBucketFiles(bool $checkFilename = false): array
     {
         $files = [];
         $unprocessedPhotos = $this->photoService->findAllUnprocessedPhotos();
         foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium()->getBucket()) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {
-                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], false, false, null, null);
+                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], false, false, null, null);
             } else {
                 $entity = $unprocessedPhotos[$filename['Key']];
                 $alreadyWaiting = $entity->getStatus()->getId() === PhotosStatus::WAITING;
                 $hasControlError = $entity->getStatus()->getId() === PhotosStatus::CONTROL_ERROR;
-                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getMessage());
+                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getMessage());
             }
-
+            if ($checkFilename) {
+                if (!$this->specimenIdService->filenameFitsHerbariumPattern($file->name, $this->herbariumService->getCurrentUserHerbarium())) {
+                    $file->setIneligibleForImport();
+                }
+            }
             $files[] = $file;
         }
 
         return $files;
     }
 
-    public function importNewFiles(): Pipeline
+    public function importNewFilesByBarcode(): Pipeline
     {
         return (new Pipeline())
             ->pipe($this->stageFactory->createDownloadStage())
             ->pipe($this->stageFactory->createThumbnailStage())
             ->pipe($this->stageFactory->createMetadataStage())
             ->pipe($this->stageFactory->createBarcodeStage())
+            ->pipe($this->stageFactory->createDuplicityStage())
+            ->pipe($this->stageFactory->createConvertStage())
+            ->pipe($this->stageFactory->createTransferStage());
+    }
+
+    public function importNewFilesByFilename(): Pipeline
+    {
+        return (new Pipeline())
+            ->pipe($this->stageFactory->createDownloadStage())
+            ->pipe($this->stageFactory->createThumbnailStage())
+            ->pipe($this->stageFactory->createMetadataStage())
+            ->pipe($this->stageFactory->createFilenameStage())
             ->pipe($this->stageFactory->createDuplicityStage())
             ->pipe($this->stageFactory->createConvertStage())
             ->pipe($this->stageFactory->createTransferStage());
@@ -148,22 +172,6 @@ readonly class CuratorFacade
         throw new AuthenticationException('Not allowed to reimport photo.');
     }
 
-    public function getHerbariumFromId(string $specimenId): Herbaria
-    {
-        $acronym = strtoupper($this->splitId($specimenId)[$this->repositoryConfiguration->getRegexHerbariumPartName()]);
-        $herbarium = $this->herbariumService->findOneWithAcronym($acronym);
-        if ($herbarium === null) {
-            throw new SpecimenIdException('Unknown herbarium');
-        }
-
-        return $herbarium;
-    }
-
-    public function getSpecimenIdFromId(string $specimenId): int
-    {
-        return (int) $this->splitId($specimenId)[$this->repositoryConfiguration->getRegexSpecimenPartName()];
-    }
-
     public function getArchiveFile(Photos $photo, string $destination): CuratorFacade
     {
         $this->s3Service->getObject($this->repositoryConfiguration->getArchiveBucket(), $photo->getArchiveFilename(), $destination);
@@ -171,25 +179,8 @@ readonly class CuratorFacade
         return $this;
     }
 
-    /**
-     * @return FileInsideCuratorBucket[]
-     */
-    protected function getEligibleCuratorBucketFiles(): array
+    public function getActualHerbarium(): Herbaria
     {
-        return array_filter($this->getAllCuratorBucketFiles(), fn ($item) => $item->isEligibleToBeImported() === true);
+        return $this->herbariumService->getCurrentUserHerbarium();
     }
-
-    /**
-     * @return string[]
-     */
-    protected function splitId(string $specimenId): array
-    {
-        $parts = [];
-        if (preg_match($this->repositoryConfiguration->getSpecimenNameRegex(), $specimenId, $parts)) {
-            return $parts;
-        } else {
-            throw new SpecimenIdException('invalid name format: ' . $specimenId);
-        }
-    }
-
 }

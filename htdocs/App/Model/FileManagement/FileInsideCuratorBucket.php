@@ -4,7 +4,7 @@ namespace App\Model\FileManagement;
 
 use Aws\Api\DateTimeResult;
 
-readonly class FileInsideCuratorBucket
+class FileInsideCuratorBucket
 {
 
     public const int MIN_FILESIZE =   5 * 1024 * 1024;
@@ -13,8 +13,11 @@ readonly class FileInsideCuratorBucket
     public const string EXTENSION = 'tif';
     public const string MIME_TYPE = 'image/tiff';
 
+    protected bool $isEligibleForImport = false;
+
     public function __construct(public readonly string $name, public readonly int $size, public readonly DateTimeResult $timestamp, public readonly bool $alreadyWaiting, public readonly bool $hasControlError, public readonly ?int $rowId, public readonly ?string $controlMsg)
     {
+        $this->isEligibleForImport = $this->isSizeOk() && $this->isTypeOk() && !$this->isAlreadyWaiting() && !$this->hasControlError();
     }
 
     public function getUploaded(): string
@@ -49,7 +52,13 @@ readonly class FileInsideCuratorBucket
 
     public function isEligibleToBeImported(): bool
     {
-        return $this->isSizeOk() && $this->isTypeOk() && !$this->isAlreadyWaiting() && !$this->hasControlError();
+        return $this->isEligibleForImport;
+    }
+
+    public function setIneligibleForImport(): self
+    {
+        $this->isEligibleForImport = false;
+        return $this;
     }
 
 }

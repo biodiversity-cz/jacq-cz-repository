@@ -5,6 +5,7 @@ namespace App\UI\Admin\ImportFilename;
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Services\EntityServices\PhotoService;
+use App\Services\SpecimenIdService;
 use App\UI\Base\SecuredPresenter;
 use Nette\Application\Responses\CallbackResponse;
 use Nette\Application\UI\Form;
@@ -18,23 +19,27 @@ final class ImportFilenamePresenter extends SecuredPresenter
     /** @inject */
     public PhotoService $photoService;
 
+    /** @inject */
+    public SpecimenIdService $specimenIdService;
+
     public ?Photos $photo;
+
 
     public function renderDefault(): void
     {
         $this->template->title = 'New Files';
-        $files = $this->curatorFacade->getAllCuratorBucketFiles();
+        $files = $this->curatorFacade->getAllCuratorBucketFiles(true);
         $this->template->files = $files;
         $this->template->orphanedItems = $this->curatorFacade->getOrphanedItems();
-        $this->template->eligible = count(array_filter($files, fn ($item) => $item->isEligibleToBeImported() === true));
+        $this->template->eligible = count(array_filter($files, fn ($item) => ($item->isEligibleToBeImported() === true && $this->specimenIdService->filenameFitsHerbariumPattern($item->name, $this->herbarium))));
         $this->template->erroneous = count(array_filter($files, fn ($item) => $item->hasControlError() === true));
         $this->template->waiting = count(array_filter($files, fn ($item) => $item->isAlreadyWaiting() === true));
-        $this->template->preliminaryError = count(array_filter($files, fn ($item) => $item->isSizeOK() === false || $item->isTypeOK() === false));
+        $this->template->herbarium = $this->curatorFacade->getActualHerbarium();
     }
 
     public function actionThumbnail(int $id): void
     {
-        $thumb = $this->photoService->getPhotoWithError($id)?->getThumbnail();
+        $thumb = $this->specimenIdService->getPhotoWithError($id)?->getThumbnail();
         if ($thumb !== null) {
             $this->sendResponse(new CallbackResponse(function ($request, $response) use ($thumb): void {
                 $response->setContentType('image');
@@ -48,7 +53,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
 
     public function actionRevise(int $id): void
     {
-        $photo = $this->photoService->getPhotoWithError($id);
+        $photo = $this->specimenIdService->getPhotoWithError($id);
         if ($photo === null) {
             $this->error('Photo not found');
         }
@@ -72,7 +77,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function actionDeleteErroneous(): void
     {
         try {
-            $erroneous = $this->photoService->getPhotosWithError();
+            $erroneous = $this->specimenIdService->getPhotosWithError();
             foreach ($erroneous as $photoWithImportError) {
                 $this->curatorFacade->deleteNotImportedPhoto($photoWithImportError);
             }
@@ -87,7 +92,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function actionReimport(int $id): void
     {
         try {
-            $photo = $this->photoService->getPhotoWithError($id);
+            $photo = $this->specimenIdService->getPhotoWithError($id);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
@@ -104,7 +109,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function actionDelete(int $id): void
     {
         try {
-            $photo = $this->photoService->getPhotoWithError($id);
+            $photo = $this->specimenIdService->getPhotoWithError($id);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
@@ -134,12 +139,12 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function specimenIdFormSucceeded(Form $form, \stdClass $values): void
     {
         try {
-            $photo = $this->photoService->getPhotoWithError((int) $values->photoId);
+            $photo = $this->specimenIdService->getPhotoWithError((int) $values->photoId);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
 
-            $this->curatorFacade->reimportPhoto($this->photoService->getPhotoReference((int) $values->photoId), (string) $values->specimen);
+            $this->curatorFacade->reimportPhoto($this->specimenIdService->getPhotoReference((int) $values->photoId), (string) $values->specimen);
 
             $fullID = $this->herbarium->getAcronym() . '-' . $values->specimen;
             $this->flashMessage('File successfully marked to be re-processed with ID ' . $fullID, 'success');

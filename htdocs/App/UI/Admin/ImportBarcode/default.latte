@@ -1,7 +1,9 @@
 {block content}
 <div class="container" id="autorefresh">
 
-    <h2>Files in the "new" bucket</h2>
+    <h2>Files in the <i>{$herbarium->getBucket()}</i> bucket</h2>
+    <p>Validity of the barcode is compared using a regular expression assigned to your herbarium: <br> <code>{$herbarium->getRegexBarcode()}</code></p>
+    <p>You can understand it easily with the ChatGPT, an online <a href="https://regex101.com/">tool</a>, or ask administrator of the repository to fit it according your needs.</p>
     <div class="row">
         <div class="col-sm-12 col-md-2">
             <table class="table">

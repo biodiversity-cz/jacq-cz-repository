@@ -3,13 +3,13 @@
 namespace App\Model;
 
 use App\Exceptions\SpecimenIdException;
-use App\Facades\CuratorFacade;
 use App\Services\EntityServices\HerbariumService;
+use App\Services\SpecimenIdService;
 
 class SpecimenFactory
 {
 
-    public function __construct(protected readonly HerbariumService $herbariumService, protected readonly CuratorFacade $curatorFacade)
+    public function __construct(protected readonly HerbariumService $herbariumService, protected readonly SpecimenIdService $specimenIdService)
     {
     }
 
@@ -20,9 +20,9 @@ class SpecimenFactory
         }
 
         $specimen = new Specimen($fullSpecimenId);
-        $specimen->setHerbarium($this->curatorFacade->getHerbariumFromId($fullSpecimenId));
+        $specimen->setHerbarium($this->specimenIdService->getHerbariumFromId($fullSpecimenId));
 
-        $specimenId = $this->curatorFacade->getSpecimenIdFromId($fullSpecimenId);
+        $specimenId = $this->specimenIdService->getSpecimenIdFromId($fullSpecimenId);
         $specimen->setSpecimenId($specimenId);
 
         return $specimen;

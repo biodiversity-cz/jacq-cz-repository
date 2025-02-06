@@ -35,7 +35,7 @@ class MetadataStage implements StageInterface
             $this->readDimensions($imagick);
             $this->item->setIdentify($this->imageService->readIdentify($imagick));
             $this->item->setExif($this->imageService->readExif($imagick));
-            $imagick->destroy();
+            $imagick->clear();
             unset($imagick);
 
             return $this->item;

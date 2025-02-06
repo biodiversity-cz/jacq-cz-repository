@@ -24,18 +24,6 @@ test('RepositoryConfiguration Service', function (): void {
     Assert::type('int', $service->getJp2Quality());
     Assert::true($service->getJp2Quality() >= 0 && $service->getJp2Quality() <= 100 );
 
-    Assert::type('string', $service->getBarcodeRegex());
-    Assert::notEqual('', $service->getBarcodeRegex());
-
-    Assert::type('string', $service->getRegexSpecimenPartName());
-    Assert::notEqual('', $service->getRegexSpecimenPartName());
-
-    Assert::type('string', $service->getRegexHerbariumPartName());
-    Assert::notEqual('', $service->getRegexHerbariumPartName());
-
-    Assert::type('string', $service->getSpecimenNameRegex());
-    Assert::notEqual('', $service->getSpecimenNameRegex());
-
     Assert::type('int', $service->getZbarImageSize());
     Assert::true($service->getZbarImageSize() >= 500 && $service->getZbarImageSize() <= 10000 );
 

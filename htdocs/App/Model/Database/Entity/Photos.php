@@ -27,7 +27,7 @@ class Photos
     #[Column(unique: true, nullable: true, options: ['comment' => 'Filename of Archive Master TIF file'])]
     protected ?string $archiveFilename;
 
-    #[Column(nullable: true, options: ['comment' => 'Filename that was provided during curator upload, could make sense or completely missing semantical content'])]
+    #[Column(nullable: true, options: ['comment' => 'Filename that was provided during curator upload, could make sense or completely missing semantic content'])]
     protected string $originalFilename;
 
     #[Column(unique: true, nullable: true, options: ['comment' => 'Filename of JP2 file'])]
@@ -56,7 +56,10 @@ class Photos
     #[Column(type: Types::BIGINT, nullable: true, options: ['comment' => 'Filesize of converted JP2 file in bytes'])]
     protected ?int $JP2FileSize;
 
-    #[Column(type: Types::TEXT, length: 60000, nullable: true, options: ['comment' => 'Result of migration'])]
+    #[Column(nullable: false, options: ['comment' => 'If true, the import pipeline will use the barcode detection. If false, the filename will be used to detect specimen id', 'default' => true])]
+    protected bool $useBarcode;
+
+    #[Column(type: Types::TEXT, length: 60000, nullable: true, options: ['comment' => 'Result of import into the repository'])]
     protected ?string $message;
 
     #[Column(type: Types::BLOB, nullable: true, options: ['comment' => 'Thumbnail during import phase'])]
@@ -259,5 +262,17 @@ class Photos
 
         return $this;
     }
+
+    public function isUseBarcode(): bool
+    {
+        return $this->useBarcode;
+    }
+
+    public function setUseBarcode(bool $useBarcode): Photos
+    {
+        $this->useBarcode = $useBarcode;
+        return $this;
+    }
+
 
 }
