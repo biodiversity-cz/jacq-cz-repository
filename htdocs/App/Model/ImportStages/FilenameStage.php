@@ -37,7 +37,7 @@ class FilenameStage implements StageInterface
         if (!preg_match($this->item->getHerbarium()->getRegexFilename(), $this->item->getOriginalFilename(),$parts)) {
             throw new FilenameStageException('Invalid filename');
         }
-        $this->item->setSpecimenId($parts[SpecimenIdService::regexSpecimenPartName]);
+        $this->item->setSpecimenId($parts[SpecimenIdService::regexSpecimenPart]);
     }
 
 }

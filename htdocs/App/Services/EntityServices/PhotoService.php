@@ -76,9 +76,9 @@ class PhotoService extends BaseEntityService
         return $this->repository->findOneBy(['status' => [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR], 'herbarium' => $this->user->getIdentity()->herbarium, 'originalFilename' => $filename]);
     }
 
-    public function findAllUnprocessedPhotos(): array
+    public function findUnprocessedPhotos(bool $useBarcode): array
     {
-        $photos =  $this->repository->findBy(['status' => [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR], 'herbarium' => $this->user->getIdentity()->herbarium]);
+        $photos =  $this->repository->findBy(['status' => [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR], 'herbarium' => $this->user->getIdentity()->herbarium, 'useBarcode' => $useBarcode]);
         $unprocessedPhotos = [];
         foreach ($photos as $photo) {
             $unprocessedPhotos[$photo->getOriginalFilename()] = $photo;

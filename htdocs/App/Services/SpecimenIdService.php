@@ -10,9 +10,9 @@ use App\Services\EntityServices\HerbariumService;
 readonly class SpecimenIdService
 {
 
-    public const string regexSpecimenPartName = 'specimenId';
-    public const string regexHerbariumPartName = 'herbarium';
-    public const string regexExtensionPartName = 'extension';
+    public const string regexSpecimenPart = 'specimenId';
+    public const string regexHerbariumPart = 'herbarium';
+    public const string regexExtensionPart = 'extension';
 
     public function __construct(protected RepositoryConfiguration $repositoryConfiguration, protected HerbariumService $herbariumService)
     {
@@ -29,7 +29,7 @@ readonly class SpecimenIdService
 
     public function getHerbariumFromId(string $specimenId): Herbaria
     {
-        $acronym = strtoupper($this->splitSpecimenId($specimenId)[SpecimenIdService::regexHerbariumPartName]);
+        $acronym = strtoupper($this->splitSpecimenId($specimenId)[SpecimenIdService::regexHerbariumPart]);
         $herbarium = $this->herbariumService->findOneWithAcronym($acronym);
         if ($herbarium === null) {
             throw new SpecimenIdException('Unknown herbarium');
@@ -44,7 +44,7 @@ readonly class SpecimenIdService
     protected function splitSpecimenId(string $specimenId): array
     {
         $parts = [];
-        if (preg_match(SpecimenIdService::regexSpecimenPartName, $specimenId, $parts)) {
+        if (preg_match(SpecimenIdService::regexSpecimenPart, $specimenId, $parts)) {
             return $parts;
         } else {
             throw new SpecimenIdException('invalid name format: ' . $specimenId);
@@ -53,6 +53,6 @@ readonly class SpecimenIdService
 
     public function getSpecimenIdFromId(string $specimenId): int
     {
-        return (int)$this->splitSpecimenId($specimenId)[SpecimenIdService::regexSpecimenPartName];
+        return (int)$this->splitSpecimenId($specimenId)[SpecimenIdService::regexSpecimenPart];
     }
 }

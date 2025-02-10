@@ -28,7 +28,7 @@
 		"nette/utils": "^4.0",
 		"latte/latte": "^3.0",
 		"tracy/tracy": "^2.10",
-    "league/pipeline": "1.0.0",
+    "league/pipeline": "^1",
     "guzzlehttp/guzzle": "^7",
 		"ublaboo/aws-sdk-nette-extension": "dev-master",
 

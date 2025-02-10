@@ -28,7 +28,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function renderDefault(): void
     {
         $this->template->title = 'New Files';
-        $files = $this->curatorFacade->getAllCuratorBucketFiles(true);
+        $files = $this->curatorFacade->getAvailableCuratorBucketFiles(false);
         $this->template->files = $files;
         $this->template->orphanedItems = $this->curatorFacade->getOrphanedItems();
         $this->template->eligible = count(array_filter($files, fn ($item) => ($item->isEligibleToBeImported() === true && $this->specimenIdService->filenameFitsHerbariumPattern($item->name, $this->herbarium))));
@@ -39,7 +39,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
 
     public function actionThumbnail(int $id): void
     {
-        $thumb = $this->specimenIdService->getPhotoWithError($id)?->getThumbnail();
+        $thumb = $this->photoService->getPhotoWithError($id)?->getThumbnail();
         if ($thumb !== null) {
             $this->sendResponse(new CallbackResponse(function ($request, $response) use ($thumb): void {
                 $response->setContentType('image');
@@ -53,7 +53,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
 
     public function actionRevise(int $id): void
     {
-        $photo = $this->specimenIdService->getPhotoWithError($id);
+        $photo = $this->photoService->getPhotoWithError($id);
         if ($photo === null) {
             $this->error('Photo not found');
         }
@@ -65,7 +65,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function actionPrimaryImport(): void
     {
         try {
-            $this->curatorFacade->registerNewFiles();
+            $this->curatorFacade->registerNewFiles(false);
             $this->flashMessage('Files successfully marked to be processed', 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
@@ -77,7 +77,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function actionDeleteErroneous(): void
     {
         try {
-            $erroneous = $this->specimenIdService->getPhotosWithError();
+            $erroneous = $this->photoService->getPhotosWithError();
             foreach ($erroneous as $photoWithImportError) {
                 $this->curatorFacade->deleteNotImportedPhoto($photoWithImportError);
             }
@@ -92,7 +92,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function actionReimport(int $id): void
     {
         try {
-            $photo = $this->specimenIdService->getPhotoWithError($id);
+            $photo = $this->photoService->getPhotoWithError($id);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
@@ -109,7 +109,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function actionDelete(int $id): void
     {
         try {
-            $photo = $this->specimenIdService->getPhotoWithError($id);
+            $photo = $this->photoService->getPhotoWithError($id);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
@@ -139,7 +139,7 @@ final class ImportFilenamePresenter extends SecuredPresenter
     public function specimenIdFormSucceeded(Form $form, \stdClass $values): void
     {
         try {
-            $photo = $this->specimenIdService->getPhotoWithError((int) $values->photoId);
+            $photo = $this->photoService->getPhotoWithError((int) $values->photoId);
             if ($photo === null) {
                 $this->error('Photo not found');
             }

@@ -23,7 +23,7 @@ final class ImportBarcodePresenter extends SecuredPresenter
     public function renderDefault(): void
     {
         $this->template->title = 'New Files';
-        $files = $this->curatorFacade->getAllCuratorBucketFiles();
+        $files = $this->curatorFacade->getAvailableCuratorBucketFiles(true);
         $this->template->files = $files;
         $this->template->orphanedItems = $this->curatorFacade->getOrphanedItems();
         $this->template->eligible = count(array_filter($files, fn ($item) => $item->isEligibleToBeImported() === true));
@@ -60,7 +60,7 @@ final class ImportBarcodePresenter extends SecuredPresenter
     public function actionPrimaryImport(): void
     {
         try {
-            $this->curatorFacade->registerNewFiles();
+            $this->curatorFacade->registerNewFiles(true);
             $this->flashMessage('Files successfully marked to be processed', 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');

@@ -34,9 +34,9 @@ readonly class CuratorFacade
     /**
      * On curator request read curatorBucket and insert files basic info into the database
      */
-    public function registerNewFiles(): CuratorFacade
+    public function registerNewFiles(bool $useBarcode): CuratorFacade
     {
-        foreach ($this->getEligibleCuratorBucketFiles() as $file) {
+        foreach ($this->getEligibleCuratorBucketFiles($useBarcode) as $file) {
             $entity = new Photos();
             $entity
                 ->setCreatedAt()
@@ -44,7 +44,8 @@ readonly class CuratorFacade
                 ->setOriginalFilename($file->name)
                 ->setStatus($this->photoService->getWaitingStatus())
                 ->setHerbarium($this->herbariumService->getCurrentUserHerbarium())
-                ->setArchiveFileSize($file->size);
+                ->setArchiveFileSize($file->size)
+                ->setUseBarcode($useBarcode);
             $this->entityManager->persist($entity);
         }
 
@@ -56,18 +57,18 @@ readonly class CuratorFacade
     /**
      * @return FileInsideCuratorBucket[]
      */
-    protected function getEligibleCuratorBucketFiles(): array
+    protected function getEligibleCuratorBucketFiles(bool $useBarcode): array
     {
-        return array_filter($this->getAllCuratorBucketFiles(), fn($item) => $item->isEligibleToBeImported() === true);
+        return array_filter($this->getAvailableCuratorBucketFiles($useBarcode), fn($item) => $item->isEligibleToBeImported() === true);
     }
 
     /**
      * @return FileInsideCuratorBucket[]
      */
-    public function getAllCuratorBucketFiles(bool $checkFilename = false): array
+    public function getAvailableCuratorBucketFiles(bool $useBarcode): array
     {
         $files = [];
-        $unprocessedPhotos = $this->photoService->findAllUnprocessedPhotos();
+        $unprocessedPhotos = $this->photoService->findUnprocessedPhotos($useBarcode);
         foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium()->getBucket()) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {
                 $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], false, false, null, null);
@@ -77,7 +78,7 @@ readonly class CuratorFacade
                 $hasControlError = $entity->getStatus()->getId() === PhotosStatus::CONTROL_ERROR;
                 $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getMessage());
             }
-            if ($checkFilename) {
+            if ($useBarcode) {
                 if (!$this->specimenIdService->filenameFitsHerbariumPattern($file->name, $this->herbariumService->getCurrentUserHerbarium())) {
                     $file->setIneligibleForImport();
                 }
@@ -104,9 +105,9 @@ readonly class CuratorFacade
     {
         return (new Pipeline())
             ->pipe($this->stageFactory->createDownloadStage())
+            ->pipe($this->stageFactory->createFilenameStage())
             ->pipe($this->stageFactory->createThumbnailStage())
             ->pipe($this->stageFactory->createMetadataStage())
-            ->pipe($this->stageFactory->createFilenameStage())
             ->pipe($this->stageFactory->createDuplicityStage())
             ->pipe($this->stageFactory->createConvertStage())
             ->pipe($this->stageFactory->createTransferStage());

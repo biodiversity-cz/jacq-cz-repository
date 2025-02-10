@@ -32,7 +32,7 @@ class ProceedCuratorImage extends Command
     {
         $rsm = new ResultSetMappingBuilder($this->entityManager);
         $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
-        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id = ? ORDER BY id asc FOR UPDATE SKIP LOCKED LIMIT 1 ', $rsm);
+        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id = ? AND use_barcode = ? ORDER BY id asc FOR UPDATE SKIP LOCKED LIMIT 1 ', $rsm);
         $query->setParameter(1, PhotosStatus::WAITING);
         try {
             /** @var Photos $photo */

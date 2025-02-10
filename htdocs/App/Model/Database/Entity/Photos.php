@@ -57,7 +57,7 @@ class Photos
     protected ?int $JP2FileSize;
 
     #[Column(nullable: false, options: ['comment' => 'If true, the import pipeline will use the barcode detection. If false, the filename will be used to detect specimen id', 'default' => true])]
-    protected bool $useBarcode;
+    protected bool $useBarcode = true;
 
     #[Column(type: Types::TEXT, length: 60000, nullable: true, options: ['comment' => 'Result of import into the repository'])]
     protected ?string $message;
