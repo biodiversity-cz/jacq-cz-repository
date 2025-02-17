@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace App\UI\Admin\ImportBarcode;
+namespace App\UI\Admin\Import;
 
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
@@ -9,7 +9,7 @@ use App\UI\Base\SecuredPresenter;
 use Nette\Application\Responses\CallbackResponse;
 use Nette\Application\UI\Form;
 
-final class ImportBarcodePresenter extends SecuredPresenter
+final class ImportPresenter extends SecuredPresenter
 {
 
     /** @inject */
@@ -60,7 +60,7 @@ final class ImportBarcodePresenter extends SecuredPresenter
     public function actionPrimaryImport(): void
     {
         try {
-            $this->curatorFacade->registerNewFiles(true);
+            $this->curatorFacade->registerNewFiles();
             $this->flashMessage('Files successfully marked to be processed', 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');

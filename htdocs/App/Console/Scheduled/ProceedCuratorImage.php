@@ -32,7 +32,7 @@ class ProceedCuratorImage extends Command
     {
         $rsm = new ResultSetMappingBuilder($this->entityManager);
         $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
-        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id = ? AND use_barcode = ? ORDER BY id asc FOR UPDATE SKIP LOCKED LIMIT 1 ', $rsm);
+        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id = ? ORDER BY id asc FOR UPDATE SKIP LOCKED LIMIT 1 ', $rsm);
         $query->setParameter(1, PhotosStatus::WAITING);
         try {
             /** @var Photos $photo */
@@ -64,11 +64,9 @@ class ProceedCuratorImage extends Command
             $output->write("\n filename: s3://" . $photo->getHerbarium()->getBucket() . '/' . $photo->getOriginalFilename() . "\n");
             $photo->setLastEditAt();
             $photo->setMessage(null);
-            if($photo->isUseBarcode()){
-                $this->curatorService->importNewFilesByBarcode()->process($photo);
-            }else{
-                $this->curatorService->importNewFilesByFilename()->process($photo);
-            }
+
+            $this->curatorService->importNewFiles()->process($photo);
+
             $photo->setThumbnail(null);
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_OK));
         } catch (ImportStageException $e) {

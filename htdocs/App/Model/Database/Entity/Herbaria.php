@@ -31,6 +31,9 @@ class Herbaria
     #[Column(unique: false, nullable: false, options: ['comment' => 'RegEx for image filenames'])]
     protected string $regexFilename;
 
+    #[Column(unique: false, nullable: false, options: ['comment' => 'Allow use filenam when barcode is not present in the image', 'default' => false])]
+    protected bool $fallbackFilename;
+
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'logo URL'])]
     protected ?string $logo;
 
@@ -136,6 +139,18 @@ class Herbaria
         $this->regexFilename = $regexFilename;
         return $this;
     }
+
+    public function isFallbackFilename(): bool
+    {
+        return $this->fallbackFilename;
+    }
+
+    public function setFallbackFilename(bool $fallbackFilename): Herbaria
+    {
+        $this->fallbackFilename = $fallbackFilename;
+        return $this;
+    }
+
 
 
 }

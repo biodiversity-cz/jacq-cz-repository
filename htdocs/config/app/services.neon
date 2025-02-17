@@ -1,20 +1,10 @@
 services:
     - App\Core\RouterFactory::createRouter
     - App\Security\UserAuthenticator
-    - App\Services\S3Service
-    - App\Services\ImageService
-    - App\Services\SpecimenIdService
     - App\Services\WebDir(%wwwDir%)
     - App\Services\TempDir(%tempDir%)
     - App\Services\RepositoryConfiguration(%storage%)
     - App\Services\AppConfiguration(@container::getParameters())
-    - App\Services\EntityServices\HerbariumService
-    - App\Services\EntityServices\PhotoService
-    - App\Facades\CuratorFacade
-    - App\Model\SpecimenFactory
-    - App\Model\ImportStages\StageFactory
-    - App\Model\IIIF\ManifestFactory
-    - App\Grids\ImportedPhotosGrid
 
     - {factory: App\Console\Scheduled\ProceedCuratorImage, tags: {console.command: curator:importImage}}
     - {factory: App\Console\Admin\Test, tags: {console.command: curator:test}}
@@ -30,3 +20,5 @@ search:
     classes:
         - *Factory
         - *Facade
+        - *Service
+        - *Grid

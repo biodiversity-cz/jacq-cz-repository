@@ -34,9 +34,9 @@ readonly class CuratorFacade
     /**
      * On curator request read curatorBucket and insert files basic info into the database
      */
-    public function registerNewFiles(bool $useBarcode): CuratorFacade
+    public function registerNewFiles(): CuratorFacade
     {
-        foreach ($this->getEligibleCuratorBucketFiles($useBarcode) as $file) {
+        foreach ($this->getEligibleCuratorBucketFiles() as $file) {
             $entity = new Photos();
             $entity
                 ->setCreatedAt()
@@ -44,8 +44,7 @@ readonly class CuratorFacade
                 ->setOriginalFilename($file->name)
                 ->setStatus($this->photoService->getWaitingStatus())
                 ->setHerbarium($this->herbariumService->getCurrentUserHerbarium())
-                ->setArchiveFileSize($file->size)
-                ->setUseBarcode($useBarcode);
+                ->setArchiveFileSize($file->size);
             $this->entityManager->persist($entity);
         }
 
@@ -57,18 +56,18 @@ readonly class CuratorFacade
     /**
      * @return FileInsideCuratorBucket[]
      */
-    protected function getEligibleCuratorBucketFiles(bool $useBarcode): array
+    protected function getEligibleCuratorBucketFiles(): array
     {
-        return array_filter($this->getAvailableCuratorBucketFiles($useBarcode), fn($item) => $item->isEligibleToBeImported() === true);
+        return array_filter($this->getAvailableCuratorBucketFiles(), fn($item) => $item->isEligibleToBeImported() === true);
     }
 
     /**
      * @return FileInsideCuratorBucket[]
      */
-    public function getAvailableCuratorBucketFiles(bool $useBarcode): array
+    public function getAvailableCuratorBucketFiles(): array
     {
         $files = [];
-        $unprocessedPhotos = $this->photoService->findUnprocessedPhotos($useBarcode);
+        $unprocessedPhotos = $this->photoService->findUnprocessedPhotos();
         foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium()->getBucket()) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {
                 $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], false, false, null, null);
@@ -78,36 +77,19 @@ readonly class CuratorFacade
                 $hasControlError = $entity->getStatus()->getId() === PhotosStatus::CONTROL_ERROR;
                 $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getMessage());
             }
-            if ($useBarcode) {
-                if (!$this->specimenIdService->filenameFitsHerbariumPattern($file->name, $this->herbariumService->getCurrentUserHerbarium())) {
-                    $file->setIneligibleForImport();
-                }
-            }
             $files[] = $file;
         }
 
         return $files;
     }
 
-    public function importNewFilesByBarcode(): Pipeline
+    public function importNewFiles(): Pipeline
     {
         return (new Pipeline())
             ->pipe($this->stageFactory->createDownloadStage())
             ->pipe($this->stageFactory->createThumbnailStage())
             ->pipe($this->stageFactory->createMetadataStage())
             ->pipe($this->stageFactory->createBarcodeStage())
-            ->pipe($this->stageFactory->createDuplicityStage())
-            ->pipe($this->stageFactory->createConvertStage())
-            ->pipe($this->stageFactory->createTransferStage());
-    }
-
-    public function importNewFilesByFilename(): Pipeline
-    {
-        return (new Pipeline())
-            ->pipe($this->stageFactory->createDownloadStage())
-            ->pipe($this->stageFactory->createFilenameStage())
-            ->pipe($this->stageFactory->createThumbnailStage())
-            ->pipe($this->stageFactory->createMetadataStage())
             ->pipe($this->stageFactory->createDuplicityStage())
             ->pipe($this->stageFactory->createConvertStage())
             ->pipe($this->stageFactory->createTransferStage());
