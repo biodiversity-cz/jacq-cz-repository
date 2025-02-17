@@ -54,9 +54,4 @@ readonly class StageFactory
         return new TransferStage($this->s3Service, $this->repositoryConfiguration, $this->appConfiguration);
     }
 
-    public function createFilenameStage(): FilenameStage
-    {
-        return new FilenameStage($this->specimenIdService);
-    }
-
 }

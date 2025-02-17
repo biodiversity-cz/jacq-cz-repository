@@ -1,0 +1,18 @@
+{block content}
+<div class="container">
+    <h2>Herbarium {$herbarium->getAcronym()} {$herbarium->getFullname()}</h2>
+    <div class="row">
+        <p>Validity of the barcode is compared using a regular expression assigned to your herbarium: <br> <code>{$herbarium->getRegexBarcode()}</code></p>
+        <p>You can understand it easily with the ChatGPT, an online <a href="https://regex101.com/">tool</a>, or ask administrator of the repository to fit it according your needs.</p>
+
+        {if $herbarium->usesFilenameFallback()}
+        <h3>SpecimenId -- filename fallback is ON! <span class="badge bg-warning">not recommended</span></h3>
+        <p>If no barcode is present on the image, the specimen ID identification falls to the filename using a regular expression. This could be useful for some situation, but please do not overuse it, as a preferred state is to include the barcode in the image in the "physical original". <br> <code>{$herbarium->getRegexFilename()}</code></p>
+        {/if}
+
+        <h3>People</h3>
+        {foreach $herbarium->getUsers() as $contact}
+        <p>{$contact->getFullname()}</p>
+        {/foreach}
+    </div>
+</div>

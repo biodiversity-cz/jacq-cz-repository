@@ -101,6 +101,12 @@ class Herbaria
         return $this->address;
     }
 
+    public function getUsers(): PersistentCollection
+    {
+        return $this->users;
+    }
+
+
     public function setAddress(string $address): Herbaria
     {
         $this->address = $address;
@@ -140,12 +146,12 @@ class Herbaria
         return $this;
     }
 
-    public function isFallbackFilename(): bool
+    public function usesFilenameFallback(): bool
     {
         return $this->fallbackFilename;
     }
 
-    public function setFallbackFilename(bool $fallbackFilename): Herbaria
+    public function setFilenameFallback(bool $fallbackFilename): Herbaria
     {
         $this->fallbackFilename = $fallbackFilename;
         return $this;

@@ -37,4 +37,8 @@ abstract class BaseEntityService
         return $this->repository->findOneBy($criteria, $orderBy);
     }
 
+    public function find(int $id): ?object
+    {
+        return $this->repository->find($id);
+    }
 }

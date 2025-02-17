@@ -2,8 +2,6 @@
 <div class="container" id="autorefresh">
 
     <h2>Files in the <i>{$herbarium->getBucket()}</i> bucket</h2>
-    <p>Validity of the barcode is compared using a regular expression assigned to your herbarium: <br> <code>{$herbarium->getRegexBarcode()}</code></p>
-    <p>You can understand it easily with the ChatGPT, an online <a href="https://regex101.com/">tool</a>, or ask administrator of the repository to fit it according your needs.</p>
     <div class="row">
         <div class="col-sm-12 col-md-2">
             <table class="table">
@@ -11,8 +9,6 @@
                     <td><strong>Total count of files</strong></td>
                     <td>{count($files)}</td>
                 </tr>
-
-
             </table>
 
                 <table class="table table-striped">
@@ -37,6 +33,9 @@
 
             {if $eligible>0}
             <a n:href=":primaryImport" id="importButton" class="btn btn-primary btn-lg" role="button">Send to repository</a>
+            {if $herbarium->usesFilenameFallback()}
+            <p><i class="fa-solid fa-exclamation blink"></i> filename as a source of the specimen ID is allowed.</p>
+            {/if}
             {/if}
 <br>
             <br>
