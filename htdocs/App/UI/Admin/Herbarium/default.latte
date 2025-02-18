@@ -1,18 +1,66 @@
 {block content}
 <div class="container">
     <h2>Herbarium {$herbarium->getAcronym()} {$herbarium->getFullname()}</h2>
+
     <div class="row">
-        <p>Validity of the barcode is compared using a regular expression assigned to your herbarium: <br> <code>{$herbarium->getRegexBarcode()}</code></p>
-        <p>You can understand it easily with the ChatGPT, an online <a href="https://regex101.com/">tool</a>, or ask administrator of the repository to fit it according your needs.</p>
 
+        <p>Validity of the barcode and its transformation in herbarium specimen ID is compared using a regular expression assigned to your herbarium: </p>
+        <code class="text-center fs-3" id="barcodeRegex">{$herbarium->getRegexBarcode()}</code>
+        <p class="fw-light">You can understand it easily with the ChatGPT, an online <a href="https://regex101.com/">tool</a>, or ask the repository administrator to fit it according your needs.</p>
+
+
+        <div class="mb-3 row">
+            <label for="barcodeRegexInput" class="col-sm-2 col-md-1 col-form-label fw-bold">Test it:</label>
+            <div class="col-sm-5 col-md-3">
+                <input type="text" class="form-control" id="barcodeRegexInput" placeholder="Enter a barcode content" autofocus>
+            </div>
+            <div class="col-sm-1">
+                <p class="fs-4">
+                <b style="color: #bebebe" class="barcodeRegexResult" id="barcodeRegexEmpty">?</b>
+                <b class="text-success barcodeRegexResult d-none" id="barcodeRegexOk">✓</b>
+                <b class="text-danger barcodeRegexResult d-none" id="barcodeRegexError">𐄂</b>
+                </p>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <input type="text" readonly class="form-control-plaintext" id="barcodeRegexHerbarium" value="">
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <input type="text" readonly class="form-control-plaintext" id="barcodeRegexNumber" value="">
+            </div>
+        </div>
         {if $herbarium->usesFilenameFallback()}
-        <h3>SpecimenId -- filename fallback is ON! <span class="badge bg-warning">not recommended</span></h3>
-        <p>If no barcode is present on the image, the specimen ID identification falls to the filename using a regular expression. This could be useful for some situation, but please do not overuse it, as a preferred state is to include the barcode in the image in the "physical original". <br> <code>{$herbarium->getRegexFilename()}</code></p>
+        <hr>
+        <div class="alert alert-secondary" role="alert">
+            Specimen ID detection from the filename is ON <span class="badge bg-danger">not recommended</span>
+        </div>
+        <p class="ms-5">If <em>no barcode is present</em> on the image, the specimen ID identification falls to the filename, using a regular expression evaluation again. This could be useful for some situation, but please do not overuse it, a preferred state is to include the barcode in the image in the "physical original". </p>
+        <code class="text-center fs-5" id="filenameRegex">{$herbarium->getRegexFilename()}</code>
         {/if}
+    </div>
+    <div class="row mt-5">
+        <h4>User accounts assigned to this herbarium</h4>
+        <div class="col-auto offset-2">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+               <th>username</th>
+                <th>role</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach $herbarium->getUsers() as $contact}
 
-        <h3>People</h3>
-        {foreach $herbarium->getUsers() as $contact}
-        <p>{$contact->getFullname()}</p>
-        {/foreach}
+            <tr>
+                <td>
+                    {$contact->getFullname()}
+                </td>
+                <td>regular user</td>
+            </tr>
+            {/foreach}
+
+            </tbody>
+        </table>
+        </div>
+
     </div>
 </div>

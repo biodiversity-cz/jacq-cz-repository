@@ -2,6 +2,7 @@ import 'bootstrap';
 import '@fortawesome/fontawesome-free/js/all'
 import './scss/index.scss';
 import '@contributte/datagrid/assets/datagrid'
+import regexValidation from "./js/settings";
 
 // require('ublaboo-datagrid/assets/datagrid');
 // require('ublaboo-datagrid/assets/datagrid-spinners');
@@ -11,7 +12,7 @@ require('@contributte/datagrid/assets/datagrid-spinners.css');
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
-
+regexValidation();
 
     // disable button to block multiple resend of request
     if (document.getElementById("importButton")) {
