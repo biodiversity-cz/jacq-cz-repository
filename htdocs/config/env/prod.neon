@@ -20,3 +20,6 @@ aws:
 http:
     proxy:
         - 10.42.0.0/16
+
+di:
+    lazy: true
