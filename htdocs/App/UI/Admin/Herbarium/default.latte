@@ -33,8 +33,27 @@
         <div class="alert alert-secondary" role="alert">
             Specimen ID detection from the filename is ON <span class="badge bg-danger">not recommended</span>
         </div>
-        <p class="ms-5">If <em>no barcode is present</em> on the image, the specimen ID identification falls to the filename, using a regular expression evaluation again. This could be useful for some situation, but please do not overuse it, a preferred state is to include the barcode in the image in the "physical original". </p>
+        <p class="ms-5">If <em>no barcode is present</em> in the image, the specimen ID identification falls to the filename, using a regular expression evaluation again. This could be useful for some situation, but please do not overuse it, a preferred state is to include the barcode in the image in the "physical original". </p>
         <code class="text-center fs-5" id="filenameRegex">{$herbarium->getRegexFilename()}</code>
+        <div class="mb-3 mt-4 row">
+            <label for="filenameRegexInput" class="col-sm-2 col-md-1 col-form-label fw-bold">Test it:</label>
+            <div class="col-sm-5 col-md-4">
+                <input type="text" class="form-control" id="filenameRegexInput" placeholder="Enter a filename example including extension">
+            </div>
+            <div class="col-sm-1">
+                <p class="fs-4">
+                    <b style="color: #bebebe" class="filenameRegexResult" id="filenameRegexEmpty">?</b>
+                    <b class="text-success filenameRegexResult d-none" id="filenameRegexOk">✓</b>
+                    <b class="text-danger filenameRegexResult d-none" id="filenameRegexError">𐄂</b>
+                </p>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <input type="text" readonly class="form-control-plaintext" id="filenameRegexHerbarium" value="">
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <input type="text" readonly class="form-control-plaintext" id="filenameRegexNumber" value="">
+            </div>
+        </div>
         {/if}
     </div>
     <div class="row mt-5">
