@@ -1,0 +1,9 @@
+extensions:
+	asset: SixtyEightPublishers\Asset\Bridge\Nette\DI\AssetExtension
+	encore: SixtyEightPublishers\WebpackEncoreBundle\Bridge\Nette\DI\WebpackEncoreBundleExtension
+
+encore:
+	output_path: %wwwDir%/dist
+
+asset:
+    json_manifest_path: %wwwDir%/dist/manifest.json

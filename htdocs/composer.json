@@ -39,7 +39,10 @@
     "nettrine/cache": "^0.3",
     "nettrine/migrations": "^v0.9",
     "ublaboo/datagrid": "^v6.10",
-    "yale-web-technologies/iiif-manifest-generator": "dev-develop"
+    "yale-web-technologies/iiif-manifest-generator": "dev-develop",
+
+    "68publishers/asset": "^3",
+    "68publishers/webpack-encore-bundle": "^3"
   },
 	"require-dev": {
 		"nette/tester": "^2.5",

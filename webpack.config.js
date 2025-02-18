@@ -8,6 +8,7 @@ Encore
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
+    .enableVersioning(Encore.isProduction())
     .enableSassLoader()
     .enablePostCssLoader()
     .configureBabel(()=> {}, {

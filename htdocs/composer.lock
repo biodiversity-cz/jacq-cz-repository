@@ -4,8 +4,142 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8454948cf497e0e280bc738ca02051dc",
+    "content-hash": "4b451b623a7dffa41da9b69143e34071",
     "packages": [
+        {
+            "name": "68publishers/asset",
+            "version": "v3.3.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/68publishers/asset.git",
+                "reference": "b7ff755221b60778b406b582a05d150cf36b60ea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/68publishers/asset/zipball/b7ff755221b60778b406b582a05d150cf36b60ea",
+                "reference": "b7ff755221b60778b406b582a05d150cf36b60ea",
+                "shasum": ""
+            },
+            "require": {
+                "latte/latte": "^2.5 || ^3.0",
+                "nette/di": "^3.0.10",
+                "nette/utils": "^3.2.5 || ^4.0",
+                "php": "^7.4 || ^8.0",
+                "symfony/asset": "^5.4 || ^6.0 || ^7.0"
+            },
+            "conflict": {
+                "nette/schema": "<1.2.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.13",
+                "nette/application": "^3.1.0",
+                "nette/bootstrap": "^3.1",
+                "nette/tester": "^2.4.3",
+                "phpstan/phpstan": "^1.9",
+                "phpstan/phpstan-nette": "^1.1",
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SixtyEightPublishers\\Asset\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomáš Glawaty",
+                    "email": "tomasglawaty@icloud.com"
+                }
+            ],
+            "description": "Integration of Symfony's Asset component into Nette Framework.",
+            "keywords": [
+                "68publishers",
+                "asset",
+                "nette"
+            ],
+            "support": {
+                "issues": "https://github.com/68publishers/asset/issues",
+                "source": "https://github.com/68publishers/asset/tree/v3.3.4"
+            },
+            "time": "2024-08-05T23:21:30+00:00"
+        },
+        {
+            "name": "68publishers/webpack-encore-bundle",
+            "version": "v3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/68publishers/webpack-encore-bundle.git",
+                "reference": "75d712ca1eab156cc104615bec7f71e5ae5d0e0b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/68publishers/webpack-encore-bundle/zipball/75d712ca1eab156cc104615bec7f71e5ae5d0e0b",
+                "reference": "75d712ca1eab156cc104615bec7f71e5ae5d0e0b",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "latte/latte": "^3.0",
+                "nette/di": "^3.2",
+                "nette/utils": "^4.0",
+                "php": "^8.3",
+                "symfony/asset": "^7.0",
+                "symfony/cache": "^7.0"
+            },
+            "conflict": {
+                "nette/schema": "<1.2.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.13",
+                "mockery/mockery": "^1.5",
+                "nette/application": "^3.1.0",
+                "nette/bootstrap": "^3.1",
+                "nette/component-model": "^3.0.2",
+                "nette/tester": "^2.4.3",
+                "phpstan/phpstan": "^1.9",
+                "phpstan/phpstan-nette": "^1.1",
+                "roave/security-advisories": "dev-latest",
+                "symfony/console": "^7.0",
+                "symfony/event-dispatcher": "^7.0"
+            },
+            "suggest": {
+                "68publishers/asset": "The recommended way to get Symfony Asset Component into your project.",
+                "contributte/console": "The recommended way to get Symfony Console into your project."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SixtyEightPublishers\\WebpackEncoreBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tomáš Glawaty",
+                    "email": "tomasglawaty@icloud.com"
+                }
+            ],
+            "description": "Nette integration with Webpack Encore! https://symfony.com/webpack-encore",
+            "keywords": [
+                "68publishers",
+                "nette",
+                "webpack",
+                "webpack-encore",
+                "webpack-encore-bundle"
+            ],
+            "support": {
+                "issues": "https://github.com/68publishers/webpack-encore-bundle/issues",
+                "source": "https://github.com/68publishers/webpack-encore-bundle/tree/v3.2.0"
+            },
+            "time": "2025-01-10T23:45:52+00:00"
+        },
         {
             "name": "aws/aws-crt-php",
             "version": "v1.2.7",
@@ -62,16 +196,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.339.9",
+            "version": "3.339.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "e443779facb8cd0bba30383753a7a451db83acd6"
+                "reference": "46ef2d3734ba8358966af80e4ac181633bd03692"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e443779facb8cd0bba30383753a7a451db83acd6",
-                "reference": "e443779facb8cd0bba30383753a7a451db83acd6",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/46ef2d3734ba8358966af80e4ac181633bd03692",
+                "reference": "46ef2d3734ba8358966af80e4ac181633bd03692",
                 "shasum": ""
             },
             "require": {
@@ -153,9 +287,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.339.9"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.339.15"
             },
-            "time": "2025-02-07T19:14:31+00:00"
+            "time": "2025-02-17T19:07:50+00:00"
         },
         {
             "name": "contributte/application",
@@ -4055,6 +4189,249 @@
             "time": "2019-03-08T08:55:37+00:00"
         },
         {
+            "name": "symfony/asset",
+            "version": "v7.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/asset.git",
+                "reference": "cb926cd59fefa1f9b4900b3695f0f846797ba5c0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/asset/zipball/cb926cd59fefa1f9b4900b3695f0f846797ba5c0",
+                "reference": "cb926cd59fefa1f9b4900b3695f0f846797ba5c0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2"
+            },
+            "conflict": {
+                "symfony/http-foundation": "<6.4"
+            },
+            "require-dev": {
+                "symfony/http-client": "^6.4|^7.0",
+                "symfony/http-foundation": "^6.4|^7.0",
+                "symfony/http-kernel": "^6.4|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Asset\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Manages URL generation and versioning of web assets such as CSS stylesheets, JavaScript files and image files",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/asset/tree/v7.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-10-25T15:15:23+00:00"
+        },
+        {
+            "name": "symfony/cache",
+            "version": "v7.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache.git",
+                "reference": "8d773a575e446de220dca03d600b2d8e1c1c10ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/8d773a575e446de220dca03d600b2d8e1c1c10ec",
+                "reference": "8d773a575e446de220dca03d600b2d8e1c1c10ec",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.2",
+                "psr/cache": "^2.0|^3.0",
+                "psr/log": "^1.1|^2|^3",
+                "symfony/cache-contracts": "^2.5|^3",
+                "symfony/deprecation-contracts": "^2.5|^3.0",
+                "symfony/service-contracts": "^2.5|^3",
+                "symfony/var-exporter": "^6.4|^7.0"
+            },
+            "conflict": {
+                "doctrine/dbal": "<3.6",
+                "symfony/dependency-injection": "<6.4",
+                "symfony/http-kernel": "<6.4",
+                "symfony/var-dumper": "<6.4"
+            },
+            "provide": {
+                "psr/cache-implementation": "2.0|3.0",
+                "psr/simple-cache-implementation": "1.0|2.0|3.0",
+                "symfony/cache-implementation": "1.1|2.0|3.0"
+            },
+            "require-dev": {
+                "cache/integration-tests": "dev-master",
+                "doctrine/dbal": "^3.6|^4",
+                "predis/predis": "^1.1|^2.0",
+                "psr/simple-cache": "^1.0|^2.0|^3.0",
+                "symfony/clock": "^6.4|^7.0",
+                "symfony/config": "^6.4|^7.0",
+                "symfony/dependency-injection": "^6.4|^7.0",
+                "symfony/filesystem": "^6.4|^7.0",
+                "symfony/http-kernel": "^6.4|^7.0",
+                "symfony/messenger": "^6.4|^7.0",
+                "symfony/var-dumper": "^6.4|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Cache\\": ""
+                },
+                "classmap": [
+                    "Traits/ValueWrapper.php"
+                ],
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides extended PSR-6, PSR-16 (and tags) implementations",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "caching",
+                "psr6"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/cache/tree/v7.2.3"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2025-01-27T11:08:17+00:00"
+        },
+        {
+            "name": "symfony/cache-contracts",
+            "version": "v3.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache-contracts.git",
+                "reference": "15a4f8e5cd3bce9aeafc882b1acab39ec8de2c1b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/15a4f8e5cd3bce9aeafc882b1acab39ec8de2c1b",
+                "reference": "15a4f8e5cd3bce9aeafc882b1acab39ec8de2c1b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/cache": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
+                "branch-alias": {
+                    "dev-main": "3.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Cache\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to caching",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/cache-contracts/tree/v3.5.1"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-09-25T14:20:29+00:00"
+        },
+        {
             "name": "symfony/console",
             "version": "v6.4.17",
             "source": {
@@ -5750,16 +6127,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.17",
+            "version": "1.12.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "7027b3b0270bf392de0cfba12825979768d728bf"
+                "reference": "fef9f07814a573399229304bb0046affdf558812"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7027b3b0270bf392de0cfba12825979768d728bf",
-                "reference": "7027b3b0270bf392de0cfba12825979768d728bf",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/fef9f07814a573399229304bb0046affdf558812",
+                "reference": "fef9f07814a573399229304bb0046affdf558812",
                 "shasum": ""
             },
             "require": {
@@ -5804,7 +6181,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-07T15:01:57+00:00"
+            "time": "2025-02-13T12:44:44+00:00"
         },
         {
             "name": "slevomat/coding-standard",
