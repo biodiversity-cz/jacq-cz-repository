@@ -14,6 +14,8 @@ readonly class SpecimenIdService
     public const string regexHerbariumPart = 'herbarium';
     public const string regexExtensionPart = 'extension';
 
+    public const string regexPublicSpecimenId = '/^(?<' . self::regexHerbariumPart . '>[a-zA-Z]+)[\s\-–_](?<' . self::regexSpecimenPart . '>\d+)$/i';
+
     public function __construct(protected RepositoryConfiguration $repositoryConfiguration, protected HerbariumService $herbariumService)
     {
     }
@@ -29,7 +31,7 @@ readonly class SpecimenIdService
 
     public function getHerbariumFromId(string $specimenId): Herbaria
     {
-        $acronym = strtoupper($this->splitSpecimenId($specimenId)[SpecimenIdService::regexHerbariumPart]);
+        $acronym = strtoupper($this->splitSpecimenId($specimenId)[self::regexHerbariumPart]);
         $herbarium = $this->herbariumService->findOneWithAcronym($acronym);
         if ($herbarium === null) {
             throw new SpecimenIdException('Unknown herbarium');
@@ -44,7 +46,7 @@ readonly class SpecimenIdService
     protected function splitSpecimenId(string $specimenId): array
     {
         $parts = [];
-        if (preg_match(SpecimenIdService::regexSpecimenPart, $specimenId, $parts)) {
+        if (preg_match(self::regexPublicSpecimenId, $specimenId, $parts)) {
             return $parts;
         } else {
             throw new SpecimenIdException('invalid name format: ' . $specimenId);
@@ -53,6 +55,6 @@ readonly class SpecimenIdService
 
     public function getSpecimenIdFromId(string $specimenId): int
     {
-        return (int)$this->splitSpecimenId($specimenId)[SpecimenIdService::regexSpecimenPart];
+        return (int)$this->splitSpecimenId($specimenId)[self::regexSpecimenPart];
     }
 }

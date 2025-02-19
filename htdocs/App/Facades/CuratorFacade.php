@@ -132,7 +132,7 @@ readonly class CuratorFacade
         throw new AuthenticationException('Not allowed to delete photo.');
     }
 
-    public function deleteJustFile(string $filename): CuratorFacade
+    public function deleteJustNotimportedFile(string $filename): CuratorFacade
     {
         $this->s3Service->deleteObject($this->herbariumService->getCurrentUserHerbarium()->getBucket(), $filename);
 

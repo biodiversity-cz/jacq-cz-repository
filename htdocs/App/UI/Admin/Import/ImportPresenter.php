@@ -122,7 +122,7 @@ final class ImportPresenter extends SecuredPresenter
     public function actionDeleteJustFile(string $id): void
     {
         try {
-            $this->curatorFacade->deleteJustFile($id);
+            $this->curatorFacade->deleteJustNotimportedFile($id);
             $this->flashMessage('File ' . $id . ' deleted.', 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
