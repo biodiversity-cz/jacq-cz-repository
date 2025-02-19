@@ -30,7 +30,8 @@ readonly class DuplicityStage implements StageInterface
 
                 $imagickFromDuplicateCandidate = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempDuplicatePath($duplicate));
                  if ($imagickNewFile->getImageSignature() === $imagickFromDuplicateCandidate->getImageSignature()) {
-                    $this->informAboutDuplicity($duplicate);
+                    $this->item->getError()->setDuplicateTo($duplicate);
+                     throw new DuplicityStageException('suspicious similarity with already imported file');
                 }
                 $imagickFromDuplicateCandidate->clear();
                 unset($imagickFromDuplicateCandidate);
@@ -42,10 +43,5 @@ readonly class DuplicityStage implements StageInterface
         return $payload;
     }
 
-    protected function informAboutDuplicity(Photos $duplicate): void
-    {
-        $link = $this->linkGenerator->link(':Front:Repository:specimen', [$duplicate->getFullSpecimenId()], null, 'link');
-        throw new DuplicityStageException('suspicious similarity with file ' . $duplicate->getArchiveFilename() . ' already imported to the specimen <a href="' . $link . '" target="duplicity">' . $this->item->getFullSpecimenId() . '</a>');
-    }
 
 }

@@ -34,7 +34,7 @@ final class ImportPresenter extends SecuredPresenter
 
     public function actionThumbnail(int $id): void
     {
-        $thumb = $this->photoService->getPhotoWithError($id)?->getThumbnail();
+        $thumb = $this->photoService->getPhotoWithError($id)?->getError()->getThumbnail();
         if ($thumb !== null) {
             $this->sendResponse(new CallbackResponse(function ($request, $response) use ($thumb): void {
                 $response->setContentType('image');

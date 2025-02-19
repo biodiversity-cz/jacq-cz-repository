@@ -23,7 +23,7 @@ class ThumbnailStage implements StageInterface
         $imagick = $this->imageService->resizeImage($imagick, $this->repositoryConfiguration->getPreviewSize());
         $imagick->setImageFormat('jpg');
         $imagick->setImageCompressionQuality($this->repositoryConfiguration->getPreviewQuality());
-        $this->item->setThumbnail($imagick->getImagesBlob());
+        $this->item->getError()->setThumbnail($imagick->getImagesBlob());
         $imagick->clear();
         unset($imagick);
     }

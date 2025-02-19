@@ -67,10 +67,10 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'message', 'thumbnail', 'exif', 'identify', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
+            return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
         }
 
-        return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'message', 'thumbnail', 'exif', 'identify', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
+        return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
     }
 
     /**
@@ -314,28 +314,6 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function getMessage(): ?string
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getMessage', []);
-
-        return parent::getMessage();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setMessage(?string $message): \App\Model\Database\Entity\Photos
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setMessage', [$message]);
-
-        return parent::setMessage($message);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getFullSpecimenId(): string
     {
 
@@ -446,28 +424,6 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
     /**
      * {@inheritDoc}
      */
-    public function getThumbnail(): mixed
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getThumbnail', []);
-
-        return parent::getThumbnail();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setThumbnail(mixed $thumbnail): \App\Model\Database\Entity\Photos
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setThumbnail', [$thumbnail]);
-
-        return parent::setThumbnail($thumbnail);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getExif(): ?array
     {
 
@@ -507,6 +463,28 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setIdentify', [$identify]);
 
         return parent::setIdentify($identify);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getError(): ?\App\Model\Database\Entity\PhotosError
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getError', []);
+
+        return parent::getError();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setError(?\App\Model\Database\Entity\PhotosError $error): \App\Model\Database\Entity\Photos
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setError', [$error]);
+
+        return parent::setError($error);
     }
 
     /**

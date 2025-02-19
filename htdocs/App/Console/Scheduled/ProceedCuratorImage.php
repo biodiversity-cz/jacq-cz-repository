@@ -4,6 +4,7 @@ namespace App\Console\Scheduled;
 
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
+use App\Model\Database\Entity\PhotosError;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\EntityManager;
 use App\Model\ImportStages\Exceptions\ImportStageException;
@@ -28,7 +29,7 @@ class ProceedCuratorImage extends Command
         parent::__construct($name);
     }
 
-    public function getPhoto(): ?Photos
+    protected function getPhoto(): ?Photos
     {
         $rsm = new ResultSetMappingBuilder($this->entityManager);
         $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
@@ -57,21 +58,20 @@ class ProceedCuratorImage extends Command
         $photo = $this->getPhoto();
         if ($photo === null) {
             $this->entityManager->getConnection()->rollBack();
-
             return Command::SUCCESS;
         }
         try {
             $output->write("\n filename: s3://" . $photo->getHerbarium()->getBucket() . '/' . $photo->getOriginalFilename() . "\n");
-            $photo->setLastEditAt();
-            $photo->setMessage(null);
+            $photo = $this->prepareErrorStorage($photo);
 
             $this->curatorService->importNewFiles()->process($photo);
 
-            $photo->setThumbnail(null);
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_OK));
+            $this->entityManager->remove($photo->getError());
+            $photo->setError(null);
         } catch (ImportStageException $e) {
-            $photo->setMessage($e->getMessage())
-                ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR));
+            $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR));
+            $photo->getError()->setMessage($e->getMessage());
             $output->write("\n ERROR: " . $e->getMessage() . "\n");
         } catch (\Throwable $e) {
             $this->entityManager->getConnection()->rollBack();
@@ -83,6 +83,22 @@ class ProceedCuratorImage extends Command
         $this->entityManager->getConnection()->commit();
 
         return Command::SUCCESS;
+    }
+
+    protected function prepareErrorStorage(Photos $photo): Photos
+    {
+        $photo->setLastEditAt();
+        if ($photo->getError() !== null) {
+            $this->entityManager->remove($photo->getError());
+        }
+        $photo->setError(null);
+        $importError = new PhotosError();
+        $importError->setPhoto($photo);
+        $photo->setError($importError);
+        $this->entityManager->persist($importError);
+
+        return $photo;
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

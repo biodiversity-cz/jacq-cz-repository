@@ -75,7 +75,7 @@ readonly class CuratorFacade
                 $entity = $unprocessedPhotos[$filename['Key']];
                 $alreadyWaiting = $entity->getStatus()->getId() === PhotosStatus::WAITING;
                 $hasControlError = $entity->getStatus()->getId() === PhotosStatus::CONTROL_ERROR;
-                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getMessage());
+                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getError()?->getMessage());
             }
             $files[] = $file;
         }

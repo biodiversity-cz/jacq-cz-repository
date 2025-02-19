@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity(repositoryClass: PhotosRepository::class)]
@@ -56,12 +57,6 @@ class Photos
     #[Column(type: Types::BIGINT, nullable: true, options: ['comment' => 'Filesize of converted JP2 file in bytes'])]
     protected ?int $JP2FileSize;
 
-    #[Column(type: Types::TEXT, length: 60000, nullable: true, options: ['comment' => 'Result of import into the repository'])]
-    protected ?string $message;
-
-    #[Column(type: Types::BLOB, nullable: true, options: ['comment' => 'Thumbnail during import phase'])]
-    protected mixed $thumbnail;
-
     /** @var ?mixed[] */
     #[Column(type: Types::JSON, nullable: true, options: ['jsonb' => true, 'comment' => 'raw EXIF data extracted from Archive Master file'])]
     protected ?array $exif;
@@ -69,6 +64,9 @@ class Photos
     /** @var ?mixed[] */
     #[Column(type: Types::JSON, nullable: true, options: ['jsonb' => true, 'comment' => 'Imagick -verbose identify metadata output from the Archive Master file'])]
     protected ?array $identify;
+
+    #[OneToOne(mappedBy: 'photo', targetEntity: PhotosError::class, cascade: ['remove'])]
+    private ?PhotosError $error = null;
 
     public function getArchiveFilename(): ?string
     {
@@ -142,18 +140,6 @@ class Photos
         return $this;
     }
 
-    public function getMessage(): ?string
-    {
-        return $this->message;
-    }
-
-    public function setMessage(?string $message): Photos
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
     public function getFullSpecimenId(): string
     {
         return strtoupper($this->getHerbarium()->getAcronym()) . '_' . sprintf('%06d', $this->getSpecimenId());
@@ -212,18 +198,6 @@ class Photos
         return $this;
     }
 
-    public function getThumbnail(): mixed
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(mixed $thumbnail): Photos
-    {
-        $this->thumbnail = $thumbnail;
-
-        return $this;
-    }
-
     /**
      * @return ?mixed[]
      */
@@ -259,5 +233,17 @@ class Photos
 
         return $this;
     }
+
+    public function getError(): ?PhotosError
+    {
+        return $this->error;
+    }
+
+    public function setError(?PhotosError $error): Photos
+    {
+        $this->error = $error;
+        return $this;
+    }
+
 
 }
