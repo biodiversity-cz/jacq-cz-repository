@@ -43,6 +43,8 @@ class Herbaria
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'address of the institution/herbarium'])]
     protected ?string $address;
 
+    //TODO add prefered specimen ID format (trailing zeros) for output presentation
+
     /** @var PersistentCollection<int, Photos> */
     #[OneToMany(mappedBy: 'herbarium', targetEntity: Photos::class)]
     protected PersistentCollection $photos;
