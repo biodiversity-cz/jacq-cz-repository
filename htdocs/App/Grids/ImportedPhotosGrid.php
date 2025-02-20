@@ -38,7 +38,7 @@ class ImportedPhotosGrid extends BaseGridFactory
             ->setRenderer(function ($item) {
                 $el = Html::el(null);
                 /** @var Photos $item */
-                $url = $this->presenter->link(':Front:Repository:specimen', ['specimenFullId' => $item->getFullSpecimenId()]);
+                $url = $this->presenter->link('Import:specimen', ['specimenFullId' => $item->getFullSpecimenId()]);
                 $el->addHtml('<a href="' . $url . '">' . $item->getFullSpecimenId() . '</a>');
                 return $el;
             });
@@ -46,7 +46,6 @@ class ImportedPhotosGrid extends BaseGridFactory
             ->setRenderer(function ($item) {
                 $el = Html::el(null);
                 /** @var Photos $item */
-                $url = $this->presenter->link(':Front:Repository:specimen', ['specimenFullId' => $item->getFullSpecimenId()]);
                 $el->addHtml('<a href="https://'.$item->getHerbarium()->getAcronym().'.jacq.org/'.$item->getHerbarium()->getAcronym().$item->getSpecimenId(). '">JACQ</a>');
                 return $el;
             });
@@ -64,6 +63,8 @@ class ImportedPhotosGrid extends BaseGridFactory
 
         $this->grid->addExportCsvFiltered('Csv export (filtered)', 'curator_imported.csv')
             ->setTitle('Csv export (filtered)');
+
+
         return $this->grid;
     }
 

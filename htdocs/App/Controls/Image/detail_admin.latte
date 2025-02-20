@@ -1,0 +1,28 @@
+<div class="col">
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-md-4">
+                {if $photo->getStatus()->getId() === 3 || $photo->getStatus()->getId() === 4}
+                <img
+                    src="https://herbarium-iiif.dyn.cloud.e-infra.cz/iiif/3/{$photo->getJp2Filename()}/full/300,/0/default.jpg"
+                    width="300px" class="img-fluid rounded-start">
+                {/if}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">PID: NRPKA3.3domain.image{$photo->getId()}</h5>
+                    <p class="card-text">Archive Master filename: {$photo->getArchiveFilename()} <a
+                        href="{plink Import:archiveImage $photo->getId()}">download</a></p>
+                    <p class="card-text">W×H: {$photo->getWidth()}×{$photo->getHeight()}</p>
+                    <p class="card-text">Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
+                    <p class="card-text">Status: {$photo->getStatus()->getName()} </p>
+                    <p class="card-text"><small class="text-muted">Imported at
+                        {$photo->getCreatedAt()|localDate}</small></p>
+
+                    <a class="btn btn-outline-danger deleteButton" n:href="delete!" role="button">Delete</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -19,6 +19,16 @@ export default function importForm() {
         });
     }
 
+         document.querySelectorAll(".deleteButton").forEach(button => {
+            button.addEventListener('click', function(event) {
+                if (!confirm("Do you really want to delete this file? It won't be allowed in the production settings.")) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+
+
     //autorefresh page
     const element = document.getElementById('autorefresh');
     if (element) {

@@ -2,6 +2,7 @@
 
 namespace App\UI\Front\Repository;
 
+use App\Controls\Image\DetailControlFactory;
 use App\Exceptions\SpecimenIdException;
 use App\Model\SpecimenFactory;
 use App\Services\EntityServices\PhotoService;
@@ -9,6 +10,7 @@ use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\Responses\CallbackResponse;
+use Nette\Application\UI\Multiplier;
 use Nette\Http\IRequest;
 use Nette\Http\Response;
 
@@ -22,6 +24,8 @@ final class RepositoryPresenter extends UnsecuredPresenter
     /** @inject */ public PhotoService $photoService;
 
     /** @inject */ public RepositoryConfiguration $repositoryConfiguration;
+
+    /** @inject */ public DetailControlFactory $detailControlFactory;
 
     public function renderArchiveImage(int $id): void
     {
@@ -71,6 +75,13 @@ final class RepositoryPresenter extends UnsecuredPresenter
         $this->template->images = $this->photoService->getPublicPhotosOfSpecimen($specimen);
 
         $this->template->manifestAbsoluteLink = $this->link('//Iiif:manifest', $specimenFullId);
+    }
+
+    protected function createComponentDetail(): Multiplier
+    {
+        return new Multiplier(function ($id) {
+            return $this->detailControlFactory->create((int) $id);
+        });
     }
 
 }

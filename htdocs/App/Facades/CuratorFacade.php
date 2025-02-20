@@ -132,6 +132,25 @@ readonly class CuratorFacade
         throw new AuthenticationException('Not allowed to delete photo.');
     }
 
+    /**
+     * @deprecated
+     * This function should not be present in production settings
+     * TODO distinguish between photo imported and with error (different buckets to be deleted..)
+     */
+    public function deleteAlreadyImportedPhoto(Photos $photo): CuratorFacade
+    {
+        if ($this->herbariumService->getCurrentUserHerbarium() === $photo->getHerbarium()) {
+            $this->s3Service->deleteObject($this->repositoryConfiguration->getImageServerBucket(), $photo->getJp2Filename());
+            $this->s3Service->deleteObject($this->repositoryConfiguration->getArchiveBucket(), $photo->getArchiveFilename());
+            $this->entityManager->remove($photo);
+            $this->entityManager->flush();
+
+            return $this;
+        }
+
+        throw new AuthenticationException('Not allowed to delete photo.');
+    }
+
     public function deleteJustNotimportedFile(string $filename): CuratorFacade
     {
         $this->s3Service->deleteObject($this->herbariumService->getCurrentUserHerbarium()->getBucket(), $filename);
