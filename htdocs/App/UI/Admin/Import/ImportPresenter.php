@@ -89,7 +89,7 @@ final class ImportPresenter extends SecuredPresenter
         try {
             $erroneous = $this->photoService->getPhotosWithError();
             foreach ($erroneous as $photoWithImportError) {
-                $this->curatorFacade->deleteNotImportedPhoto($photoWithImportError);
+                $this->curatorFacade->deletePhoto($photoWithImportError);
             }
             $this->flashMessage('Files with import error were deleted from your herbarium bucket', 'success');
         } catch (\Exception $exception) {
@@ -125,7 +125,7 @@ final class ImportPresenter extends SecuredPresenter
             }
 
             $name = $photo->getOriginalFilename();
-            $this->curatorFacade->deleteNotImportedPhoto($photo);
+            $this->curatorFacade->deletePhoto($photo);
             $this->flashMessage('Photo ' . $name . ' deleted.', 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');

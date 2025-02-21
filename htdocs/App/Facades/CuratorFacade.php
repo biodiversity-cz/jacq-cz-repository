@@ -13,7 +13,9 @@ use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use App\Services\SpecimenIdService;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use League\Pipeline\Pipeline;
+use Nette\Neon\Exception;
 use Nette\Security\AuthenticationException;
 
 readonly class CuratorFacade
@@ -119,36 +121,48 @@ readonly class CuratorFacade
         return $this->photoService->findLastImported();
     }
 
-    public function deleteNotImportedPhoto(Photos $photo): CuratorFacade
-    {
-        if ($this->herbariumService->getCurrentUserHerbarium() === $photo->getHerbarium()) {
-            $this->s3Service->deleteObject($photo->getHerbarium()->getBucket(), $photo->getOriginalFilename());
-            $this->entityManager->remove($photo);
-            $this->entityManager->flush();
-
-            return $this;
-        }
-
-        throw new AuthenticationException('Not allowed to delete photo.');
-    }
-
     /**
      * @deprecated
-     * This function should not be present in production settings
-     * TODO distinguish between photo imported and with error (different buckets to be deleted..)
+     * This function requires refactoring in production settings
      */
-    public function deleteAlreadyImportedPhoto(Photos $photo): CuratorFacade
+    public function deletePhoto(Photos $entity): CuratorFacade
     {
-        if ($this->herbariumService->getCurrentUserHerbarium() === $photo->getHerbarium()) {
-            $this->s3Service->deleteObject($this->repositoryConfiguration->getImageServerBucket(), $photo->getJp2Filename());
-            $this->s3Service->deleteObject($this->repositoryConfiguration->getArchiveBucket(), $photo->getArchiveFilename());
-            $this->entityManager->remove($photo);
-            $this->entityManager->flush();
-
-            return $this;
+        if ($this->herbariumService->getCurrentUserHerbarium() !== $entity->getHerbarium()) {
+            throw new AuthenticationException('Not allowed to delete photo.');
         }
+        try {
+            $this->entityManager->beginTransaction();
+            $rsm = new ResultSetMappingBuilder($this->entityManager);
+            $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
+            $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE id = ? FOR UPDATE SKIP LOCKED LIMIT 1 ', $rsm);
+            $query->setParameter(1, $entity->getId());
+            $lockedEntity = $query->getSingleResult();
 
-        throw new AuthenticationException('Not allowed to delete photo.');
+            switch ($lockedEntity->getStatus()->getId()) {
+                case PhotosStatus::WAITING:
+                case PhotosStatus::CONTROL_ERROR:
+                    $this->s3Service->deleteObject($lockedEntity->getHerbarium()->getBucket(), $lockedEntity->getOriginalFilename());
+                    break;
+                /**
+                 * @deprecated
+                 * //TODO delete is not allowed in the final repository
+                 */
+                case PhotosStatus::CONTROL_OK:
+                case PhotosStatus::PUBLIC:
+                case PhotosStatus::HIDDEN:
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getImageServerBucket(), $lockedEntity->getJp2Filename());
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getArchiveBucket(), $lockedEntity->getArchiveFilename());
+                    break;
+            }
+
+            $this->entityManager->remove($lockedEntity);
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+        } catch (\Exception $e) {
+            $this->entityManager->rollback();
+            throw new Exception("Error in photo delete: " . $e->getMessage());
+        }
+        return $this;
     }
 
     public function deleteJustNotimportedFile(string $filename): CuratorFacade

@@ -37,6 +37,6 @@ class DetailControl extends Control
 
     public function handleDelete()
     {
-        $this->curatorFacade->deleteAlreadyImportedPhoto($this->photo);
+        $this->curatorFacade->deletePhoto($this->photo);
     }
 }

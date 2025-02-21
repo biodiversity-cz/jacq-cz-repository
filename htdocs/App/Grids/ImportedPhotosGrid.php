@@ -4,7 +4,6 @@ namespace App\Grids;
 
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
-use App\Model\Entity\Accession;
 use App\Services\EntityServices\PhotoService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
