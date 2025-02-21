@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model;
 
@@ -15,6 +15,12 @@ class Specimen
     {
     }
 
+    public function getStandardizedId()
+    {
+        return $this->getHerbarium()->getAcronym() . '-' . sprintf('%07d', $this->getSpecimenId());
+
+    }
+
     public function getHerbarium(): Herbaria
     {
         return $this->herbarium;
@@ -27,16 +33,16 @@ class Specimen
         return $this;
     }
 
+    public function getSpecimenId(): int
+    {
+        return $this->specimenId;
+    }
+
     public function setSpecimenId(int $specimenId): Specimen
     {
         $this->specimenId = $specimenId;
 
         return $this;
-    }
-
-    public function getSpecimenId(): int
-    {
-        return $this->specimenId;
     }
 
 }

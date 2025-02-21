@@ -1,7 +1,7 @@
 {block content}
 <h2>Detail of specimen</h2>
 <p>Herbarium: {$images[0]->getHerbarium()->getAcronym()}</p>
-<p>Specimen: {$id}</p>
+<p>Specimen: {$specimen->getStandardizedId()}</p>
 <p>Specimen Persistent ID (=link to JACQ): <a href="{$images[0]->getJacqPid()}">{$images[0]->getJacqPid()}</a></p>
 <p>IIIF manifest: <a href="{$manifestAbsoluteLink}">{$manifestAbsoluteLink}</a></p>
 <h4>Photos</h4>

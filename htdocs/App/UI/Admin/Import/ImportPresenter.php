@@ -191,7 +191,7 @@ final class ImportPresenter extends SecuredPresenter
             $this->redirect('Home:');
         }
 
-        $this->template->id = $specimenFullId;
+        $this->template->specimen = $specimen;
         $this->template->images = $this->photoService->getAllPhotosOfSpecimen($specimen);
 
         $this->template->manifestAbsoluteLink = $this->link('//:Front:Iiif:manifest', $specimenFullId);

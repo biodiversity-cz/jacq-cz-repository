@@ -71,7 +71,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $this->error('Specimen ' . $specimenFullId . ' not in evidence.');
         }
 
-        $this->template->id = $specimenFullId;
+        $this->template->specimen = $specimen;
         $this->template->images = $this->photoService->getPublicPhotosOfSpecimen($specimen);
 
         $this->template->manifestAbsoluteLink = $this->link('//Iiif:manifest', $specimenFullId);
