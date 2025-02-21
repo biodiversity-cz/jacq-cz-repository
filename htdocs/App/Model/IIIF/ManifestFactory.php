@@ -5,7 +5,7 @@ namespace App\Model\IIIF;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\EntityManager;
 use App\Model\Database\Repository\PhotosRepository;
-use App\Model\Specimen;
+use App\Model\Specimen\Specimen;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use IIIF\PresentationAPI\Links\Service;

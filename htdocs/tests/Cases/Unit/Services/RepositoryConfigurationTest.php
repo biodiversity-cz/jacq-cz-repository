@@ -15,11 +15,11 @@ test('RepositoryConfiguration Service', function (): void {
     $parameters = $container->getParameters();
     $service = new RepositoryConfiguration($parameters["storage"], $tempDir);
 
-    Assert::type('string', $service->getArchiveBucket());
-    Assert::notEqual('', $service->getArchiveBucket());
+    Assert::type('string', $service->getRepositoryArchiveBucket());
+    Assert::notEqual('', $service->getRepositoryArchiveBucket());
 
-    Assert::type('string', $service->getImageServerBucket());
-    Assert::notEqual('', $service->getImageServerBucket());
+    Assert::type('string', $service->getRespositoryImageServerBucket());
+    Assert::notEqual('', $service->getRespositoryImageServerBucket());
 
     Assert::type('int', $service->getJp2Quality());
     Assert::true($service->getJp2Quality() >= 0 && $service->getJp2Quality() <= 100 );

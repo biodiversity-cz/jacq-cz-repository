@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace App\Model;
+namespace App\Model\Specimen;
 
 use App\Exceptions\SpecimenIdException;
 use App\Services\EntityServices\HerbariumService;
@@ -22,7 +22,7 @@ class SpecimenFactory
         $specimen = new Specimen();
         $specimen->setHerbarium($this->specimenIdService->getHerbariumFromId($fullSpecimenId));
 
-        $specimenId = $this->specimenIdService->getSpecimenIdFromId($fullSpecimenId);
+        $specimenId = $this->specimenIdService->getNumericPartFromId($fullSpecimenId);
         $specimen->setNumericPartOfId($specimenId);
 
         return $specimen;

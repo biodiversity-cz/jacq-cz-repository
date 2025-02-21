@@ -49,7 +49,7 @@ class BucketParity extends Command
      */
     public function getArchiveFilesS3(): array
     {
-        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getArchiveBucket());
+        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getRepositoryArchiveBucket());
     }
 
     /**
@@ -57,7 +57,7 @@ class BucketParity extends Command
      */
     public function getJp2FilesS3(): array
     {
-        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getImageServerBucket());
+        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getRespositoryImageServerBucket());
     }
 
     protected function configure(): void

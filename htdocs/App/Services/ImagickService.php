@@ -1,16 +1,21 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services;
 
 use Imagick;
 
-class ImageService
+readonly class ImagickService
 {
 
-    public const string ENCODING = 'UTF-8';
-
-    public function __construct(protected readonly S3Service $S3Service, protected readonly RepositoryConfiguration $storageConfiguration)
+    /**
+     * creates Imagick instance with the largest page of file activated
+     */
+    public function createImagick(string $path): Imagick
     {
+        $imagick = new Imagick($path);
+        $imagick->setIteratorIndex($this->getLargestImageIndex($imagick));
+
+        return $imagick;
     }
 
     /**
@@ -39,17 +44,6 @@ class ImageService
         return $largestImageIndex;
     }
 
-    /**
-     * creates Imagick instance with the largest page of file activated
-     */
-    public function createImagick(string $path): Imagick
-    {
-        $imagick = new Imagick($path);
-        $imagick->setIteratorIndex($this->getLargestImageIndex($imagick));
-
-        return $imagick;
-    }
-
     public function resizeImage(Imagick $imagick, int $maxEdgeLength): Imagick
     {
         $width = $imagick->getImageWidth();
@@ -69,25 +63,14 @@ class ImageService
         return $imagick;
     }
 
-    /**
-     * @return mixed[]
-     */
     public function readIdentify(Imagick $imagick): array
     {
         $identify = $imagick->identifyImage(true);
-        if(isset($identify['rawOutput'])){
+        if (isset($identify['rawOutput'])) {
             $identify['rawOutput'] = $this->parseIdentify($identify['rawOutput']);
         }
 
         return $identify;
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function readExif(Imagick $imagick): array
-    {
-        return $imagick->getImageProperties();
     }
 
     /**
@@ -112,7 +95,7 @@ class ImageService
 
             if (empty($trimLine))
 
-            continue;
+                continue;
 
             if ($raw) {
                 preg_match('/^[0-9]+:\s/', $trimLine, $match);
@@ -187,6 +170,11 @@ class ImageService
         $outputs[] = $output['Image'];
 
         return count($outputs) > 1 ? $outputs : $outputs[0];
+    }
+
+    public function readExif(Imagick $imagick): array
+    {
+        return $imagick->getImageProperties();
     }
 
 }

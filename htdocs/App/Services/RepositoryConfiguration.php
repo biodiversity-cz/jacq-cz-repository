@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services;
 
@@ -11,20 +11,29 @@ final readonly class RepositoryConfiguration
     public const string TEMP_FILE = 'default';
     public const string TEMP_ZBAR_FILE = 'default_zbar';
     public const string TEMP_DUPLICATE_FILE = 'duplicate';
+    public const string SPECIMEN_NUMERIC_FORMAT = '%07d';
 
-    /**
-     * @param mixed[] $config
-     */
     public function __construct(protected array $config, protected TempDir $tempDir)
     {
     }
 
-    public function getArchiveBucket(): string
+    public function getRepositoryArchiveBucket(): string
     {
         return $this->getKey('archiveBucket', 'Archive bucket not set.');
     }
 
-    public function getImageServerBucket(): string
+    protected function getKey(string $key, string $msg = ''): mixed
+    {
+        if (!isset($this->config[$key])) {
+            $text = $msg === '' ? 'Configuration parameter ' . strtoupper($key) . ' not set!' : $msg;
+
+            throw new ConfigurationException($text);
+        }
+
+        return $this->config[$key];
+    }
+
+    public function getRespositoryImageServerBucket(): string
     {
         return $this->getKey('jp2Bucket', 'Image server bucket not set.');
     }
@@ -39,14 +48,14 @@ final readonly class RepositoryConfiguration
         return $this->getImageServerBaseUrl() . $jp2ObjectName;
     }
 
+    protected function getImageServerBaseUrl(): string
+    {
+        return $this->getKey('imageServerBaseUrl');
+    }
+
     public function getZbarImageSize(): int
     {
         return $this->getKey('zbarImageHeight');
-    }
-
-    public function getThumbnailSize(): int
-    {
-        return $this->getKey('thumbImageWidth');
     }
 
     public function getPreviewSize(): int
@@ -62,6 +71,11 @@ final readonly class RepositoryConfiguration
     public function getImageServerUrlThumbnail(string $jp2ObjectName): string
     {
         return $this->getImageServerBaseUrl() . $jp2ObjectName . '/full/' . $this->getThumbnailSize() . ',/0/default.jpg';
+    }
+
+    public function getThumbnailSize(): int
+    {
+        return $this->getKey('thumbImageWidth');
     }
 
     public function getImportTempPath(Photos $photo): string
@@ -81,7 +95,7 @@ final readonly class RepositoryConfiguration
 
     public function getImportTempDuplicatePath(Photos $photo): string
     {
-        return $this->tempDir->getPath(self::TEMP_DUPLICATE_FILE . '.'.pathinfo($photo->getArchiveFilename(), PATHINFO_EXTENSION));
+        return $this->tempDir->getPath(self::TEMP_DUPLICATE_FILE . '.' . pathinfo($photo->getArchiveFilename(), PATHINFO_EXTENSION));
     }
 
     public function createS3Jp2Name(Photos $photo): string
@@ -92,22 +106,6 @@ final readonly class RepositoryConfiguration
     public function createS3TifName(Photos $photo): string
     {
         return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.tif';
-    }
-
-    protected function getKey(string $key, string $msg = ''): mixed
-    {
-        if (!isset($this->config[$key])) {
-            $text = $msg === '' ? 'Configuration parameter ' . strtoupper($key) . ' not set!' : $msg;
-
-            throw new ConfigurationException($text);
-        }
-
-        return $this->config[$key];
-    }
-
-    protected function getImageServerBaseUrl(): string
-    {
-        return $this->getKey('imageServerBaseUrl');
     }
 
 }

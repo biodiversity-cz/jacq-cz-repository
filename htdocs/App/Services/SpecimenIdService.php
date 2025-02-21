@@ -20,15 +20,6 @@ readonly class SpecimenIdService
     {
     }
 
-    public function filenameFitsHerbariumPattern(string $filename, Herbaria $herbarium): bool
-    {
-        if (preg_match($herbarium->getRegexFilename(), $filename)) {
-            return true;
-        }
-        return false;
-
-    }
-
     public function getHerbariumFromId(string $specimenId): Herbaria
     {
         $acronym = strtoupper($this->splitSpecimenId($specimenId)[self::regexHerbariumPart]);
@@ -53,7 +44,7 @@ readonly class SpecimenIdService
         }
     }
 
-    public function getSpecimenIdFromId(string $specimenId): int
+    public function getNumericPartFromId(string $specimenId): int
     {
         return (int)$this->splitSpecimenId($specimenId)[self::regexSpecimenPart];
     }

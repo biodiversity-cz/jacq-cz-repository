@@ -150,8 +150,8 @@ readonly class CuratorFacade
                 case PhotosStatus::CONTROL_OK:
                 case PhotosStatus::PUBLIC:
                 case PhotosStatus::HIDDEN:
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getImageServerBucket(), $lockedEntity->getJp2Filename());
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getArchiveBucket(), $lockedEntity->getArchiveFilename());
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRespositoryImageServerBucket(), $lockedEntity->getJp2Filename());
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $lockedEntity->getArchiveFilename());
                     break;
             }
 
@@ -190,7 +190,7 @@ readonly class CuratorFacade
 
     public function getArchiveFile(Photos $photo, string $destination): CuratorFacade
     {
-        $this->s3Service->getObject($this->repositoryConfiguration->getArchiveBucket(), $photo->getArchiveFilename(), $destination);
+        $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename(), $destination);
 
         return $this;
     }

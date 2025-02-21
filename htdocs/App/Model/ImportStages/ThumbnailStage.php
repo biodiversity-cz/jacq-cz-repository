@@ -4,7 +4,7 @@ namespace App\Model\ImportStages;
 
 use App\Model\Database\Entity\Photos;
 use App\Model\ImportStages\Exceptions\ThumbnailStageException;
-use App\Services\ImageService;
+use App\Services\ImagickService;
 use App\Services\RepositoryConfiguration;
 use Imagick;
 use League\Pipeline\StageInterface;
@@ -14,7 +14,7 @@ class ThumbnailStage implements StageInterface
 
     protected Photos $item;
 
-    public function __construct(protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly ImageService $imageService)
+    public function __construct(protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly ImagickService $imageService)
     {
     }
 

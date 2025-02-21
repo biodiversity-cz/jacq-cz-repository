@@ -3,7 +3,7 @@
 namespace App\Model\ImportStages;
 
 use App\Model\ImportStages\Exceptions\ConvertStageException;
-use App\Services\ImageService;
+use App\Services\ImagickService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use League\Pipeline\StageInterface;
@@ -11,7 +11,7 @@ use League\Pipeline\StageInterface;
 readonly class ConvertStage implements StageInterface
 {
 
-    public function __construct(protected S3Service $s3Service, protected RepositoryConfiguration $repositoryConfiguration, protected ImageService $imageService)
+    public function __construct(protected S3Service $s3Service, protected RepositoryConfiguration $repositoryConfiguration, protected ImagickService $imageService)
     {
     }
 

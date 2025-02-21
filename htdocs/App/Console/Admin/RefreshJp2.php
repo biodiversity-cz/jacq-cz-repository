@@ -6,7 +6,7 @@ use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\EntityManager;
-use App\Services\ImageService;
+use App\Services\ImagickService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use App\Services\TempDir;
@@ -21,7 +21,7 @@ class RefreshJp2 extends Command
     protected const string TEMPNAME = DIRECTORY_SEPARATOR . 'exif.tif';
     protected const string TEMPNAME2 = DIRECTORY_SEPARATOR . 'exif.jp2';
 
-    public function __construct(protected readonly EntityManager $entityManager, protected readonly CuratorFacade $curatorService, protected readonly TempDir $tempDir, protected readonly ImageService $imageService, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service, ?string $name = null)
+    public function __construct(protected readonly EntityManager $entityManager, protected readonly CuratorFacade $curatorService, protected readonly TempDir $tempDir, protected readonly ImagickService $imageService, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service, ?string $name = null)
     {
         parent::__construct($name);
     }
@@ -73,8 +73,8 @@ class RefreshJp2 extends Command
             $this->entityManager->flush();
             unlink($this->tempFile());
 
-            $this->s3Service->deleteObject($this->repositoryConfiguration->getImageServerBucket(), $this->repositoryConfiguration->createS3Jp2Name($photo));
-            $this->s3Service->putJp2IfNotExists($this->repositoryConfiguration->getImageServerBucket(), $this->repositoryConfiguration->createS3Jp2Name($photo), $this->tempFile2());
+            $this->s3Service->deleteObject($this->repositoryConfiguration->getRespositoryImageServerBucket(), $this->repositoryConfiguration->createS3Jp2Name($photo));
+            $this->s3Service->putJp2IfNotExists($this->repositoryConfiguration->getRespositoryImageServerBucket(), $this->repositoryConfiguration->createS3Jp2Name($photo), $this->tempFile2());
             unlink($this->tempFile2());
         }
 

@@ -4,8 +4,8 @@ namespace App\UI\Front\Iiif;
 
 use App\Exceptions\SpecimenIdException;
 use App\Model\IIIF\ManifestFactory;
-use App\Model\Specimen;
-use App\Model\SpecimenFactory;
+use App\Model\Specimen\Specimen;
+use App\Model\Specimen\SpecimenFactory;
 use App\Services\EntityServices\PhotoService;
 use App\UI\Base\UnsecuredPresenter;
 

@@ -4,7 +4,7 @@ namespace App\Services\EntityServices;
 
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
-use App\Model\Specimen;
+use App\Model\Specimen\Specimen;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 

@@ -5,6 +5,7 @@ namespace App\Model\Database\Repository;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
+use Nette\Security\User;
 
 /**
  * @method Photos|NULL find($id, ?int $lockMode = NULL, ?int $lockVersion = NULL)
@@ -30,5 +31,15 @@ class PhotosRepository extends AbstractRepository
     {
         return $this->findBy(['status' => [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR], 'herbarium' => $herbarium]);
     }
+//TODO move methods from PhotoService to the repository, cleanup also Facade
+    public function findLastImported(User $user): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->andWhere('p.owner = :user OR :isAdmin = true')
+            ->setParameter('user', $user)
+            ->setParameter('isAdmin', $user->hasRole('ROLE_ADMIN'))
+            ->orderBy('p.id', 'DESC');
 
+        return $qb->getQuery()->getResult();
+    }
 }

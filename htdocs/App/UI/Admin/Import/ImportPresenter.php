@@ -6,7 +6,7 @@ use App\Controls\Image\DetailControlFactory;
 use App\Exceptions\SpecimenIdException;
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
-use App\Model\SpecimenFactory;
+use App\Model\Specimen\SpecimenFactory;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
@@ -218,7 +218,7 @@ final class ImportPresenter extends SecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $bucket = $this->repositoryConfiguration->getArchiveBucket();
+        $bucket = $this->repositoryConfiguration->getRepositoryArchiveBucket();
         $filename = $photo->getArchiveFilename();
         if ($this->s3Service->objectExists($bucket, $filename)) {
             $head = $this->s3Service->headObject($bucket, $filename);

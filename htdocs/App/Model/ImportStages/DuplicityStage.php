@@ -5,7 +5,7 @@ namespace App\Model\ImportStages;
 use App\Model\Database\Entity\Photos;
 use App\Model\ImportStages\Exceptions\DuplicityStageException;
 use App\Services\EntityServices\PhotoService;
-use App\Services\ImageService;
+use App\Services\ImagickService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use League\Pipeline\StageInterface;
@@ -15,7 +15,7 @@ readonly class DuplicityStage implements StageInterface
 {
     protected Photos $item;
 
-    public function __construct(protected PhotoService $photoService, protected LinkGenerator $linkGenerator, protected ImageService $imageService, protected  RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service)
+    public function __construct(protected PhotoService $photoService, protected LinkGenerator $linkGenerator, protected ImagickService $imageService, protected  RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service)
     {
     }
 
@@ -26,7 +26,7 @@ readonly class DuplicityStage implements StageInterface
         if (count($duplicities) > 0) {
             $imagickNewFile = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempPath($this->item));
             foreach ($duplicities as $duplicate) {
-                $this->s3Service->getObject($this->repositoryConfiguration->getArchiveBucket(), $duplicate->getArchiveFilename(), $this->repositoryConfiguration->getImportTempDuplicatePath($duplicate));
+                $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $duplicate->getArchiveFilename(), $this->repositoryConfiguration->getImportTempDuplicatePath($duplicate));
 
                 $imagickFromDuplicateCandidate = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempDuplicatePath($duplicate));
                  if ($imagickNewFile->getImageSignature() === $imagickFromDuplicateCandidate->getImageSignature()) {

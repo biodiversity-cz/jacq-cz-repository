@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Specimen;
 
 use App\Model\Database\Entity\Herbaria;
+use App\Services\RepositoryConfiguration;
 
 class Specimen
 {
@@ -17,7 +18,7 @@ class Specimen
 
     public function getStandardizedId()
     {
-        return $this->getHerbarium()->getAcronym() . '-' . sprintf('%07d', $this->getNumericPartOfId());
+        return $this->getHerbarium()->getAcronym() . '-' . sprintf(RepositoryConfiguration::SPECIMEN_NUMERIC_FORMAT, $this->getNumericPartOfId());
 
     }
 
