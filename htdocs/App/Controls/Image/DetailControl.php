@@ -6,6 +6,7 @@ use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Services\EntityServices\PhotoService;
 use Nette\Application\UI\Control;
+use Nette\Neon\Exception;
 
 class DetailControl extends Control
 {
@@ -36,6 +37,11 @@ class DetailControl extends Control
 
     public function handleDelete()
     {
-        $this->curatorFacade->deletePhoto($this->photo);
+        try {
+            $this->curatorFacade->deletePhoto($this->photo);
+        }catch (Exception $e){
+            $this->presenter->flashMessage($e->getMessage(), 'danger');
+        }
+        $this->redirect('this');
     }
 }

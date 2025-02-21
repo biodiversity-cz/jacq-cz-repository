@@ -3,7 +3,7 @@
 namespace App\UI\Admin\Home;
 
 use App\Facades\CuratorFacade;
-use App\Grids\ImportedPhotosGrid;
+use App\Grids\ImportedPhotosGridFactory;
 use App\Model\Database\Entity\Photos;
 use App\UI\Base\SecuredPresenter;
 
@@ -12,7 +12,7 @@ final class HomePresenter extends SecuredPresenter
 
     /** @inject */
     public CuratorFacade $curatorService;
-    /** @inject */ public ImportedPhotosGrid  $importedPhotosGrid;
+    /** @inject */ public ImportedPhotosGridFactory $importedPhotosGridFactory;
 
     public ?Photos $photo;
 
@@ -30,7 +30,7 @@ final class HomePresenter extends SecuredPresenter
 
     public function createComponentImportedGrid($name)
     {
-        return $this->importedPhotosGrid->create($this->getPresenter(), $name);
+        return $this->importedPhotosGridFactory->create();
     }
 
 }

@@ -194,7 +194,7 @@ final class ImportPresenter extends SecuredPresenter
                 throw new SpecimenIdException('Specimen not in evidence');
             }
         } catch (SpecimenIdException $exception) {
-            $this->flashMessage($exception->getMessage(), 'error');
+            $this->flashMessage($exception->getMessage(), 'warning');
             $this->redirect('Home:');
         }
 

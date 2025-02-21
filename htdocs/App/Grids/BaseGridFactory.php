@@ -5,16 +5,16 @@ namespace App\Grids;
 use Nette\Application\UI\Presenter;
 use Ublaboo\DataGrid\DataGrid;
 
-abstract class BaseGridFactory
+class BaseGridFactory
 {
 
     public const array FILTER_NOTHING = ['' => ' - - - - - '];
-    protected Presenter $presenter;
+
     protected DataGrid $grid;
 
-    public function createBaseDatagrid($name): DataGrid
+    public function createBaseDatagrid(): DataGrid
     {
-        $this->grid = new DataGrid($this->presenter, $name);
+        $this->grid = new DataGrid();
         $this->grid
             ->setItemsPerPageList([10, 50, 200])
             ->setStrictSessionFilterValues(false);

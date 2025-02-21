@@ -2,20 +2,26 @@
 
 namespace App\Grids;
 
+use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Services\EntityServices\PhotoService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
-use Nette\Application\UI\Presenter;
+use Nette\Application\UI\Control;
+use Nette\Neon\Exception;
 use Nette\Utils\Html;
+use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 use Ublaboo\DataGrid\DataGrid;
 
-class ImportedPhotosGrid extends BaseGridFactory
+class ImportedPhotosGrid extends Control
 {
 
-    public function __construct(protected readonly PhotoService $photoService)
+    private DataGrid $grid;
+
+    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade)
     {
+        $this->grid = $this->gridFactory->createBaseDatagrid('importedPhotos');
     }
 
     protected function defaultDatasource(): QueryBuilder
@@ -26,10 +32,33 @@ class ImportedPhotosGrid extends BaseGridFactory
             ->orderBy('a.id', 'DESC');
     }
 
-    public function create(Presenter $presenter, string $name): DataGrid
+    public function create(): self
     {
-        $this->presenter = $presenter;
-        $this->createBaseDatagrid($name);
+        return $this;
+    }
+
+    public function render()
+    {
+        $template = $this->template;
+        $template->setFile(__DIR__ . '/importedPhotosGrid.latte');
+
+        $template->render();
+    }
+
+    public function handleDelete(int $id)
+    {
+        try {
+            $photo = $this->photoService->getPhoto($id);
+            $this->curatorFacade->deletePhoto($photo);
+        }catch (Exception $e){
+            $this->presenter->flashMessage($e->getMessage(), 'danger');
+        }
+        $this->redirect('this');
+    }
+
+    public function createComponentGrid(): DataGrid
+    {
+
         $this->grid->setDataSource($this->defaultDatasource())->setDefaultSort(["id" => Criteria::DESC])->setRememberState(false);
         $this->grid->addColumnNumber('id', 'ID');
         $this->grid->addColumnDateTime('lastEditAt', 'processed at')->setFormat('d.m.Y H:i');
@@ -63,7 +92,13 @@ class ImportedPhotosGrid extends BaseGridFactory
         $this->grid->addExportCsvFiltered('Csv export (filtered)', 'curator_imported.csv')
             ->setTitle('Csv export (filtered)');
 
-
+        $this->grid->addAction('delete', '', 'delete!')
+            ->setIcon('trash')
+            ->setTitle('Smazat')
+            ->setClass('btn btn-xs btn-danger <strong class="text-danger">ajax</strong>')
+            ->setConfirmation(
+                new StringConfirmation('Do you really want to delete photo %s? This won\'t be allowed in production mode!', 'archiveFilename') // Second parameter is optional
+            );
         return $this->grid;
     }
 
