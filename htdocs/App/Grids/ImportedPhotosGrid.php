@@ -37,7 +37,7 @@ class ImportedPhotosGrid extends BaseGridFactory
             ->setRenderer(function ($item) {
                 $el = Html::el(null);
                 /** @var Photos $item */
-                $url = $this->presenter->link('Import:specimen', ['specimenFullId' => $item->getFullSpecimenId()]);
+                $url = $this->presenter->link('Import:specimen', ['specimenNumericPartOfId' => $item->getSpecimenId()]);
                 $el->addHtml('<a href="' . $url . '">' . $item->getFullSpecimenId() . '</a>');
                 return $el;
             });

@@ -178,14 +178,18 @@ final class ImportPresenter extends SecuredPresenter
         return $form;
     }
 
-    public function renderSpecimen(?string $specimenFullId): void
+    public function renderSpecimen(?int $specimenNumericPartOfId): void
     {
         try {
-            if ($specimenFullId === null) {
+            if ($specimenNumericPartOfId === null) {
                 throw new SpecimenIdException();
             }
 
-            $specimen = $this->specimenFactory->create($specimenFullId);
+            $specimen = $this->specimenFactory->createFromNumeric($specimenNumericPartOfId);
+            $images=  $this->photoService->getAllPhotosOfSpecimen($specimen);
+            if(count($images) == 0){
+                throw new SpecimenIdException('Specimen not in evidence');
+            }
         } catch (SpecimenIdException $exception) {
             $this->flashMessage($exception->getMessage(), 'error');
             $this->redirect('Home:');
@@ -194,7 +198,7 @@ final class ImportPresenter extends SecuredPresenter
         $this->template->specimen = $specimen;
         $this->template->images = $this->photoService->getAllPhotosOfSpecimen($specimen);
 
-        $this->template->manifestAbsoluteLink = $this->link('//:Front:Iiif:manifest', $specimenFullId);
+        $this->template->manifestAbsoluteLink = $this->link('//:Front:Iiif:manifest', $specimen->getStandardizedId());
     }
 
     protected function createComponentDetail(): Multiplier

@@ -19,11 +19,20 @@ class SpecimenFactory
             throw new SpecimenIdException('Specimen id cannot be empty');
         }
 
-        $specimen = new Specimen($fullSpecimenId);
+        $specimen = new Specimen();
         $specimen->setHerbarium($this->specimenIdService->getHerbariumFromId($fullSpecimenId));
 
         $specimenId = $this->specimenIdService->getSpecimenIdFromId($fullSpecimenId);
-        $specimen->setSpecimenId($specimenId);
+        $specimen->setNumericPartOfId($specimenId);
+
+        return $specimen;
+    }
+
+    public function createFromNumeric(int $numericSpecimenId): Specimen
+    {
+        $specimen = new Specimen();
+        $specimen->setHerbarium($this->herbariumService->getCurrentUserHerbarium());
+        $specimen->setNumericPartOfId($numericSpecimenId);
 
         return $specimen;
     }

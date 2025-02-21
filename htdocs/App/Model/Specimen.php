@@ -9,15 +9,15 @@ class Specimen
 
     protected Herbaria $herbarium;
 
-    protected int $specimenId;
+    protected int $numericPartOfId;
 
-    public function __construct(protected readonly string $specimenFullId)
+    public function __construct()
     {
     }
 
     public function getStandardizedId()
     {
-        return $this->getHerbarium()->getAcronym() . '-' . sprintf('%07d', $this->getSpecimenId());
+        return $this->getHerbarium()->getAcronym() . '-' . sprintf('%07d', $this->getNumericPartOfId());
 
     }
 
@@ -33,14 +33,14 @@ class Specimen
         return $this;
     }
 
-    public function getSpecimenId(): int
+    public function getNumericPartOfId(): int
     {
-        return $this->specimenId;
+        return $this->numericPartOfId;
     }
 
-    public function setSpecimenId(int $specimenId): Specimen
+    public function setNumericPartOfId(int $numericPartOfId): Specimen
     {
-        $this->specimenId = $specimenId;
+        $this->numericPartOfId = $numericPartOfId;
 
         return $this;
     }

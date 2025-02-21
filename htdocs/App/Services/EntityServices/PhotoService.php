@@ -30,7 +30,7 @@ class PhotoService extends BaseEntityService
      */
     public function getPublicPhotosOfSpecimen(Specimen $specimen): array
     {
-        return $this->repository->findBy(['specimenId' => $specimen->getSpecimenId(), 'herbarium' => $specimen->getHerbarium(), 'status' => PhotosStatus::PASSED_PUBLIC]);
+        return $this->repository->findBy(['specimenId' => $specimen->getNumericPartOfId(), 'herbarium' => $specimen->getHerbarium(), 'status' => PhotosStatus::PASSED_PUBLIC]);
     }
 
     /**
@@ -38,7 +38,7 @@ class PhotoService extends BaseEntityService
      */
     public function getAllPhotosOfSpecimen(Specimen $specimen): array
     {
-        return $this->repository->findBy(['specimenId' => $specimen->getSpecimenId(), 'herbarium' => $this->user->getIdentity()->herbarium]);
+        return $this->repository->findBy(['specimenId' => $specimen->getNumericPartOfId(), 'herbarium' => $this->user->getIdentity()->herbarium]);
     }
 
     public function getPhotoReference(int $id): Photos
