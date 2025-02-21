@@ -67,10 +67,10 @@ class PhotosStatus extends \App\Model\Database\Entity\PhotosStatus implements \D
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'name', 'description', 'id'];
+            return ['__isInitialized__', 'name', 'description', 'color', 'id'];
         }
 
-        return ['__isInitialized__', 'name', 'description', 'id'];
+        return ['__isInitialized__', 'name', 'description', 'color', 'id'];
     }
 
     /**
@@ -199,6 +199,28 @@ class PhotosStatus extends \App\Model\Database\Entity\PhotosStatus implements \D
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getDescription', []);
 
         return parent::getDescription();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getColor(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getColor', []);
+
+        return parent::getColor();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setColor(string $color): \App\Model\Database\Entity\PhotosStatus
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setColor', [$color]);
+
+        return parent::setColor($color);
     }
 
     /**

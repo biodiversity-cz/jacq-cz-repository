@@ -56,7 +56,7 @@
             <dt class="col-sm-3">"zero status"</dt>
             <dd class="col-sm-9">Files uploaded to the S3 bucket and not marked to be imported yet. These files are just resting in the folder, and the repository does not keep any evidence about them.</dd>
             {foreach $statuses as $status}
-            <dt class="col-sm-3">{$status->getName()}</dt>
+            <dt class="col-sm-3"><span class="badge bg-{$status->getColor()}"> </span> {$status->getName()} </dt>
             <dd class="col-sm-9">{$status->getDescription()}</dd>
             {/foreach}
         </dl>

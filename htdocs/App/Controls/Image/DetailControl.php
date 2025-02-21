@@ -24,7 +24,6 @@ class DetailControl extends Control
 
     public function render(bool $forPublic = true)
     {
-        //TODO visualization of import status, different behaviour, links..
         $template = $this->template;
         $template->photo = $this->photo;
         if ($forPublic) {

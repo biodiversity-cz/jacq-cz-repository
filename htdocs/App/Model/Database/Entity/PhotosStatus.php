@@ -28,6 +28,9 @@ class PhotosStatus
     #[Column(unique: true, nullable: false, options: ['comment' => 'short description'])]
     protected string $description;
 
+    #[Column(unique: true, nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
+    protected string $color;
+
     public function getName(): string
     {
         return $this->name;
@@ -37,5 +40,18 @@ class PhotosStatus
     {
         return $this->description;
     }
+
+    public function getColor(): string
+    {
+        return $this->color;
+    }
+
+    public function setColor(string $color): PhotosStatus
+    {
+        $this->color = $color;
+        return $this;
+    }
+
+
 
 }

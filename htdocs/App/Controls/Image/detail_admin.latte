@@ -15,7 +15,7 @@
                         href="{plink Import:archiveImage $photo->getId()}">download</a></p>
                     <p class="card-text">W×H: {$photo->getWidth()}×{$photo->getHeight()}</p>
                     <p class="card-text">Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
-                    <p class="card-text">Status: {$photo->getStatus()->getName()} </p>
+                    <p class="card-text">Status: <span class="badge bg-{$photo->getStatus()->getColor()}">{$photo->getStatus()->getName()}</span> </p>
                     <p class="card-text"><small class="text-muted">Imported at
                         {$photo->getCreatedAt()|localDate}</small></p>
 
