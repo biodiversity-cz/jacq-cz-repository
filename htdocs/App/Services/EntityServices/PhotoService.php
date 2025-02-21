@@ -115,4 +115,20 @@ class PhotoService extends BaseEntityService
         return $this->repository->findBy(['herbarium' => $photo->getHerbarium(), 'specimenId' => $photo->getSpecimenId(), 'archiveFileSize' => $photo->getArchiveFileSize(), 'status' => [PhotosStatus::CONTROL_OK, PhotosStatus::PUBLIC, PhotosStatus::HIDDEN]]);
     }
 
+    /**
+     * how many records area waiting for processing by the import pipeline
+     */
+    public function pendingPhotosCount()
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('h.id, h.acronym, COUNT(p.id) AS count')
+            ->from('App\Model\Database\Entity\Photos', 'p')
+            ->andWhere('p.status = :status')
+            ->join('p.herbarium', 'h')
+            ->groupBy('h.id')
+            ->setParameter('status', PhotosStatus::WAITING);
+
+       return $qb->getQuery()->getResult();
+    }
+
 }

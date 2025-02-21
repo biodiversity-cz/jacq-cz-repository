@@ -42,6 +42,20 @@
             {if $erroneous>0}
             <a n:href=":deleteErroneous" id="cleanupButton" class="btn btn-danger btn-lg" role="button">Delete ALL files with import error</a>
             {/if}
+            <br>
+            <br>
+            {if count($pendingPhotos) > 0}
+            <h6>Pending records</h6>
+            <ul class="list-group">
+            {foreach $pendingPhotos as $institution}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    herbarium {$institution["acronym"]}
+                    <span class="badge bg-primary rounded-pill">{$institution["count"]}</span>
+                </li>
+            {/foreach}
+            </ul>
+            <p>There are a total of {$totalPendingPhotos} photos waiting to be processed and imported into the repository. It will be approx. <em>{$totalPendingPhotos*40|timeInterval}</em> before it's your turn to process the new uploaded images.</p>
+            {/if}
         </div>
         <div class="col">
             <table class="table table-striped table-hover table-sm">
