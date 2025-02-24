@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services;
 
@@ -6,6 +6,7 @@ use App\Exceptions\S3Exception;
 use Aws\Result;
 use Aws\S3\S3Client;
 use DateTimeImmutable;
+use Iterator;
 
 readonly class S3Service
 {
@@ -58,7 +59,7 @@ readonly class S3Service
         ]);
         $data = $result->get('Metadata');
         if (isset($data['origin-date-iso8601'])) {
-            return new \DateTimeImmutable($data['origin-date-iso8601']);
+            return new DateTimeImmutable($data['origin-date-iso8601']);
         }
 
         return null;
@@ -110,7 +111,7 @@ readonly class S3Service
         return $objects;
     }
 
-    public function listObjects(string $bucket): \Iterator
+    public function listObjects(string $bucket): Iterator
     {
         return $this->s3->getIterator('ListObjects', [
             'Bucket' => $bucket,

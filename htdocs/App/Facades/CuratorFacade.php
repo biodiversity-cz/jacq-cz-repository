@@ -2,7 +2,6 @@
 
 namespace App\Facades;
 
-use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\Entity\PhotosType;
@@ -18,6 +17,7 @@ use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use League\Pipeline\Pipeline;
 use Nette\Neon\Exception;
 use Nette\Security\AuthenticationException;
+use Nette\Security\User;
 
 readonly class CuratorFacade
 {
@@ -39,25 +39,25 @@ readonly class CuratorFacade
      */
     public function getAllPhotoTypes(): array
     {
-        return $this->entityManager->getPhotosTypeRepository()->gfindPairs('id', 'name');
+        return $this->entityManager->getPhotosTypeRepository()->findPairs('id', 'name');
     }
 
     /**
      * On curator request read curatorBucket and insert files basic info into the database
      */
-    public function registerNewFiles(array $formData): CuratorFacade
+    public function registerNewFiles(User $user, array $formData): CuratorFacade
     {
 
-        foreach ($this->getEligibleCuratorBucketFiles() as $file) {
+        foreach ($this->getEligibleCuratorBucketFiles($user) as $file) {
             $entity = new Photos();
             $entity
                 ->setCreatedAt()
                 ->setLastEditAt()
                 ->setOriginalFilename($file->name)
                 ->setStatus($this->photoService->getWaitingStatus())
-                ->setHerbarium($this->herbariumService->getCurrentUserHerbarium())
+                ->setHerbarium($this->herbariumService->getCurrentUserHerbarium($user))
                 ->setArchiveFileSize($file->size)
-                ->setType($this->entityManager->getReference(PhotosType::class, $formData['photoType']));;
+                ->setType($this->entityManager->getReference(PhotosType::class, $formData['photoType']));
             $this->entityManager->persist($entity);
         }
 
@@ -69,19 +69,19 @@ readonly class CuratorFacade
     /**
      * @return FileInsideCuratorBucket[]
      */
-    protected function getEligibleCuratorBucketFiles(): array
+    protected function getEligibleCuratorBucketFiles(User $user): array
     {
-        return array_filter($this->getAvailableCuratorBucketFiles(), fn($item) => $item->isEligibleToBeImported() === true);
+        return array_filter($this->getAvailableCuratorBucketFiles($user), fn($item) => $item->isEligibleToBeImported() === true);
     }
 
     /**
      * @return FileInsideCuratorBucket[]
      */
-    public function getAvailableCuratorBucketFiles(): array
+    public function getAvailableCuratorBucketFiles(User $user): array
     {
         $files = [];
-        $unprocessedPhotos = $this->photoService->findUnprocessedPhotos();
-        foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium()->getBucket()) as $filename) {
+        $unprocessedPhotos = $this->photoService->findUnprocessedPhotos($user);
+        foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium($user)->getBucket()) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {
                 $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], false, false, null, null);
             } else {
@@ -111,12 +111,12 @@ readonly class CuratorFacade
     /**
      * @return Photos[]
      */
-    public function getOrphanedItems(): array
+    public function getOrphanedItems(User $user): array
     {
         $photos = [];
-        $dbItems = $this->entityManager->getPhotosRepository()->getOrphananble($this->herbariumService->getCurrentUserHerbarium());
+        $dbItems = $this->entityManager->getPhotosRepository()->getOrphananble($this->herbariumService->getCurrentUserHerbarium($user));
         foreach ($dbItems as $photo) {
-            if (!$this->s3Service->objectExists($this->herbariumService->getCurrentUserHerbarium()->getBucket(), $photo->getOriginalFilename())) {
+            if (!$this->s3Service->objectExists($this->herbariumService->getCurrentUserHerbarium($user)->getBucket(), $photo->getOriginalFilename())) {
                 $photos[] = $photo;
             }
         }
@@ -125,20 +125,12 @@ readonly class CuratorFacade
     }
 
     /**
-     * @return Photos[]
-     */
-    public function getLatestImports(): array
-    {
-        return $this->photoService->findLastImported();
-    }
-
-    /**
      * @deprecated
      * This function requires refactoring in production settings
      */
-    public function deletePhoto(Photos $entity): CuratorFacade
+    public function deletePhoto(User $user, Photos $entity): CuratorFacade
     {
-        if ($this->herbariumService->getCurrentUserHerbarium() !== $entity->getHerbarium()) {
+        if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->getHerbarium()) {
             throw new AuthenticationException('Not allowed to delete photo.');
         }
         try {
@@ -176,16 +168,16 @@ readonly class CuratorFacade
         return $this;
     }
 
-    public function deleteJustNotimportedFile(string $filename): CuratorFacade
+    public function deleteJustNotimportedFile(User $user, string $filename): CuratorFacade
     {
-        $this->s3Service->deleteObject($this->herbariumService->getCurrentUserHerbarium()->getBucket(), $filename);
+        $this->s3Service->deleteObject($this->herbariumService->getCurrentUserHerbarium($user)->getBucket(), $filename);
 
         return $this;
     }
 
-    public function reimportPhoto(Photos $photo, ?string $manualSpecimenId = null): CuratorFacade
+    public function reimportPhoto(User $user, Photos $photo, ?string $manualSpecimenId = null): CuratorFacade
     {
-        if ($this->herbariumService->getCurrentUserHerbarium() === $photo->getHerbarium()) {
+        if ($this->herbariumService->getCurrentUserHerbarium($user) === $photo->getHerbarium()) {
             $photo
                 ->setLastEditAt()
                 ->setMessage(null)
@@ -206,8 +198,4 @@ readonly class CuratorFacade
         return $this;
     }
 
-    public function getActualHerbarium(): Herbaria
-    {
-        return $this->herbariumService->getCurrentUserHerbarium();
-    }
 }

@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ProceedCuratorImage extends Command
 {
 
-    public const int LIMIT = 40;
+    public const int LIMIT = 4;
 
     /**
      * Running as a CronJob - process images from curatorBucket to the repository waiting room

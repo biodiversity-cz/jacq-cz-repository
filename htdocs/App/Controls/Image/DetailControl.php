@@ -7,15 +7,16 @@ use App\Model\Database\Entity\Photos;
 use App\Services\EntityServices\PhotoService;
 use Nette\Application\UI\Control;
 use Nette\Neon\Exception;
+use Nette\Security\User;
 
 class DetailControl extends Control
 {
 
     private Photos $photo;
 
-    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade)
+    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private  readonly User $user)
     {
-        $this->photo = $this->photoService->getPhoto($this->id);
+        $this->photo = $this->photoService->getPhoto($this->user, $this->id);
     }
 
     public function create(): self
@@ -38,7 +39,7 @@ class DetailControl extends Control
     public function handleDelete()
     {
         try {
-            $this->curatorFacade->deletePhoto($this->photo);
+            $this->curatorFacade->deletePhoto($this->user, $this->photo);
         }catch (Exception $e){
             $this->presenter->flashMessage($e->getMessage(), 'danger');
         }

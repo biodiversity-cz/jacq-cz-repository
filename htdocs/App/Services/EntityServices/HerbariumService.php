@@ -1,17 +1,18 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
 use App\Model\Database\Entity\Herbaria;
+use Nette\Security\User;
 
 class HerbariumService extends BaseEntityService
 {
 
     protected string $entityName = Herbaria::class;
 
-    public function getCurrentUserHerbarium(): Herbaria
+    public function getCurrentUserHerbarium(User $user): Herbaria
     {
-        return $this->entityManager->getReference($this->entityName, $this->user->getIdentity()->herbarium);
+        return $this->entityManager->getReference($this->entityName, $user->getIdentity()->herbarium);
     }
 
     public function findOneWithAcronym(string $acronym): ?Herbaria

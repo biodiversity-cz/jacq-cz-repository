@@ -22,12 +22,6 @@ final class HomePresenter extends SecuredPresenter
         $this->template->statuses = $this->curatorService->getAllStatuses();
     }
 
-    public function renderOverview(): void
-    {
-        $files = $this->curatorService->getLatestImports();
-        $this->template->files = $files;
-    }
-
     public function createComponentImportedGrid($name)
     {
         return $this->importedPhotosGridFactory->create();

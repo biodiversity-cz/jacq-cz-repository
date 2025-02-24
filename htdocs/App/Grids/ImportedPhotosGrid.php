@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use Nette\Application\UI\Control;
 use Nette\Neon\Exception;
+use Nette\Security\User;
 use Nette\Utils\Html;
 use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
 use Ublaboo\DataGrid\DataGrid;
@@ -20,17 +21,17 @@ class ImportedPhotosGrid extends Control
 
     private DataGrid $grid;
 
-    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade)
+    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user)
     {
         $this->grid = $this->gridFactory->createBaseDatagrid('importedPhotos');
     }
 
-    protected function defaultDatasource(): QueryBuilder
+    protected function defaultDatasource(User $user): QueryBuilder
     {
-        return $this->photoService->getDefaultDatasource()
-            ->andWhere('a.status IN (:status)')
+        return $this->photoService->getDefaultDatasource($user)
+            ->andWhere('p.status IN (:status)')
             ->setParameter('status', PhotosStatus::PASSED)
-            ->orderBy('a.id', 'DESC');
+            ->orderBy('p.id', 'DESC');
     }
 
     public function create(): self
@@ -49,8 +50,8 @@ class ImportedPhotosGrid extends Control
     public function handleDelete(int $id)
     {
         try {
-            $photo = $this->photoService->getPhoto($id);
-            $this->curatorFacade->deletePhoto($photo);
+            $photo = $this->photoService->getPhoto($this->user, $id);
+            $this->curatorFacade->deletePhoto($this->user, $photo);
         }catch (Exception $e){
             $this->presenter->flashMessage($e->getMessage(), 'danger');
         }
@@ -60,7 +61,7 @@ class ImportedPhotosGrid extends Control
     public function createComponentGrid(): DataGrid
     {
 
-        $this->grid->setDataSource($this->defaultDatasource())->setDefaultSort(["id" => Criteria::DESC])->setRememberState(false);
+        $this->grid->setDataSource($this->defaultDatasource($this->user))->setDefaultSort(["id" => Criteria::DESC])->setRememberState(false);
         $this->grid->addColumnNumber('id', 'ID');
         $this->grid->addColumnDateTime('lastEditAt', 'processed at')->setFormat('d.m.Y H:i');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')

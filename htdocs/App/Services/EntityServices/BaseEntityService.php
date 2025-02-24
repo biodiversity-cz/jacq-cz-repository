@@ -1,11 +1,11 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
 use App\Model\Database\EntityManager;
 use App\Model\Database\Repository\AbstractRepository;
+use App\Model\Database\T;
 use Doctrine\Persistence\ObjectRepository;
-use Nette\Security\User;
 
 abstract class BaseEntityService
 {
@@ -14,13 +14,13 @@ abstract class BaseEntityService
 
     protected string $entityName;
 
-    public function __construct(protected readonly EntityManager $entityManager, protected readonly User $user)
+    public function __construct(protected readonly EntityManager $entityManager)
     {
         $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 
     /**
-     * @return \App\Model\Database\T[]|array|object[]
+     * @return T[]|array|object[]
      */
     public function findAll(): array
     {
@@ -30,7 +30,7 @@ abstract class BaseEntityService
     /**
      * @param array $criteria
      * @param array $orderBy
-     * @return object|\App\Model\Database\T|null
+     * @return object|T|null
      */
     public function findOneBy(array $criteria, array $orderBy = []): ?object
     {

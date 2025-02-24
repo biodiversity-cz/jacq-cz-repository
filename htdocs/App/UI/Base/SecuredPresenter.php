@@ -26,7 +26,7 @@ abstract class SecuredPresenter extends BasePresenter
 
     public function startup(): void
     {
-        $this->herbarium = $this->herbariumService->getCurrentUserHerbarium();
+        $this->herbarium = $this->herbariumService->getCurrentUserHerbarium($this->user);
 
         parent::startup();
     }

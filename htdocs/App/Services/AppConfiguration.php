@@ -11,6 +11,11 @@ final readonly class AppConfiguration
     {
     }
 
+    public function isProduction(): bool
+    {
+        return $this->getPlatform() === 'production';
+    }
+
     public function getPlatform(): ?string
     {
         if (!isset($this->config['environment'])) {
@@ -18,11 +23,6 @@ final readonly class AppConfiguration
         }
 
         return $this->config['environment'];
-    }
-
-    public function isProduction(): bool
-    {
-        return $this->getPlatform() === 'production';
     }
 
     public function getVersion(): string

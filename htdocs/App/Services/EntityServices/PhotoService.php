@@ -1,12 +1,12 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Specimen\Specimen;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
+use Nette\Security\User;
 
 class PhotoService extends BaseEntityService
 {
@@ -18,27 +18,25 @@ class PhotoService extends BaseEntityService
         return count($this->getPublicPhotosOfSpecimen($specimen)) > 0;
     }
 
-    public function getDefaultDatasource(): QueryBuilder
-    {
-        return $this->repository->createQueryBuilder('a')
-            ->andWhere('a.herbarium = :herbarium')
-            ->setParameter('herbarium', $this->user->getIdentity()->herbarium);
-    }
-
     /**
      * @return Photos[]
      */
     public function getPublicPhotosOfSpecimen(Specimen $specimen): array
     {
-        return $this->repository->findBy(['specimenId' => $specimen->getNumericPartOfId(), 'herbarium' => $specimen->getHerbarium(), 'status' => PhotosStatus::PASSED_PUBLIC]);
+        return $this->repository->getPublicPhotosOfSpecimen($specimen);
+    }
+
+    public function getDefaultDatasource(User $user): QueryBuilder
+    {
+        return $this->repository->getDefaultDatasource($user);
     }
 
     /**
      * @return Photos[]
      */
-    public function getAllPhotosOfSpecimen(Specimen $specimen): array
+    public function getAllPhotosOfSpecimen(User $user, Specimen $specimen): array
     {
-        return $this->repository->findBy(['specimenId' => $specimen->getNumericPartOfId(), 'herbarium' => $this->user->getIdentity()->herbarium]);
+        return $this->repository->getAllPhotosOfSpecimen($user, $specimen);
     }
 
     public function getPhotoReference(int $id): Photos
@@ -48,22 +46,12 @@ class PhotoService extends BaseEntityService
 
     public function getPublicPhoto(int $id): ?Photos
     {
-        return $this->repository->findOneBy(['id' => $id, 'status' => PhotosStatus::PASSED_PUBLIC]);
+        return $this->repository->getPublicPhoto($id);
     }
 
-    public function getPhoto(int $id): ?Photos
+    public function getPhoto(User $user, int $id): ?Photos
     {
-        return $this->repository->findOneBy(['id' => $id, 'herbarium' => $this->user->getIdentity()->herbarium]);
-    }
-
-    public function getPublicStatus(): PhotosStatus
-    {
-        return $this->entityManager->getReference(PhotosStatus::class, PhotosStatus::PUBLIC);
-    }
-
-    public function getControlErrorStatus(): PhotosStatus
-    {
-        return $this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR);
+        return $this->repository->getPhoto($user, $id);
     }
 
     public function getWaitingStatus(): PhotosStatus
@@ -71,29 +59,23 @@ class PhotoService extends BaseEntityService
         return $this->entityManager->getReference(PhotosStatus::class, PhotosStatus::WAITING);
     }
 
-    public function getPhotoWithError(int $id): ?Photos
+    public function getPhotoWithError(User $user, int $id): ?Photos
     {
-        return $this->repository->findOneBy(['id' => $id, 'herbarium' => $this->user->getIdentity()->herbarium, 'status' => $this->getControlErrorStatus()]);
+        return $this->repository->getPhotoWithError($user, $id);
     }
 
     /**
      * @return Photos[]
      */
-    public function getPhotosWithError(): array
+    public function getPhotosWithError(User $user): array
     {
-        return $this->repository->findBy(['herbarium' => $this->user->getIdentity()->herbarium, 'status' => $this->getControlErrorStatus()]);
+        return $this->repository->getPhotosWithError($user);
     }
 
-    public function findUnprocessedPhotoByOriginalFilename(string $filename): ?Photos
+    public function findUnprocessedPhotos(User $user): array
     {
-        return $this->repository->findOneBy(['status' => [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR], 'herbarium' => $this->user->getIdentity()->herbarium, 'originalFilename' => $filename]);
-    }
-
-    public function findUnprocessedPhotos(): array
-    {
-        $photos =  $this->repository->findBy(['status' => [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR], 'herbarium' => $this->user->getIdentity()->herbarium]);
         $unprocessedPhotos = [];
-        foreach ($photos as $photo) {
+        foreach ($this->repository->findUnprocessedPhotos($user) as $photo) {
             $unprocessedPhotos[$photo->getOriginalFilename()] = $photo;
         }
         return $unprocessedPhotos;
@@ -102,17 +84,9 @@ class PhotoService extends BaseEntityService
     /**
      * @return Photos[]
      */
-    public function findLastImported(): array
-    {
-        return $this->repository->findBy(['herbarium' => $this->user->getIdentity()->herbarium, 'status' => [PhotosStatus::CONTROL_OK, PhotosStatus::PUBLIC, PhotosStatus::HIDDEN]], ['lastEdit' => Criteria::DESC], 30);
-    }
-
-    /**
-     * @return Photos[]
-     */
     public function findPotentialDuplicates(Photos $photo): array
     {
-        return $this->repository->findBy(['herbarium' => $photo->getHerbarium(), 'specimenId' => $photo->getSpecimenId(), 'archiveFileSize' => $photo->getArchiveFileSize(), 'status' => [PhotosStatus::CONTROL_OK, PhotosStatus::PUBLIC, PhotosStatus::HIDDEN]]);
+        return $this->repository->findBy(['herbarium' => $photo->getHerbarium(), 'specimenId' => $photo->getSpecimenId(), 'archiveFileSize' => $photo->getArchiveFileSize(), 'status' => PhotosStatus::PASSED]);
     }
 
     /**
@@ -128,7 +102,7 @@ class PhotoService extends BaseEntityService
             ->groupBy('h.id')
             ->setParameter('status', PhotosStatus::WAITING);
 
-       return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 
 }

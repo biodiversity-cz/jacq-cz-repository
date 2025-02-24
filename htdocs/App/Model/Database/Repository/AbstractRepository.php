@@ -18,7 +18,7 @@ abstract class AbstractRepository extends EntityRepository
      * @param mixed[] $orderBy
      * @return mixed[]
      */
-    public function gfindPairs(?string $key, string $value, array $criteria = [], array $orderBy = []): array
+    public function findPairs(?string $key, string $value, array $criteria = [], array $orderBy = []): array
     {
         if ($key === null) {
             $key = $this->getClassMetadata()->getSingleIdentifierFieldName();

@@ -5,6 +5,7 @@ namespace App\Model\Specimen;
 use App\Exceptions\SpecimenIdException;
 use App\Services\EntityServices\HerbariumService;
 use App\Services\SpecimenIdService;
+use Nette\Security\User;
 
 class SpecimenFactory
 {
@@ -28,10 +29,10 @@ class SpecimenFactory
         return $specimen;
     }
 
-    public function createFromNumeric(int $numericSpecimenId): Specimen
+    public function createFromNumeric(User $user, int $numericSpecimenId): Specimen
     {
         $specimen = new Specimen();
-        $specimen->setHerbarium($this->herbariumService->getCurrentUserHerbarium());
+        $specimen->setHerbarium($this->herbariumService->getCurrentUserHerbarium($user));
         $specimen->setNumericPartOfId($numericSpecimenId);
 
         return $specimen;

@@ -17,6 +17,7 @@ use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;
 use Nette\Http\IRequest;
 use Nette\Http\Response;
+use Nette\Security\User;
 
 final class ImportPresenter extends SecuredPresenter
 {
@@ -40,12 +41,12 @@ final class ImportPresenter extends SecuredPresenter
     public function renderDefault(): void
     {
         $this->template->title = 'New Files';
-        $files = $this->curatorFacade->getAvailableCuratorBucketFiles(true);
+        $files = $this->curatorFacade->getAvailableCuratorBucketFiles($this->user, true);
         $this->template->files = $files;
         $this->template->pendingPhotos = $this->photoService->pendingPhotosCount();
         $this->template->totalPendingPhotos = array_sum(array_column($this->photoService->pendingPhotosCount(), 'count'));
 
-        $this->template->orphanedItems = $this->curatorFacade->getOrphanedItems();
+        $this->template->orphanedItems = $this->curatorFacade->getOrphanedItems($this->user);
         $this->template->eligible = count(array_filter($files, fn ($item) => $item->isEligibleToBeImported() === true));
         $this->template->erroneous = count(array_filter($files, fn ($item) => $item->hasControlError() === true));
         $this->template->waiting = count(array_filter($files, fn ($item) => $item->isAlreadyWaiting() === true));
@@ -54,7 +55,7 @@ final class ImportPresenter extends SecuredPresenter
 
     public function actionThumbnail(int $id): void
     {
-        $thumb = $this->photoService->getPhotoWithError($id)?->getError()->getThumbnail();
+        $thumb = $this->photoService->getPhotoWithError($this->user, $id)?->getError()->getThumbnail();
         if ($thumb !== null) {
             $this->sendResponse(new CallbackResponse(function ($request, $response) use ($thumb): void {
                 $response->setContentType('image');
@@ -68,7 +69,7 @@ final class ImportPresenter extends SecuredPresenter
 
     public function actionRevise(int $id): void
     {
-        $photo = $this->photoService->getPhotoWithError($id);
+        $photo = $this->photoService->getPhotoWithError($this->user, $id);
         if ($photo === null) {
             $this->error('Photo not found');
         }
@@ -80,9 +81,9 @@ final class ImportPresenter extends SecuredPresenter
     public function actionDeleteErroneous(): void
     {
         try {
-            $erroneous = $this->photoService->getPhotosWithError();
+            $erroneous = $this->photoService->getPhotosWithError($this->user);
             foreach ($erroneous as $photoWithImportError) {
-                $this->curatorFacade->deletePhoto($photoWithImportError);
+                $this->curatorFacade->deletePhoto($this->user, $photoWithImportError);
             }
             $this->flashMessage('Files with import error were deleted from your herbarium bucket', 'success');
         } catch (\Exception $exception) {
@@ -92,15 +93,15 @@ final class ImportPresenter extends SecuredPresenter
         $this->redirect('default');
     }
 
-    public function actionReimport(int $id): void
+    public function actionReimport(User $user, int $id): void
     {
         try {
-            $photo = $this->photoService->getPhotoWithError($id);
+            $photo = $this->photoService->getPhotoWithError($this->user, $id);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
 
-            $this->curatorFacade->reimportPhoto($photo);
+            $this->curatorFacade->reimportPhoto($user, $photo);
             $this->flashMessage('File successfully marked to be re-processed', 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
@@ -112,13 +113,13 @@ final class ImportPresenter extends SecuredPresenter
     public function actionDelete(int $id): void
     {
         try {
-            $photo = $this->photoService->getPhotoWithError($id);
+            $photo = $this->photoService->getPhotoWithError($this->user, $id);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
 
             $name = $photo->getOriginalFilename();
-            $this->curatorFacade->deletePhoto($photo);
+            $this->curatorFacade->deletePhoto($this->user, $photo);
             $this->flashMessage('Photo ' . $name . ' deleted.', 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
@@ -130,7 +131,7 @@ final class ImportPresenter extends SecuredPresenter
     public function actionDeleteJustFile(string $id): void
     {
         try {
-            $this->curatorFacade->deleteJustNotimportedFile($id);
+            $this->curatorFacade->deleteJustNotimportedFile($this->user, $id);
             $this->flashMessage('File ' . $id . ' deleted.', 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
@@ -139,15 +140,15 @@ final class ImportPresenter extends SecuredPresenter
         $this->redirect(':default');
     }
 
-    public function specimenIdFormSucceeded(Form $form, \stdClass $values): void
+    public function specimenIdFormSucceeded(User $user, Form $form, \stdClass $values): void
     {
         try {
-            $photo = $this->photoService->getPhotoWithError((int) $values->photoId);
+            $photo = $this->photoService->getPhotoWithError($this->user, (int) $values->photoId);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
 
-            $this->curatorFacade->reimportPhoto($this->photoService->getPhotoReference((int) $values->photoId), (string) $values->specimen);
+            $this->curatorFacade->reimportPhoto($user, $this->photoService->getPhotoReference((int) $values->photoId), (string) $values->specimen);
 
             $fullID = $this->herbarium->getAcronym() . '-' . $values->specimen;
             $this->flashMessage('File successfully marked to be re-processed with ID ' . $fullID, 'success');
@@ -178,8 +179,8 @@ final class ImportPresenter extends SecuredPresenter
                 throw new SpecimenIdException();
             }
 
-            $specimen = $this->specimenFactory->createFromNumeric($specimenNumericPartOfId);
-            $images=  $this->photoService->getAllPhotosOfSpecimen($specimen);
+            $specimen = $this->specimenFactory->createFromNumeric($this->user, $specimenNumericPartOfId);
+            $images=  $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
             if(count($images) == 0){
                 throw new SpecimenIdException('Specimen not in evidence');
             }
@@ -189,7 +190,7 @@ final class ImportPresenter extends SecuredPresenter
         }
 
         $this->template->specimen = $specimen;
-        $this->template->images = $this->photoService->getAllPhotosOfSpecimen($specimen);
+        $this->template->images = $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
 
         $this->template->manifestAbsoluteLink = $this->link('//:Front:Iiif:manifest', $specimen->getStandardizedId());
     }
@@ -214,7 +215,7 @@ final class ImportPresenter extends SecuredPresenter
 
     public function renderArchiveImage(int $id): void
     {
-        $photo = $this->photoService->getPhoto($id);
+        $photo = $this->photoService->getPhoto($this->user, $id);
         if ($photo === null) {
             $this->error('The requested photo does not exists.');
         }

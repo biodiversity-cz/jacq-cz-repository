@@ -4,11 +4,12 @@ namespace App\Forms;
 
 use App\Facades\CuratorFacade;
 use Nette\Application\UI\Form;
+use Nette\Security\User;
 
 final readonly class ImportFormFactory
 {
 
-    public function __construct(private FormFactory $formFactory, private CuratorFacade $curatorFacade) { }
+    public function __construct(private FormFactory $formFactory, private CuratorFacade $curatorFacade, private User $user) { }
 
     public function create(): Form
     {
@@ -22,7 +23,7 @@ final readonly class ImportFormFactory
     public function processForm(Form $form, array $data): void
     {
         try {
-            $this->curatorFacade->registerNewFiles($data);
+            $this->curatorFacade->registerNewFiles($this->user, $data);
         } catch (\Throwable $exception) {
            $form->addError('An error occurred: ' . $exception->getMessage());
         }
