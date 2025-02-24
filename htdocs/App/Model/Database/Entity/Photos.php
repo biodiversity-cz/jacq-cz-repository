@@ -68,6 +68,10 @@ class Photos
     #[OneToOne(mappedBy: 'photo', targetEntity: PhotosError::class, cascade: ['remove'])]
     private ?PhotosError $error = null;
 
+    #[ManyToOne(targetEntity: PhotosType::class)]
+    #[JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Type of the photo', 'default' => 1])]
+    protected PhotosType $type;
+
     public function getArchiveFilename(): ?string
     {
         return $this->archiveFilename;
@@ -245,5 +249,15 @@ class Photos
         return $this;
     }
 
+    public function getType(): PhotosType
+    {
+        return $this->type;
+    }
+
+    public function setType(PhotosType $type): Photos
+    {
+        $this->type = $type;
+        return $this;
+    }
 
 }

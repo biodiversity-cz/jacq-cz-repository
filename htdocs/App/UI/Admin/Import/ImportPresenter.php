@@ -5,6 +5,7 @@ namespace App\UI\Admin\Import;
 use App\Controls\Image\DetailControlFactory;
 use App\Exceptions\SpecimenIdException;
 use App\Facades\CuratorFacade;
+use App\Forms\ImportFormFactory;
 use App\Model\Database\Entity\Photos;
 use App\Model\Specimen\SpecimenFactory;
 use App\Services\EntityServices\PhotoService;
@@ -31,6 +32,7 @@ final class ImportPresenter extends SecuredPresenter
 
     /** @inject */ public SpecimenFactory $specimenFactory;
     /** @inject */ public DetailControlFactory $detailControlFactory;
+    /** @inject */ public ImportFormFactory $importFormFactory;
 
 
     public ?Photos $photo;
@@ -73,18 +75,6 @@ final class ImportPresenter extends SecuredPresenter
 
         $this->template->photo = $photo;
         $this->photo = $photo;
-    }
-
-    public function actionPrimaryImport(): void
-    {
-        try {
-            $this->curatorFacade->registerNewFiles();
-            $this->flashMessage('Files successfully marked to be processed', 'success');
-        } catch (\Throwable $exception) {
-            $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
-        }
-
-        $this->redirect('default');
     }
 
     public function actionDeleteErroneous(): void
@@ -209,6 +199,17 @@ final class ImportPresenter extends SecuredPresenter
         return new Multiplier(function ($id) {
             return $this->detailControlFactory->create((int) $id);
         });
+    }
+
+    protected function createComponentImportForm(): Form
+    {
+        $form =  $this->importFormFactory->create();
+        $form->onSuccess[] = function () {
+            $this->flashMessage('Photos marked for processing', 'success');
+            $this->redirect('default');
+        };
+        return $form;
+
     }
 
     public function renderArchiveImage(int $id): void

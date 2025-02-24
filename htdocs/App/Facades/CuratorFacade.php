@@ -5,6 +5,7 @@ namespace App\Facades;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
+use App\Model\Database\Entity\PhotosType;
 use App\Model\Database\EntityManager;
 use App\Model\FileManagement\FileInsideCuratorBucket;
 use App\Model\ImportStages\StageFactory;
@@ -34,10 +35,19 @@ readonly class CuratorFacade
     }
 
     /**
+     * @return PhotosType[]
+     */
+    public function getAllPhotoTypes(): array
+    {
+        return $this->entityManager->getPhotosTypeRepository()->gfindPairs('id', 'name');
+    }
+
+    /**
      * On curator request read curatorBucket and insert files basic info into the database
      */
-    public function registerNewFiles(): CuratorFacade
+    public function registerNewFiles(array $formData): CuratorFacade
     {
+
         foreach ($this->getEligibleCuratorBucketFiles() as $file) {
             $entity = new Photos();
             $entity
@@ -46,7 +56,8 @@ readonly class CuratorFacade
                 ->setOriginalFilename($file->name)
                 ->setStatus($this->photoService->getWaitingStatus())
                 ->setHerbarium($this->herbariumService->getCurrentUserHerbarium())
-                ->setArchiveFileSize($file->size);
+                ->setArchiveFileSize($file->size)
+                ->setType($this->entityManager->getReference(PhotosType::class, $formData['photoType']));;
             $this->entityManager->persist($entity);
         }
 

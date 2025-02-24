@@ -2,7 +2,6 @@
 
 namespace App\Grids;
 
-use Nette\Application\UI\Presenter;
 use Ublaboo\DataGrid\DataGrid;
 
 class BaseGridFactory

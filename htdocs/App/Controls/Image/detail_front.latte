@@ -14,6 +14,7 @@
                     <p class="card-text">Archive Master filename: {$photo->getArchiveFilename()} <a
                         href="{plink Repository:archiveImage $photo->getId()}">download</a></p>
                     <p class="card-text">W×H: {$photo->getWidth()}×{$photo->getHeight()}</p>
+                    <p class="card-text">Type: <span class="badge bg-{$photo->getType()->getColor()}">{$photo->getType()->getName()}</span> </p>
                     <p class="card-text">Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
                     <p class="card-text"><small class="text-muted">Imported at
                         {$photo->getCreatedAt()|localDate}</small></p>

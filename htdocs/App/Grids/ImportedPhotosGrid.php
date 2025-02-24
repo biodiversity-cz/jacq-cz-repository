@@ -5,6 +5,7 @@ namespace App\Grids;
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
+use App\Model\Database\Entity\PhotosType;
 use App\Services\EntityServices\PhotoService;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
@@ -84,7 +85,14 @@ class ImportedPhotosGrid extends Control
             ->setFilterText();
         $this->grid->addColumnText('archiveFilename', 'archiveFilename')
             ->setFilterText();
-
+        $this->grid->addColumnText('type', 'type')
+            ->setRenderer(function ($item) {
+                $el = Html::el('i');
+                /** @var Photos $item */
+                $el->addHtml($item->getType()->getName());
+                return $el;
+            })
+            ->setFilterSelect($this->curatorFacade->getAllPhotoTypes());
         $this->grid->addColumnNumber('width', 'width [px]');
         $this->grid->addColumnNumber('height', 'height [px]');
         $this->grid->addColumnNumber('archiveFileSize', 'archiveFileSize [B]');

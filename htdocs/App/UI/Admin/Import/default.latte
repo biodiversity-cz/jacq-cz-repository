@@ -1,5 +1,5 @@
 {block content}
-<div class="container" id="autorefresh">
+<div class="container">
 
     <h2>Files in the <i>{$herbarium->getBucket()}</i> bucket</h2>
     <div class="row">
@@ -32,12 +32,19 @@
             </table>
 
             {if $eligible>0}
-            <a n:href=":primaryImport" id="importButton" class="btn btn-primary btn-lg" role="button">Send to repository</a>
-            {if $herbarium->usesFilenameFallback()}
-            <p><i class="fa-solid fa-exclamation blink"></i> filename as a source of the specimen ID is allowed.</p>
+            <h6>Metadata</h6>
+                <p>You have to pick one photoType that fits to all images you are going to upload: </p>
+                {control importForm}
+
+                {if $herbarium->usesFilenameFallback()}
+            <hr>
+                    <p><i class="fa-solid fa-exclamation blink"></i> filename as a source of the specimen ID is allowed</p>
+                {/if}
             {/if}
-            {/if}
-<br>
+            <br>
+            <br>
+
+            <br>
             <br>
             {if $erroneous>0}
             <a n:href=":deleteErroneous" id="cleanupButton" class="btn btn-danger btn-lg" role="button">Delete ALL files with import error</a>

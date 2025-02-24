@@ -67,10 +67,10 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
+            return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'type', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
         }
 
-        return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
+        return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'type', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
     }
 
     /**
@@ -485,6 +485,28 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setError', [$error]);
 
         return parent::setError($error);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getType(): \App\Model\Database\Entity\PhotosType
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getType', []);
+
+        return parent::getType();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setType(\App\Model\Database\Entity\PhotosType $type): \App\Model\Database\Entity\Photos
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setType', [$type]);
+
+        return parent::setType($type);
     }
 
     /**
