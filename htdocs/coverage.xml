@@ -1,0 +1,572 @@
+<?xml version="1.0"?>
+<coverage generated="1740405215">
+  <project timestamp="1740405215">
+    <metrics packages="0" files="88" loc="4957" ncloc="4656" classes="84" methods="359" coveredmethods="14" statements="1674" coveredstatements="33" elements="2033" coveredelements="47" conditionals="0" coveredconditionals="0"/>
+    <file name="/srv/App/Core/RouterFactory.php">
+      <metrics loc="40" ncloc="40" classes="1" methods="3" coveredmethods="0" statements="14" coveredstatements="0" elements="17" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Core" name="RouterFactory">
+        <metrics methods="3" coveredmethods="0" statements="14" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="17" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Console/Admin/Test.php">
+      <metrics loc="57" ncloc="56" classes="1" methods="3" coveredmethods="0" statements="27" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Console\Admin" name="Test">
+        <metrics methods="3" coveredmethods="0" statements="27" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Console/Admin/HarvestExif.php">
+      <metrics loc="81" ncloc="78" classes="1" methods="5" coveredmethods="0" statements="37" coveredstatements="0" elements="42" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Console\Admin" name="HarvestExif">
+        <metrics methods="5" coveredmethods="0" statements="37" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="42" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Console/Admin/RefreshJp2.php">
+      <metrics loc="86" ncloc="83" classes="1" methods="6" coveredmethods="0" statements="35" coveredstatements="0" elements="41" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Console\Admin" name="RefreshJp2">
+        <metrics methods="6" coveredmethods="0" statements="35" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="41" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Console/Admin/BatchDownload.php">
+      <metrics loc="62" ncloc="54" classes="1" methods="4" coveredmethods="0" statements="19" coveredstatements="0" elements="23" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Console\Admin" name="BatchDownload">
+        <metrics methods="4" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="23" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Console/Admin/BucketParity.php">
+      <metrics loc="101" ncloc="86" classes="1" methods="7" coveredmethods="0" statements="42" coveredstatements="0" elements="49" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Console\Admin" name="BucketParity">
+        <metrics methods="7" coveredmethods="0" statements="42" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="49" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Console/Scheduled/ProceedCuratorImage.php">
+      <metrics loc="121" ncloc="116" classes="1" methods="6" coveredmethods="0" statements="70" coveredstatements="0" elements="76" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Console\Scheduled" name="ProceedCuratorImage">
+        <metrics methods="6" coveredmethods="0" statements="70" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="76" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Security/SecurityUser.php">
+      <metrics loc="13" ncloc="10" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Security" name="SecurityUser">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Security/StaticAuthorizator.php">
+      <metrics loc="50" ncloc="24" classes="1" methods="2" coveredmethods="0" statements="6" coveredstatements="0" elements="8" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Security" name="StaticAuthorizator">
+        <metrics methods="2" coveredmethods="0" statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="8" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Security/Identity.php">
+      <metrics loc="15" ncloc="15" classes="1" methods="1" coveredmethods="0" statements="1" coveredstatements="0" elements="2" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Security" name="Identity">
+        <metrics methods="1" coveredmethods="0" statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="2" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Security/UserAuthenticator.php">
+      <metrics loc="61" ncloc="49" classes="1" methods="3" coveredmethods="0" statements="20" coveredstatements="0" elements="23" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Security" name="UserAuthenticator">
+        <metrics methods="3" coveredmethods="0" statements="20" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="23" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/IIIF/ManifestFactory.php">
+      <metrics loc="150" ncloc="147" classes="1" methods="9" coveredmethods="0" statements="78" coveredstatements="0" elements="87" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\IIIF" name="ManifestFactory">
+        <metrics methods="9" coveredmethods="0" statements="78" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="87" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Specimen/Specimen.php">
+      <metrics loc="44" ncloc="44" classes="1" methods="5" coveredmethods="0" statements="9" coveredstatements="0" elements="14" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Specimen" name="Specimen">
+        <metrics methods="5" coveredmethods="0" statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="14" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Specimen/SpecimenFactory.php">
+      <metrics loc="41" ncloc="41" classes="1" methods="3" coveredmethods="0" statements="17" coveredstatements="0" elements="20" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Specimen" name="SpecimenFactory">
+        <metrics methods="3" coveredmethods="0" statements="17" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="20" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/PhotosError.php">
+      <metrics loc="100" ncloc="98" classes="1" methods="10" coveredmethods="0" statements="20" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="PhotosError">
+        <metrics methods="10" coveredmethods="0" statements="20" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/PhotosType.php">
+      <metrics loc="49" ncloc="49" classes="1" methods="4" coveredmethods="0" statements="6" coveredstatements="0" elements="10" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="PhotosType">
+        <metrics methods="4" coveredmethods="0" statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="10" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/PhotosStatus.php">
+      <metrics loc="56" ncloc="56" classes="1" methods="4" coveredmethods="0" statements="6" coveredstatements="0" elements="10" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="PhotosStatus">
+        <metrics methods="4" coveredmethods="0" statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="10" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/Photos.php">
+      <metrics loc="265" ncloc="251" classes="1" methods="30" coveredmethods="0" statements="58" coveredstatements="0" elements="88" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="Photos">
+        <metrics methods="30" coveredmethods="0" statements="58" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="88" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/Attributes/TOriginalFileAt.php">
+      <metrics loc="27" ncloc="27" classes="1" methods="2" coveredmethods="0" statements="4" coveredstatements="0" elements="6" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity\Attributes" name="TOriginalFileAt">
+        <metrics methods="2" coveredmethods="0" statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="6" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/Attributes/TLastEditAt.php">
+      <metrics loc="29" ncloc="29" classes="1" methods="2" coveredmethods="0" statements="4" coveredstatements="0" elements="6" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity\Attributes" name="TLastEditAt">
+        <metrics methods="2" coveredmethods="0" statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="6" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/Attributes/TCreatedAt.php">
+      <metrics loc="27" ncloc="27" classes="1" methods="2" coveredmethods="0" statements="4" coveredstatements="0" elements="6" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity\Attributes" name="TCreatedAt">
+        <metrics methods="2" coveredmethods="0" statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="6" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/Attributes/TId.php">
+      <metrics loc="27" ncloc="27" classes="1" methods="2" coveredmethods="0" statements="2" coveredstatements="0" elements="4" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity\Attributes" name="TId">
+        <metrics methods="2" coveredmethods="0" statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="4" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/User.php">
+      <metrics loc="166" ncloc="166" classes="1" methods="19" coveredmethods="0" statements="37" coveredstatements="0" elements="56" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="User">
+        <metrics methods="19" coveredmethods="0" statements="37" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="56" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/Herbaria.php">
+      <metrics loc="165" ncloc="162" classes="1" methods="18" coveredmethods="0" statements="34" coveredstatements="0" elements="52" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="Herbaria">
+        <metrics methods="18" coveredmethods="0" statements="34" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="52" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/UserRole.php">
+      <metrics loc="37" ncloc="37" classes="1" methods="2" coveredmethods="0" statements="2" coveredstatements="0" elements="4" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="UserRole">
+        <metrics methods="2" coveredmethods="0" statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="4" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/Contact.php">
+      <metrics loc="100" ncloc="100" classes="1" methods="11" coveredmethods="0" statements="21" coveredstatements="0" elements="32" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="Contact">
+        <metrics methods="11" coveredmethods="0" statements="21" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="32" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Repository/AbstractRepository.php">
+      <metrics loc="47" ncloc="36" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Repository" name="AbstractRepository">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Repository/PhotosRepository.php">
+      <metrics loc="114" ncloc="87" classes="1" methods="12" coveredmethods="0" statements="24" coveredstatements="0" elements="36" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Repository" name="PhotosRepository">
+        <metrics methods="12" coveredmethods="0" statements="24" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="36" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Repository/PhotosTypeRepository.php">
+      <metrics loc="17" ncloc="10" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Repository" name="PhotosTypeRepository">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Repository/HerbariaRepository.php">
+      <metrics loc="26" ncloc="19" classes="1" methods="1" coveredmethods="0" statements="5" coveredstatements="0" elements="6" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Repository" name="HerbariaRepository">
+        <metrics methods="1" coveredmethods="0" statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="6" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/ConvertStage.php">
+      <metrics loc="35" ncloc="35" classes="1" methods="2" coveredmethods="0" statements="14" coveredstatements="0" elements="16" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages" name="ConvertStage">
+        <metrics methods="2" coveredmethods="0" statements="14" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="16" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/ThumbnailStage.php">
+      <metrics loc="44" ncloc="44" classes="1" methods="3" coveredmethods="0" statements="16" coveredstatements="0" elements="19" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages" name="ThumbnailStage">
+        <metrics methods="3" coveredmethods="0" statements="16" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="19" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/DuplicityStage.php">
+      <metrics loc="50" ncloc="50" classes="1" methods="2" coveredmethods="0" statements="24" coveredstatements="0" elements="26" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages" name="DuplicityStage">
+        <metrics methods="2" coveredmethods="0" statements="24" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="26" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/BarcodeStage.php">
+      <metrics loc="119" ncloc="108" classes="1" methods="6" coveredmethods="0" statements="69" coveredstatements="0" elements="75" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages" name="BarcodeStage">
+        <metrics methods="6" coveredmethods="0" statements="69" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="75" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/MetadataStage.php">
+      <metrics loc="47" ncloc="47" classes="1" methods="3" coveredmethods="0" statements="18" coveredstatements="0" elements="21" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages" name="MetadataStage">
+        <metrics methods="3" coveredmethods="0" statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="21" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/Exceptions/ThumbnailStageException.php">
+      <metrics loc="8" ncloc="8" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages\Exceptions" name="ThumbnailStageException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/Exceptions/BarcodeStageException.php">
+      <metrics loc="8" ncloc="8" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages\Exceptions" name="BarcodeStageException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/Exceptions/TransferStageException.php">
+      <metrics loc="8" ncloc="8" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages\Exceptions" name="TransferStageException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/Exceptions/DuplicityStageException.php">
+      <metrics loc="8" ncloc="8" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages\Exceptions" name="DuplicityStageException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/Exceptions/ConvertStageException.php">
+      <metrics loc="8" ncloc="8" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages\Exceptions" name="ConvertStageException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/Exceptions/DownloadStageException.php">
+      <metrics loc="8" ncloc="8" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages\Exceptions" name="DownloadStageException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/Exceptions/MetadataStageException.php">
+      <metrics loc="8" ncloc="8" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages\Exceptions" name="MetadataStageException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/Exceptions/ImportStageException.php">
+      <metrics loc="10" ncloc="10" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages\Exceptions" name="ImportStageException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/TransferStage.php">
+      <metrics loc="62" ncloc="62" classes="1" methods="5" coveredmethods="0" statements="26" coveredstatements="0" elements="31" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages" name="TransferStage">
+        <metrics methods="5" coveredmethods="0" statements="26" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="31" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/StageFactory.php">
+      <metrics loc="57" ncloc="57" classes="1" methods="8" coveredmethods="0" statements="8" coveredstatements="0" elements="16" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages" name="StageFactory">
+        <metrics methods="8" coveredmethods="0" statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="16" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/ImportStages/DownloadStage.php">
+      <metrics loc="30" ncloc="30" classes="1" methods="2" coveredmethods="0" statements="10" coveredstatements="0" elements="12" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\ImportStages" name="DownloadStage">
+        <metrics methods="2" coveredmethods="0" statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="12" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/FileManagement/FileInsideCuratorBucket.php">
+      <metrics loc="65" ncloc="65" classes="1" methods="9" coveredmethods="0" statements="11" coveredstatements="0" elements="20" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\FileManagement" name="FileInsideCuratorBucket">
+        <metrics methods="9" coveredmethods="0" statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="20" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/FileManagement/File.php">
+      <metrics loc="69" ncloc="66" classes="1" methods="9" coveredmethods="0" statements="21" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\FileManagement" name="File">
+        <metrics methods="9" coveredmethods="0" statements="21" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Front/Iiif/IiifPresenter.php">
+      <metrics loc="44" ncloc="41" classes="1" methods="2" coveredmethods="0" statements="15" coveredstatements="0" elements="17" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Front\Iiif" name="IiifPresenter">
+        <metrics methods="2" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="17" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Front/Home/HomePresenter.php">
+      <metrics loc="20" ncloc="19" classes="1" methods="1" coveredmethods="0" statements="2" coveredstatements="0" elements="3" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Front\Home" name="HomePresenter">
+        <metrics methods="1" coveredmethods="0" statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="3" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Front/Sign/SignPresenter.php">
+      <metrics loc="69" ncloc="65" classes="1" methods="4" coveredmethods="0" statements="34" coveredstatements="0" elements="38" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Front\Sign" name="SignPresenter">
+        <metrics methods="4" coveredmethods="0" statements="34" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="38" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Front/Repository/RepositoryPresenter.php">
+      <metrics loc="85" ncloc="80" classes="1" methods="3" coveredmethods="0" statements="43" coveredstatements="0" elements="46" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Front\Repository" name="RepositoryPresenter">
+        <metrics methods="3" coveredmethods="0" statements="43" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="46" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Base/Error/Error5xx/Error5xxPresenter.php">
+      <metrics loc="39" ncloc="34" classes="1" methods="2" coveredmethods="0" statements="12" coveredstatements="0" elements="14" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Base\Error\Error5xx" name="Error5xxPresenter">
+        <metrics methods="2" coveredmethods="0" statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="14" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Base/Error/Error5xx/500.phtml">
+      <metrics loc="27" ncloc="27" classes="0" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+    </file>
+    <file name="/srv/App/UI/Base/Error/Error5xx/503.phtml">
+      <metrics loc="24" ncloc="23" classes="0" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+    </file>
+    <file name="/srv/App/UI/Base/Error/Error4xx/Error4xxPresenter.php">
+      <metrics loc="27" ncloc="23" classes="1" methods="1" coveredmethods="0" statements="7" coveredstatements="0" elements="8" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Base\Error\Error4xx" name="Error4xxPresenter">
+        <metrics methods="1" coveredmethods="0" statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="8" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Base/BasePresenter.php">
+      <metrics loc="31" ncloc="29" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Base" name="BasePresenter">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Base/UnsecuredPresenter.php">
+      <metrics loc="8" ncloc="8" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Base" name="UnsecuredPresenter">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Base/SecuredPresenter.php">
+      <metrics loc="41" ncloc="40" classes="1" methods="2" coveredmethods="0" statements="6" coveredstatements="0" elements="8" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Base" name="SecuredPresenter">
+        <metrics methods="2" coveredmethods="0" statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="8" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Base/Form/FormFactory.php">
+      <metrics loc="15" ncloc="15" classes="1" methods="1" coveredmethods="0" statements="1" coveredstatements="0" elements="2" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Base\Form" name="FormFactory">
+        <metrics methods="1" coveredmethods="0" statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="2" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Base/Accessory/LatteExtension.php">
+      <metrics loc="90" ncloc="84" classes="1" methods="5" coveredmethods="0" statements="53" coveredstatements="0" elements="58" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Base\Accessory" name="LatteExtension">
+        <metrics methods="5" coveredmethods="0" statements="53" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="58" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Admin/Herbarium/HerbariumPresenter.php">
+      <metrics loc="19" ncloc="18" classes="1" methods="1" coveredmethods="0" statements="2" coveredstatements="0" elements="3" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Admin\Herbarium" name="HerbariumPresenter">
+        <metrics methods="1" coveredmethods="0" statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="3" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Admin/Home/HomePresenter.php">
+      <metrics loc="32" ncloc="30" classes="1" methods="2" coveredmethods="0" statements="3" coveredstatements="0" elements="5" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Admin\Home" name="HomePresenter">
+        <metrics methods="2" coveredmethods="0" statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="5" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Admin/Import/ImportPresenter.php">
+      <metrics loc="244" ncloc="237" classes="1" methods="13" coveredmethods="0" statements="149" coveredstatements="0" elements="162" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Admin\Import" name="ImportPresenter">
+        <metrics methods="13" coveredmethods="0" statements="149" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="162" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Admin/Report/ReportPresenter.php">
+      <metrics loc="14" ncloc="13" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Admin\Report" name="ReportPresenter">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Grids/ImportedPhotosGrid.php">
+      <metrics loc="114" ncloc="113" classes="1" methods="6" coveredmethods="0" statements="67" coveredstatements="0" elements="73" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Grids" name="ImportedPhotosGrid">
+        <metrics methods="6" coveredmethods="0" statements="67" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="73" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Grids/ImportedPhotosGridFactory.php">
+      <metrics loc="10" ncloc="10" classes="0" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+    </file>
+    <file name="/srv/App/Grids/BaseGridFactory.php">
+      <metrics loc="25" ncloc="24" classes="1" methods="1" coveredmethods="0" statements="7" coveredstatements="0" elements="8" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Grids" name="BaseGridFactory">
+        <metrics methods="1" coveredmethods="0" statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="8" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Forms/ImportFormFactory.php">
+      <metrics loc="38" ncloc="35" classes="1" methods="3" coveredmethods="0" statements="12" coveredstatements="0" elements="15" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Forms" name="ImportFormFactory">
+        <metrics methods="3" coveredmethods="0" statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="15" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Forms/BaseForm.php">
+      <metrics loc="21" ncloc="21" classes="1" methods="1" coveredmethods="0" statements="6" coveredstatements="0" elements="7" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Forms" name="BaseForm">
+        <metrics methods="1" coveredmethods="0" statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="7" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Forms/FormFactory.php">
+      <metrics loc="28" ncloc="28" classes="1" methods="3" coveredmethods="0" statements="5" coveredstatements="0" elements="8" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Forms" name="FormFactory">
+        <metrics methods="3" coveredmethods="0" statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="8" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Exceptions/S3Exception.php">
+      <metrics loc="10" ncloc="10" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Exceptions" name="S3Exception">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Exceptions/ConfigurationException.php">
+      <metrics loc="10" ncloc="10" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Exceptions" name="ConfigurationException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Exceptions/SpecimenIdException.php">
+      <metrics loc="10" ncloc="10" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Exceptions" name="SpecimenIdException">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Services/TempDir.php">
+      <metrics loc="20" ncloc="20" classes="1" methods="2" coveredmethods="2" statements="3" coveredstatements="3" elements="5" coveredelements="5" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services" name="TempDir">
+        <metrics methods="2" coveredmethods="2" statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" elements="5" coveredelements="5"/>
+      </class>
+      <line num="12" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
+      <line num="17" type="stmt" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+    </file>
+    <file name="/srv/App/Services/S3Service.php">
+      <metrics loc="129" ncloc="124" classes="1" methods="12" coveredmethods="0" statements="65" coveredstatements="0" elements="77" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services" name="S3Service">
+        <metrics methods="12" coveredmethods="0" statements="65" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="77" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Services/ImagickService.php">
+      <metrics loc="186" ncloc="166" classes="1" methods="6" coveredmethods="0" statements="134" coveredstatements="0" elements="140" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services" name="ImagickService">
+        <metrics methods="6" coveredmethods="0" statements="134" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="140" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Services/AppConfiguration.php">
+      <metrics loc="40" ncloc="37" classes="1" methods="4" coveredmethods="0" statements="12" coveredstatements="0" elements="16" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services" name="AppConfiguration">
+        <metrics methods="4" coveredmethods="0" statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="16" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Services/EntityServices/HerbariumService.php">
+      <metrics loc="23" ncloc="23" classes="1" methods="2" coveredmethods="0" statements="2" coveredstatements="0" elements="4" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services\EntityServices" name="HerbariumService">
+        <metrics methods="2" coveredmethods="0" statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="4" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Services/EntityServices/PhotoService.php">
+      <metrics loc="114" ncloc="94" classes="1" methods="13" coveredmethods="0" statements="26" coveredstatements="0" elements="39" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services\EntityServices" name="PhotoService">
+        <metrics methods="13" coveredmethods="0" statements="26" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="39" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Services/EntityServices/BaseEntityService.php">
+      <metrics loc="44" ncloc="37" classes="1" methods="3" coveredmethods="0" statements="3" coveredstatements="0" elements="6" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services\EntityServices" name="BaseEntityService">
+        <metrics methods="3" coveredmethods="0" statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="6" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Services/RepositoryConfiguration.php">
+      <metrics loc="114" ncloc="111" classes="1" methods="18" coveredmethods="10" statements="22" coveredstatements="13" elements="40" coveredelements="23" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services" name="RepositoryConfiguration">
+        <metrics methods="18" coveredmethods="10" statements="22" coveredstatements="13" conditionals="0" coveredconditionals="0" elements="40" coveredelements="23"/>
+      </class>
+      <line num="40" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="70" type="stmt" count="0"/>
+      <line num="85" type="stmt" count="0"/>
+      <line num="90" type="stmt" count="0"/>
+      <line num="95" type="stmt" count="0"/>
+      <line num="101" type="stmt" count="0"/>
+      <line num="103" type="stmt" count="0"/>
+      <line num="111" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <line num="25" type="stmt" count="1"/>
+      <line num="30" type="stmt" count="1"/>
+      <line num="35" type="stmt" count="1"/>
+      <line num="45" type="stmt" count="1"/>
+      <line num="50" type="stmt" count="1"/>
+      <line num="55" type="stmt" count="1"/>
+      <line num="65" type="stmt" count="1"/>
+      <line num="75" type="stmt" count="1"/>
+      <line num="80" type="stmt" count="1"/>
+      <line num="100" type="stmt" count="1"/>
+      <line num="106" type="stmt" count="1"/>
+      <line num="115" type="stmt" count="1"/>
+    </file>
+    <file name="/srv/App/Services/WebDir.php">
+      <metrics loc="17" ncloc="17" classes="1" methods="2" coveredmethods="2" statements="3" coveredstatements="3" elements="5" coveredelements="5" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services" name="WebDir">
+        <metrics methods="2" coveredmethods="2" statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" elements="5" coveredelements="5"/>
+      </class>
+      <line num="8" type="stmt" count="1"/>
+      <line num="10" type="stmt" count="1"/>
+      <line num="14" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+    </file>
+    <file name="/srv/App/Services/SpecimenIdService.php">
+      <metrics loc="51" ncloc="48" classes="1" methods="4" coveredmethods="0" statements="15" coveredstatements="0" elements="19" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services" name="SpecimenIdService">
+        <metrics methods="4" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="19" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Facades/CuratorFacade.php">
+      <metrics loc="206" ncloc="178" classes="1" methods="12" coveredmethods="0" statements="110" coveredstatements="0" elements="122" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Facades" name="CuratorFacade">
+        <metrics methods="12" coveredmethods="0" statements="110" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="122" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Controls/Image/DetailControl.php">
+      <metrics loc="51" ncloc="51" classes="1" methods="4" coveredmethods="0" statements="18" coveredstatements="0" elements="22" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Controls\Image" name="DetailControl">
+        <metrics methods="4" coveredmethods="0" statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="22" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Controls/Image/DetailControlFactory.php">
+      <metrics loc="10" ncloc="10" classes="0" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+    </file>
+    <file name="/srv/App/Bootstrap.php">
+      <metrics loc="39" ncloc="39" classes="1" methods="1" coveredmethods="0" statements="18" coveredstatements="14" elements="19" coveredelements="14" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App" name="Bootstrap">
+        <metrics methods="1" coveredmethods="0" statements="18" coveredstatements="14" conditionals="0" coveredconditionals="0" elements="19" coveredelements="14"/>
+      </class>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="30" type="stmt" count="0"/>
+      <line num="12" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="20" type="stmt" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <line num="22" type="stmt" count="1"/>
+      <line num="23" type="stmt" count="1"/>
+      <line num="24" type="stmt" count="1"/>
+      <line num="25" type="stmt" count="1"/>
+      <line num="33" type="stmt" count="1"/>
+      <line num="34" type="stmt" count="1"/>
+      <line num="36" type="stmt" count="1"/>
+      <line num="40" type="stmt" count="1"/>
+    </file>
+  </project>
+</coverage>

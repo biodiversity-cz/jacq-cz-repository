@@ -67,10 +67,10 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'type', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
+            return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', 'type', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
         }
 
-        return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'type', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
+        return ['__isInitialized__', 'archiveFilename', 'originalFilename', 'jp2Filename', 'herbarium', 'status', 'specimenId', 'width', 'height', 'archiveFileSize', 'JP2FileSize', 'exif', 'identify', 'type', '' . "\0" . 'App\\Model\\Database\\Entity\\Photos' . "\0" . 'error', 'id', 'createdAt', 'lastEdit', 'originalFileTimestamp'];
     }
 
     /**
