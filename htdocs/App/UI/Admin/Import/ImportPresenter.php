@@ -96,7 +96,7 @@ final class ImportPresenter extends SecuredPresenter
         $this->redirect('default');
     }
 
-    public function actionReimport(User $user, int $id): void
+    public function actionReimport(int $id): void
     {
         try {
             $photo = $this->photoService->getPhotoWithError($this->user, $id);
@@ -104,7 +104,7 @@ final class ImportPresenter extends SecuredPresenter
                 $this->error('Photo not found');
             }
 
-            $this->curatorFacade->reimportPhoto($user, $photo);
+            $this->curatorFacade->reimportPhoto($this->user, $photo);
             $this->flashMessage('File successfully marked to be re-processed', 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');

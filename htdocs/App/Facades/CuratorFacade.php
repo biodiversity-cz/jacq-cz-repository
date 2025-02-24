@@ -177,7 +177,7 @@ readonly class CuratorFacade
         if ($this->herbariumService->getCurrentUserHerbarium($user) === $photo->getHerbarium()) {
             $photo
                 ->setLastEditAt()
-                ->setMessage(null)
+                ->setError(null)
                 ->setSpecimenId($manualSpecimenId)
                 ->setStatus($this->photoService->getWaitingStatus());
             $this->entityManager->flush();
