@@ -5,11 +5,11 @@ namespace App\Console\Admin;
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
-use App\Model\Database\EntityManager;
 use App\Services\ImagickService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use App\Services\TempDir;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,7 +21,7 @@ class RefreshJp2 extends Command
     protected const string TEMPNAME = DIRECTORY_SEPARATOR . 'exif.tif';
     protected const string TEMPNAME2 = DIRECTORY_SEPARATOR . 'exif.jp2';
 
-    public function __construct(protected readonly EntityManager $entityManager, protected readonly CuratorFacade $curatorService, protected readonly TempDir $tempDir, protected readonly ImagickService $imageService, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service, ?string $name = null)
+    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorService, protected readonly TempDir $tempDir, protected readonly ImagickService $imageService, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service, ?string $name = null)
     {
         parent::__construct($name);
     }

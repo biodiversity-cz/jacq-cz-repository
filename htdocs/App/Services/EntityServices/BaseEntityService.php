@@ -2,9 +2,8 @@
 
 namespace App\Services\EntityServices;
 
-use App\Model\Database\EntityManager;
 use App\Model\Database\Repository\AbstractRepository;
-use App\Model\Database\T;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
 
 abstract class BaseEntityService
@@ -14,13 +13,13 @@ abstract class BaseEntityService
 
     protected string $entityName;
 
-    public function __construct(protected readonly EntityManager $entityManager)
+    public function __construct(protected readonly EntityManagerInterface $entityManager)
     {
         $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 
     /**
-     * @return T[]|array|object[]
+     * @return array|object[]
      */
     public function findAll(): array
     {
@@ -30,7 +29,7 @@ abstract class BaseEntityService
     /**
      * @param array $criteria
      * @param array $orderBy
-     * @return object|T|null
+     * @return object|null
      */
     public function findOneBy(array $criteria, array $orderBy = []): ?object
     {

@@ -2,7 +2,9 @@
 
 namespace App\Security;
 
-use App\Model\Database\EntityManager;
+
+use App\Model\Database\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Nette\Security\AuthenticationException;
 use Nette\Security\Authenticator;
 use Nette\Security\Passwords;
@@ -13,13 +15,13 @@ final class UserAuthenticator implements Authenticator
 
     public const string DEFAULT_PASSWORD = 'Trogoderma2024';
 
-    public function __construct(private EntityManager $entityManager, private Passwords $passwords)
+    public function __construct(private EntityManagerInterface $entityManager, private Passwords $passwords)
     {
     }
 
     public function authenticate(string $username, string $password): SimpleIdentity
     {
-        $row = $this->entityManager->getUserRepository()->findOneByUsername($username);
+        $row = $this->entityManager->getRepository(User::class)->findOneByUsername($username);
         if (!$row) {
             throw new AuthenticationException('User not found.');
         }

@@ -2,11 +2,10 @@
 
 namespace App\Console\Admin;
 
-use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
-use App\Model\Database\EntityManager;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -17,7 +16,7 @@ class BucketParity extends Command
     /**
      * Compare archive and iiif bucket if exactly what expected files are present
      */
-    public function __construct(protected readonly EntityManager $entityManager, protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly S3Service $s3Service, ?string $name = null)
+    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly S3Service $s3Service, ?string $name = null)
     {
         parent::__construct($name);
     }

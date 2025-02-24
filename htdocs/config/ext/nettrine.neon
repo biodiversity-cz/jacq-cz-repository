@@ -4,7 +4,7 @@ extensions:
 
 	# Dbal
 	nettrine.dbal: Nettrine\DBAL\DI\DbalExtension
-	nettrine.dbal.console: Nettrine\DBAL\DI\DbalConsoleExtension
+	nettrine.dbal.console: Nettrine\DBAL\DI\DbalConsoleExtension(%consoleMode%)
 
 	# Orm
 	nettrine.orm: Nettrine\ORM\DI\OrmExtension
@@ -14,7 +14,8 @@ extensions:
 
 nettrine.dbal:
 	debug:
-		panel: false
+		panel: %debugMode%
+		sourcePaths: [%appDir%]
 	connection:
 		driver: %database.driver%
 		host: %database.host%
@@ -28,13 +29,12 @@ nettrine.orm.attributes:
    App\Model\Database: %appDir%/Model/Database
 
 nettrine.orm:
-	entityManagerDecoratorClass: App\Model\Database\EntityManager
 	configuration:
 		autoGenerateProxyClasses: %debugMode%
 
 nettrine.migrations:
 	table: doctrine_migrations
 	column: version
-	directory: %rootDir%/db/Migrations
-	namespace: Database\Migrations
+	directories:
+	    Database\Migrations: %rootDir%/db/Migrations
 	versionsOrganization: null

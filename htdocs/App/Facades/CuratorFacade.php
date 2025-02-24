@@ -5,7 +5,6 @@ namespace App\Facades;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\Entity\PhotosType;
-use App\Model\Database\EntityManager;
 use App\Model\FileManagement\FileInsideCuratorBucket;
 use App\Model\ImportStages\StageFactory;
 use App\Services\EntityServices\HerbariumService;
@@ -13,6 +12,7 @@ use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use App\Services\SpecimenIdService;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use League\Pipeline\Pipeline;
 use Nette\Neon\Exception;
@@ -22,7 +22,7 @@ use Nette\Security\User;
 readonly class CuratorFacade
 {
 
-    public function __construct(protected EntityManager $entityManager, protected S3Service $s3Service, protected StageFactory $stageFactory, protected RepositoryConfiguration $repositoryConfiguration, protected PhotoService $photoService, protected HerbariumService $herbariumService, protected SpecimenIdService $specimenIdService)
+    public function __construct(protected EntityManagerInterface $entityManager, protected S3Service $s3Service, protected StageFactory $stageFactory, protected RepositoryConfiguration $repositoryConfiguration, protected PhotoService $photoService, protected HerbariumService $herbariumService, protected SpecimenIdService $specimenIdService)
     {
     }
 
@@ -31,7 +31,7 @@ readonly class CuratorFacade
      */
     public function getAllStatuses(): array
     {
-        return $this->entityManager->getPhotosStatusRepository()->findBy([], ['id' => 'ASC']);
+        return $this->entityManager->getRepository(PhotosStatus::class)->findBy([], ['id' => 'ASC']);
     }
 
     /**
@@ -39,7 +39,7 @@ readonly class CuratorFacade
      */
     public function getAllPhotoTypes(): array
     {
-        return $this->entityManager->getPhotosTypeRepository()->findPairs('id', 'name');
+        return $this->entityManager->getRepository(PhotosType::class)->findPairs('id', 'name');
     }
 
     /**
@@ -114,7 +114,7 @@ readonly class CuratorFacade
     public function getOrphanedItems(User $user): array
     {
         $photos = [];
-        $dbItems = $this->entityManager->getPhotosRepository()->getOrphananble($this->herbariumService->getCurrentUserHerbarium($user));
+        $dbItems = $this->entityManager->getRepository(Photos::class)->getOrphananble($this->herbariumService->getCurrentUserHerbarium($user));
         foreach ($dbItems as $photo) {
             if (!$this->s3Service->objectExists($this->herbariumService->getCurrentUserHerbarium($user)->getBucket(), $photo->getOriginalFilename())) {
                 $photos[] = $photo;

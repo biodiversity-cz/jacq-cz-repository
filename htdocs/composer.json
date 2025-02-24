@@ -27,9 +27,9 @@
 		"nette/security": "^3",
     "nette/utils": "^4",
     "nettrine/orm": "^0.8",
-    "nettrine/dbal": "^v0.8.2",
+    "nettrine/dbal": "^0.8.2",
     "nettrine/cache": "^0.3",
-    "nettrine/migrations": "^v0.9",
+    "nettrine/migrations": "^0",
     "latte/latte": "^3",
     "tracy/tracy": "^2",
 

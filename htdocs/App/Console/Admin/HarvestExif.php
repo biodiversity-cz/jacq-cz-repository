@@ -5,9 +5,9 @@ namespace App\Console\Admin;
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
-use App\Model\Database\EntityManager;
 use App\Services\ImagickService;
 use App\Services\TempDir;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,7 +18,7 @@ class HarvestExif extends Command
 
     protected const string TEMPNAME = DIRECTORY_SEPARATOR . 'exif.tif';
 
-    public function __construct(protected readonly EntityManager $entityManager, protected readonly CuratorFacade $curatorService, protected readonly TempDir $tempDir, protected readonly ImagickService $imageService, ?string $name = null)
+    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorService, protected readonly TempDir $tempDir, protected readonly ImagickService $imageService, ?string $name = null)
     {
         parent::__construct($name);
     }

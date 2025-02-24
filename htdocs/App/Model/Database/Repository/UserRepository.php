@@ -11,7 +11,7 @@ use App\Model\Database\Entity\User;
  * @method User[] findBy(array $criteria, array $orderBy = NULL, ?int $limit = NULL, ?int $offset = NULL)
  * @extends AbstractRepository<User>
  */
-class UserRepository extends AbstractRepository
+final class UserRepository extends AbstractRepository
 {
 
 }

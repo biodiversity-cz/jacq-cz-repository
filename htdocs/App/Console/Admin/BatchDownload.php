@@ -4,10 +4,10 @@ namespace App\Console\Admin;
 
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
-use App\Model\Database\EntityManager;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use App\Services\TempDir;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,7 +21,7 @@ class BatchDownload extends Command
      *
      * Do not forget switch S3 service to make the right buckets available, and keep up-to-date local copy of database
      */
-    public function __construct(protected readonly EntityManager $entityManager, protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly S3Service $s3Service, protected readonly TempDir $tempDir, ?string $name = null)
+    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly S3Service $s3Service, protected readonly TempDir $tempDir, ?string $name = null)
     {
         parent::__construct($name);
     }
