@@ -29,7 +29,7 @@ class BarcodeStage implements StageInterface
         $imagick->modulateImage(100, 0, 100);
         // adaptive threshold had worse results than unmodified image        * $imagick->adaptiveThresholdImage(150, 150, 1);
         $imagick->setImageFormat('png');
-        $imagick->writeImage($this->repositoryConfiguration->getImportTempZbarPath($this->item));
+        $imagick->writeImage($this->repositoryConfiguration->getImportTempZbarPath());
         $imagick->clear();
         unset($imagick);
     }
@@ -43,7 +43,7 @@ class BarcodeStage implements StageInterface
     {
         $output = [];
         $returnVar = 0;
-        $info = exec('zbarimg --quiet --raw ' . escapeshellarg($this->repositoryConfiguration->getImportTempZbarPath($this->item)), $output, $returnVar);
+        $info = exec('zbarimg --quiet --raw ' . escapeshellarg($this->repositoryConfiguration->getImportTempZbarPath()), $output, $returnVar);
 
         switch ($returnVar) {
             case 1:

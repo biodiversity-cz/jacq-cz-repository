@@ -45,7 +45,7 @@ readonly class CuratorFacade
     /**
      * On curator request read curatorBucket and insert files basic info into the database
      *
-     * @param string|mixed[] $formData
+     * @param mixed[] $formData
      */
     public function registerNewFiles(User $user, array $formData): CuratorFacade
     {

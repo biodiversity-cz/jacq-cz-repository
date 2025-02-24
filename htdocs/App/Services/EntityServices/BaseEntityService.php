@@ -4,12 +4,13 @@ namespace App\Services\EntityServices;
 
 use App\Model\Database\Repository\AbstractRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectRepository;
 
 abstract class BaseEntityService
 {
 
-    protected AbstractRepository|ObjectRepository $repository;
+    protected EntityRepository $repository;
 
     protected string $entityName;
 
@@ -27,8 +28,8 @@ abstract class BaseEntityService
     }
 
     /**
-     * @param string|mixed[] $criteria
-     * @param string|mixed[] $orderBy
+     * @param mixed[] $criteria
+     * @param mixed[] $orderBy
      */
     public function findOneBy(array $criteria, array $orderBy = []): ?object
     {

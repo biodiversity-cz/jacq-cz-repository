@@ -22,7 +22,7 @@ class ImportedPhotosGrid extends Control
 
     public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user)
     {
-        $this->grid = $this->gridFactory->createBaseDatagrid('importedPhotos');
+        $this->grid = $this->gridFactory->createBaseDatagrid();
     }
 
     public function create(): self

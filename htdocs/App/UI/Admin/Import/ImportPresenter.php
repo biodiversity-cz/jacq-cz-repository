@@ -43,7 +43,7 @@ final class ImportPresenter extends SecuredPresenter
     public function renderDefault(): void
     {
         $this->template->title = 'New Files';
-        $files = $this->curatorFacade->getAvailableCuratorBucketFiles($this->user, true);
+        $files = $this->curatorFacade->getAvailableCuratorBucketFiles($this->user);
         $this->template->files = $files;
         $this->template->pendingPhotos = $this->photoService->pendingPhotosCount();
         $this->template->totalPendingPhotos = array_sum(array_column($this->photoService->pendingPhotosCount(), 'count'));

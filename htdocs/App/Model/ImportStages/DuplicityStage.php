@@ -11,12 +11,12 @@ use App\Services\S3Service;
 use League\Pipeline\StageInterface;
 use Nette\Application\LinkGenerator;
 
-readonly class DuplicityStage implements StageInterface
+class DuplicityStage implements StageInterface
 {
 
     protected Photos $item;
 
-    public function __construct(protected PhotoService $photoService, protected LinkGenerator $linkGenerator, protected ImagickService $imageService, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service)
+    public function __construct(protected readonly PhotoService $photoService, protected readonly LinkGenerator $linkGenerator, protected readonly ImagickService $imageService, protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly S3Service $s3Service)
     {
     }
 

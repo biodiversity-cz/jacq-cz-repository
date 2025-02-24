@@ -14,7 +14,7 @@ final readonly class RepositoryConfiguration
     public const string SPECIMEN_NUMERIC_FORMAT = '%07d';
 
     /**
-     * @param string|mixed[] $config
+     * @param mixed[] $config
      */
     public function __construct(protected array $config, protected TempDir $tempDir)
     {

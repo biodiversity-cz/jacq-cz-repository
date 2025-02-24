@@ -49,8 +49,7 @@ final class LatteExtension extends Extension
             ->setText($email);
 
         $icon = Html::el('i')
-            ->class('fa fa-envelope')
-            ->aria('hidden', 'true');
+            ->class('fa fa-envelope');
 
         return Html::el('span')
             ->addHtml($link)
@@ -72,7 +71,7 @@ final class LatteExtension extends Extension
         $hours = floor($minutes / 60);
         $minutes %= 60;
         if ($hours < 24) {
-            if ($hours === 1) {
+            if ($hours == 1) {
                 return $minutes > 0 ? $hours . ' hour ' . $minutes . ' min.' : $hours . ' hour';
             } else {
                 return $minutes > 0 ? $hours . ' hours ' . $minutes . ' min' : $hours . ' hours';
@@ -81,7 +80,7 @@ final class LatteExtension extends Extension
 
         $days = floor($hours / 24);
         $hours %= 24;
-        if ($days === 1) {
+        if ($days == 1) {
             return $hours > 0 ? $days . ' day ' . $hours . ' hours' : $days . ' day';
         } else {
             return $hours > 0 ? $days . ' days ' . $hours . ' hours' : $days . ' days';

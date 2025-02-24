@@ -5,7 +5,6 @@ namespace App\Model\Database\Entity;
 use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
-use App\Model\Database\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -13,7 +12,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity(repositoryClass: UserRepository::class)]
+#[Entity()]
 #[Table(name: 'users', options: ['comment' => 'Repository users'])]
 class User
 {

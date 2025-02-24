@@ -8,7 +8,7 @@ final readonly class AppConfiguration
     public const string VERSION_VARIABLE = 'GIT_TAG';
 
     /**
-     * @param string|mixed[] $config
+     * @param mixed[] $config
      */
     public function __construct(private array $config)
     {

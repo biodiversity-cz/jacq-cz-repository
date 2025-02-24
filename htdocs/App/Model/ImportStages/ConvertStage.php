@@ -21,10 +21,10 @@ readonly class ConvertStage implements StageInterface
             $imagick = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempPath($payload));
             $imagick->setImageFormat('jp2');
             $imagick->setImageCompressionQuality($this->repositoryConfiguration->getJp2Quality());
-            $imagick->writeImage($this->repositoryConfiguration->getImportTempJp2Path($payload));
+            $imagick->writeImage($this->repositoryConfiguration->getImportTempJp2Path());
             $imagick->clear();
             unset($imagick);
-            $payload->setJp2FileSize(filesize($this->repositoryConfiguration->getImportTempJp2Path($payload)));
+            $payload->setJp2FileSize(filesize($this->repositoryConfiguration->getImportTempJp2Path()));
         } catch (\Throwable $exception) {
             throw new ConvertStageException('unable convert to JP2 (' . $exception->getMessage() . '): ' . $payload->getId());
         }
