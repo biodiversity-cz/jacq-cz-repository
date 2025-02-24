@@ -147,7 +147,7 @@ final class ImportPresenter extends SecuredPresenter
         $this->redirect(':default');
     }
 
-    public function specimenIdFormSucceeded(User $user, Form $form, array $values): void
+    public function specimenIdFormSucceeded(Form $form, array $values): void
     {
         try {
             $photo = $this->photoService->getPhotoWithError($this->user, (int) $values['photoId']);
@@ -155,7 +155,7 @@ final class ImportPresenter extends SecuredPresenter
                 $this->error('Photo not found');
             }
 
-            $this->curatorFacade->reimportPhoto($user, $this->photoService->getPhotoReference((int) $values['photoId']), (string) $values['specimen']);
+            $this->curatorFacade->reimportPhoto($this->user, $this->photoService->getPhotoReference((int) $values['photoId']), (string) $values['specimen']);
 
             $fullID = $this->herbarium->getAcronym() . '-' . $values['specimen'];
             $this->flashMessage('File successfully marked to be re-processed with ID ' . $fullID, 'success');
