@@ -175,14 +175,16 @@ readonly class CuratorFacade
     public function reimportPhoto(User $user, Photos $photo, ?string $manualSpecimenId = null): CuratorFacade
     {
         if ($this->herbariumService->getCurrentUserHerbarium($user) === $photo->getHerbarium()) {
-            $photo
-                ->setLastEditAt()
-                ->setError(null)
-                ->setSpecimenId($manualSpecimenId)
-                ->setStatus($this->photoService->getWaitingStatus());
-            $this->entityManager->flush();
-
-            return $this;
+            if ($photo->getError() !== null) {
+                $this->entityManager->remove($photo->getError());
+                $photo
+                    ->setLastEditAt()
+                    ->setError(null)
+                    ->setSpecimenId($manualSpecimenId)
+                    ->setStatus($this->photoService->getWaitingStatus());
+                $this->entityManager->flush();
+                return $this;
+            }
         }
 
         throw new AuthenticationException('Not allowed to reimport photo.');

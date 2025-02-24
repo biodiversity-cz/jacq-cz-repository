@@ -95,6 +95,7 @@ class ProceedCuratorImage extends Command
         }
 
         $photo->setError(null);
+        $this->entityManager->flush();
         $importError = new PhotosError();
         $importError->setPhoto($photo);
         $photo->setError($importError);
