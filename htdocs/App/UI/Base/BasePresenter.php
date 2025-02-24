@@ -15,8 +15,6 @@ abstract class BasePresenter extends Presenter
 
     /** @inject */ public AppConfiguration $appConfiguration;
 
-    /** @inject */ public FormFactory $formFactory;
-
     protected function beforeRender(): void
     {
         if ($this->appConfiguration->getPlatform() !== 'production') {

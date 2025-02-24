@@ -5,6 +5,7 @@ namespace App\UI\Admin\Import;
 use App\Controls\Image\DetailControlFactory;
 use App\Exceptions\SpecimenIdException;
 use App\Facades\CuratorFacade;
+use App\Forms\FormFactory;
 use App\Forms\ImportFormFactory;
 use App\Model\Database\Entity\Photos;
 use App\Model\Specimen\SpecimenFactory;
@@ -27,6 +28,9 @@ final class ImportPresenter extends SecuredPresenter
 
     /** @inject */
     public PhotoService $photoService;
+
+
+    /** @inject */ public FormFactory $formFactory;
 
     /** @inject */ public RepositoryConfiguration $repositoryConfiguration;
 
@@ -143,17 +147,17 @@ final class ImportPresenter extends SecuredPresenter
         $this->redirect(':default');
     }
 
-    public function specimenIdFormSucceeded(User $user, Form $form, \stdClass $values): void
+    public function specimenIdFormSucceeded(User $user, Form $form, array $values): void
     {
         try {
-            $photo = $this->photoService->getPhotoWithError($this->user, (int) $values->photoId);
+            $photo = $this->photoService->getPhotoWithError($this->user, (int) $values['photoId']);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
 
-            $this->curatorFacade->reimportPhoto($user, $this->photoService->getPhotoReference((int) $values->photoId), (string) $values->specimen);
+            $this->curatorFacade->reimportPhoto($user, $this->photoService->getPhotoReference((int) $values['photoId']), (string) $values['specimen']);
 
-            $fullID = $this->herbarium->getAcronym() . '-' . $values->specimen;
+            $fullID = $this->herbarium->getAcronym() . '-' . $values['specimen'];
             $this->flashMessage('File successfully marked to be re-processed with ID ' . $fullID, 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
@@ -214,7 +218,7 @@ final class ImportPresenter extends SecuredPresenter
 
     protected function createComponentSpecimenIdForm(): Form
     {
-        $form = $this->formFactory->create();
+        $form = $this->formFactory->forBackend();
         $form->addInteger('specimen', 'ID:')
             ->setRequired('Please insert only number.')
             ->addRule($form::Integer, 'It must be integer');
