@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Model\ImportStages;
 
@@ -21,32 +21,6 @@ class BarcodeStage implements StageInterface
 
     public function __construct(protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly ImagickService $imageService)
     {
-    }
-
-    public function __invoke(mixed $payload): mixed
-    {
-        try {
-            $this->item = $payload;
-            /**
-             * skip detection when manually inserted id
-             */
-            if ($this->item->getSpecimenId() === null) {
-                $imagick = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempPath($this->item));
-                $this->createContrastedImage($imagick);
-                $this->detectCodes();
-                if (empty($this->barcodes)) {
-                    $this->noBarcodeDetected();
-                } else {
-                    $this->harvestCodes();
-                }
-            }
-
-            return $this->item;
-        } catch (BarcodeStageException $e) {
-            throw $e;
-        } catch (Throwable $e) {
-            throw new BarcodeStageException('problem with barcode processing: ' . $e->getMessage());
-        }
     }
 
     protected function createContrastedImage(Imagick $imagick): void
@@ -85,21 +59,21 @@ class BarcodeStage implements StageInterface
     protected function harvestCodes(): void
     {
             $isValid = false;
-            foreach ($this->barcodes as $code) {
-                $parts = [];
-                if (preg_match($this->item->getHerbarium()->getRegexBarcode(), $code, $parts)) {
-                    if ($this->item->getHerbarium()->getAcronym() === strtoupper($parts['herbarium']) && $parts['specimenId'] !== '') {
-                        $isValid = true;
-                        $this->item->setSpecimenId($parts['specimenId']);
-                    }
+        foreach ($this->barcodes as $code) {
+            $parts = [];
+            if (preg_match($this->item->getHerbarium()->getRegexBarcode(), $code, $parts)) {
+                if ($this->item->getHerbarium()->getAcronym() === strtoupper($parts['herbarium']) && $parts['specimenId'] !== '') {
+                    $isValid = true;
+                    $this->item->setSpecimenId($parts['specimenId']);
                 }
             }
+        }
 
-            if (!$isValid) {
-                $this->item->getError()->setBarcodes(implode($this->barcodes));
-                throw new BarcodeStageException('Invalid barcode(s)');
-            }
+        if (!$isValid) {
+            $this->item->getError()->setBarcodes(implode($this->barcodes));
 
+            throw new BarcodeStageException('Invalid barcode(s)');
+        }
     }
 
     protected function noBarcodeDetected(): void
@@ -112,7 +86,34 @@ class BarcodeStage implements StageInterface
         if (!preg_match($this->item->getHerbarium()->getRegexFilename(), $this->item->getOriginalFilename(), $parts)) {
             throw new BarcodeStageException('No barcode detected & invalid filename');
         }
-        $this->item->setSpecimenId($parts[SpecimenIdService::regexSpecimenPart]);
+
+        $this->item->setSpecimenId($parts[SpecimenIdService::REGEX_SPECIMEN]);
+    }
+
+    public function __invoke(mixed $payload): mixed
+    {
+        try {
+            $this->item = $payload;
+            /**
+             * skip detection when manually inserted id
+             */
+            if ($this->item->getSpecimenId() === null) {
+                $imagick = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempPath($this->item));
+                $this->createContrastedImage($imagick);
+                $this->detectCodes();
+                if (empty($this->barcodes)) {
+                    $this->noBarcodeDetected();
+                } else {
+                    $this->harvestCodes();
+                }
+            }
+
+            return $this->item;
+        } catch (BarcodeStageException $e) {
+            throw $e;
+        } catch (Throwable $e) {
+            throw new BarcodeStageException('problem with barcode processing: ' . $e->getMessage());
+        }
     }
 
 }

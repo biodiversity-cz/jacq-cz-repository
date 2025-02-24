@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Services\EntityServices;
 
@@ -72,12 +72,16 @@ class PhotoService extends BaseEntityService
         return $this->repository->getPhotosWithError($user);
     }
 
+    /**
+     * @return Photos[]
+     */
     public function findUnprocessedPhotos(User $user): array
     {
         $unprocessedPhotos = [];
         foreach ($this->repository->findUnprocessedPhotos($user) as $photo) {
             $unprocessedPhotos[$photo->getOriginalFilename()] = $photo;
         }
+
         return $unprocessedPhotos;
     }
 
@@ -91,8 +95,10 @@ class PhotoService extends BaseEntityService
 
     /**
      * how many records area waiting for processing by the import pipeline
+     *
+     * @return mixed[]
      */
-    public function pendingPhotosCount()
+    public function pendingPhotosCount(): array
     {
         $qb = $this->entityManager->createQueryBuilder();
         $qb->select('h.id, h.acronym, COUNT(p.id) AS count')

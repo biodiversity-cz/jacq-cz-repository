@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Model\Specimen;
 
@@ -12,14 +12,9 @@ class Specimen
 
     protected int $numericPartOfId;
 
-    public function __construct()
-    {
-    }
-
-    public function getStandardizedId()
+    public function getStandardizedId(): string
     {
         return $this->getHerbarium()->getAcronym() . '-' . sprintf(RepositoryConfiguration::SPECIMEN_NUMERIC_FORMAT, $this->getNumericPartOfId());
-
     }
 
     public function getHerbarium(): Herbaria

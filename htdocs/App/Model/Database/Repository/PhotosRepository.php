@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Model\Database\Repository;
 
@@ -16,7 +16,7 @@ use Nette\Security\User;
  * @method Photos[] findBy(array $criteria, array $orderBy = NULL, ?int $limit = NULL, ?int $offset = NULL)
  * @extends AbstractRepository<Photos>
  */
-class PhotosRepository extends AbstractRepository
+final class PhotosRepository extends AbstractRepository
 {
 
     public function findOneByArchiveFilename(string $archiveFilename): ?Photos
@@ -34,6 +34,9 @@ class PhotosRepository extends AbstractRepository
         return $this->findBy(['status' => [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR], 'herbarium' => $herbarium]);
     }
 
+    /**
+     * @return Photos[]
+     */
     public function findLastImported(User $user): array
     {
         $qb = $this->getDefaultDatasource($user)->andWhere('p.status IN (:status)')->setParameter('status', PhotosStatus::PASSED)->orderBy('p.lastEdit', 'DESC');
@@ -73,11 +76,9 @@ class PhotosRepository extends AbstractRepository
         return $qb->getQuery()->getResult();
     }
 
-    protected function getControlErrorStatus(): PhotosStatus
-    {
-        return $this->getEntityManager()->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR);
-    }
-
+    /**
+     * @return Photos[]
+     */
     public function getPhotosWithError(User $user): array
     {
         $qb = $this->getDefaultDatasource($user)->andWhere('p.status = :status')->setParameter('status', $this->getControlErrorStatus());
@@ -101,8 +102,13 @@ class PhotosRepository extends AbstractRepository
     public function findUnprocessedPhotos(User $user): array
     {
         $qb = $this->getDefaultDatasource($user)->andWhere('p.status IN (:status)')->setParameter('status', [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR]);
+
         return $qb->getQuery()->getResult();
     }
 
+    protected function getControlErrorStatus(): PhotosStatus
+    {
+        return $this->getEntityManager()->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR);
+    }
 
 }

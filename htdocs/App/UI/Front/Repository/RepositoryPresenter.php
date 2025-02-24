@@ -79,9 +79,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
 
     protected function createComponentDetail(): Multiplier
     {
-        return new Multiplier(function ($id) {
-            return $this->detailControlFactory->create((int) $id);
-        });
+        return new Multiplier(fn ($id) => $this->detailControlFactory->create((int) $id));
     }
 
 }

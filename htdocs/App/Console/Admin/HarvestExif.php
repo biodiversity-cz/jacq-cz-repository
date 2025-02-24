@@ -67,8 +67,9 @@ class HarvestExif extends Command
                 $output->write("\n 8");
                 $output->write("\n 9");
             }
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $output->writeln("\n Error: " . $exception->getMessage());
+
             return Command::FAILURE;
         }
 

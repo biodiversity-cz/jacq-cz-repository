@@ -8,20 +8,21 @@ use Contributte\FormsBootstrap\Enums\BootstrapVersion;
 final class FormFactory
 {
 
-	private function create(): BaseForm
-	{
+    public function forFrontend(): BaseForm
+    {
+        return $this->create();
+    }
+
+    public function forBackend(): BaseForm
+    {
+        return $this->create();
+    }
+
+    private function create(): BaseForm
+    {
         BootstrapForm::switchBootstrapVersion(BootstrapVersion::V5);
-		return new BaseForm();
-	}
 
-	public function forFrontend(): BaseForm
-	{
-		return $this->create();
-	}
-
-	public function forBackend(): BaseForm
-	{
-		return $this->create();
-	}
+        return new BaseForm();
+    }
 
 }

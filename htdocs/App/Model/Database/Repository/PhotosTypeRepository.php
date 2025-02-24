@@ -14,6 +14,4 @@ use App\Model\Database\Entity\PhotosType;
 final class PhotosTypeRepository extends AbstractRepository
 {
 
-
-
 }

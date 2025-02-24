@@ -53,7 +53,7 @@ class Herbaria
 
     /** @var PersistentCollection<int, Contact> */
     #[OneToMany(mappedBy: 'herbarium', targetEntity: Contact::class)]
-    #[OrderBy(["surname" => "ASC"])]
+    #[OrderBy(['surname' => 'ASC'])]
     protected PersistentCollection $contacts;
 
     public function getAcronym(): string
@@ -93,6 +93,7 @@ class Herbaria
     public function setFullname(string $fullname): Herbaria
     {
         $this->fullname = $fullname;
+
         return $this;
     }
 
@@ -106,10 +107,10 @@ class Herbaria
         return $this->users;
     }
 
-
     public function setAddress(string $address): Herbaria
     {
         $this->address = $address;
+
         return $this;
     }
 
@@ -121,6 +122,7 @@ class Herbaria
     public function setContacts(PersistentCollection $contacts): Herbaria
     {
         $this->contacts = $contacts;
+
         return $this;
     }
 
@@ -132,6 +134,7 @@ class Herbaria
     public function setRegexBarcode(string $regexBarcode): Herbaria
     {
         $this->regexBarcode = $regexBarcode;
+
         return $this;
     }
 
@@ -143,6 +146,7 @@ class Herbaria
     public function setRegexFilename(string $regexFilename): Herbaria
     {
         $this->regexFilename = $regexFilename;
+
         return $this;
     }
 
@@ -154,9 +158,8 @@ class Herbaria
     public function setFilenameFallback(bool $fallbackFilename): Herbaria
     {
         $this->fallbackFilename = $fallbackFilename;
+
         return $this;
     }
-
-
 
 }

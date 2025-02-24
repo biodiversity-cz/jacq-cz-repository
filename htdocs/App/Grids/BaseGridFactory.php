@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Grids;
 
@@ -17,6 +17,7 @@ class BaseGridFactory
         $this->grid
             ->setItemsPerPageList([10, 50, 200])
             ->setStrictSessionFilterValues(false);
+
 //        DataGrid::$iconPrefix = 'bi bi-';
         return $this->grid;
     }

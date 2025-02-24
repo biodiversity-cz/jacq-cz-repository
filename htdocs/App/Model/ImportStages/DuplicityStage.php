@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Model\ImportStages;
 
@@ -13,9 +13,10 @@ use Nette\Application\LinkGenerator;
 
 readonly class DuplicityStage implements StageInterface
 {
+
     protected Photos $item;
 
-    public function __construct(protected PhotoService $photoService, protected LinkGenerator $linkGenerator, protected ImagickService $imageService, protected  RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service)
+    public function __construct(protected PhotoService $photoService, protected LinkGenerator $linkGenerator, protected ImagickService $imageService, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service)
     {
     }
 
@@ -29,19 +30,21 @@ readonly class DuplicityStage implements StageInterface
                 $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $duplicate->getArchiveFilename(), $this->repositoryConfiguration->getImportTempDuplicatePath($duplicate));
 
                 $imagickFromDuplicateCandidate = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempDuplicatePath($duplicate));
-                 if ($imagickNewFile->getImageSignature() === $imagickFromDuplicateCandidate->getImageSignature()) {
+                if ($imagickNewFile->getImageSignature() === $imagickFromDuplicateCandidate->getImageSignature()) {
                     $this->item->getError()->setDuplicateTo($duplicate);
-                     throw new DuplicityStageException('suspicious similarity with already imported file');
+
+                    throw new DuplicityStageException('suspicious similarity with already imported file');
                 }
+
                 $imagickFromDuplicateCandidate->clear();
                 unset($imagickFromDuplicateCandidate);
             }
+
             $imagickNewFile->clear();
             unset($imagickNewFile);
         }
 
         return $payload;
     }
-
 
 }

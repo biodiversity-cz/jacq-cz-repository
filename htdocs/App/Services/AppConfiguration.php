@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Services;
 
@@ -7,6 +7,9 @@ final readonly class AppConfiguration
 
     public const string VERSION_VARIABLE = 'GIT_TAG';
 
+    /**
+     * @param string|mixed[] $config
+     */
     public function __construct(private array $config)
     {
     }

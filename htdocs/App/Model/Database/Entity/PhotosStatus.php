@@ -49,9 +49,8 @@ class PhotosStatus
     public function setColor(string $color): PhotosStatus
     {
         $this->color = $color;
+
         return $this;
     }
-
-
 
 }

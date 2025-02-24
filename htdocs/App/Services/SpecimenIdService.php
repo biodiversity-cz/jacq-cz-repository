@@ -1,7 +1,6 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Services;
-
 
 use App\Exceptions\SpecimenIdException;
 use App\Model\Database\Entity\Herbaria;
@@ -10,11 +9,11 @@ use App\Services\EntityServices\HerbariumService;
 readonly class SpecimenIdService
 {
 
-    public const string regexSpecimenPart = 'specimenId';
-    public const string regexHerbariumPart = 'herbarium';
-    public const string regexExtensionPart = 'extension';
+    public const string REGEX_SPECIMEN = 'specimenId';
+    public const string REGEX_HERBARIUM = 'herbarium';
+    public const string REGEX_EXTENSION = 'extension';
 
-    public const string regexPublicSpecimenId = '/^(?<' . self::regexHerbariumPart . '>[a-zA-Z]+)[\s\-–_](?<' . self::regexSpecimenPart . '>\d+)$/i';
+    public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<' . self::REGEX_HERBARIUM . '>[a-zA-Z]+)[\s\-–_](?<' . self::REGEX_SPECIMEN . '>\d+)$/i';
 
     public function __construct(protected RepositoryConfiguration $repositoryConfiguration, protected HerbariumService $herbariumService)
     {
@@ -22,7 +21,7 @@ readonly class SpecimenIdService
 
     public function getHerbariumFromId(string $specimenId): Herbaria
     {
-        $acronym = strtoupper($this->splitSpecimenId($specimenId)[self::regexHerbariumPart]);
+        $acronym = strtoupper($this->splitSpecimenId($specimenId)[self::REGEX_HERBARIUM]);
         $herbarium = $this->herbariumService->findOneWithAcronym($acronym);
         if ($herbarium === null) {
             throw new SpecimenIdException('Unknown herbarium');
@@ -31,21 +30,22 @@ readonly class SpecimenIdService
         return $herbarium;
     }
 
+    public function getNumericPartFromId(string $specimenId): int
+    {
+        return (int) $this->splitSpecimenId($specimenId)[self::REGEX_SPECIMEN];
+    }
+
     /**
      * @return string[]
      */
     protected function splitSpecimenId(string $specimenId): array
     {
         $parts = [];
-        if (preg_match(self::regexPublicSpecimenId, $specimenId, $parts)) {
+        if (preg_match(self::REGEX_PUBLIC_SPECIMEN_ID, $specimenId, $parts)) {
             return $parts;
         } else {
             throw new SpecimenIdException('invalid name format: ' . $specimenId);
         }
     }
 
-    public function getNumericPartFromId(string $specimenId): int
-    {
-        return (int)$this->splitSpecimenId($specimenId)[self::regexSpecimenPart];
-    }
 }

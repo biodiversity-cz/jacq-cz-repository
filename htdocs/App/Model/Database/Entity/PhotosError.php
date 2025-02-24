@@ -13,9 +13,11 @@ use Doctrine\ORM\Mapping\Table;
 
 #[Entity()]
 #[Table(name: 'photos_error', options: ['comment' => 'Errors that occur during the import'])]
+// phpcs:disable SlevomatCodingStandard.Classes.SuperfluousErrorNaming.SuperfluousSuffix
 class PhotosError
 {
 
+// phpcs:enable
     use TId;
 
     #[OneToOne(targetEntity: Photos::class)]
@@ -43,6 +45,7 @@ class PhotosError
     public function setPhoto(Photos $photo): PhotosError
     {
         $this->photo = $photo;
+
         return $this;
     }
 
@@ -54,6 +57,7 @@ class PhotosError
     public function setDuplicateTo(?Photos $duplicateTo): PhotosError
     {
         $this->duplicateTo = $duplicateTo;
+
         return $this;
     }
 
@@ -65,6 +69,7 @@ class PhotosError
     public function setMessage(string $message): PhotosError
     {
         $this->message = $message;
+
         return $this;
     }
 
@@ -76,9 +81,9 @@ class PhotosError
     public function setBarcodes(?string $barcodes): PhotosError
     {
         $this->barcodes = $barcodes;
+
         return $this;
     }
-
 
     public function getThumbnail(): mixed
     {

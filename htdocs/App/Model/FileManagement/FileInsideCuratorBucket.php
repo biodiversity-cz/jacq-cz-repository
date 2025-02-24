@@ -7,7 +7,7 @@ use Aws\Api\DateTimeResult;
 class FileInsideCuratorBucket
 {
 
-    public const int MIN_FILESIZE =   5 * 1024 * 1024;
+    public const int MIN_FILESIZE = 5 * 1024 * 1024;
     public const int MAX_FILESIZE = 650 * 1024 * 1024;
 
     public const string EXTENSION = 'tif';
@@ -58,6 +58,7 @@ class FileInsideCuratorBucket
     public function setIneligibleForImport(): self
     {
         $this->isEligibleForImport = false;
+
         return $this;
     }
 

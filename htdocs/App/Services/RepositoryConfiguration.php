@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Services;
 
@@ -13,6 +13,9 @@ final readonly class RepositoryConfiguration
     public const string TEMP_DUPLICATE_FILE = 'duplicate';
     public const string SPECIMEN_NUMERIC_FORMAT = '%07d';
 
+    /**
+     * @param string|mixed[] $config
+     */
     public function __construct(protected array $config, protected TempDir $tempDir)
     {
     }
@@ -20,17 +23,6 @@ final readonly class RepositoryConfiguration
     public function getRepositoryArchiveBucket(): string
     {
         return $this->getKey('archiveBucket', 'Archive bucket not set.');
-    }
-
-    protected function getKey(string $key, string $msg = ''): mixed
-    {
-        if (!isset($this->config[$key])) {
-            $text = $msg === '' ? 'Configuration parameter ' . strtoupper($key) . ' not set!' : $msg;
-
-            throw new ConfigurationException($text);
-        }
-
-        return $this->config[$key];
     }
 
     public function getRespositoryImageServerBucket(): string
@@ -46,11 +38,6 @@ final readonly class RepositoryConfiguration
     public function getImageServerInfoUrl(string $jp2ObjectName): string
     {
         return $this->getImageServerBaseUrl() . $jp2ObjectName;
-    }
-
-    protected function getImageServerBaseUrl(): string
-    {
-        return $this->getKey('imageServerBaseUrl');
     }
 
     public function getZbarImageSize(): int
@@ -106,6 +93,22 @@ final readonly class RepositoryConfiguration
     public function createS3TifName(Photos $photo): string
     {
         return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.tif';
+    }
+
+    protected function getKey(string $key, string $msg = ''): mixed
+    {
+        if (!isset($this->config[$key])) {
+            $text = $msg === '' ? 'Configuration parameter ' . strtoupper($key) . ' not set!' : $msg;
+
+            throw new ConfigurationException($text);
+        }
+
+        return $this->config[$key];
+    }
+
+    protected function getImageServerBaseUrl(): string
+    {
+        return $this->getKey('imageServerBaseUrl');
     }
 
 }

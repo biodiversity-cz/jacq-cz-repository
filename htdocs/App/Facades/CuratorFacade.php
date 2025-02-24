@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Facades;
 
@@ -35,7 +35,7 @@ readonly class CuratorFacade
     }
 
     /**
-     * @return PhotosType[]
+     * @return mixed[]
      */
     public function getAllPhotoTypes(): array
     {
@@ -44,10 +44,11 @@ readonly class CuratorFacade
 
     /**
      * On curator request read curatorBucket and insert files basic info into the database
+     *
+     * @param string|mixed[] $formData
      */
     public function registerNewFiles(User $user, array $formData): CuratorFacade
     {
-
         foreach ($this->getEligibleCuratorBucketFiles($user) as $file) {
             $entity = new Photos();
             $entity
@@ -69,27 +70,20 @@ readonly class CuratorFacade
     /**
      * @return FileInsideCuratorBucket[]
      */
-    protected function getEligibleCuratorBucketFiles(User $user): array
-    {
-        return array_filter($this->getAvailableCuratorBucketFiles($user), fn($item) => $item->isEligibleToBeImported() === true);
-    }
-
-    /**
-     * @return FileInsideCuratorBucket[]
-     */
     public function getAvailableCuratorBucketFiles(User $user): array
     {
         $files = [];
         $unprocessedPhotos = $this->photoService->findUnprocessedPhotos($user);
         foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium($user)->getBucket()) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {
-                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], false, false, null, null);
+                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], false, false, null, null);
             } else {
                 $entity = $unprocessedPhotos[$filename['Key']];
                 $alreadyWaiting = $entity->getStatus()->getId() === PhotosStatus::WAITING;
                 $hasControlError = $entity->getStatus()->getId() === PhotosStatus::CONTROL_ERROR;
-                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getError()?->getMessage());
+                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getError()?->getMessage());
             }
+
             $files[] = $file;
         }
 
@@ -133,6 +127,7 @@ readonly class CuratorFacade
         if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->getHerbarium()) {
             throw new AuthenticationException('Not allowed to delete photo.');
         }
+
         try {
             $this->entityManager->beginTransaction();
             $rsm = new ResultSetMappingBuilder($this->entityManager);
@@ -161,10 +156,12 @@ readonly class CuratorFacade
             $this->entityManager->remove($lockedEntity);
             $this->entityManager->flush();
             $this->entityManager->commit();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->entityManager->rollback();
-            throw new Exception("Error in photo delete: " . $e->getMessage());
+
+            throw new Exception('Error in photo delete: ' . $e->getMessage());
         }
+
         return $this;
     }
 
@@ -196,6 +193,14 @@ readonly class CuratorFacade
         $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename(), $destination);
 
         return $this;
+    }
+
+    /**
+     * @return FileInsideCuratorBucket[]
+     */
+    protected function getEligibleCuratorBucketFiles(User $user): array
+    {
+        return array_filter($this->getAvailableCuratorBucketFiles($user), fn ($item) => $item->isEligibleToBeImported() === true);
     }
 
 }

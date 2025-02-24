@@ -42,9 +42,8 @@ class PhotosType
     public function setColor(string $color): PhotosType
     {
         $this->color = $color;
+
         return $this;
     }
-
-
 
 }

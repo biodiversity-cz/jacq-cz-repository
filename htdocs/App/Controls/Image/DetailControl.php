@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Controls\Image;
 
@@ -14,7 +14,7 @@ class DetailControl extends Control
 
     private Photos $photo;
 
-    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private  readonly User $user)
+    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user)
     {
         $this->photo = $this->photoService->getPhoto($this->user, $this->id);
     }
@@ -24,7 +24,7 @@ class DetailControl extends Control
         return $this;
     }
 
-    public function render(bool $forPublic = true)
+    public function render(bool $forPublic = true): void
     {
         $template = $this->template;
         $template->photo = $this->photo;
@@ -33,16 +33,19 @@ class DetailControl extends Control
         } else {
             $template->setFile(__DIR__ . '/detail_admin.latte');
         }
+
         $template->render();
     }
 
-    public function handleDelete()
+    public function handleDelete(): void
     {
         try {
             $this->curatorFacade->deletePhoto($this->user, $this->photo);
-        }catch (Exception $e){
+        } catch (Exception $e) {
             $this->presenter->flashMessage($e->getMessage(), 'danger');
         }
+
         $this->redirect('this');
     }
+
 }

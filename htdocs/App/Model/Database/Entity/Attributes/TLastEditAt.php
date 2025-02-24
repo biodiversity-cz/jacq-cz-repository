@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping\PreUpdate;
 trait TLastEditAt
 {
 
-    #[Column(name: 'lastedit_timestamp', type: Types::DATETIME_MUTABLE, nullable: false, options: ["default"=>"CURRENT_TIMESTAMP"])]
+    #[Column(name: 'lastedit_timestamp', type: Types::DATETIME_MUTABLE, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected ?DateTime $lastEdit = null;
 
     public function getLastEditAt(): DateTime

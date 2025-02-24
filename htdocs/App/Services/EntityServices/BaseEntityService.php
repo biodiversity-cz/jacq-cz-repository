@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Services\EntityServices;
 
@@ -27,9 +27,8 @@ abstract class BaseEntityService
     }
 
     /**
-     * @param array $criteria
-     * @param array $orderBy
-     * @return object|null
+     * @param string|mixed[] $criteria
+     * @param string|mixed[] $orderBy
      */
     public function findOneBy(array $criteria, array $orderBy = []): ?object
     {
@@ -40,4 +39,5 @@ abstract class BaseEntityService
     {
         return $this->repository->find($id);
     }
+
 }

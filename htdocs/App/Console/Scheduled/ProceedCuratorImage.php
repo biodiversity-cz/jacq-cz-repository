@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Console\Scheduled;
 
@@ -53,13 +53,14 @@ class ProceedCuratorImage extends Command
 
     protected function proceedPhoto(OutputInterface $output): int
     {
-
         $this->entityManager->getConnection()->beginTransaction(); //we are locking the selected row
         $photo = $this->getPhoto();
         if ($photo === null) {
             $this->entityManager->getConnection()->rollBack();
+
             return Command::SUCCESS;
         }
+
         try {
             $output->write("\n filename: s3://" . $photo->getHerbarium()->getBucket() . '/' . $photo->getOriginalFilename() . "\n");
             $photo = $this->prepareErrorStorage($photo);
@@ -79,6 +80,7 @@ class ProceedCuratorImage extends Command
 
             return Command::FAILURE;
         }
+
         $this->entityManager->flush();
         $this->entityManager->getConnection()->commit();
 
@@ -91,6 +93,7 @@ class ProceedCuratorImage extends Command
         if ($photo->getError() !== null) {
             $this->entityManager->remove($photo->getError());
         }
+
         $photo->setError(null);
         $importError = new PhotosError();
         $importError->setPhoto($photo);
@@ -98,7 +101,6 @@ class ProceedCuratorImage extends Command
         $this->entityManager->persist($importError);
 
         return $photo;
-
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -110,7 +112,9 @@ class ProceedCuratorImage extends Command
                 return Command::FAILURE;
             }
         }
+
         $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+
         return Command::SUCCESS;
     }
 

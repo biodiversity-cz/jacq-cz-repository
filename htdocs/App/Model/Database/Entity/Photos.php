@@ -65,12 +65,12 @@ class Photos
     #[Column(type: Types::JSON, nullable: true, options: ['jsonb' => true, 'comment' => 'Imagick -verbose identify metadata output from the Archive Master file'])]
     protected ?array $identify;
 
-    #[OneToOne(mappedBy: 'photo', targetEntity: PhotosError::class, cascade: ['remove'])]
-    private ?PhotosError $error = null;
-
     #[ManyToOne(targetEntity: PhotosType::class)]
     #[JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Type of the photo', 'default' => 1])]
     protected PhotosType $type;
+
+    #[OneToOne(mappedBy: 'photo', targetEntity: PhotosError::class, cascade: ['remove'])]
+    private ?PhotosError $error = null;
 
     public function getArchiveFilename(): ?string
     {
@@ -246,6 +246,7 @@ class Photos
     public function setError(?PhotosError $error): Photos
     {
         $this->error = $error;
+
         return $this;
     }
 
@@ -257,6 +258,7 @@ class Photos
     public function setType(PhotosType $type): Photos
     {
         $this->type = $type;
+
         return $this;
     }
 

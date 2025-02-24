@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare(strict_types = 1);
 
 namespace App\Services;
 
@@ -63,6 +63,9 @@ readonly class ImagickService
         return $imagick;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function readIdentify(Imagick $imagick): array
     {
         $identify = $imagick->identifyImage(true);
@@ -74,8 +77,14 @@ readonly class ImagickService
     }
 
     /**
-     * @phpcsSuppress SlevomatCodingStandard.PHP.DisallowReference
-     *
+     * @return mixed[]
+     */
+    public function readExif(Imagick $imagick): array
+    {
+        return $imagick->getImageProperties();
+    }
+
+    /**
      * from https://www.php.net/manual/en/imagick.identifyimage.php
      * $identify = $this->parseIdentify($identify['rawOutput']);
      */
@@ -151,6 +160,7 @@ readonly class ImagickService
                 }
             }
 
+// phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference
             $currSpaces = $spaces;
             $arr = &$output;
 
@@ -162,6 +172,7 @@ readonly class ImagickService
                 $arr = &$arr[$key];
             }
 
+// phpcs:enable
             if (!is_array($_val)) {
                 $arr[$_key] = $_val;
             }
@@ -170,11 +181,6 @@ readonly class ImagickService
         $outputs[] = $output['Image'];
 
         return count($outputs) > 1 ? $outputs : $outputs[0];
-    }
-
-    public function readExif(Imagick $imagick): array
-    {
-        return $imagick->getImageProperties();
     }
 
 }

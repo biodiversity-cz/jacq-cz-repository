@@ -29,12 +29,14 @@ final class ImportPresenter extends SecuredPresenter
     public PhotoService $photoService;
 
     /** @inject */ public RepositoryConfiguration $repositoryConfiguration;
+
     /** @inject */ public S3Service $s3Service;
 
     /** @inject */ public SpecimenFactory $specimenFactory;
-    /** @inject */ public DetailControlFactory $detailControlFactory;
-    /** @inject */ public ImportFormFactory $importFormFactory;
 
+    /** @inject */ public DetailControlFactory $detailControlFactory;
+
+    /** @inject */ public ImportFormFactory $importFormFactory;
 
     public ?Photos $photo;
 
@@ -85,8 +87,9 @@ final class ImportPresenter extends SecuredPresenter
             foreach ($erroneous as $photoWithImportError) {
                 $this->curatorFacade->deletePhoto($this->user, $photoWithImportError);
             }
+
             $this->flashMessage('Files with import error were deleted from your herbarium bucket', 'success');
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
         }
 
@@ -159,19 +162,6 @@ final class ImportPresenter extends SecuredPresenter
         $this->redirect(':default');
     }
 
-    protected function createComponentSpecimenIdForm(): Form
-    {
-        $form = $this->formFactory->create();
-        $form->addInteger('specimen', 'ID:')
-            ->setRequired('Please insert only number.')
-            ->addRule($form::Integer, 'It must be integer');
-        $form->addHidden('photoId', $this->photo->getId());
-        $form->addSubmit('submit', 'Import with this ID');
-        $form->onSuccess[] = [$this, 'specimenIdFormSucceeded'];
-
-        return $form;
-    }
-
     public function renderSpecimen(?int $specimenNumericPartOfId): void
     {
         try {
@@ -180,8 +170,8 @@ final class ImportPresenter extends SecuredPresenter
             }
 
             $specimen = $this->specimenFactory->createFromNumeric($this->user, $specimenNumericPartOfId);
-            $images=  $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
-            if(count($images) == 0){
+            $images = $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
+            if (count($images) === 0) {
                 throw new SpecimenIdException('Specimen not in evidence');
             }
         } catch (SpecimenIdException $exception) {
@@ -193,24 +183,6 @@ final class ImportPresenter extends SecuredPresenter
         $this->template->images = $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
 
         $this->template->manifestAbsoluteLink = $this->link('//:Front:Iiif:manifest', $specimen->getStandardizedId());
-    }
-
-    protected function createComponentDetail(): Multiplier
-    {
-        return new Multiplier(function ($id) {
-            return $this->detailControlFactory->create((int) $id);
-        });
-    }
-
-    protected function createComponentImportForm(): Form
-    {
-        $form =  $this->importFormFactory->create();
-        $form->onSuccess[] = function () {
-            $this->flashMessage('Photos marked for processing', 'success');
-            $this->redirect('default');
-        };
-        return $form;
-
     }
 
     public function renderArchiveImage(int $id): void
@@ -239,4 +211,34 @@ final class ImportPresenter extends SecuredPresenter
             $this->error('The requested image does not exists.');
         }
     }
+
+    protected function createComponentSpecimenIdForm(): Form
+    {
+        $form = $this->formFactory->create();
+        $form->addInteger('specimen', 'ID:')
+            ->setRequired('Please insert only number.')
+            ->addRule($form::Integer, 'It must be integer');
+        $form->addHidden('photoId', $this->photo->getId());
+        $form->addSubmit('submit', 'Import with this ID');
+        $form->onSuccess[] = [$this, 'specimenIdFormSucceeded'];
+
+        return $form;
+    }
+
+    protected function createComponentDetail(): Multiplier
+    {
+        return new Multiplier(fn ($id) => $this->detailControlFactory->create((int) $id));
+    }
+
+    protected function createComponentImportForm(): Form
+    {
+        $form = $this->importFormFactory->create();
+        $form->onSuccess[] = function (): void {
+            $this->flashMessage('Photos marked for processing', 'success');
+            $this->redirect('default');
+        };
+
+        return $form;
+    }
+
 }

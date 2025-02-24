@@ -3,11 +3,11 @@
 namespace App\Model\IIIF;
 
 use App\Model\Database\Entity\Photos;
-use App\Model\Database\Repository\PhotosRepository;
 use App\Model\Specimen\Specimen;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use IIIF\PresentationAPI\Links\Service;
 use IIIF\PresentationAPI\Metadata\Metadata;
 use IIIF\PresentationAPI\Parameters\DCType;
@@ -24,7 +24,7 @@ use Nette\Application\LinkGenerator;
 class ManifestFactory
 {
 
-    protected $photosRepository;
+    protected EntityRepository $photosRepository;
 
     protected Specimen $specimen;
 

@@ -40,6 +40,7 @@ class Contact
     public function setName(string $name): Contact
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -51,6 +52,7 @@ class Contact
     public function setSurname(string $surname): Contact
     {
         $this->surname = $surname;
+
         return $this;
     }
 
@@ -62,6 +64,7 @@ class Contact
     public function setDescription(string $description): Contact
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -73,6 +76,7 @@ class Contact
     public function setEmail(string $email): Contact
     {
         $this->email = $email;
+
         return $this;
     }
 
@@ -84,6 +88,7 @@ class Contact
     public function setHerbarium(Herbaria $herbarium): Contact
     {
         $this->herbarium = $herbarium;
+
         return $this;
     }
 

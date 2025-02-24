@@ -2,7 +2,6 @@
 
 namespace App\Security;
 
-
 use App\Model\Database\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\Security\AuthenticationException;
