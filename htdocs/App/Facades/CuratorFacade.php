@@ -166,7 +166,6 @@ readonly class CuratorFacade
     public function deleteJustNotimportedFile(User $user, string $filename): CuratorFacade
     {
         $this->s3Service->deleteObject($this->herbariumService->getCurrentUserHerbarium($user)->getBucket(), $filename);
-
         return $this;
     }
 

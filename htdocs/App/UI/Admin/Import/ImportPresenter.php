@@ -57,6 +57,7 @@ final class ImportPresenter extends SecuredPresenter
         $this->template->erroneous = count(array_filter($files, fn ($item) => $item->hasControlError() === true));
         $this->template->waiting = count(array_filter($files, fn ($item) => $item->isAlreadyWaiting() === true));
         $this->template->preliminaryError = count(array_filter($files, fn ($item) => $item->isSizeOK() === false || $item->isTypeOK() === false));
+        $this->template->herbarium = $this->herbariumService->find($this->user->getIdentity()->herbarium);
     }
 
     public function actionThumbnail(int $id): void

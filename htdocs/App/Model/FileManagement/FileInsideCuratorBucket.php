@@ -55,6 +55,11 @@ class FileInsideCuratorBucket
         return $this->isEligibleForImport;
     }
 
+    public function hasPrecontrolError(): bool
+    {
+        return !$this->isSizeOk() ||  !$this->isTypeOk();
+    }
+
     public function setIneligibleForImport(): self
     {
         $this->isEligibleForImport = false;

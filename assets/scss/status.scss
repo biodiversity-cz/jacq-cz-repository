@@ -1,0 +1,27 @@
+@import "bootstrap";
+
+$status-waiting: $warning;
+$status-error: $danger;
+$status-ok: $primary;
+$status-published: $success;
+$status-hidden: $secondary;
+
+.status-zero {
+    background-color: #9b9b9b;
+    color: $dark;
+}
+.status-waiting {
+    background-color: $status-waiting;
+}
+.status-error {
+    background-color: $status-error;
+}
+.status-ok {
+    background-color: $status-ok;
+}
+.status-published {
+    background-color: $status-published;
+}
+.status-hidden {
+    background-color: $status-hidden;
+}

@@ -1,139 +1,241 @@
 {block content}
 <div class="container">
-
     <h2>Files in the <i>{$herbarium->getBucket()}</i> bucket</h2>
-    <div class="row">
-        <div class="col-sm-12 col-md-2">
-            <table class="table">
-                <tr>
-                    <td><strong>Total count of files</strong></td>
-                    <td>{count($files)}</td>
-                </tr>
-            </table>
-
-                <table class="table table-striped">
-                    <tr>
-                        <td>Ready for import</td>
-                        <td>{$eligible}</td>
-                    </tr>
-                <tr>
-                    <td>Waiting for repository processing</td>
-                    <td>{$waiting}</td>
-                </tr>
-                    <tr>
-                        <td>Import error</td>
-                        <td>{$erroneous}</td>
-                    </tr>
-                <tr>
-                    <td>Precontrol error</td>
-                    <td>{$preliminaryError}</td>
-                </tr>
-
-            </table>
-
-            {if $eligible>0}
-            <h6>Metadata</h6>
-                <p>You have to pick one photoType that fits to all images you are going to upload: </p>
-                {control importForm}
-
+    <ul class="nav nav-tabs" id="importTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="info-status-tab" data-bs-toggle="tab" data-bs-target="#info-tab-pane"
+                    type="button" role="tab" aria-controls="info-tab-pane" aria-selected="true">info <i
+                class="fa fa-info-circle" aria-hidden="true"></i></button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="zero-status-tab" data-bs-toggle="tab" data-bs-target="#first-tab-pane"
+                    type="button" role="tab" aria-controls="first-tab-pane" aria-selected="false" {if $eligible== 0}disabled{/if}>Ready for import {if $eligible > 0}<span
+            class="badge rounded-pill status-zero">{$eligible}</span>{/if}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="waiting-status-tab" data-bs-toggle="tab" data-bs-target="#second-tab-pane"
+                    type="button" role="tab" aria-controls="second-tab-pane" aria-selected="false" {if $waiting== 0}disabled{/if}>Waiting for processing {if $waiting > 0}<span class="badge rounded-pill status-waiting">{$waiting}</span>{/if}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="error-status-tab" data-bs-toggle="tab" data-bs-target="#third-tab-pane"
+                    type="button" role="tab" aria-controls="third-tab-pane" aria-selected="false" {if $erroneous== 0}
+                    disabled{/if}>Import error {if $erroneous > 0}<span
+            class="badge rounded-pill status-error">{$erroneous}</span>{/if}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="preerror-status-tab" data-bs-toggle="tab" data-bs-target="#fourth-tab-pane"
+                    type="button" role="tab" aria-controls="fourth-tab-pane" aria-selected="false" {if $preliminaryError== 0} disabled{/if}>Pre-control error {if $preliminaryError > 0}<span class="badge rounded-pill status-error">{$preliminaryError}</span>{/if}</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="orphaned-status-tab" data-bs-toggle="tab" data-bs-target="#fifth-tab-pane"
+                    type="button" role="tab" aria-controls="fifth-tab-pane" aria-selected="false" {if count($orphanedItems)== 0} disabled{/if}>Orphaned files {if count($orphanedItems) > 0}<span class="badge rounded-pill status-waiting">{count($orphanedItems)}</span>{/if}</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="info-tab-pane" role="tabpanel" aria-labelledby="info-status-tab"
+             tabindex="0">
+            <div class="row mt-5">
+                <div class="col">
+                    <h6>Waiting records</h6>
+                    {if count($pendingPhotos) > 0}
+                    <ul class="list-group">
+                        {foreach $pendingPhotos as $institution}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            herbarium {$institution["acronym"]}
+                            <span class="badge bg-primary rounded-pill">{$institution["count"]}</span>
+                        </li>
+                        {/foreach}
+                    </ul>
+                    <p>There are a total of {$totalPendingPhotos} photos waiting to be processed and imported into the
+                        repository. It will be approx. <em>{$totalPendingPhotos*40|timeInterval}</em> before the import pipeline
+                        will be free to process new images.</p>
+                    {else}
+                    <p class="mt-3">No files are in the queue for processing, yours will be the first to go!</p>
+                    {/if}
+                </div>
+                <div class="col">
+                    <h6>Import settings</h6>
                 {if $herbarium->usesFilenameFallback()}
-            <hr>
-                    <p><i class="fa-solid fa-exclamation blink"></i> filename as a source of the specimen ID is allowed</p>
+                    <div class="alert alert-secondary" role="alert">
+                        Specimen ID detection from the filename is ON <i class="fa-solid fa-exclamation blink"></i> <span class="badge bg-danger">not recommended</span>
+                    </div>
+                    <p class="ms-5">If <em>no barcode is present</em> in the image, the specimen ID identification falls to the
+                        filename, using a regular expression evaluation again. This could be useful for some situation, but
+                        please do not overuse it, a preferred state is to include the barcode in the image in the "physical
+                        original". </p>
                 {/if}
-            {/if}
-            <br>
-            <br>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="first-tab-pane" role="tabpanel" aria-labelledby="zero-status-tab" tabindex="0">
+            <div class="row mt-5">
+                <div class="col-sm-12 col-md-2">
+                    <h6>Metadata</h6>
+                    <p>You have to pick one photoType that fits to all images you are going to upload: </p>
+                    {control importForm}
+                </div>
+                <div class="col">
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">filename</th>
+                            <th scope="col">uploaded</th>
+                            <th scope="col">size</th>
+                            <th scope="col">filetypeCheck</th>
+                            <th scope="col">sizeCheck</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $files as $file}
+                            {if $file->isEligibleToBeImported()}
+                                <tr>
+                                    <th>{$file->name}</th>
+                                    <td>{$file->getUploaded()}</td>
+                                    <td>{$file->size|bytes:1} <small>({$file->size|number} bytes)</small></td>
+                                    <td title="Required type is {\App\Model\FileManagement\FileInsideCuratorBucket::EXTENSION}">
+                                        {$file->isTypeOK()|status}
+                                    </td>
+                                    <td title="Required size is between {\App\Model\FileManagement\FileInsideCuratorBucket::MIN_FILESIZE|bytes:1} and {\App\Model\FileManagement\FileInsideCuratorBucket::MAX_FILESIZE|bytes:1}">
+                                        {$file->isSizeOK()|status}
+                                    </td>
+                                </tr>
+                            {/if}
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="second-tab-pane" role="tabpanel" aria-labelledby="waiting-status-tab" tabindex="0">
+            <div class="row mt-5">
+                <div class="col">
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">filename</th>
+                            <th scope="col">uploaded</th>
+                            <th scope="col">size</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $files as $file}
+                            {if $file->isAlreadyWaiting()}
+                                <tr>
+                                    <th>{$file->name}</th>
+                                    <td>{$file->getUploaded()}</td>
+                                    <td>{$file->size|bytes:1} <small>({$file->size|number} bytes)</small></td>
+                                </tr>
+                            {/if}
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="third-tab-pane" role="tabpanel" aria-labelledby="error-status-tab" tabindex="0">
+            <div class="row mt-5">
+                <div class="col-sm-12 col-md-2">
+                    <a n:href=":deleteErroneous" id="cleanupButton" class="btn btn-danger" role="button">Delete ALL files
+                        with import error</a>
+                </div>
+                <div class="col">
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">filename</th>
+                            <th scope="col">uploaded</th>
+                            <th scope="col">size</th>
+                            <th scope="col">message</th>
+                            <th scope="col">action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $files as $file}
+                        {if $file->hasControlError()}
+                        <tr>
+                            <th>{$file->name}</th>
+                            <td>{$file->getUploaded()}</td>
+                            <td>{$file->size|bytes:1} <small>({$file->size|number} bytes)</small></td>
 
-            <br>
-            <br>
-            {if $erroneous>0}
-            <a n:href=":deleteErroneous" id="cleanupButton" class="btn btn-danger btn-lg" role="button">Delete ALL files with import error</a>
-            {/if}
-            <br>
-            <br>
-            {if count($pendingPhotos) > 0}
-            <h6>Waiting records</h6>
-            <ul class="list-group">
-            {foreach $pendingPhotos as $institution}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    herbarium {$institution["acronym"]}
-                    <span class="badge bg-primary rounded-pill">{$institution["count"]}</span>
-                </li>
-            {/foreach}
-            </ul>
-            <p>There are a total of {$totalPendingPhotos} photos waiting to be processed and imported into the repository. It will be approx. <em>{$totalPendingPhotos*40|timeInterval}</em> before the import pipeline will be free to process new images.</p>
-            {/if}
+                            <td>{$file->getControlMsg()|noescape}</td>
+                            <td>
+                             <a n:href=":revise $file->rowId">revise</a>
+                            </td>
+                        </tr>
+                        {/if}
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="col">
-            <table class="table table-striped table-hover table-sm">
-                <thead>
-                <tr>
-                    <th scope="col">filename</th>
-                    <th scope="col">uploaded</th>
-                    <th scope="col">size</th>
-                    <th scope="col">filetypeCheck</th>
-                    <th scope="col">sizeCheck</th>
-                    <th scope="col">alreadyWaiting</th>
-                    <th scope="col">status</th>
-                    <th scope="col">message</th>
-                </tr>
-                </thead>
-                <tbody>
-                {foreach $files as $file}
-                <tr {if !$file->isEligibleToBeImported()}class="table-warning"{/if}>
-                    <th>{$file->name}</th>
-                     <td>{$file->getUploaded()}</td>
-                    <td>{$file->size|bytes:1} <small>({$file->size|number} bytes)</small></td>
-                    <td title="Required type is {\App\Model\FileManagement\FileInsideCuratorBucket::EXTENSION}">
-                        {$file->isTypeOK()|status}
-                    </td>
-                    <td title="Required size is between {\App\Model\FileManagement\FileInsideCuratorBucket::MIN_FILESIZE|bytes:1} and {\App\Model\FileManagement\FileInsideCuratorBucket::MAX_FILESIZE|bytes:1}">
-                        {$file->isSizeOK()|status}
-                    </td>
-                    <td title="Is already marked for import or not..">
-                        {$file->isAlreadyWaiting()|status}
-                    </td>
-                    <td>{if $file->isEligibleToBeImported()}{1|status} ready for import
-                        {else}
-                        {if $file->isAlreadyWaiting()}🕑 in processing{else}
-                        {if $file->hasControlError()}control error <a n:href=":revise $file->rowId">revise</a>{else}
-                        {0|status} is ignored <a n:href=":deleteJustFile $file->name">delete</a>{/if}{/if}{/if}
-                    </td>
-                    <td>{$file->getControlMsg()|noescape}</td>
-                </tr>
-                {/foreach}
-                </tbody>
-            </table>
+        <div class="tab-pane fade" id="fourth-tab-pane" role="tabpanel" aria-labelledby="preerror-status-tab" tabindex="0">
+            <div class="row mt-5">
+                <div class="col">
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">filename</th>
+                            <th scope="col">uploaded</th>
+                            <th scope="col">size</th>
+                            <th scope="col">filetypeCheck</th>
+                            <th scope="col">sizeCheck</th>
+                            <th scope="col">action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $files as $file}
+                        {if !$file->isEligibleToBeImported() && $file->hasPrecontrolError()}
+                        <tr>
+                            <th>{$file->name}</th>
+                            <td>{$file->getUploaded()}</td>
+                            <td>{$file->size|bytes:1} <small>({$file->size|number} bytes)</small></td>
+                            <td title="Required type is {\App\Model\FileManagement\FileInsideCuratorBucket::EXTENSION}">
+                                {$file->isTypeOK()|status}
+                            </td>
+                            <td title="Required size is between {\App\Model\FileManagement\FileInsideCuratorBucket::MIN_FILESIZE|bytes:1} and {\App\Model\FileManagement\FileInsideCuratorBucket::MAX_FILESIZE|bytes:1}">
+                                {$file->isSizeOK()|status}
+                            </td>
+                            <td>
+                                <a n:href=":deleteJustFile $file->name">delete</a>
+                            </td>
+                        </tr>
+                        {/if}
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    </div>
-    {if count($orphanedItems)>0}
-    <div class="row">
-        <h3>Currently being processed</h3>
-        <p>Files with unfinished status in but without files present in the curator bucket.</p>
-        <div class="col">
-            <table class="table table-striped table-hover table-sm">
-                <thead>
-                <tr>
-                    <th scope="col">filename</th>
-                    <th scope="col">imported</th>
-                    <th scope="col">status</th>
-                    <th scope="col">message</th>
-                </tr>
-                </thead>
-                <tbody>
-                {foreach $orphanedItems as $photo}
-                <tr>
-                    <th>{$photo->getOriginalFilename()}</th>
-                    <td>{$photo->getCreatedAt()->format('j. F Y')}</td>
-                    <td>{$photo->getStatus()->getName()}</td>
-                    <td>
-                        {$photo->getError()?->getMessage()}
-                    </td>
-                </tr>
-                {/foreach}
-                </tbody>
-            </table>
+        <div class="tab-pane fade" id="fifth-tab-pane" role="tabpanel" aria-labelledby="orphaned-status-tab" tabindex="0">
+            <div class="row mt-5">
+                <h3>Currently being processed</h3>
+                <p>Files with unfinished status in but without files present in the curator bucket.</p>
+                <div class="col">
+                    <table class="table table-striped table-hover table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">filename</th>
+                            <th scope="col">imported</th>
+                            <th scope="col">status</th>
+                            <th scope="col">message</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $orphanedItems as $photo}
+                        <tr>
+                            <th>{$photo->getOriginalFilename()}</th>
+                            <td>{$photo->getCreatedAt()->format('j. F Y')}</td>
+                            <td>{$photo->getStatus()->getName()}</td>
+                            <td>
+                                {$photo->getError()?->getMessage()}
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-    {/if}
 </div>
