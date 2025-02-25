@@ -12,6 +12,7 @@ use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use App\Services\SpecimenIdService;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use League\Pipeline\Pipeline;
@@ -130,11 +131,8 @@ readonly class CuratorFacade
 
         try {
             $this->entityManager->beginTransaction();
-            $rsm = new ResultSetMappingBuilder($this->entityManager);
-            $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
-            $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE id = ? FOR UPDATE SKIP LOCKED LIMIT 1 ', $rsm);
-            $query->setParameter(1, $entity->getId());
-            $lockedEntity = $query->getSingleResult();
+
+            $lockedEntity = $this->entityManager->find(Photos::class, $entity->getId(), LockMode::PESSIMISTIC_WRITE);
 
             switch ($lockedEntity->getStatus()->getId()) {
                 case PhotosStatus::WAITING:
