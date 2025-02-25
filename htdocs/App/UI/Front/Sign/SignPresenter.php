@@ -2,6 +2,7 @@
 
 namespace App\UI\Front\Sign;
 
+use App\Forms\FormFactory;
 use App\UI\Base\BasePresenter;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\UI\Form;
@@ -15,6 +16,8 @@ final class SignPresenter extends UnsecuredPresenter
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     public $backlink;
+
+    /** @inject  */ public FormFactory $formFactory;
 
     public function actionIn(): void
     {
@@ -53,7 +56,7 @@ final class SignPresenter extends UnsecuredPresenter
 
     protected function createComponentLoginForm(): Form
     {
-        $form = $this->formFactory->create();
+        $form = $this->formFactory->forFrontend();
         $form->addText('username')
             ->setRequired(true);
         $form->addPassword('password')

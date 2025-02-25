@@ -127,7 +127,7 @@
                     <td>{$photo->getCreatedAt()->format('j. F Y')}</td>
                     <td>{$photo->getStatus()->getName()}</td>
                     <td>
-                        {$photo->getMessage()}
+                        {$photo->getError()?->getMessage()}
                     </td>
                 </tr>
                 {/foreach}

@@ -108,7 +108,7 @@ readonly class CuratorFacade
     public function getOrphanedItems(User $user): array
     {
         $photos = [];
-        $dbItems = $this->entityManager->getRepository(Photos::class)->getOrphananble($this->herbariumService->getCurrentUserHerbarium($user));
+        $dbItems = $this->entityManager->getRepository(Photos::class)->getOrphanable($user);
         foreach ($dbItems as $photo) {
             if (!$this->s3Service->objectExists($this->herbariumService->getCurrentUserHerbarium($user)->getBucket(), $photo->getOriginalFilename())) {
                 $photos[] = $photo;

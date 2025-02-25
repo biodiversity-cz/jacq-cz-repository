@@ -19,19 +19,16 @@ use Nette\Security\User;
 final class PhotosRepository extends AbstractRepository
 {
 
-    public function findOneByArchiveFilename(string $archiveFilename): ?Photos
-    {
-        return $this->findOneBy(['archiveFilename' => $archiveFilename]);
-    }
-
     /**
      * if curator deletes a file in his bucket and the image i) is processed or ii) has Import error, then we have an "orphaned" row.
      *
      * @return Photos[]
      */
-    public function getOrphananble(Herbaria $herbarium): array
+    public function getOrphanable(User $user): array
     {
-        return $this->findBy(['status' => [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR], 'herbarium' => $herbarium]);
+        $qb = $this->getDefaultDatasource($user)->andWhere('p.status IN (:status)')->setParameter('status', [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR])->orderBy('p.lastEdit', 'DESC');
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
