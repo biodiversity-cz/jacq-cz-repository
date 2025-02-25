@@ -195,7 +195,7 @@ final class ImportPresenter extends SecuredPresenter
         if ($photo === null) {
             $this->error('The requested photo does not exists.');
         }
-
+//TODO user security police and only public images..
         $bucket = $this->repositoryConfiguration->getRepositoryArchiveBucket();
         $filename = $photo->getArchiveFilename();
         if ($this->s3Service->objectExists($bucket, $filename)) {
