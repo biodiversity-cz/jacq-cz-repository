@@ -1,4 +1,1 @@
-!proxies/**
-*
-!.gitignore
-!curator/.gitignore
+cache
