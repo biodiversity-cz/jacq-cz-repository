@@ -15,7 +15,8 @@ Encore
         useBuiltIns: 'usage',
         corejs: 3
     })
-    .disableSingleRuntimeChunk()
+    .splitEntryChunks()
+    .enableSingleRuntimeChunk()
     .autoProvideVariables({
         $: 'jquery',
         naja: ['naja', 'default'], //https://github.com/naja-js/naja/discussions/203

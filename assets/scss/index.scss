@@ -29,3 +29,15 @@ footer {
         opacity: 0;
     }
 }
+
+.copyIcon {
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+    color: #555;
+    transition: color 0.2s ease-in-out;
+}
+
+.copyIcon:hover {
+    color: #000;
+}

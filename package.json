@@ -13,6 +13,7 @@
     "@popperjs/core": "^2",
     "@contributte/datagrid": "git+ssh://git@github.com:contributte/datagrid.git#v6.10.0",
     "jquery": "^3",
+    "mirador": "^3",
     "naja": "^3"
   },
   "devDependencies": {

@@ -54,27 +54,27 @@ final class RepositoryPresenter extends UnsecuredPresenter
         }
     }
 
-    public function renderSpecimen(?string $specimenFullId): void
+    public function renderSpecimen(?string $sid): void
     {
         try {
-            if ($specimenFullId === null) {
+            if ($sid === null) {
                 throw new SpecimenIdException();
             }
 
-            $specimen = $this->specimenFactory->create($specimenFullId);
+            $specimen = $this->specimenFactory->create($sid);
         } catch (SpecimenIdException $exception) {
             $this->flashMessage($exception->getMessage(), 'error');
             $this->redirect('Home:');
         }
 
         if (!$this->photoService->specimenHasPublicPhotos($specimen)) {
-            $this->error('Specimen ' . $specimenFullId . ' not in evidence.');
+            $this->error('Specimen ' . $sid . ' not in evidence.');
         }
 
         $this->template->specimen = $specimen;
         $this->template->images = $this->photoService->getPublicPhotosOfSpecimen($specimen);
 
-        $this->template->manifestAbsoluteLink = $this->link('//Iiif:manifest', $specimenFullId);
+        $this->template->manifestAbsoluteLink = $this->link('//Iiif:manifest', $sid);
     }
 
     protected function createComponentDetail(): Multiplier

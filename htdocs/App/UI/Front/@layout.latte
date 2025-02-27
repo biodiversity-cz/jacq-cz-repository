@@ -15,7 +15,7 @@
                         <form action="{link Repository:specimen}" method="GET">
                             <div class="row">
                                 <div class="col">
-                                    <input class="form-control form-control-lg" id="specimenFullId" name="specimenFullId" placeholder="Search for a specimen, e.g. PR 5, PR-000005..."  aria-label="Search a specimen" autofocus />
+                                    <input class="form-control form-control-lg" name="sid" placeholder="Search for a specimen in several formats, e.g. PR 5 or PR-000005..."  aria-label="Search a specimen" autofocus  autocomplete="off" />
                                 </div>
                                 <div class="col-auto"><button class="btn btn-primary btn-lg" type="submit">Search</button></div>
                             </div>
@@ -40,7 +40,7 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 </ul>
                 <form class="d-flex" action="{link Repository:specimen}" method="GET">
-                    <input name="specimenFullId"  class="form-control me-2" type="search" placeholder="PRC_37" aria-label="Search specimen">
+                    <input name="sid" class="form-control me-2" type="search" placeholder="PRC_37" aria-label="Search specimen" autocomplete="off">
                     <button class="btn btn-primary text-light" type="submit">Search</button>
                 </form>
                 <form class="d-flex">
