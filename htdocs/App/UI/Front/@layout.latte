@@ -1,52 +1,68 @@
 {layout '../Base/@layout.latte'}
-    {block main}
+{block main}
 <header>
-<nav class="navbar navbar-expand-lg navbar-light bg-success-subtle mb-2 py-1">
-    <div class="container-fluid">
-        <a class="navbar-brand" n:href="Home:"><img src="{$basePath}/logo/jacq.png" class="m-0"
-                                                    style="width: 100px; height: 40px" alt="JACQ"><em>images</em>CZ</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-                <li class="nav-item">
-                    <a class="nav-link {if $presenter->isLinkCurrent('Home:about')}active{/if}"
-                       n:href="Home:about">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {if $presenter->isLinkCurrent('Home:contact')}active{/if}"
-                       n:href="Home:contact">Contact</a>
-                </li>
-
-            </ul>
-            <form class="d-flex" action="{link Repository:specimen}" method="GET">
-                <input name="specimenFullId"  class="form-control me-2" type="search" placeholder="PRC_37" aria-label="Search specimen">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-            <form class="d-flex">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
-                    <li class="nav-item">
-                        <a class="nav-link" n:href="Sign:in"><i class="bi bi-box-arrow-in-right"></i> Sign in</a>
-                    </li>
-                </ul>
-            </form>
+{if $presenter->isLinkCurrent('Home:default')}
+    <div id="masthead">
+        <div id="logo">
+            <a n:href="Home:"><img src="{$basePath}/logo/jacq.png"  alt="JACQ"><span class="text-light fs-5"><em>images</em>CZ</span></a>
+        </div>
+        <div id="signLink"><a class="btn btn-info" role="button" n:href="Sign:in"><i class="bi bi-box-arrow-in-right"></i> Sign in</a></div>
+        <div class="container position-relative">
+            <div class="row justify-content-center">
+                <div class="col-xl-8 col-lg-10">
+                    <div class="text-center text-white">
+                        <h1 class="mb-5">Czech herbaria specimens repository</h1>
+                        <form action="{link Repository:specimen}" method="GET">
+                            <div class="row">
+                                <div class="col">
+                                    <input class="form-control form-control-lg" id="specimenFullId" name="specimenFullId" placeholder="Search for a specimen, e.g. PR 5, PR-000005..."  aria-label="Search a specimen" autofocus />
+                                </div>
+                                <div class="col-auto"><button class="btn btn-primary btn-lg" type="submit">Search</button></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</nav>
-
+{else}
+    <nav class="navbar navbar-expand-lg mb-2 py-1" id="masthead-thin">
+        <div class="container-fluid">
+            <a class="navbar-brand" n:href="Home:"><img src="{$basePath}/logo/jacq.png" class="m-0"
+                                                        style="width: 100px; height: 40px" alt="JACQ"><span class="text-light fs-5"><em>images</em>CZ</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <h3 class="text-light">Czech herbaria specimens repository</h3>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                </ul>
+                <form class="d-flex" action="{link Repository:specimen}" method="GET">
+                    <input name="specimenFullId"  class="form-control me-2" type="search" placeholder="PRC_37" aria-label="Search specimen">
+                    <button class="btn btn-primary text-light" type="submit">Search</button>
+                </form>
+                <form class="d-flex">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                        <li class="nav-item">
+                            <a class="nav-link text-light" n:href="Sign:in"><i class="bi bi-box-arrow-in-right"></i> Sign in</a>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </nav>
+{/if}
 </header>
     <main class="content">
-    <div class="container-fluid">
-        <div class="col-sm-12">
-            <div n:foreach="$flashes as $flash" n:class="alert, $flash->type">{$flash->message}</div>
+        <div class="container-fluid">
+            <div class="col-sm-12">
+                <div n:foreach="$flashes as $flash" n:class="alert, $flash->type">{$flash->message}</div>
+            </div>
         </div>
-    </div>
         <div class="container">
         {include content}
         </div>
     </main>
-    {/block}
+{/block}

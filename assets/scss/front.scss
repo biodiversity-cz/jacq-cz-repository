@@ -1,0 +1,109 @@
+#masthead {
+    position: relative;
+    background: linear-gradient(
+            340deg,
+            hsl(115deg 59% 11%) 0%,
+            hsl(103deg 60% 13%) 8%,
+            hsl(94deg 63% 14%) 17%,
+            hsl(85deg 66% 15%) 25%,
+            hsl(78deg 69% 16%) 33%,
+            hsl(71deg 71% 17%) 42%,
+            hsl(65deg 72% 18%) 50%,
+            hsl(60deg 73% 19%) 58%,
+            hsl(55deg 74% 21%) 67%,
+            hsl(50deg 73% 24%) 75%,
+            hsl(46deg 72% 27%) 83%,
+            hsl(42deg 70% 30%) 92%,
+            hsl(39deg 67% 34%) 100%
+    );
+
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+
+    @media (max-width: 768px) {
+        padding-top: 4rem;
+        padding-bottom: 3rem;
+        #masthead h1, #masthead .h1 {
+            font-size: 1.5rem;
+        }
+    }
+}
+#masthead:before {
+    content: "";
+    position: absolute;
+    background-color: #1c375e;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.5;
+}
+#masthead h1, #masthead .h1 {
+    font-size: 2rem;
+}
+
+#masthead-thin{
+    background:  #2b4035;
+
+}
+
+// logo
+#logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 1rem;
+    opacity: revert;
+    img {
+        max-width: 100px;
+        max-height: 40px;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1999px) {
+      #logo {
+        top: 1rem;
+        left: 2rem;
+          img {
+              max-width: 200px;
+              max-height: 80px;
+          }
+    }
+}
+
+@media (min-width: 2000px) {
+    #logo {
+        top: 3rem;
+        left: 10rem;
+        img {
+            max-width: 200px;
+            max-height: 80px;
+        }
+    }
+}
+
+// icons on homepage
+.features-icons {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+}
+.features-icons .features-icons-item {
+    max-width: 20rem;
+}
+.features-icons .features-icons-item .features-icons-icon {
+    height: 7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.features-icons .features-icons-item .features-icons-icon i {
+    font-size: 4.5rem;
+}
+
+#signLink {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 1rem;
+    opacity: revert;
+}
