@@ -132,7 +132,15 @@ readonly class CuratorFacade
         try {
             $this->entityManager->beginTransaction();
 
-            $lockedEntity = $this->entityManager->find(Photos::class, $entity->getId(), LockMode::PESSIMISTIC_WRITE);
+            $lockedEntity = $this->entityManager
+                ->createQueryBuilder()
+                ->select('p')
+                ->from(Photos::class, 'p')
+                ->where('p.id = :id')
+                ->setParameter('id', $entity->getId())
+                ->getQuery()
+                ->setLockMode(LockMode::PESSIMISTIC_WRITE)
+                ->getSingleResult();
 
             switch ($lockedEntity->getStatus()->getId()) {
                 case PhotosStatus::WAITING:
