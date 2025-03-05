@@ -22,6 +22,7 @@ abstract class BasePresenter extends Presenter
         }
 
         $this->template->version = $this->appConfiguration->getVersion();
+        $this->template->dbSsl = $this->appConfiguration->isSslDbConnection();
 
         parent::beforeRender();
     }

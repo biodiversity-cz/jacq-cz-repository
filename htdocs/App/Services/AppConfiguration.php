@@ -1,6 +1,8 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services;
+
+use Doctrine\ORM\EntityManagerInterface;
 
 final readonly class AppConfiguration
 {
@@ -10,7 +12,7 @@ final readonly class AppConfiguration
     /**
      * @param mixed[] $config
      */
-    public function __construct(private array $config)
+    public function __construct(private array $config, private EntityManagerInterface $entityManager)
     {
     }
 
@@ -35,6 +37,12 @@ final readonly class AppConfiguration
         }
 
         return 'unknown version';
+    }
+
+    public function isSslDbConnection(): bool
+    {
+        $result = $this->entityManager->getConnection()->executeQuery("SHOW ssl;")->fetchOne();
+        return ($result !== 'off');
     }
 
 }

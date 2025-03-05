@@ -23,8 +23,6 @@ nettrine.dbal:
 		password: %database.password%
 		dbname: %database.dbname%
 		port: %database.port%
-		driverOptions:
-			1002: 'require'  # PDO::PGSQL_ATTR_SSLMODE
 
 nettrine.orm.attributes:
   mapping:
