@@ -151,7 +151,7 @@ readonly class CuratorFacade
                  * @deprecated
                  * //TODO delete is not allowed in the final repository
                  */
-                case PhotosStatus::CONTROL_OK:
+                case PhotosStatus::IMPORTED:
                 case PhotosStatus::PUBLIC:
                 case PhotosStatus::HIDDEN:
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRespositoryImageServerBucket(), $lockedEntity->getJp2Filename());

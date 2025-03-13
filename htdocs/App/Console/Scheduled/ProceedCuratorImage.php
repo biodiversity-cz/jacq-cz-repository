@@ -67,7 +67,7 @@ class ProceedCuratorImage extends Command
 
             $this->curatorService->importNewFiles()->process($photo);
 
-            $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_OK));
+            $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMPORTED));
             $this->entityManager->remove($photo->getError());
             $photo->setError(null);
         } catch (ImportStageException $e) {

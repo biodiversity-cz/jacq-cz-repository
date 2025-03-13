@@ -16,11 +16,11 @@ class PhotosStatus
 
     public const int WAITING = 1;
     public const int CONTROL_ERROR = 2;
-    public const int CONTROL_OK = 3;
+    public const int IMPORTED = 3;
     public const int PUBLIC = 4;
     public const int HIDDEN = 5;
-    public const array PASSED = [self::CONTROL_OK, self::PUBLIC, self::HIDDEN];
-    public const array PASSED_PUBLIC = [self::CONTROL_OK, self::PUBLIC];
+    public const array PASSED = [self::IMPORTED, self::PUBLIC, self::HIDDEN];
+    public const array PASSED_PUBLIC = [self::IMPORTED, self::PUBLIC];
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'name of the status'])]
     protected string $name;
