@@ -94,8 +94,8 @@ class ImportedPhotosGrid extends Control
 
         $this->grid->addAction('delete', '', 'delete!')
             ->setIcon('trash')
-            ->setTitle('Smazat')
-            ->setClass('btn btn-xs btn-danger <strong class="text-danger">ajax</strong>')
+            ->setTitle('Delete')
+            ->setClass('btn btn-xs btn-danger ajax')
             ->setConfirmation(
                 new StringConfirmation('Do you really want to delete photo %s? This won\'t be allowed in production mode!', 'archiveFilename') // Second parameter is optional
             );
