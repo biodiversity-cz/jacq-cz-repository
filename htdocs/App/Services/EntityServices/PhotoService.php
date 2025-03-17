@@ -51,7 +51,11 @@ class PhotoService extends BaseEntityService
 
     public function getPhoto(User $user, int $id): ?Photos
     {
-        return $this->repository->getPhoto($user, $id);
+        if ($user->isLoggedIn()){
+            return $this->repository->getPhoto($user, $id);
+        }else{
+            return $this->repository->getPublicPhoto($id);
+        }
     }
 
     public function getWaitingStatus(): PhotosStatus
