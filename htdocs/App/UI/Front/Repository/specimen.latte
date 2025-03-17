@@ -40,10 +40,14 @@
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
                     <h5 class="mb-1">GBIF</h5>
-                    <small class="text-body-secondary">Directs to GBIF search results</small>
+                    <small class="text-body-secondary"><b id="copyGbif"></b> <span
+                        class="copyIcon" data-copy-target="#copyGbif" title="Copy">
+            <i class="fa-regular fa-copy"></i>
+        </span></small><br>
+                    <small class="text-body-secondary">Directs to GBIF occurrence</small>
                 </div>
                 <div>
-                    <a href="https://www.gbif.org/occurrence/search?occurrence_id={$images[0]->getJacqPid()}">link</a>
+                    <a id="GBIF" data-url="https://api.gbif.org/v1/occurrence/search?occurrenceId={$images[0]->getJacqPid()}" href="https://www.gbif.org/occurrence/search?occurrence_id={$images[0]->getJacqPid()}">link</a>
                 </div>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
