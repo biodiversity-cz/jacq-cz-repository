@@ -4,7 +4,7 @@ import './scss/index.scss';
 import '@contributte/datagrid/assets/datagrid'
 import regexValidation from "./js/settings";
 import importForm from "./js/import";
-import makeJACQLinks from "./js/specimen";
+import joinLinks from "./js/specimen";
 import {initCopyButtons} from "./js/copyButton";
 import mirador from "./js/mirador";
 
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
     regexValidation();
     importForm();
-    makeJACQLinks();
+    joinLinks();
     initCopyButtons();
 
     if (document.querySelector('#mirador')) {
