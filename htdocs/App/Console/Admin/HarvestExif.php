@@ -30,7 +30,7 @@ class HarvestExif extends Command
     {
         $rsm = new ResultSetMappingBuilder($this->entityManager);
         $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
-        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id IN (?) AND identify is null ORDER BY id asc LIMIT 10', $rsm);
+        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id IN (?) AND identify is null ORDER BY id asc', $rsm);
         $query->setParameter(1, PhotosStatus::PASSED);
 
         return $query->execute();
@@ -50,23 +50,21 @@ class HarvestExif extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
+        $output->write("\n Job started...");
         try {
-            $output->write("\n Started...");
             foreach ($this->getListOfPhotos() as $photo) {
                 $output->write("\n photoId: " . $photo->getId() . "\n");
                 $this->curatorService->getArchiveFile($photo, $this->tempFile());
                 $imagick = $this->imageService->createImagick($this->tempFile());
                 $photo->setIdentify($this->imageService->readIdentify($imagick));
                 $photo->setExif($this->imageService->readExif($imagick));
-                $output->write("\n 6");
+                $photo->setLastEditAt();
+
                 $imagick->clear();
                 unset($imagick);
                 unlink($this->tempFile());
-                $photo->setLastEditAt();
-                $output->write("\n 7");
+
                 $this->entityManager->flush();
-                $output->write("\n 8");
-                $output->write("\n 9");
             }
         } catch (\Throwable $exception) {
             $output->writeln("\n Error: " . $exception->getMessage());
