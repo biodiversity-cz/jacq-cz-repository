@@ -1,0 +1,29 @@
+<div class="col-4">
+    {if $photo->getStatus()->getId() > 2}
+    <img
+        src="https://herbarium-iiif.dyn.cloud.e-infra.cz/iiif/3/{$photo->getJp2Filename()}/full/900,/0/default.jpg"
+        class="img-fluid rounded-start" style="height: 90vh; object-fit: cover;">
+    {/if}
+</div>
+<div class="col-4">
+    <h5 >PID: NRPKA3.3domain.image{$photo->getId()} <span class="fs-6">(back to <a
+        href="{plink Import:specimen $photo->getSpecimenId()}">specimen info</a>)</span></h5>
+    <p>W×H: {$photo->getWidth()}×{$photo->getHeight()}</p>
+    <p >Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
+    <p>Status: <span class="badge bg-{$photo->getStatus()->getColor()}">{$photo->getStatus()->getName()}</span>
+    </p>
+    <!--                    TODO error message a výraznější head pro chybné -->
+    <p>Type: <span
+        class="badge bg-{$photo->getType()->getColor()}">{$photo->getType()->getName()}</span></p>
+    <p><small class="text-muted">File created at
+        {$photo->getCreatedAt()|localDate}</small></p>
+
+    <a class="btn btn-outline-danger deleteButton" n:href="delete!" role="button">Delete</a>
+</div>
+<div class="col-4">
+    <h4>EXIF info</h4>
+    <code>{$photo->getExif()|dumpArray|noescape}</code>
+    <h4>Identify description</h4>
+    <code>{$photo->getIdentify()|dumpArray|noescape}</code>
+
+</div>

@@ -217,6 +217,15 @@ final class ImportPresenter extends SecuredPresenter
         }
     }
 
+    public function renderPhoto(int $id): void
+    {
+        $photo = $this->photoService->getPhoto($this->user, $id);
+        if ($photo === null) {
+            $this->error('The requested photo does not exists.');
+        }
+        $this->template->photo = $photo;
+    }
+
     protected function createComponentSpecimenIdForm(): Form
     {
         $form = $this->formFactory->forBackend();
