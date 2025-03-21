@@ -1,12 +1,9 @@
 {block content}
-<div class="container">
-    <h2>Detail of file <em>{$photo->getOriginalFilename()}</em> [task {$photo->getId()}]</h2>
-
-    <a n:href=":default#third-tab-pane">back to upload results</a>
+<div class="container-fluid">
+    <h2>Resolve problems with file <em>{$photo->getOriginalFilename()}</em> <span class="fs-5">[task {$photo->getId()}] or go back to  <a n:href=":default#third-tab-pane">upload results</a></span></h2>
 
     <div class="row">
-        <div class="col-md-8"><img src="{link :thumbnail $photo->getId()}" class="img-fluid"></div>
-        <div class="col-md-4">
+        <div class="col-md-3">
             <p><b>error:</b> {$photo->getError()->getMessage()}</p>
             {if $photo->getError()->getBarcodes()!== null}
             <p><b>detected barcode (s):</b> {$photo->getError()->getBarcodes()}</p>
@@ -15,7 +12,7 @@
 
             <p><a n:href=":reimport $photo->getId()" id="reupload" class="btn btn-primary btn-sm" role="button">Repeat
                 processing</a> - the file is ok and the error reported looks like a temporal error of the repository.</p>
-            <p><a n:href=":delete $photo->getId()" id="delete" class="btn btn-warning btn-sm" role="button">Delete</a> -
+            <p><a n:href=":delete $photo->getId()" id="delete" class="btn btn-danger btn-sm" role="button">Delete</a> -
                 delete the file from my bucket and erase the information about its processing.</p>
             <hr width="70%">
             <p>The file could be fine, but the automatic barcode processing failed. If so, enter the numeric part of
@@ -31,10 +28,10 @@
                         <label n:name=specimen class="form-label">{$herbarium->getAcronym()}-</label>
                     </div>
                     <div class="col-auto">
-                       <input n:name=specimen  type="number" style=" width: 8em;" class="form-control" aria-describedby="helpInline" autofocus placeholder="12345">
+                        <input n:name=specimen  type="number" style=" width: 8em;" class="form-control" aria-describedby="helpInline" autofocus placeholder="12345">
                     </div>
                     <div class="col-auto">
-                    <span n:ifcontent{inputError specimen} id="helpInline" class="form-text error"></span>
+                        <span n:ifcontent{inputError specimen} id="helpInline" class="form-text error"></span>
                     </div>
                 </div>
                 <div class="row mt-3 align-items-center">
@@ -47,6 +44,24 @@
             </form>
 
         </div>
+        {if $photo->getError()->getDuplicateTo()}
+        <div class="col-md-4">
+            <h5>NEW image being imported <span class="fs-6">(<a href="{link :thumbnail $photo->getId()}" target="_blank">full preview</a>)</span></h5>
+            <img src="{link :thumbnail $photo->getId()}" class="img-fluid"  style="height: 90vh; object-fit: cover;">
+        </div>
+        <div class="col-md-4">
+            <h5>EXISTING image from the repository</h5>
+            <img
+                src="https://herbarium-iiif.dyn.cloud.e-infra.cz/iiif/3/{$photo->getError()->getDuplicateTo()->getJp2Filename()}/full/900,/0/default.jpg"
+                class="img-fluid rounded-start" style="height: 90vh; object-fit: cover;">
+        </div>
+        {else}
+        <div class="col-md-4">
+            <h5>NEW image being imported <span class="fs-6">(<a href="{link :thumbnail $photo->getId()}" target="_blank">full preview</a>)</span></h5>
+            <img src="{link :thumbnail $photo->getId()}" class="img-fluid" style="height: 90vh; object-fit: cover;">
+        </div>
+        {/if}
+
     </div>
 
 </div>

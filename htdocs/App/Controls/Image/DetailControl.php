@@ -24,14 +24,19 @@ class DetailControl extends Control
         return $this;
     }
 
-    public function render(bool $forPublic = true): void
+    public function render(bool $forPublic = true, bool $fullInfo = false): void
     {
         $template = $this->template;
         $template->photo = $this->photo;
         if ($forPublic) {
             $template->setFile(__DIR__ . '/detail_front.latte');
         } else {
-            $template->setFile(__DIR__ . '/detail_admin.latte');
+            if ($fullInfo) {
+                $template->setFile(__DIR__ . '/detail_adminFull.latte');
+            }else{
+                $template->setFile(__DIR__ . '/detail_admin.latte');
+            }
+
         }
 
         $template->render();

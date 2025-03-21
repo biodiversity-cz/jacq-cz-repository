@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\UI\Base\Accessory;
 
@@ -17,6 +17,7 @@ final class LatteExtension extends Extension
             'status' => [$this, 'status'],
             'email' => [$this, 'email'],
             'timeInterval' => [$this, 'formatSeconds'],
+            'dumpArray' => [$this, 'dumpArray'],
         ];
     }
 
@@ -31,7 +32,7 @@ final class LatteExtension extends Extension
     public function status(mixed $status): Html
     {
         $el = Html::el('b');
-        if ((bool) $status === true) {
+        if ((bool)$status === true) {
             $el->style('color', 'green');
             $el->setText('✓');
         } else {
@@ -85,6 +86,21 @@ final class LatteExtension extends Extension
         } else {
             return $hours > 0 ? $days . ' days ' . $hours . ' hours' : $days . ' days';
         }
+    }
+
+    public function dumpArray(array $data): string
+    {
+        $output = '';
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $output .= "<strong>{$key}:</strong><ul>";
+                $output .= $this->dumpArray($value);
+                $output .= "</ul>";
+            } else {
+                $output .= "<p><strong>{$key}</strong>: {$value}</p>";
+            }
+        }
+        return $output;
     }
 
 }

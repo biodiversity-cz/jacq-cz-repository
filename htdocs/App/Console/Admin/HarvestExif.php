@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Console\Admin;
 
@@ -26,7 +26,7 @@ class HarvestExif extends Command
     /**
      * @return Photos[]
      */
-    public function getListOfPhotos(): ?array
+    protected function getListOfPhotos(): ?array
     {
         $rsm = new ResultSetMappingBuilder($this->entityManager);
         $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
@@ -36,36 +36,14 @@ class HarvestExif extends Command
         return $query->execute();
     }
 
-    protected function configure(): void
-    {
-        $this->setName('admin:harvestExif');
-        $this->setDescription('harvest Exif and Identify metadata from images uploaded before the repository was established');
-    }
-
-    protected function tempFile(): string
-    {
-        return $this->tempDir->getPath(self::TEMPNAME);
-    }
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
+        $output->write("\n Job started...");
         try {
             foreach ($this->getListOfPhotos() as $photo) {
                 $output->write("\n photoId: " . $photo->getId() . "\n");
-                $this->curatorService->getArchiveFile($photo, $this->tempFile());
-                $imagick = $this->imageService->createImagick($this->tempFile());
-                $photo->setIdentify($this->imageService->readIdentify($imagick));
-                $photo->setExif($this->imageService->readExif($imagick));
-                $imagick->destroy();
-                unset($imagick);
-                unlink($this->tempFile());
-                $output->write("\n 6");
-                $photo->setLastEditAt();
-                $output->write("\n 7");
-                $this->entityManager->flush();
-                $output->write("\n 8");
-                $output->write("\n 9");
+                $this->proceedFile($photo);
             }
         } catch (\Throwable $exception) {
             $output->writeln("\n Error: " . $exception->getMessage());
@@ -77,5 +55,32 @@ class HarvestExif extends Command
 
         return Command::SUCCESS;
     }
+
+    protected function proceedFile(Photos $photo): void
+    {
+        $this->curatorService->getArchiveFile($photo, $this->tempFile());
+        $imagick = $this->imageService->createImagick($this->tempFile());
+        $photo->setIdentify($this->imageService->readIdentify($imagick));
+        $photo->setExif($this->imageService->readExif($imagick));
+        $photo->setLastEditAt();
+
+        $imagick->clear();
+        unset($imagick);
+        unlink($this->tempFile());
+
+        $this->entityManager->flush();
+    }
+
+    protected function tempFile(): string
+    {
+        return $this->tempDir->getPath(self::TEMPNAME);
+    }
+
+    protected function configure(): void
+    {
+        $this->setName('admin:harvestExif');
+        $this->setDescription('harvest Exif and Identify metadata from images uploaded before the repository was established');
+    }
+
 
 }
