@@ -63,13 +63,6 @@ class ImportedPhotosGrid extends Control
 
                 return $el;
             });
-        $this->grid->addColumnNumber('jacq', 'JACQ')
-            ->setRenderer(function (Photos $item) {
-                $el = Html::el(null);
-                $el->addHtml('<a href="https://' . $item->getHerbarium()->getAcronym() . '.jacq.org/' . $item->getHerbarium()->getAcronym() . $item->getSpecimenId() . '">JACQ</a>');
-
-                return $el;
-            });
         $this->grid->addColumnText('originalFilename', 'originalFilename')
             ->setFilterText();
 
