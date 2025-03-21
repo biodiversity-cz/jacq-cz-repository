@@ -26,11 +26,11 @@ class HarvestExif extends Command
     /**
      * @return Photos[]
      */
-    public function getListOfPhotos(): ?array
+    protected function getListOfPhotos(): ?array
     {
         $rsm = new ResultSetMappingBuilder($this->entityManager);
         $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
-        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id IN (?) AND identify is null ORDER BY id asc', $rsm);
+        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id IN (?) AND identify is null ORDER BY id asc LIMIT 10', $rsm);
         $query->setParameter(1, PhotosStatus::PASSED);
 
         return $query->execute();
@@ -51,16 +51,17 @@ class HarvestExif extends Command
     {
         $startTime = microtime(true);
         try {
+            $output->write("\n Started...");
             foreach ($this->getListOfPhotos() as $photo) {
                 $output->write("\n photoId: " . $photo->getId() . "\n");
                 $this->curatorService->getArchiveFile($photo, $this->tempFile());
                 $imagick = $this->imageService->createImagick($this->tempFile());
                 $photo->setIdentify($this->imageService->readIdentify($imagick));
                 $photo->setExif($this->imageService->readExif($imagick));
-                $imagick->destroy();
+                $output->write("\n 6");
+                $imagick->clear();
                 unset($imagick);
                 unlink($this->tempFile());
-                $output->write("\n 6");
                 $photo->setLastEditAt();
                 $output->write("\n 7");
                 $this->entityManager->flush();
