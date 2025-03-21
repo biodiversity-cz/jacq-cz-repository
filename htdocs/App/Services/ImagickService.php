@@ -100,7 +100,7 @@ readonly class ImagickService
         $raw = false;
 
         foreach ($lines as $line) {
-            $trimLine = trim($line);
+            $trimLine = $this->sanitizeUtf8(trim($line));
 
             if (empty($trimLine))
 
@@ -118,7 +118,7 @@ readonly class ImagickService
                     preg_match($regex, $trimLine, $matches);
                     array_shift($matches);
 
-                    $output['Image'][$raw][] = $matches;
+                    $output['Image'][$raw][] = array_map([$this, 'sanitizeUtf8'], $matches);
 
                     continue;
                 } else {
@@ -134,7 +134,8 @@ readonly class ImagickService
 
             $_key = ucwords($parts[0]);
             $_key = str_replace(' ', '', $_key);
-            $_val = $parts[1] ?? [];
+            $_val = isset($parts[1]) ? $this->sanitizeUtf8($parts[1]) : [];
+
 
             if ($_key === 'Image') {
                 if (!empty($output)) {
@@ -181,6 +182,25 @@ readonly class ImagickService
         $outputs[] = $output['Image'];
 
         return count($outputs) > 1 ? $outputs : $outputs[0];
+    }
+
+    private function sanitizeUtf8(string $text): string
+    {
+        if (mb_check_encoding($text, 'UTF-8')) {
+            return $text;
+        }
+
+        $converted = mb_convert_encoding($text, 'UTF-8', 'UTF-8, ISO-8859-2, WINDOWS-1252');
+        if ($converted !== false) {
+            return $converted;
+        }
+
+        $converted = iconv('ISO-8859-2', 'UTF-8//IGNORE', $text);
+        if ($converted !== false) {
+            return $converted;
+        }
+
+        return preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $text) ?: '';
     }
 
 }
