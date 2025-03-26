@@ -88,18 +88,32 @@ final class LatteExtension extends Extension
         }
     }
 
-    public function dumpArray(array $data): string
+    public function dumpArray(array $data, int $level = 0): string
     {
-        $output = '';
+        static $idCounter = 0;
+        $output = '<ul class="list-unstyled">';
+
         foreach ($data as $key => $value) {
+            $uniqueId = 'collapse-' . (++$idCounter);
+
             if (is_array($value)) {
-                $output .= "<strong>{$key}:</strong><ul>";
-                $output .= $this->dumpArray($value);
-                $output .= "</ul>";
+                $output .= '<li>';
+                $output .= '<button class="btn btn-link p-0 text-decoration-none" data-bs-toggle="collapse" data-bs-target="#' . $uniqueId . '">';
+                $output .= '<i class="fas fa-folder"></i> ' . $key;
+                $output .= '</button>';
+                $output .= '<div class="collapse" id="' . $uniqueId . '">';
+//                $output .= '<div class="collapse ' . ($level === 0 ? 'show' : '') . '" id="' . $uniqueId . '">';
+                $output .= '<ul class="list-unstyled ps-3">';
+                $output .= $this->dumpArray($value, $level + 1);
+                $output .= '</ul>';
+                $output .= '</div>';
+                $output .= '</li>';
             } else {
-                $output .= "<p><strong>{$key}</strong>: {$value}</p>";
+                $output .= '<li> <strong>' . $key . ':</strong> ' . $value . '</li>';
             }
         }
+
+        $output .= '</ul>';
         return $output;
     }
 

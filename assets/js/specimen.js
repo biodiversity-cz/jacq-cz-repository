@@ -1,5 +1,5 @@
 export default async function joinLinks() {
-    makeJACQLinks();  
+    makeJACQLinks();
     makeGbifLink();
 }
 
@@ -81,11 +81,7 @@ async function makeGbifLink() {
         if (Array.isArray(data.results) && data.results.length > 0) {
             let firstKey = data.results[0].key;            gbifElement.href = `https://gbif.org/occurrence/${firstKey}`;
             gbifInfoElement.textContent = `https://gbif.org/occurrence/${firstKey}`;
-          } else {
-            console.error("missing response");
-            return;
           }
-         
 
     } catch (error) {
     }

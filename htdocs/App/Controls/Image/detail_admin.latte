@@ -10,7 +10,7 @@
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">PID: NRPKA3.3domain.image{$photo->getId()} <span class="fs-6">(see <a href="{plink Import:photo $photo->getId()}">detail info</a>)</span></h5>
+                    <h5 class="card-title">ID {$photo->getId()} <span class="fs-6">(see <a href="{plink Import:photo $photo->getId()}">more info</a>)</span></h5>
                     <p class="card-text">W×H: {$photo->getWidth()}×{$photo->getHeight()}</p>
                     <p class="card-text">Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
                     <p class="card-text">Status: <span class="badge bg-{$photo->getStatus()->getColor()}">{$photo->getStatus()->getName()}</span> </p>
@@ -18,9 +18,6 @@
                     <p class="card-text">Type: <span class="badge bg-{$photo->getType()->getColor()}">{$photo->getType()->getName()}</span> </p>
                     <p class="card-text"><small class="text-muted">Created at
                         {$photo->getCreatedAt()|localDate}</small></p>
-
-                    <a class="btn btn-outline-danger deleteButton" n:href="delete!" role="button">Delete</a>
-
                 </div>
             </div>
         </div>

@@ -6,18 +6,29 @@
     {/if}
 </div>
 <div class="col-4">
-    <h5 >PID: NRPKA3.3domain.image{$photo->getId()} <span class="fs-6">(back to <a
+    <h5>ID {$photo->getId()} <span class="fs-6">(back to <a
         href="{plink Import:specimen $photo->getSpecimenId()}">specimen info</a>)</span></h5>
     <p>W×H: {$photo->getWidth()}×{$photo->getHeight()}</p>
-    <p >Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
+    <p>Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
     <p>Status: <span class="badge bg-{$photo->getStatus()->getColor()}">{$photo->getStatus()->getName()}</span>
     </p>
-    <!--                    TODO error message a výraznější head pro chybné -->
     <p>Type: <span
         class="badge bg-{$photo->getType()->getColor()}">{$photo->getType()->getName()}</span></p>
     <p><small class="text-muted">File created at
         {$photo->getCreatedAt()|localDate}</small></p>
-
+    {if $photo->getStatus()->getId() === \App\Model\Database\Entity\PhotosStatus::CONTROL_ERROR}
+    <hr>
+    <b>import error:</b> {$photo->getError()->getMessage()} </br>
+    {if $photo->getError()->getDuplicateTo()}
+    <b>duplicate to:</b> ID {$photo->getError()->getDuplicateTo()->getId()}, that is  {$photo->getError()->getDuplicateTo()->getJp2Filename()} </br>
+    go to the errors' <a href="{plink :revise $photo->getId()}">resolve</a> page
+    {/if}
+    {else}
+        <p class="card-text"><h5>Archive Master</h5> filename: {$photo->getArchiveFilename()} <br>
+            <a href="{plink :Front:Repository:archiveImage $photo->getId()}">download</a>
+        </p>
+    {/if}
+    <hr>
     <a class="btn btn-outline-danger deleteButton" n:href="delete!" role="button">Delete</a>
 </div>
 <div class="col-4">
