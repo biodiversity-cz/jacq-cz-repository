@@ -1,29 +1,36 @@
 import Mirador from 'mirador/dist/mirador.min';
 
 export default function waitForManifest() {
-    const intervalId = setInterval(() => {
-        const miradorElement = document.querySelector('#mirador');
+    let initialized = false;
+    let miradorElement = document.querySelector('#mirador');
 
+    let intervalId = setInterval(() => {
         // Pokud atribut data-manifest není prázdný, inicializujeme Mirador a zastavíme interval
-        const manifest = miradorElement ? miradorElement.getAttribute('data-manifest') : '';
+        let manifest = miradorElement ? miradorElement.getAttribute('data-manifest') : '';
         if (manifest && manifest.trim() !== '') {
             clearInterval(intervalId);  // Zastavíme interval, když je manifest k dispozici
-            initializeMirador();
+            initializeMirador(manifest);
+            initialized = true;
         }
     }, 500); // Zkontrolujeme každých 500 ms
 
     // Po uplynutí určitého času  zkusíme interval zrušit, pokud atribut neexistuje
     setTimeout(() => {
         clearInterval(intervalId);
-    }, 3000);
+        if (!initialized) {
+            let manifest = miradorElement ? miradorElement.getAttribute('data-manifest-raw') : '';
+            if (manifest && manifest.trim() !== '') {
+                initializeMirador(manifest);
+            }
+        }
+    }, 2000);
 }
 
 
-function initializeMirador() {
-    const miradorElement = document.querySelector('#mirador');
+function initializeMirador(manifestUrl) {
     const config = {
         id: 'mirador', windows: [{
-            manifestId: document.getElementById("mirador").getAttribute("data-manifest"),
+            manifestId: manifestUrl,
             thumbnailNavigationPosition: 'far-right',
         }], window: {
             allowClose: false,
@@ -40,9 +47,6 @@ function initializeMirador() {
         }
     };
 
-    const manifest = miradorElement ? miradorElement.getAttribute('data-manifest') : '';
-    if (manifest && manifest.trim() !== '') {
-        Mirador.viewer(config);
-    }
+    Mirador.viewer(config);
 
 }
