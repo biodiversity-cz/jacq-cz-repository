@@ -88,8 +88,12 @@ final class LatteExtension extends Extension
         }
     }
 
-    public function dumpArray(array $data, int $level = 0): string
+    public function dumpArray(?array $data, int $level = 0): string
     {
+        if ($data === null) {
+            return '';
+        }
+
         static $idCounter = 0;
         $output = '<ul class="list-unstyled">';
 
