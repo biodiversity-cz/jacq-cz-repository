@@ -44,7 +44,7 @@ class ImportedPhotosGrid extends Control
             $photo = $this->photoService->getPhoto($this->user, $id);
             $this->curatorFacade->deletePhoto($this->user, $photo);
         } catch (Exception $e) {
-            $this->presenter->flashMessage("It is not possible to delete the photo now, it has some unresolved \"duplicateTo\" realtionship.", 'danger');
+            $this->presenter->flashMessage("It is not possible to delete the photo now, it has some unresolved \"duplicateTo\" relationship.", 'danger');
         }
 
         $this->redirect('this');

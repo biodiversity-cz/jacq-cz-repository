@@ -38,6 +38,7 @@
     "contributte/forms-bootstrap": "^0",
     "guzzlehttp/guzzle": "^7",
     "league/pipeline": "^1",
+    "picqer/php-barcode-generator": "v3",
     "ublaboo/aws-sdk-nette-extension": "dev-master",
     "ublaboo/datagrid": "^v6",
     "yale-web-technologies/iiif-manifest-generator": "dev-develop",
