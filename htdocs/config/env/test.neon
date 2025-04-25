@@ -10,6 +10,10 @@ parameters:
     storage:
         archiveBucket: test-archive
         jp2Bucket: test-iiif
+    pdf:
+        url: http://localhost:3000
+        barcodeUrl: http://localhost:8080/barcode
+
 http:
     proxy:
         - 10.42.0.0/16

@@ -8,21 +8,16 @@ use GuzzleHttp\Exception\RequestException;
 class PdfClient
 {
 
-    private string $baseUrl = 'http://chrome-pdf:3000/pdf';
-    private ?string $token;
+    private string $token;
 
-    public function __construct(private Client $httpClient)
+    public function __construct(private Client $httpClient, private readonly AppConfiguration $appConfiguration)
     {
         $this->httpClient = new Client([
-            'base_uri' => $this->baseUrl,
+            'base_uri' => $this->appConfiguration->getPdfGeneratorUrl(),
             'timeout' => 30,
         ]);
-    }
 
-    public function setToken(string $token): PdfClient
-    {
-        $this->token = $token;
-        return $this;
+        $this->token = $this->appConfiguration->getPdfGeneratorToken();
     }
 
     public function generatePdfToFile(string $url, string $filepath, array $options = []): void
@@ -35,14 +30,12 @@ class PdfClient
     {
         $headers = [];
 
-        if ($this->token !== null) {
-            $headers['Authorization'] = 'Bearer ' . $this->token;
-        }
+        $headers['Authorization'] = 'Bearer ' . $this->token;
 
         try {
-            $response = $this->httpClient->post('/pdf', [
+            $response = $this->httpClient->post('pdf', [
                 'headers' => $headers,
-                'query' => ['token'=>$this->token],
+                'query' => ['token' => $this->token],
                 'json' => [
                     'url' => $url,
                     'options' => array_merge([

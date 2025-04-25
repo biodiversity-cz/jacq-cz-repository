@@ -13,7 +13,10 @@ abstract class BasePresenter extends Presenter
     public const string DESTINATION_AFTER_SIGN_OUT = ':Front:Home:';
     public const string DESTINATION_LOG_IN = ':Front:Sign:in';
 
-    /** @inject */ public AppConfiguration $appConfiguration;
+    public function __construct(protected readonly AppConfiguration $appConfiguration)
+    {
+        parent::__construct();
+    }
 
     protected function beforeRender(): void
     {

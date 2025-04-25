@@ -2,6 +2,7 @@
 
 namespace App\UI\Front\Barcode;
 
+use App\Services\AppConfiguration;
 use App\Services\PdfClient;
 use App\UI\Base\UnsecuredPresenter;
 use Contributte\Application\Response\ImageResponse;
@@ -12,9 +13,9 @@ use Picqer\Barcode\BarcodeGeneratorPNG;
 
 final class BarcodePresenter extends UnsecuredPresenter
 {
-    public function __construct(protected PdfClient $client)
+    public function __construct(protected PdfClient $client, AppConfiguration $appConfiguration)
     {
-        parent::__construct();
+        parent::__construct($appConfiguration);
     }
 
     public function renderDefault(?string $title, ?string $subtitle, ?string $prefix, ?int $start, ?int $end): void
@@ -68,17 +69,16 @@ final class BarcodePresenter extends UnsecuredPresenter
         ], fn($v) => $v !== null);
 
         $query = http_build_query($queryParams);
-        $url = "http://nginx:8080/barcode/?" . $query;
 
-        $pdf = $this->client->setToken('aaa')
-            ->generatePdf($url, [
+        $url = $this->appConfiguration->getPdfBarcodeUrl()."/?" . $query;
+
+        $pdf = $this->client->generatePdf($url, [
                 'scale' => 0.43,
                 'margin' => ['top' => '5mm', 'bottom' => '5mm']
             ]);
 
         $this->sendResponse(new CallbackResponse(function ($request, $response) use ($pdf) {
             $response->setContentType("application/pdf");
-            $response->setExpiration('1 minute');
             echo $pdf;
         }));
     }

@@ -9,6 +9,10 @@ parameters:
     storage:
         archiveBucket: archive
         jp2Bucket: iiif
+    pdf:
+        url: http://localhost:3000
+        barcodeUrl: http://localhost:8080/barcode
+
 
 aws:
     endpoint: https://s3.cl4.du.cesnet.cz
