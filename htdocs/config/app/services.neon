@@ -3,6 +3,7 @@ services:
     - App\Security\UserAuthenticator
     - App\Services\WebDir(%wwwDir%)
     - App\Services\TempDir(%tempDir%)
+    - App\Services\PdfClient()
     - App\Services\RepositoryConfiguration(%storage%)
     - App\Services\AppConfiguration(@container::getParameters())
 
