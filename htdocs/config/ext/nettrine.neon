@@ -1,40 +1,39 @@
 extensions:
-	nettrine.cache: Nettrine\Cache\DI\CacheExtension
-	nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
+    nettrine.cache: Nettrine\Cache\DI\CacheExtension
+    nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
 
-	# Dbal
-	nettrine.dbal: Nettrine\DBAL\DI\DbalExtension
-	nettrine.dbal.console: Nettrine\DBAL\DI\DbalConsoleExtension(%consoleMode%)
+    # Dbal
+    nettrine.dbal: Nettrine\DBAL\DI\DbalExtension
 
-	# Orm
-	nettrine.orm: Nettrine\ORM\DI\OrmExtension
-	nettrine.orm.attributes: Nettrine\ORM\DI\OrmAttributesExtension
-	nettrine.orm.cache: Nettrine\ORM\DI\OrmCacheExtension
-	nettrine.orm.console: Nettrine\ORM\DI\OrmConsoleExtension
+    # Orm
+    nettrine.orm: Nettrine\ORM\DI\OrmExtension
 
 nettrine.dbal:
-	debug:
-		panel: %debugMode%
-		sourcePaths: [%appDir%]
-	connection:
-		driver: %database.driver%
-		host: %database.host%
-		user: %database.user%
-		password: %database.password%
-		dbname: %database.dbname%
-		port: %database.port%
-
-nettrine.orm.attributes:
-  mapping:
-   App\Model\Database: %appDir%/Model/Database
+    debug:
+        panel: %debugMode%
+        sourcePaths: [%appDir%]
+    connections:
+        default:
+            driver: %database.driver%
+            host: %database.host%
+            user: %database.user%
+            password: %database.password%
+            dbname: %database.dbname%
+            port: %database.port%
 
 nettrine.orm:
-	configuration:
-		autoGenerateProxyClasses: %debugMode%
+    managers:
+        default:
+            mapping:
+                App:
+                  directories: [%appDir%/Model/Database]
+                  namespace: App\Model\Database
+            connection: default
+            autoGenerateProxyClasses: %debugMode%
 
 nettrine.migrations:
-	table: doctrine_migrations
-	column: version
-	directories:
-	    Database\Migrations: %rootDir%/db/Migrations
-	versionsOrganization: null
+    table: doctrine_migrations
+    column: version
+    directories:
+        Database\Migrations: %rootDir%/db/Migrations
+    versionsOrganization: null

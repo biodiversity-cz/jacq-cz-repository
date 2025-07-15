@@ -15,6 +15,7 @@
     "ext-imagick": "*",
     "ext-intl": "*",
     "ext-exif": "*",
+    "ext-zip": "*",
 
 		"nette/application": "^3",
 		"nette/bootstrap": "^3",
@@ -44,7 +45,8 @@
     "yale-web-technologies/iiif-manifest-generator": "dev-develop",
 
     "68publishers/asset": "^3",
-    "68publishers/webpack-encore-bundle": "^3"
+    "68publishers/webpack-encore-bundle": "^3",
+		"mk-j/php_xlsxwriter": "^0"
   },
 	"require-dev": {
 		"nette/tester": "^2",
@@ -64,7 +66,8 @@
       "php": "8.4",
       "ext-imagick": "3",
       "ext-intl": "3",
-      "ext-exif": "3"
+      "ext-exif": "3",
+      "ext-zip": "*"
     },
 		"allow-plugins": {
 			"symfony/thanks": true,
