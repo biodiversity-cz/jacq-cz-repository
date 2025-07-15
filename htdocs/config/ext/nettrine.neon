@@ -1,12 +1,9 @@
 extensions:
+    nettrine.dbal: Nettrine\DBAL\DI\DbalExtension(%debugMode%)
+    nettrine.orm: Nettrine\ORM\DI\OrmExtension
+
     nettrine.cache: Nettrine\Cache\DI\CacheExtension
     nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
-
-    # Dbal
-    nettrine.dbal: Nettrine\DBAL\DI\DbalExtension
-
-    # Orm
-    nettrine.orm: Nettrine\ORM\DI\OrmExtension
 
 nettrine.dbal:
     debug:
@@ -30,6 +27,7 @@ nettrine.orm:
                   namespace: App\Model\Database
             connection: default
             autoGenerateProxyClasses: %debugMode%
+            proxyDir: %tempDir%/proxies
 
 nettrine.migrations:
     table: doctrine_migrations
