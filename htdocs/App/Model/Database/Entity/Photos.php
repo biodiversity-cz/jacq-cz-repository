@@ -69,7 +69,7 @@ class Photos
     #[JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Type of the photo', 'default' => 1])]
     protected PhotosType $type;
 
-    #[OneToOne(mappedBy: 'photo', targetEntity: PhotosError::class, cascade: ['remove'])]
+    #[OneToOne(targetEntity: PhotosError::class, mappedBy: 'photo', cascade: ['remove'])]
     private ?PhotosError $error = null;
 
     public function getArchiveFilename(): ?string

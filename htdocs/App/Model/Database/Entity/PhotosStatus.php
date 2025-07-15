@@ -19,6 +19,7 @@ class PhotosStatus
     public const int IMPORTED = 3;
     public const int PUBLIC = 4;
     public const int HIDDEN = 5;
+    public const int DEVELOP_PROCEED = 100;
     public const array PASSED = [self::IMPORTED, self::PUBLIC, self::HIDDEN];
     public const array PASSED_PUBLIC = [self::IMPORTED, self::PUBLIC];
 
