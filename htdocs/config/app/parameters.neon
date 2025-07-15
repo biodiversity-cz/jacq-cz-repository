@@ -15,7 +15,3 @@ parameters:
         previewImageSize: 1800 #px size of preview shown to curator on pipeline error
         previewQuality: 80 #JPEG compression of preview shown to curator on pipeline error
 
-    pdf:
-        url: http://chrome-pdf:3000
-        barcodeUrl: http://nginx:8080/barcode
-        token: aaa

@@ -45,23 +45,4 @@ final readonly class AppConfiguration
         return ($result !== 'off');
     }
 
-    protected function getPdf(): array
-    {
-        return $this->config['pdf'];
-    }
-
-    public function getPdfGeneratorUrl(): string
-    {
-        return $this->getPdf()['url'];
-    }
-
-    public function getPdfBarcodeUrl(): string
-    {
-        return $this->getPdf()['barcodeUrl'];
-    }
-    public function getPdfGeneratorToken(): string
-    {
-        return $this->getPdf()['token'];
-    }
-
 }

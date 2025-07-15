@@ -39,7 +39,6 @@
     "contributte/forms-bootstrap": "^0",
     "guzzlehttp/guzzle": "^7",
     "league/pipeline": "^1",
-    "picqer/php-barcode-generator": "v3",
     "ublaboo/aws-sdk-nette-extension": "dev-master",
     "ublaboo/datagrid": "^v7",
     "yale-web-technologies/iiif-manifest-generator": "dev-develop",
@@ -67,7 +66,7 @@
       "ext-imagick": "3",
       "ext-intl": "3",
       "ext-exif": "3",
-      "ext-zip": "*"
+      "ext-zip": "3"
     },
 		"allow-plugins": {
 			"symfony/thanks": true,
