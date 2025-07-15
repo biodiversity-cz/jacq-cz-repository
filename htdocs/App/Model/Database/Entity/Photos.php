@@ -31,7 +31,7 @@ class Photos
     #[Column(nullable: true, options: ['comment' => 'Filename that was provided during curator upload, could make sense or completely missing semantic content'])]
     protected string $originalFilename;
 
-    #[Column(unique: true, nullable: true, options: ['comment' => 'Filename of JP2 file'])]
+    #[Column(name: 'jp2filename', unique: true, nullable: true, options: ['comment' => 'Filename of JP2 file'])]
     protected ?string $jp2Filename;
 
     #[ManyToOne(targetEntity: Herbaria::class, inversedBy: 'photos')]
@@ -54,7 +54,7 @@ class Photos
     #[Column(type: Types::BIGINT, nullable: true, options: ['comment' => 'Filesize of Archive Master TIFF file in bytes'])]
     protected ?int $archiveFileSize;
 
-    #[Column(type: Types::BIGINT, nullable: true, options: ['comment' => 'Filesize of converted JP2 file in bytes'])]
+    #[Column(name: 'jp2file_size', type: Types::BIGINT, nullable: true, options: ['comment' => 'Filesize of converted JP2 file in bytes'])]
     protected ?int $JP2FileSize;
 
     /** @var ?mixed[] */
@@ -69,7 +69,7 @@ class Photos
     #[JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Type of the photo', 'default' => 1])]
     protected PhotosType $type;
 
-    #[OneToOne(mappedBy: 'photo', targetEntity: PhotosError::class, cascade: ['remove'])]
+    #[OneToOne(targetEntity: PhotosError::class, mappedBy: 'photo', cascade: ['remove'])]
     private ?PhotosError $error = null;
 
     public function getArchiveFilename(): ?string

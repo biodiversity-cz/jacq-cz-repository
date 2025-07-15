@@ -33,5 +33,6 @@ admin:
 	NETTE_DEBUG=1 bin/console admin:bucketParity
 	NETTE_DEBUG=1 bin/console admin:harvestExif
 	NETTE_DEBUG=1 bin/console admin:refreshJp2
+	NETTE_DEBUG=1 bin/console admin:batchDelete
 
 

@@ -15,6 +15,7 @@
     "ext-imagick": "*",
     "ext-intl": "*",
     "ext-exif": "*",
+    "ext-zip": "*",
 
 		"nette/application": "^3",
 		"nette/bootstrap": "^3",
@@ -26,9 +27,9 @@
 		"nette/robot-loader": "^4",
 		"nette/security": "^3",
     "nette/utils": "^4",
-    "nettrine/orm": "^0.8",
-    "nettrine/dbal": "^0.8.2",
-    "nettrine/cache": "^0.3",
+    "nettrine/orm": "^0",
+    "nettrine/dbal": "^0",
+    "nettrine/cache": "^0",
     "nettrine/migrations": "^0",
     "latte/latte": "^3",
     "tracy/tracy": "^2",
@@ -38,13 +39,13 @@
     "contributte/forms-bootstrap": "^0",
     "guzzlehttp/guzzle": "^7",
     "league/pipeline": "^1",
-    "picqer/php-barcode-generator": "v3",
     "ublaboo/aws-sdk-nette-extension": "dev-master",
-    "ublaboo/datagrid": "^v6",
+    "ublaboo/datagrid": "^v7",
     "yale-web-technologies/iiif-manifest-generator": "dev-develop",
 
     "68publishers/asset": "^3",
-    "68publishers/webpack-encore-bundle": "^3"
+    "68publishers/webpack-encore-bundle": "^3",
+		"mk-j/php_xlsxwriter": "^0"
   },
 	"require-dev": {
 		"nette/tester": "^2",
@@ -64,7 +65,8 @@
       "php": "8.4",
       "ext-imagick": "3",
       "ext-intl": "3",
-      "ext-exif": "3"
+      "ext-exif": "3",
+      "ext-zip": "3"
     },
 		"allow-plugins": {
 			"symfony/thanks": true,

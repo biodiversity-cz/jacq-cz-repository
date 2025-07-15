@@ -14,3 +14,4 @@ parameters:
         thumbImageWidth: 400  #px size of image used for manifest thumbnail
         previewImageSize: 1800 #px size of preview shown to curator on pipeline error
         previewQuality: 80 #JPEG compression of preview shown to curator on pipeline error
+

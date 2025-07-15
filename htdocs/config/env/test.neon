@@ -7,9 +7,11 @@ parameters:
         host: jacq-pgsql-cluster-rw
         dbname: jacq_test
         user: jacq_test
+        password: jacq_test
     storage:
         archiveBucket: test-archive
         jp2Bucket: test-iiif
+
 http:
     proxy:
         - 10.42.0.0/16

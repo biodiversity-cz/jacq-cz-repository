@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Grids;
 
@@ -6,14 +6,14 @@ use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Services\EntityServices\PhotoService;
-use Doctrine\Common\Collections\Criteria;
+use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
+use Contributte\Datagrid\Datagrid;
 use Doctrine\ORM\QueryBuilder;
+use Nette\Application\Responses\FileResponse;
 use Nette\Application\UI\Control;
 use Nette\Neon\Exception;
 use Nette\Security\User;
 use Nette\Utils\Html;
-use Ublaboo\DataGrid\Column\Action\Confirmation\StringConfirmation;
-use Ublaboo\DataGrid\DataGrid;
 
 class ImportedPhotosGrid extends Control
 {
@@ -50,11 +50,11 @@ class ImportedPhotosGrid extends Control
         $this->redirect('this');
     }
 
-    public function createComponentGrid(): DataGrid
+    public function createComponentGrid(): Datagrid
     {
-        $this->grid->setDataSource($this->defaultDatasource($this->user))->setDefaultSort(['id' => Criteria::DESC])->setRememberState(false);
+        $this->grid->setDataSource($this->defaultDatasource($this->user))->setDefaultSort(['id' => 'DESC'])->setRememberState(false);
         $this->grid->addColumnNumber('id', 'ID');
-        $this->grid->addColumnDateTime('lastEditAt', 'processed at')->setFormat('d.m.Y H:i');
+        $this->grid->addColumnDateTime('lastEditAt', 'processed at')->setFormat('d.m.Y H:i')->setFilterDate('lastEdit')->setFormat('j. n. Y', 'd. m. Y');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
@@ -93,6 +93,10 @@ class ImportedPhotosGrid extends Control
                 new StringConfirmation('Do you really want to delete photo %s? This won\'t be allowed in production mode!', 'archiveFilename') // Second parameter is optional
             );
 
+        $this->grid->addExportCallback('Excel export (filtered)', function ($data): void {
+            $this->exportToXlsx($data);
+        }, true)
+            ->setClass('btn btn-xs btn-success');
         return $this->grid;
     }
 
@@ -103,5 +107,53 @@ class ImportedPhotosGrid extends Control
             ->setParameter('status', PhotosStatus::PASSED)
             ->orderBy('p.id', 'DESC');
     }
+
+    private function exportToXlsx(array $data): void
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'export_') . '.xlsx';
+        $writer = new \XLSXWriter();
+
+        if (!empty($data)) {
+
+            $headers = ['id' => 'integer',
+                'processed at' => 'datetime',
+                'specimen' => 'string',
+                'original filename' => 'string',
+                'jp2 filename' => 'string',
+                'archive filename' => 'string',
+                'type' => 'string',
+                'width' => 'integer',
+                'height' => 'integer',
+                'archive filesize' => 'integer'
+            ];
+            $writer->writeSheetHeader('Export', $headers);
+
+            foreach ($data as $photo) {
+                /** @var Photos $photo */
+                $row = [
+                    $photo->getId(),
+                    $photo->getLastEditAt()->format('Y-m-d H:i:s'),
+                    $photo->getFullSpecimenId(),
+                    $photo->getOriginalFilename(),
+                    $photo->getJp2Filename(),
+                    $photo->getArchiveFilename(),
+                    $photo->getType()->getName(),
+                    $photo->getWidth(),
+                    $photo->getHeight(),
+                    $photo->getArchiveFilesize()
+                ];
+                $writer->writeSheetRow('Export', $row);
+            }
+        }
+
+        $writer->writeToFile($filename);
+
+        $this->presenter->sendResponse(new FileResponse(
+            $filename,
+            'export.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ));
+    }
+
 
 }

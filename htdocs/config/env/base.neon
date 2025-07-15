@@ -26,7 +26,7 @@ latte:
 		- App\UI\Base\Accessory\LatteExtension
 
 application:
-	catchExceptions: true # %productionMode%
+	catchExceptions: %productionMode%
     # Error presenters to handle application errors
 	errorPresenter:
 		4xx: Base:Error:Error4xx
