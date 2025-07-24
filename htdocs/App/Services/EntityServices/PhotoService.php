@@ -47,10 +47,12 @@ class PhotoService extends BaseEntityService
     public function getPhoto(User $user, int $id): ?Photos
     {
         if ($user->isLoggedIn()) {
-            return $this->repository->getPhoto($user, $id);
-        } else {
-            return $this->repository->getPublicPhoto($id);
+            $photoIncludingPrivate =  $this->repository->getPhoto($user, $id);
+            if ($photoIncludingPrivate!==null) {
+                return $photoIncludingPrivate;
+            }
         }
+        return $this->repository->getPublicPhoto($id);
     }
 
     public function getPublicPhoto(int $id): ?Photos

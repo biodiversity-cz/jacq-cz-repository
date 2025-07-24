@@ -63,7 +63,7 @@ final class PhotosRepository extends AbstractRepository
     {
         $qb = $this->getDefaultDatasource($user)->andWhere('p.id = :id')->setParameter('id', $id);
 
-        return $qb->getQuery()->getSingleResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function getPhotoWithError(User $user, int $id): ?Photos
