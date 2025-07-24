@@ -7,11 +7,14 @@ use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
 use App\Model\Database\Entity\Attributes\TOriginalFileAt;
 use App\Model\Database\Repository\PhotosRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
 
@@ -71,6 +74,14 @@ class Photos
 
     #[OneToOne(targetEntity: PhotosError::class, mappedBy: 'photo', cascade: ['remove'])]
     private ?PhotosError $error = null;
+
+    #[OneToMany(targetEntity: DatabotResult::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $databotResults;
+
+    public function __construct()
+    {
+        $this->databotResults = new ArrayCollection();
+    }
 
     public function getArchiveFilename(): ?string
     {
@@ -261,5 +272,17 @@ class Photos
 
         return $this;
     }
+
+    public function getDatabotResults(): Collection
+    {
+        return $this->databotResults;
+    }
+
+    public function setDatabotResults(Collection $databotResults): Photos
+    {
+        $this->databotResults = $databotResults;
+        return $this;
+    }
+
 
 }
