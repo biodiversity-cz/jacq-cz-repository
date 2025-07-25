@@ -3,6 +3,7 @@
 namespace App\UI\Base;
 
 use App\Services\AppConfiguration;
+use App\Services\EntityServices\MaintenanceService;
 use App\UI\Base\Form\FormFactory;
 use Nette\Application\UI\Presenter;
 
@@ -12,6 +13,9 @@ abstract class BasePresenter extends Presenter
     public const string DESTINATION_AFTER_SIGN_IN = ':Admin:Home:';
     public const string DESTINATION_AFTER_SIGN_OUT = ':Front:Home:';
     public const string DESTINATION_LOG_IN = ':Front:Sign:in';
+
+    /** @inject */ public MaintenanceService $maintenanceService;
+
 
     public function __construct(protected readonly AppConfiguration $appConfiguration)
     {
@@ -26,6 +30,7 @@ abstract class BasePresenter extends Presenter
 
         $this->template->version = $this->appConfiguration->getVersion();
         $this->template->dbSsl = $this->appConfiguration->isSslDbConnection();
+        $this->template->maintenances = $this->maintenanceService->getValid();
 
         parent::beforeRender();
     }
