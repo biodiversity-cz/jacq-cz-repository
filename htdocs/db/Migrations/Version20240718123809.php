@@ -43,6 +43,7 @@ final class Version20240718123809 extends AbstractMigration
         $this->addSql('ALTER TABLE photos ADD CONSTRAINT FK_876E0D9DD127992 FOREIGN KEY (herbarium_id) REFERENCES herbaria (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
 
         $this->addSql("INSERT INTO herbaria VALUES (DEFAULT, 'PRC')");
+        $this->addSql("INSERT INTO herbaria VALUES (DEFAULT, 'TEST')");
     }
 
     public function down(Schema $schema): void
