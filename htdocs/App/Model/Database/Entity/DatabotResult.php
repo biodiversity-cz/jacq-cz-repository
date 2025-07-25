@@ -25,7 +25,7 @@ class DatabotResult
     protected Photos $photo;
 
     #[ORM\Column(nullable: false, enumType: DatabotResultStatus::class, options: ['comment' => 'Result status: ok, error, warning...'])]
-    protected string $status;
+    protected DatabotResultStatus $status = DatabotResultStatus::OK;
 
     #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => 'Optional log or error description'])]
     protected ?string $message = null;

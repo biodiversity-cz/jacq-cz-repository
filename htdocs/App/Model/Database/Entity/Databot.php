@@ -6,6 +6,7 @@ use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Enums\DatabotRole;
 use App\Model\Database\Repository\DatabotRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
@@ -20,13 +21,13 @@ class Databot
     use TId;
     use TCreatedAt;
 
-    #[Column(unique: true, nullable: false, options: ['comment' => 'Short name of Databot'])]
+    #[Column(nullable: false, options: ['comment' => 'Short name of Databot'])]
     protected string $name;
 
-    #[Column(unique: false, nullable: false)]
+    #[Column(type: Types::TEXT, length: 60000, unique: false, nullable: false)]
     protected string $description;
 
-    #[Column(unique: false, nullable: false)]
+    #[Column(nullable: false)]
     protected int $version;
 
     #[Column(type: 'boolean', nullable: false, options: ['default' => true])]
@@ -36,7 +37,7 @@ class Databot
     protected ?\DateTimeInterface $lastRun = null;
 
     #[Column(nullable: false, enumType: DatabotRole::class)]
-    protected DatabotRole $role;
+    protected DatabotRole $role = DatabotRole::VALIDATOR;
 
     public function getName(): string
     {
