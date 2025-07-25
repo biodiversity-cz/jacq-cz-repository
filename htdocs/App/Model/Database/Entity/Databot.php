@@ -5,6 +5,7 @@ namespace App\Model\Database\Entity;
 use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Enums\DatabotRole;
+use App\Model\Database\Enums\EnumDatabotRole;
 use App\Model\Database\Repository\DatabotRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
@@ -36,7 +37,11 @@ class Databot
     #[Column(type: 'datetime', nullable: true)]
     protected ?\DateTimeInterface $lastRun = null;
 
-    #[Column(nullable: false, enumType: DatabotRole::class)]
+    #[Column(
+        type: EnumDatabotRole::NAME,
+        nullable: false,
+        enumType: DatabotRole::class,
+        options: ['default' => DatabotRole::VALIDATOR])]
     protected DatabotRole $role = DatabotRole::VALIDATOR;
 
     public function getName(): string

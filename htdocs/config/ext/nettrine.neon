@@ -17,6 +17,12 @@ nettrine.dbal:
             password: %database.password%
             dbname: %database.dbname%
             port: %database.port%
+    types:
+        enum_databot_result_status: App\Model\Database\Enums\EnumDatabotStatusType
+        enum_databot_role: App\Model\Database\Enums\EnumDatabotRole
+    typesMapping:
+        enum_databot_role: enum_databot_role
+        enum_databot_result_status: enum_databot_result_status
 
 nettrine.orm:
     managers:

@@ -5,6 +5,7 @@ namespace App\Model\Database\Entity;
 use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Enums\DatabotResultStatus;
+use App\Model\Database\Enums\EnumDatabotStatusType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -24,7 +25,11 @@ class DatabotResult
     #[ORM\JoinColumn(name: 'photo_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected Photos $photo;
 
-    #[ORM\Column(nullable: false, enumType: DatabotResultStatus::class, options: ['comment' => 'Result status: ok, error, warning...'])]
+    #[ORM\Column(
+        type: EnumDatabotStatusType::NAME,
+        nullable: false,
+        enumType: DatabotResultStatus::class,
+        options: ['comment' => 'Result status: ok, error, warning...', 'default' => DatabotResultStatus::OK])]
     protected DatabotResultStatus $status = DatabotResultStatus::OK;
 
     #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => 'Optional log or error description'])]
