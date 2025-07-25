@@ -21,7 +21,7 @@ class PhotosType
     #[Column(unique: true, nullable: false, options: ['comment' => 'short description'])]
     protected string $description;
 
-    #[Column(unique: true, nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
+    #[Column(nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
     protected string $color;
 
     public function getName(): string

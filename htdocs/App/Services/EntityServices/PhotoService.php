@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
@@ -44,18 +44,20 @@ class PhotoService extends BaseEntityService
         return $this->entityManager->getReference($this->entityName, $id);
     }
 
-    public function getPublicPhoto(int $id): ?Photos
+    public function getPhoto(User $user, int $id): ?Photos
     {
+        if ($user->isLoggedIn()) {
+            $photoIncludingPrivate =  $this->repository->getPhoto($user, $id);
+            if ($photoIncludingPrivate!==null) {
+                return $photoIncludingPrivate;
+            }
+        }
         return $this->repository->getPublicPhoto($id);
     }
 
-    public function getPhoto(User $user, int $id): ?Photos
+    public function getPublicPhoto(int $id): ?Photos
     {
-        if ($user->isLoggedIn()){
-            return $this->repository->getPhoto($user, $id);
-        }else{
-            return $this->repository->getPublicPhoto($id);
-        }
+        return $this->repository->getPublicPhoto($id);
     }
 
     public function getWaitingStatus(): PhotosStatus

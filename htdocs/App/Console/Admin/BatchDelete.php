@@ -21,6 +21,7 @@ class BatchDelete extends Command
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorFacade, protected User $user, ?string $name = null)
     {
+        exit; //disabled just for sure
         parent::__construct($name);
     }
 

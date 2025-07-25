@@ -8,8 +8,7 @@ use App\UI\Base\UnsecuredPresenter;
 final class HomePresenter extends UnsecuredPresenter
 {
 
-    /** @inject */
-    public HerbariumService $herbariumService;
+    /** @inject */ public HerbariumService $herbariumService;
 
     public function renderContact(): void
     {
