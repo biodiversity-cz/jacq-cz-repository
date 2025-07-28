@@ -20,7 +20,7 @@ build:
 	NETTE_DEBUG=1 bin/console migrations:migrate --no-interaction
 	NETTE_DEBUG=1 bin/console migrations:migrate first # revert to empty db
 #	NETTE_DEBUG=1 bin/console migrations:migrate Database\\Migrations\\Version1
-#	NETTE_DEBUG=1 bin/console doctrine:fixtures:load --no-interaction --append
+	NETTE_DEBUG=1 bin/console doctrine:fixtures:load --no-interaction
 #	NETTE_DEBUG=1 bin/console orm:schema-tool:update --dump-sql --complete
 
 	NETTE_DEBUG=1 bin/console orm:generate-proxies # keep proxies in VCS
