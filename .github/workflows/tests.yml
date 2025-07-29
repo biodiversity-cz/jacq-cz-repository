@@ -61,7 +61,7 @@ jobs:
 
             -   name: Run migrations
                 working-directory: ./htdocs
-                run: bin/console doctrine:migrations:migrate --no-interaction
+                run: bin/console migrations:migrate --no-interaction
 
             -   name: Load fixtures
                 working-directory: ./htdocs
