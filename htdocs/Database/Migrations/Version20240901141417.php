@@ -38,17 +38,8 @@ final class Version20240901141417 extends AbstractMigration
         $this->addSql('ALTER TABLE users ADD CONSTRAINT FK_1483A5E9D60322AC FOREIGN KEY (role_id) REFERENCES usersrole (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE herbaria ADD bucket VARCHAR(255)');
         $this->addSql('COMMENT ON COLUMN herbaria.bucket IS \'S3 bucket where are stored new images before imported to the repository\'');
-        $this->addSql("UPDATE herbaria SET bucket = 'herbarium-prc' WHERE acronym = 'PRC'");
-        $this->addSql("UPDATE herbaria SET bucket = 'herbarium-test' WHERE acronym = 'TEST'");
         $this->addSql('ALTER TABLE herbaria ALTER COLUMN bucket SET NOT NULL');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_40DF22BAE73F36A6 ON herbaria (bucket)');
-        $this->addSql("INSERT INTO usersrole VALUES (DEFAULT, 'superadmin', 'all privileges')");
-        $this->addSql("INSERT INTO usersrole VALUES (DEFAULT, 'admin', 'curator privileges over all herbaria')");
-        $this->addSql("INSERT INTO usersrole VALUES (DEFAULT, 'curator', 'manage photos in single herbarium')");
-        $this->addSql("INSERT INTO usersrole VALUES (DEFAULT, 'guest', 'read only access to single herbarium')");
-        $this->addSql('INSERT INTO users VALUES (DEFAULT, 1, 1, \'admin\', \'$2y$10$iMv7YJoqFRGCrpWzVX/84e1NZcoeKbKMx1FIG9HhEcrBVHwglYeP2\', \'Petr\', \'Novotný\', \'novotp@natur.cuni.cz\', true, NULL, now(), now())');
-        $this->addSql('INSERT INTO users VALUES (DEFAULT, 1, 3, \'curator_prc_1\', \'$2y$10$iMv7YJoqFRGCrpWzVX/84e1NZcoeKbKMx1FIG9HhEcrBVHwglYeP2\', \'Zdeněk\', \'Vaněček\', \'vanecekz@natur.cuni.cz\', true, NULL, now(), now())');
-        $this->addSql('INSERT INTO users VALUES (DEFAULT, 2, 3, \'curator_test\', \'$2y$10$iMv7YJoqFRGCrpWzVX/84e1NZcoeKbKMx1FIG9HhEcrBVHwglYeP2\', \'Test\', \'only\', \'test@testing.cz\', true, NULL, now(), now())');
     }
 
     public function down(Schema $schema): void

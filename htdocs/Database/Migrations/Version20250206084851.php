@@ -22,7 +22,6 @@ final class Version20250206084851 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE herbaria ADD regex_barcode VARCHAR(255) NOT NULL default \'\'');
         $this->addSql('ALTER TABLE herbaria ADD regex_filename VARCHAR(255) NOT NULL default \'\'');
-        $this->addSql('UPDATE herbaria SET regex_filename = acronym,  regex_barcode = acronym ');
         $this->addSql('COMMENT ON COLUMN herbaria.regex_barcode IS \'RegEx for barcode on the specimen\'');
         $this->addSql('COMMENT ON COLUMN herbaria.regex_filename IS \'RegEx for image filenames\'');
         $this->addSql('ALTER TABLE photos ADD use_barcode BOOLEAN DEFAULT true NOT NULL');

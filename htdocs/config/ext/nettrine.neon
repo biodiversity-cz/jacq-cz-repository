@@ -45,4 +45,4 @@ nettrine.migrations:
 
 nettrine.fixtures:
     paths:
-        - %rootDir%/db/Fixtures
+        - %rootDir%/Database/Fixtures

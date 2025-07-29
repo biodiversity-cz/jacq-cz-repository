@@ -46,4 +46,18 @@ class PhotosType
         return $this;
     }
 
+    public function setName(string $name): PhotosType
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setDescription(string $description): PhotosType
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+
+
 }

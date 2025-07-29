@@ -201,16 +201,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.351.7",
+            "version": "3.351.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "9506d7fdb3cb84f8d7b175c594db9993264814be"
+                "reference": "61bab063c6e3567942dcc4a2aac56155af22b6d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9506d7fdb3cb84f8d7b175c594db9993264814be",
-                "reference": "9506d7fdb3cb84f8d7b175c594db9993264814be",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/61bab063c6e3567942dcc4a2aac56155af22b6d5",
+                "reference": "61bab063c6e3567942dcc4a2aac56155af22b6d5",
                 "shasum": ""
             },
             "require": {
@@ -292,9 +292,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.351.7"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.351.8"
             },
-            "time": "2025-07-25T18:06:34+00:00"
+            "time": "2025-07-28T18:40:29+00:00"
         },
         {
             "name": "contributte/console",
@@ -5879,16 +5879,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.20",
+            "version": "2.1.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "a9ccfef95210f92ba6feea6e8d1eef42b5605499"
+                "reference": "1ccf445757458c06a04eb3f803603cb118fe5fa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a9ccfef95210f92ba6feea6e8d1eef42b5605499",
-                "reference": "a9ccfef95210f92ba6feea6e8d1eef42b5605499",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1ccf445757458c06a04eb3f803603cb118fe5fa6",
+                "reference": "1ccf445757458c06a04eb3f803603cb118fe5fa6",
                 "shasum": ""
             },
             "require": {
@@ -5933,7 +5933,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-07-26T20:45:26+00:00"
+            "time": "2025-07-28T19:35:08+00:00"
         },
         {
             "name": "slevomat/coding-standard",

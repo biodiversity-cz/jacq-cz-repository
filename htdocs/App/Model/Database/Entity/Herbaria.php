@@ -162,4 +162,17 @@ class Herbaria
         return $this;
     }
 
+    public function setBucket(string $bucket): Herbaria
+    {
+        $this->bucket = $bucket;
+        return $this;
+    }
+
+    public function setFallbackFilename(bool $fallbackFilename): Herbaria
+    {
+        $this->fallbackFilename = $fallbackFilename;
+        return $this;
+    }
+
+
 }

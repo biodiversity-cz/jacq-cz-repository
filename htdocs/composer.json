@@ -57,6 +57,7 @@
 	"autoload": {
 		"psr-4": {
 			"App\\": "App",
+      "Database\\": "Database",
       "Tests\\": "tests"
 		}
 	},
