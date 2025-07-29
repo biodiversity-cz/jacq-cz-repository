@@ -4,11 +4,27 @@ on:
     push:
         branches:
             - test
+            - develop
     workflow_dispatch:  # Manual run
 jobs:
     test:
         name: Run tests and collect coverage
         runs-on: ubuntu-latest
+        services:
+            postgres:
+                image: postgres:16
+                env:
+                    POSTGRES_DB: jacq_test
+                    POSTGRES_USER: jacq_test
+                    POSTGRES_PASSWORD: jacq_test
+                ports:
+                    - 5432:5432
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4
@@ -41,7 +57,15 @@ jobs:
 
             -   name: Create config file
                 working-directory: ./htdocs
-                run: cp ./config/local.neon.template ./config/local.neon
+                run: cp ./config/local.neon.ci ./config/local.neon
+
+            -   name: Run migrations
+                working-directory: ./htdocs
+                run: bin/console doctrine:migrations:migrate --no-interaction
+
+            -   name: Load fixtures
+                working-directory: ./htdocs
+                run: bin/console doctrine:fixtures:load --no-interaction --purge=truncate
 
             -   name: Run tests
                 working-directory: ./htdocs
