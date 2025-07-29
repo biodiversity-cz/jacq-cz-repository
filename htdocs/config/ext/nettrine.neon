@@ -40,7 +40,7 @@ nettrine.migrations:
     table: doctrine_migrations
     column: version
     directories:
-        Database\Migrations: %rootDir%/db/Migrations
+        Database\Migrations: %rootDir%/Database/Migrations
     versionsOrganization: null
 
 nettrine.fixtures:
