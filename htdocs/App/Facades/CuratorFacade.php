@@ -155,7 +155,7 @@ readonly class CuratorFacade
                 case PhotosStatus::PUBLIC:
                 case PhotosStatus::HIDDEN:
                 case PhotosStatus::DEVELOP_PROCEED:
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRespositoryImageServerBucket(), $lockedEntity->getJp2Filename());
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryImageServerBucket(), $lockedEntity->getJp2Filename());
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $lockedEntity->getArchiveFilename());
                     break;
             }

@@ -64,6 +64,20 @@ readonly class ImagickService
     }
 
     /**
+     * Thumbs devoted for AI and Databots,s tored in S3
+     */
+    public function preparePngThumb(Imagick $imagick, int $maxEdgeLength = 640): Imagick
+    {
+        $imagick = $this->resizeImage($imagick, $maxEdgeLength);
+        $imagick->setImageFormat('png');
+        $imagick->setImageCompression(\Imagick::COMPRESSION_ZIP);
+        $imagick->setImageCompressionQuality(90);
+        $imagick->setImageDepth(8);
+        $imagick->stripImage();
+        return $imagick;
+    }
+
+    /**
      * @return mixed[]
      */
     public function readIdentify(Imagick $imagick): array

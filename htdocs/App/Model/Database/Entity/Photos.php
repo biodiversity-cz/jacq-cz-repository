@@ -37,6 +37,9 @@ class Photos
     #[Column(name: 'jp2filename', unique: true, nullable: true, options: ['comment' => 'Filename of JP2 file'])]
     protected ?string $jp2Filename;
 
+    #[Column(name: 'databot_thumb_filename', unique: true, nullable: true, options: ['comment' => 'Filename of PNG file devoted for Databots'])]
+    protected ?string $databotThumbFilename = null;
+
     #[ManyToOne(targetEntity: Herbaria::class, inversedBy: 'photos')]
     #[JoinColumn(name: 'herbarium_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Herbarium storing and managing the specimen data'])]
     protected Herbaria $herbarium;
@@ -281,6 +284,17 @@ class Photos
     public function setDatabotResults(Collection $databotResults): Photos
     {
         $this->databotResults = $databotResults;
+        return $this;
+    }
+
+    public function getDatabotThumbFilename(): ?string
+    {
+        return $this->databotThumbFilename;
+    }
+
+    public function setDatabotThumbFilename(?string $databotThumbFilename): Photos
+    {
+        $this->databotThumbFilename = $databotThumbFilename;
         return $this;
     }
 

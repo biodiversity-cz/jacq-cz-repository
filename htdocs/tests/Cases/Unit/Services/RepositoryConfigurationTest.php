@@ -18,8 +18,8 @@ test('RepositoryConfiguration Service', function (): void {
     Assert::type('string', $service->getRepositoryArchiveBucket());
     Assert::notEqual('', $service->getRepositoryArchiveBucket());
 
-    Assert::type('string', $service->getRespositoryImageServerBucket());
-    Assert::notEqual('', $service->getRespositoryImageServerBucket());
+    Assert::type('string', $service->getRepositoryImageServerBucket());
+    Assert::notEqual('', $service->getRepositoryImageServerBucket());
 
     Assert::type('int', $service->getJp2Quality());
     Assert::true($service->getJp2Quality() >= 0 && $service->getJp2Quality() <= 100 );

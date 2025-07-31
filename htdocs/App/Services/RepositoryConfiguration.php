@@ -25,9 +25,14 @@ final readonly class RepositoryConfiguration
         return $this->getKey('archiveBucket', 'Archive bucket not set.');
     }
 
-    public function getRespositoryImageServerBucket(): string
+    public function getRepositoryImageServerBucket(): string
     {
         return $this->getKey('jp2Bucket', 'Image server bucket not set.');
+    }
+
+    public function getRepositoryDatabotThumbsBucket(): string
+    {
+        return $this->getKey('thumbBucket', 'Thumbs bucket not set.');
     }
 
     public function getJp2Quality(): int
@@ -88,6 +93,11 @@ final readonly class RepositoryConfiguration
     public function createS3Jp2Name(Photos $photo): string
     {
         return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.jp2';
+    }
+
+    public function createS3DatabotThumbName(Photos $photo): string
+    {
+        return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.png';
     }
 
     public function createS3TifName(Photos $photo): string

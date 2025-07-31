@@ -27,8 +27,6 @@ final class Version20250221095128 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE SCHEMA public');
         $this->addSql('DROP INDEX UNIQ_190AE20B665648E9');
         $this->addSql('ALTER TABLE photos_status DROP color');
     }

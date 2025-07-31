@@ -22,26 +22,7 @@ readonly class S3Service
 
     public function putTiffIfNotExists(string $bucket, string $key, string $path): Result
     {
-        if ($this->s3->doesObjectExist($bucket, $key)) {
-            throw new S3Exception(sprintf('Tif file %s already exists', $key));
-        }
-
-        $result = $this->s3->putObject([
-            'Bucket' => $bucket,
-            'Key' => $key,
-            'SourceFile' => $path,
-            'ContentType' => 'image/tiff',
-        ]);
-
-        $localSize = filesize($path);
-        $s3Size = $this->getObjectSize($bucket, $key) ?? 0;
-
-        if ($localSize !== $s3Size) {
-            $this->s3->deleteObject(['Bucket' => $bucket, 'Key' => $key]);
-            throw new S3Exception(sprintf('Uploaded file size mismatch for %s', $key));
-        }
-
-        return $result;
+        return $this->putFileIfNotExists($bucket, $key, $path, 'image/tiff');
     }
 
     public function getObjectSize(string $bucket, string $key): int
@@ -84,17 +65,17 @@ readonly class S3Service
         ]);
     }
 
-    public function putJp2IfNotExists(string $bucket, string $key, string $path): Result
+    public function putFileIfNotExists(string $bucket, string $key, string $path, string $contentType): Result
     {
         if ($this->s3->doesObjectExist($bucket, $key)) {
-            throw new S3Exception(sprintf('JP2 file %s already exists', $key));
+            throw new S3Exception(sprintf('file %s already exists', $key));
         }
 
         $result = $this->s3->putObject([
             'Bucket' => $bucket,
             'Key' => $key,
             'SourceFile' => $path,
-            'ContentType' => 'image/jp2',
+            'ContentType' => $contentType,
         ]);
 
         $localSize = filesize($path);
@@ -106,6 +87,16 @@ readonly class S3Service
         }
 
         return $result;
+    }
+
+    public function putJp2IfNotExists(string $bucket, string $key, string $path): Result
+    {
+        return $this->putFileIfNotExists($bucket, $key, $path, 'image/jp2');
+    }
+
+    public function putPngIfNotExists(string $bucket, string $key, string $path): Result
+    {
+        return $this->putFileIfNotExists($bucket, $key, $path, 'image/png');
     }
 
     public function getObject(string $bucket, string $key, string $path): Result

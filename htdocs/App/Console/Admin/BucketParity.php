@@ -56,7 +56,7 @@ class BucketParity extends Command
      */
     public function getJp2FilesS3(): array
     {
-        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getRespositoryImageServerBucket());
+        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getRepositoryImageServerBucket());
     }
 
     protected function configure(): void

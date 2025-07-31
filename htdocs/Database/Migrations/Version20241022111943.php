@@ -35,5 +35,6 @@ final class Version20241022111943 extends AbstractMigration
         $this->addSql('DROP TABLE front.contact');
         $this->addSql('ALTER TABLE herbaria DROP fullname');
         $this->addSql('ALTER TABLE herbaria DROP address');
+        $this->addSql('DROP schema front');
         }
 }

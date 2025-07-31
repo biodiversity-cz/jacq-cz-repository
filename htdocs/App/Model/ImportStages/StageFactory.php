@@ -36,7 +36,7 @@ readonly class StageFactory
 
     public function createThumbnailStage(): ThumbnailStage
     {
-        return new ThumbnailStage($this->repositoryConfiguration, $this->imageService);
+        return new ThumbnailStage($this->tempDir, $this->repositoryConfiguration, $this->imageService);
     }
 
     public function createConvertStage(): ConvertStage
@@ -51,7 +51,7 @@ readonly class StageFactory
 
     public function createTransferStage(): TransferStage
     {
-        return new TransferStage($this->s3Service, $this->repositoryConfiguration, $this->appConfiguration);
+        return new TransferStage($this->tempDir, $this->s3Service, $this->repositoryConfiguration, $this->appConfiguration);
     }
 
 }
