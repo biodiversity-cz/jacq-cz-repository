@@ -15,43 +15,43 @@ use Nette\Application\LinkGenerator;
 readonly class StageFactory
 {
 
-    public function __construct(protected S3Service $s3Service, protected TempDir $tempDir, protected EntityManagerInterface $entityManager, protected RepositoryConfiguration $repositoryConfiguration, protected ImagickService $imageService, protected LinkGenerator $linkGenerator, protected PhotoService $photoService, protected AppConfiguration $appConfiguration, protected SpecimenIdService $specimenIdService)
+    public function __construct(protected S3Service $s3Service, protected TempDir $tempDir, protected EntityManagerInterface $entityManager, protected RepositoryConfiguration $repositoryConfiguration, protected ImagickService $imagickService, protected LinkGenerator $linkGenerator, protected PhotoService $photoService, protected AppConfiguration $appConfiguration, protected SpecimenIdService $specimenIdService)
     {
     }
 
     public function createDownloadStage(): DownloadStage
     {
-        return new DownloadStage($this->s3Service, $this->repositoryConfiguration);
+        return new DownloadStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService,$this->s3Service);
     }
 
     public function createBarcodeStage(): BarcodeStage
     {
-        return new BarcodeStage($this->repositoryConfiguration, $this->imageService);
+        return new BarcodeStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
     }
 
     public function createMetadataStage(): MetadataStage
     {
-        return new MetadataStage($this->repositoryConfiguration, $this->imageService);
+        return new MetadataStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
     }
 
     public function createThumbnailStage(): ThumbnailStage
     {
-        return new ThumbnailStage($this->tempDir, $this->repositoryConfiguration, $this->imageService);
+        return new ThumbnailStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
     }
 
     public function createConvertStage(): ConvertStage
     {
-        return new ConvertStage($this->s3Service, $this->repositoryConfiguration, $this->imageService);
+        return new ConvertStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
     }
 
     public function createDuplicityStage(): DuplicityStage
     {
-        return new DuplicityStage($this->photoService, $this->linkGenerator, $this->imageService, $this->repositoryConfiguration, $this->s3Service);
+        return new DuplicityStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->photoService, $this->linkGenerator, $this->s3Service);
     }
 
     public function createTransferStage(): TransferStage
     {
-        return new TransferStage($this->tempDir, $this->s3Service, $this->repositoryConfiguration, $this->appConfiguration);
+        return new TransferStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->appConfiguration, $this->s3Service);
     }
 
 }

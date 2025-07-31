@@ -2,34 +2,24 @@
 
 namespace App\Model\ImportStages;
 
-use App\Model\Database\Entity\Photos;
 use App\Model\ImportStages\Exceptions\BarcodeStageException;
-use App\Services\ImagickService;
-use App\Services\RepositoryConfiguration;
 use App\Services\SpecimenIdService;
 use Imagick;
 use League\Pipeline\StageInterface;
 use Throwable;
 
-class BarcodeStage implements StageInterface
+class BarcodeStage extends BaseStage implements StageInterface
 {
-
-    protected Photos $item;
-
     /** @var string [] */
     protected array $barcodes;
 
-    public function __construct(protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly ImagickService $imageService)
-    {
-    }
-
     protected function createContrastedImage(Imagick $imagick): void
     {
-        $imagick = $this->imageService->resizeImage($imagick, $this->repositoryConfiguration->getZbarImageSize());
+        $imagick = $this->imagickService->resizeImage($imagick, $this->repositoryConfiguration->getZbarImageSize());
         $imagick->modulateImage(100, 0, 100);
         // adaptive threshold had worse results than unmodified image        * $imagick->adaptiveThresholdImage(150, 150, 1);
         $imagick->setImageFormat('png');
-        $imagick->writeImage($this->repositoryConfiguration->getImportTempZbarPath());
+        $imagick->writeImage($this->getZbarThumbTempPath());
         $imagick->clear();
         unset($imagick);
     }
@@ -43,7 +33,7 @@ class BarcodeStage implements StageInterface
     {
         $output = [];
         $returnVar = 0;
-        $info = exec('zbarimg --quiet --raw ' . escapeshellarg($this->repositoryConfiguration->getImportTempZbarPath()), $output, $returnVar);
+        $info = exec('zbarimg --quiet --raw ' . escapeshellarg($this->getZbarThumbTempPath()), $output, $returnVar);
 
         switch ($returnVar) {
             case 1:
@@ -98,7 +88,7 @@ class BarcodeStage implements StageInterface
              * skip detection when manually inserted id
              */
             if ($this->item->getSpecimenId() === null) {
-                $imagick = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempPath($this->item));
+                $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
                 $this->createContrastedImage($imagick);
                 $this->detectCodes();
                 if (empty($this->barcodes)) {
@@ -113,6 +103,11 @@ class BarcodeStage implements StageInterface
             throw $e;
         } catch (Throwable $e) {
             throw new BarcodeStageException('problem with barcode processing: ' . $e->getMessage());
+        } finally {
+            $path = $this->getZbarThumbTempPath();
+            if ($path && file_exists($path)) {
+                @unlink($path);
+            }
         }
     }
 

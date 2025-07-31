@@ -36,11 +36,5 @@ test('RepositoryConfiguration Service', function (): void {
     Assert::type('int', $service->getPreviewQuality());
     Assert::true($service->getPreviewQuality() >= 0 && $service->getPreviewQuality() <= 100 );
 
-    Assert::type('string', $service->getImportTempJp2Path());
-    Assert::notEqual('', $service->getImportTempJp2Path());
-
-    Assert::type('string', $service->getImportTempZbarPath());
-    Assert::notEqual('', $service->getImportTempZbarPath());
-
 });
 

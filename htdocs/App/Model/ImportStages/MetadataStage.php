@@ -2,22 +2,13 @@
 
 namespace App\Model\ImportStages;
 
-use App\Model\Database\Entity\Photos;
 use App\Model\ImportStages\Exceptions\MetadataStageException;
-use App\Services\ImagickService;
-use App\Services\RepositoryConfiguration;
 use Imagick;
 use League\Pipeline\StageInterface;
 use Throwable;
 
-class MetadataStage implements StageInterface
+class MetadataStage extends BaseStage implements StageInterface
 {
-
-    protected Photos $item;
-
-    public function __construct(protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly ImagickService $imageService)
-    {
-    }
 
     protected function readDimensions(Imagick $imagick): Imagick
     {
@@ -29,12 +20,12 @@ class MetadataStage implements StageInterface
 
     public function __invoke(mixed $payload): mixed
     {
+        $this->item = $payload;
         try {
-            $this->item = $payload;
-            $imagick = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempPath($this->item));
+            $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
             $this->readDimensions($imagick);
-            $this->item->setIdentify($this->imageService->readIdentify($imagick));
-            $this->item->setExif($this->imageService->readExif($imagick));
+            $this->item->setIdentify($this->imagickService->readIdentify($imagick));
+            $this->item->setExif($this->imagickService->readExif($imagick));
             $imagick->clear();
             unset($imagick);
 

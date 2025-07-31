@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services;
 
@@ -8,9 +8,6 @@ use App\Model\Database\Entity\Photos;
 final readonly class RepositoryConfiguration
 {
 
-    public const string TEMP_FILE = 'default';
-    public const string TEMP_ZBAR_FILE = 'default_zbar';
-    public const string TEMP_DUPLICATE_FILE = 'duplicate';
     public const string SPECIMEN_NUMERIC_FORMAT = '%07d';
 
     /**
@@ -23,6 +20,17 @@ final readonly class RepositoryConfiguration
     public function getRepositoryArchiveBucket(): string
     {
         return $this->getKey('archiveBucket', 'Archive bucket not set.');
+    }
+
+    protected function getKey(string $key, string $msg = ''): mixed
+    {
+        if (!isset($this->config[$key])) {
+            $text = $msg === '' ? 'Configuration parameter ' . strtoupper($key) . ' not set!' : $msg;
+
+            throw new ConfigurationException($text);
+        }
+
+        return $this->config[$key];
     }
 
     public function getRepositoryImageServerBucket(): string
@@ -43,6 +51,11 @@ final readonly class RepositoryConfiguration
     public function getImageServerInfoUrl(string $jp2ObjectName): string
     {
         return $this->getImageServerBaseUrl() . $jp2ObjectName;
+    }
+
+    protected function getImageServerBaseUrl(): string
+    {
+        return $this->getKey('imageServerBaseUrl');
     }
 
     public function getZbarImageSize(): int
@@ -70,26 +83,6 @@ final readonly class RepositoryConfiguration
         return $this->getKey('thumbImageWidth');
     }
 
-    public function getImportTempPath(Photos $photo): string
-    {
-        return $this->tempDir->getPath(self::TEMP_FILE . '.' . pathinfo($photo->getOriginalFilename(), PATHINFO_EXTENSION));
-    }
-
-    public function getImportTempJp2Path(): string
-    {
-        return $this->tempDir->getPath(self::TEMP_FILE . '.jp2');
-    }
-
-    public function getImportTempZbarPath(): string
-    {
-        return $this->tempDir->getPath(self::TEMP_ZBAR_FILE . '.png');
-    }
-
-    public function getImportTempDuplicatePath(Photos $photo): string
-    {
-        return $this->tempDir->getPath(self::TEMP_DUPLICATE_FILE . '.' . pathinfo($photo->getArchiveFilename(), PATHINFO_EXTENSION));
-    }
-
     public function createS3Jp2Name(Photos $photo): string
     {
         return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.jp2';
@@ -103,22 +96,6 @@ final readonly class RepositoryConfiguration
     public function createS3TifName(Photos $photo): string
     {
         return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.tif';
-    }
-
-    protected function getKey(string $key, string $msg = ''): mixed
-    {
-        if (!isset($this->config[$key])) {
-            $text = $msg === '' ? 'Configuration parameter ' . strtoupper($key) . ' not set!' : $msg;
-
-            throw new ConfigurationException($text);
-        }
-
-        return $this->config[$key];
-    }
-
-    protected function getImageServerBaseUrl(): string
-    {
-        return $this->getKey('imageServerBaseUrl');
     }
 
 }

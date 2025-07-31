@@ -3,21 +3,26 @@
 namespace App\Model\ImportStages;
 
 use App\Model\ImportStages\Exceptions\DownloadStageException;
+use App\Services\ImagickService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
+use App\Services\TempDir;
 use League\Pipeline\StageInterface;
 
-readonly class DownloadStage implements StageInterface
+class DownloadStage extends BaseStage implements StageInterface
 {
 
-    public function __construct(protected S3Service $s3Service, protected RepositoryConfiguration $configuration)
+    public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService, protected S3Service $s3Service)
     {
+        parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
     }
 
     public function __invoke(mixed $payload): mixed
     {
+        $this->item = $payload;
+
         try {
-            $this->s3Service->getObject($payload->getHerbarium()->getBucket(), $payload->getOriginalFilename(), $this->configuration->getImportTempPath($payload));
+            $this->s3Service->getObject($payload->getHerbarium()->getBucket(), $payload->getOriginalFilename(), $this->getMasterTempPath());
             $payload->setOriginalFileAt($this->s3Service->getObjectOriginalTimestamp($payload->getHerbarium()->getBucket(), $payload->getOriginalFilename()));
 
         } catch (\Throwable $exception) {
