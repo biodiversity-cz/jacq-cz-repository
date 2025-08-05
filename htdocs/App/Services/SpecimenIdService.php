@@ -13,7 +13,7 @@ readonly class SpecimenIdService
     public const string REGEX_HERBARIUM = 'herbarium';
     public const string REGEX_EXTENSION = 'extension';
 
-    public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<' . self::REGEX_HERBARIUM . '>[a-zA-Z]+)[\s\-–_](?<' . self::REGEX_SPECIMEN . '>\d+)$/i';
+    public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<' . self::REGEX_HERBARIUM . '>[a-zA-Z]+)[\s\-–_](?<' . self::REGEX_SPECIMEN . '>\d+)$/iu';
 
     public function __construct(protected RepositoryConfiguration $repositoryConfiguration, protected HerbariumService $herbariumService)
     {
