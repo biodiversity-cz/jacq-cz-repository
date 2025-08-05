@@ -1,27 +1,50 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
-use App\Model\Database\Entity\Photos;
 use App\Model\ImportStages\Exceptions\TransferStageException;
 use App\Services\AppConfiguration;
+use App\Services\ImagickService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
+use App\Services\TempDir;
 use League\Pipeline\StageInterface;
 
-class TransferStage implements StageInterface
+class TransferStage extends BaseStage implements StageInterface
 {
 
-    protected Photos $item;
-
-    public function __construct(protected readonly S3Service $s3Service, protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly AppConfiguration $appConfiguration)
+    public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService, protected readonly AppConfiguration $appConfiguration, protected readonly S3Service $s3Service)
     {
+        parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
+    }
+
+    public function __invoke(mixed $payload): mixed
+    {
+        $this->item = $payload;
+        $this->uploadJp2toRepository();
+        $this->uploadTiftoRepository();
+        $this->uploadDatabotThumbToRepository();
+        if ($this->appConfiguration->isProduction()) {
+            $this->deleteTifFromCuratorBucket();
+        }
+
+        $files = [$this->getIiifTempPath(), $this->getMasterTempPath(), $this->getDatabotThumbTempPath()];
+        foreach ($files as $path) {
+            if ($path && file_exists($path)) {
+                @unlink($path);
+            }
+        }
+
+        return $payload;
     }
 
     protected function uploadJp2toRepository(): void
     {
         try {
-            $this->s3Service->putJp2IfNotExists($this->repositoryConfiguration->getRespositoryImageServerBucket(), $this->repositoryConfiguration->createS3Jp2Name($this->item), $this->repositoryConfiguration->getImportTempJp2Path());
+            $this->s3Service->putJp2IfNotExists(
+                $this->repositoryConfiguration->getRepositoryImageServerBucket(),
+                $this->repositoryConfiguration->createS3Jp2Name($this->item),
+                $this->getIiifTempPath());
             $this->item->setJP2Filename($this->repositoryConfiguration->createS3Jp2Name($this->item));
         } catch (\Throwable $exception) {
             throw new TransferStageException('jp2 upload error (' . $exception->getMessage() . ')');
@@ -31,10 +54,26 @@ class TransferStage implements StageInterface
     protected function uploadTiftoRepository(): void
     {
         try {
-            $this->s3Service->putTiffIfNotExists($this->repositoryConfiguration->getRepositoryArchiveBucket(), $this->repositoryConfiguration->createS3TifName($this->item), $this->repositoryConfiguration->getImportTempPath($this->item));
+            $this->s3Service->putTiffIfNotExists(
+                $this->repositoryConfiguration->getRepositoryArchiveBucket(),
+                $this->repositoryConfiguration->createS3TifName($this->item),
+                $this->getMasterTempPath());
             $this->item->setArchiveFilename($this->repositoryConfiguration->createS3TifName($this->item));
         } catch (\Throwable $exception) {
             throw new TransferStageException('tiff upload error (' . $exception->getMessage() . ')');
+        }
+    }
+
+    protected function uploadDatabotThumbToRepository(): void
+    {
+        try {
+            $this->s3Service->putPngIfNotExists(
+                $this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(),
+                $this->repositoryConfiguration->createS3DatabotThumbName($this->item),
+                $this->getDatabotThumbTempPath());
+            $this->item->setDatabotThumbFilename($this->repositoryConfiguration->createS3DatabotThumbName($this->item));
+        } catch (\Throwable $exception) {
+            throw new TransferStageException('databot png upload error (' . $exception->getMessage() . ')');
         }
     }
 
@@ -45,18 +84,6 @@ class TransferStage implements StageInterface
         } catch (\Throwable $exception) {
             throw new TransferStageException('deleting tif from curatorBucket error (' . $exception->getMessage() . ')');
         }
-    }
-
-    public function __invoke(mixed $payload): mixed
-    {
-        $this->item = $payload;
-        $this->uploadJp2toRepository();
-        $this->uploadTiftoRepository();
-        if ($this->appConfiguration->isProduction()) {
-            $this->deleteTifFromCuratorBucket();
-        }
-
-        return $payload;
     }
 
 }

@@ -67,7 +67,7 @@ final class Version20250725064059 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        throw new \Exception('No down implemented');
+
 
     }
 }

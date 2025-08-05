@@ -1,0 +1,12 @@
+parameters:
+    environment: 'test'
+    database:
+        host: localhost
+        password: jacq_test
+        user: jacq_test
+        dbname: jacq_test
+
+aws:
+    credentials:
+        key: xx
+        secret: yy

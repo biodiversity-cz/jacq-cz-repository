@@ -11,6 +11,7 @@ parameters:
     storage:
         archiveBucket: test-archive
         jp2Bucket: test-iiif
+        thumbBucket: test-thumbs640
 
 http:
     proxy:

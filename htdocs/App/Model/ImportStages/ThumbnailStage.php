@@ -2,38 +2,47 @@
 
 namespace App\Model\ImportStages;
 
-use App\Model\Database\Entity\Photos;
 use App\Model\ImportStages\Exceptions\ThumbnailStageException;
-use App\Services\ImagickService;
-use App\Services\RepositoryConfiguration;
 use Imagick;
 use League\Pipeline\StageInterface;
 
-class ThumbnailStage implements StageInterface
+class ThumbnailStage extends BaseStage implements StageInterface
 {
 
-    protected Photos $item;
 
-    public function __construct(protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly ImagickService $imageService)
-    {
-    }
-
+    /**
+     * thumbnail stored in db used only during control error phase to provide visualization to curators
+     */
     protected function createThumbnail(Imagick $imagick): void
     {
-        $imagick = $this->imageService->resizeImage($imagick, $this->repositoryConfiguration->getPreviewSize());
+        $imagick = $this->imagickService->resizeImage($imagick, $this->repositoryConfiguration->getPreviewSize());
         $imagick->setImageFormat('jpg');
         $imagick->setImageCompressionQuality($this->repositoryConfiguration->getPreviewQuality());
         $this->item->getError()->setThumbnail($imagick->getImagesBlob());
-        $imagick->clear();
-        unset($imagick);
+    }
+
+    /**
+     * thumbnail stored in S3 and used for Databots
+     */
+    protected function createThumbnailDatabot(Imagick $imagick): Imagick
+    {
+        return $this->imagickService->preparePngThumb($imagick);
     }
 
     public function __invoke(mixed $payload): mixed
     {
         try {
             $this->item = $payload;
-            $imagick = $this->imageService->createImagick($this->repositoryConfiguration->getImportTempPath($this->item));
+            $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
             $this->createThumbnail($imagick);
+            $imagick->clear();
+            unset($imagick);
+
+            $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
+            $imagick = $this->createThumbnailDatabot($imagick);
+            $imagick->writeImage($this->getDatabotThumbTempPath());
+            $imagick->clear();
+            unset($imagick);
 
             return $this->item;
         } catch (\Throwable $e) {

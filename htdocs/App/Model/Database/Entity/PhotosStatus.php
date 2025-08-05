@@ -54,4 +54,18 @@ class PhotosStatus
         return $this;
     }
 
+    public function setName(string $name): PhotosStatus
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setDescription(string $description): PhotosStatus
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+
+
 }

@@ -24,11 +24,7 @@ final class Version20250224081323 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN photos_type.name IS \'name of the type\'');
         $this->addSql('COMMENT ON COLUMN photos_type.description IS \'short description\'');
         $this->addSql('COMMENT ON COLUMN photos_type.color IS \'CSS color class for status visualisation\'');
-        $this->addSql("INSERT INTO photos_type VALUES (DEFAULT, 'preserved specimen', 'Scan or photo of preserved herbarium specimen', DEFAULT)");
-        $this->addSql("INSERT INTO photos_type VALUES (DEFAULT, 'field', 'A photo from the field of the plant from which the sample was taken for the herbarium specimen', DEFAULT)");
-        $this->addSql("INSERT INTO photos_type VALUES (DEFAULT, 'microscopy', 'Microscopic image', DEFAULT)");
-        $this->addSql("INSERT INTO photos_type VALUES (DEFAULT, 'illustration', 'Illustration/drawing of the speimen parts', DEFAULT)");
-        $this->addSql('ALTER TABLE photos ADD type_id INT DEFAULT 1 NOT NULL');
+          $this->addSql('ALTER TABLE photos ADD type_id INT DEFAULT 1 NOT NULL');
         $this->addSql('COMMENT ON COLUMN photos.type_id IS \'Type of the photo\'');
         $this->addSql('ALTER TABLE photos ADD CONSTRAINT FK_876E0D9C54C8C93 FOREIGN KEY (type_id) REFERENCES photos_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_876E0D9C54C8C93 ON photos (type_id)');
@@ -36,8 +32,6 @@ final class Version20250224081323 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE photos DROP CONSTRAINT FK_876E0D9C54C8C93');
         $this->addSql('DROP TABLE photos_type');
         $this->addSql('DROP INDEX IDX_876E0D9C54C8C93');

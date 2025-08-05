@@ -9,6 +9,8 @@ parameters:
     storage:
         archiveBucket: archive
         jp2Bucket: iiif
+        thumbBucket: thumbs640
+
 
 aws:
     endpoint: https://s3.cl4.du.cesnet.cz

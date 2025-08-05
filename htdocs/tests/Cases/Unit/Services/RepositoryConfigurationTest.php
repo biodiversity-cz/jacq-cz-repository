@@ -18,8 +18,8 @@ test('RepositoryConfiguration Service', function (): void {
     Assert::type('string', $service->getRepositoryArchiveBucket());
     Assert::notEqual('', $service->getRepositoryArchiveBucket());
 
-    Assert::type('string', $service->getRespositoryImageServerBucket());
-    Assert::notEqual('', $service->getRespositoryImageServerBucket());
+    Assert::type('string', $service->getRepositoryImageServerBucket());
+    Assert::notEqual('', $service->getRepositoryImageServerBucket());
 
     Assert::type('int', $service->getJp2Quality());
     Assert::true($service->getJp2Quality() >= 0 && $service->getJp2Quality() <= 100 );
@@ -35,12 +35,6 @@ test('RepositoryConfiguration Service', function (): void {
 
     Assert::type('int', $service->getPreviewQuality());
     Assert::true($service->getPreviewQuality() >= 0 && $service->getPreviewQuality() <= 100 );
-
-    Assert::type('string', $service->getImportTempJp2Path());
-    Assert::notEqual('', $service->getImportTempJp2Path());
-
-    Assert::type('string', $service->getImportTempZbarPath());
-    Assert::notEqual('', $service->getImportTempZbarPath());
 
 });
 

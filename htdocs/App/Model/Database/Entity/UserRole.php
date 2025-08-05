@@ -34,4 +34,17 @@ class UserRole
         return $this->description;
     }
 
+    public function setName(string $name): UserRole
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setDescription(string $description): UserRole
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+
 }

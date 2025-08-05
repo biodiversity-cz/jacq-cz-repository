@@ -26,10 +26,6 @@ final class Version20241022111943 extends AbstractMigration
         $this->addSql('ALTER TABLE herbaria ADD address TEXT DEFAULT NULL');
         $this->addSql('COMMENT ON COLUMN herbaria.fullname IS \'full name of the herbarium\'');
         $this->addSql('COMMENT ON COLUMN herbaria.address IS \'address of the institution/herbarium\'');
-        $this->addSql("INSERT INTO front.contact VALUES (DEFAULT, 1, 'Patrik', 'Mráz', 'head of herbarium', 'mrazpat@natur.cuni.cz')");
-        $this->addSql("INSERT INTO front.contact VALUES (DEFAULT, 1, 'Zdeněk', 'Vaněček', 'specimen digitalization', 'vanecekz@natur.cuni.cz ')");
-        $this->addSql("INSERT INTO front.contact VALUES (DEFAULT, 1, 'Petr', 'Novotný', 'IT development', 'novotp@natur.cuni.cz')");
-        $this->addSql("UPDATE herbaria SET fullname = 'PřF UK Praha', address = 'Benátská 2, Prague' WHERE id = 1");
 
     }
 
@@ -39,5 +35,6 @@ final class Version20241022111943 extends AbstractMigration
         $this->addSql('DROP TABLE front.contact');
         $this->addSql('ALTER TABLE herbaria DROP fullname');
         $this->addSql('ALTER TABLE herbaria DROP address');
+        $this->addSql('DROP schema front');
         }
 }
