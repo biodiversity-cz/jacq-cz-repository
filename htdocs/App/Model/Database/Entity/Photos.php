@@ -29,13 +29,13 @@ class Photos
     use TOriginalFileAt;
 
     #[Column(unique: true, nullable: true, options: ['comment' => 'Filename of Archive Master TIF file'])]
-    protected ?string $archiveFilename;
+    protected ?string $archiveFilename = null;
 
     #[Column(nullable: true, options: ['comment' => 'Filename that was provided during curator upload, could make sense or completely missing semantic content'])]
     protected string $originalFilename;
 
     #[Column(name: 'jp2filename', unique: true, nullable: true, options: ['comment' => 'Filename of JP2 file'])]
-    protected ?string $jp2Filename;
+    protected ?string $jp2Filename = null;
 
     #[Column(name: 'databot_thumb_filename', unique: true, nullable: true, options: ['comment' => 'Filename of PNG file devoted for Databots'])]
     protected ?string $databotThumbFilename = null;
@@ -49,27 +49,27 @@ class Photos
     protected PhotosStatus $status;
 
     #[Column(type: Types::STRING, nullable: true, options: ['comment' => 'Herbarium internal unique id of specimen in form without herbarium acronym'])]
-    protected ?string $specimenId;
+    protected ?string $specimenId = null;
 
     #[Column(type: Types::INTEGER, nullable: true, options: ['comment' => 'Width of image with pixels'])]
-    protected ?int $width;
+    protected ?int $width = null;
 
     #[Column(type: Types::INTEGER, nullable: true, options: ['comment' => 'Height of image in pixels'])]
-    protected ?int $height;
+    protected ?int $height = null;
 
     #[Column(type: Types::BIGINT, nullable: true, options: ['comment' => 'Filesize of Archive Master TIFF file in bytes'])]
-    protected ?int $archiveFileSize;
+    protected ?int $archiveFileSize = null;
 
     #[Column(name: 'jp2file_size', type: Types::BIGINT, nullable: true, options: ['comment' => 'Filesize of converted JP2 file in bytes'])]
-    protected ?int $JP2FileSize;
+    protected ?int $JP2FileSize = null;
 
     /** @var ?mixed[] */
     #[Column(type: Types::JSON, nullable: true, options: ['jsonb' => true, 'comment' => 'raw EXIF data extracted from Archive Master file'])]
-    protected ?array $exif;
+    protected ?array $exif = null;
 
     /** @var ?mixed[] */
     #[Column(type: Types::JSON, nullable: true, options: ['jsonb' => true, 'comment' => 'Imagick -verbose identify metadata output from the Archive Master file'])]
-    protected ?array $identify;
+    protected ?array $identify = null;
 
     #[ManyToOne(targetEntity: PhotosType::class)]
     #[JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Type of the photo', 'default' => 1])]

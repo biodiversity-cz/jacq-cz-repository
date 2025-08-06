@@ -5,7 +5,7 @@ namespace App\Model\Database\Enums;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 
-final class EnumDatabotRole extends Type
+final class EnumDatabotRoleType extends Type
 {
     public const NAME = 'enum_databot_result_status';
 
