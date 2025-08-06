@@ -1,5 +1,4 @@
 parameters:
-    environment: 'test'
     database:
         host: localhost
         password: jacq_test
