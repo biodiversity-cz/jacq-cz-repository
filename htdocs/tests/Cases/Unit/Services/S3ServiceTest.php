@@ -13,7 +13,8 @@ use Tester\Assert;
 require __DIR__ . '/../../../bootstrap.php';
 
 
-function createS3Service(Mockery\MockInterface $mockS3Client): S3Service {
+function createS3Service(Mockery\MockInterface $mockS3Client): S3Service
+{
     return new S3Service($mockS3Client);
 }
 
@@ -37,6 +38,28 @@ test('putFileIfNotExists throws if file exists', function (): void {
         'file key already exists'
     );
 });
+
+
+foreach ([
+             'image/tiff' => 'putTiffIfNotExists',
+             'image/jp2' => 'putJp2IfNotExists',
+             'image/png' => 'putPngIfNotExists',
+         ] as $expectedContentType => $method) {
+    test("$method uploads with correct content type", function () use ($expectedContentType, $method): void {
+        $mock = Mockery::mock(S3Client::class);
+
+        $mock->shouldReceive('doesObjectExist')->once()->andReturn(false);
+        $mock->shouldReceive('putObject')->once()
+            ->with(Mockery::on(fn($arg) => $arg['ContentType'] === $expectedContentType))
+            ->andReturn(new Result(['ok' => true]));
+        $mock->shouldReceive('headObject')->once()->andReturn(new Result(['ContentLength' => filesize(__FILE__)]));
+
+        $service = createS3Service($mock);
+        $result = $service->$method('bucket', 'key', __FILE__);
+        Assert::type(Result::class, $result);
+    });
+}
+
 
 test('putFileIfNotExists uploads file and checks size success', function (): void {
     $mock = Mockery::mock(S3Client::class);
@@ -126,4 +149,36 @@ test('getObject returns Result', function (): void {
     $service = createS3Service($mock);
     Assert::same($result, $service->getObject('bucket', 'key', '/tmp/file'));
 });
+
+test('listObjectsNamesOnly returns array of keys from S3 iterator', function (): void {
+    $mock = Mockery::mock(S3Client::class);
+    $mock->shouldReceive('getIterator')
+        ->once()
+        ->with('ListObjects', ['Bucket' => 'bucket'])
+        ->andReturn(new \ArrayIterator([
+            ['Key' => 'file1.txt'],
+            ['Key' => 'file2.txt'],
+        ]));
+
+    $service = createS3Service($mock);
+    Assert::same(['file1.txt', 'file2.txt'], $service->listObjectsNamesOnly('bucket'));
+});
+
+test('listObjects returns an Iterator from S3Client', function (): void {
+    $mock = Mockery::mock(S3Client::class);
+    $iter = new \ArrayIterator([
+        ['Key' => 'a'],
+        ['Key' => 'b'],
+    ]);
+    $mock->shouldReceive('getIterator')
+        ->once()
+        ->with('ListObjects', ['Bucket' => 'bucket'])
+        ->andReturn($iter);
+
+    $service = createS3Service($mock);
+    $result = $service->listObjects('bucket');
+    Assert::type(\Iterator::class, $result);
+    Assert::same(['Key' => 'a'], $result->current());
+});
+
 

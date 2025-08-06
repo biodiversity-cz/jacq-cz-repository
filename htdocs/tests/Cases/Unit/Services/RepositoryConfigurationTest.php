@@ -3,6 +3,7 @@
 namespace Tests\Cases\Unit\Services;
 
 use App\Bootstrap;
+use App\Exceptions\ConfigurationException;
 use App\Model\Database\Entity\Photos;
 use App\Services\RepositoryConfiguration;
 use App\Services\TempDir;
@@ -74,6 +75,18 @@ test('RepositoryConfiguration::createS3TifName returns correct filename', functi
     $filename = $service->createS3TifName($photo);
 
     Assert::same('TEST_00005_54.tif', $filename);
+});
+
+test('RepositoryConfiguration throws exception for missing key', function (): void {
+    $tempDir = \Mockery::mock(TempDir::class);
+    $config = [];
+    $service = new RepositoryConfiguration($config, $tempDir);
+
+    Assert::exception(
+        fn() => $service->getRepositoryArchiveBucket(),
+        ConfigurationException::class,
+        'Archive bucket not set.'
+    );
 });
 
 function createPhotoMock(string $specimenId = 'TEST_00005', int $photoId = 54): Photos
