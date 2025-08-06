@@ -7,6 +7,7 @@ use App\Exceptions\ConfigurationException;
 use App\Model\Database\Entity\Photos;
 use App\Services\RepositoryConfiguration;
 use App\Services\TempDir;
+use Mockery;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
@@ -78,7 +79,7 @@ test('RepositoryConfiguration::createS3TifName returns correct filename', functi
 });
 
 test('RepositoryConfiguration throws exception for missing key', function (): void {
-    $tempDir = \Mockery::mock(TempDir::class);
+    $tempDir = Mockery::mock(TempDir::class);
     $config = [];
     $service = new RepositoryConfiguration($config, $tempDir);
 
@@ -91,7 +92,7 @@ test('RepositoryConfiguration throws exception for missing key', function (): vo
 
 function createPhotoMock(string $specimenId = 'TEST_00005', int $photoId = 54): Photos
 {
-    $photo = \Mockery::mock(Photos::class);
+    $photo = Mockery::mock(Photos::class);
     $photo->shouldReceive('getFullSpecimenId')->andReturn($specimenId);
     $photo->shouldReceive('getId')->andReturn($photoId);
     return $photo;

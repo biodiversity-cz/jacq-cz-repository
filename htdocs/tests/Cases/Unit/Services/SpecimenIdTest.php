@@ -9,6 +9,7 @@ use App\Services\RepositoryConfiguration;
 use App\Services\SpecimenIdService;
 use App\Services\EntityServices\HerbariumService;
 use Mockery;
+use ReflectionMethod;
 use Tester\Assert;
 
 require __DIR__ . '/../../../bootstrap.php';
@@ -30,7 +31,7 @@ test('splitSpecimenId parses valid specimenId with different separators', functi
         'Herb–789',
     ];
     foreach ($examples as $id) {
-        $result = (new \ReflectionMethod($service, 'splitSpecimenId'))->invoke($service, $id);
+        $result = (new ReflectionMethod($service, 'splitSpecimenId'))->invoke($service, $id);
         Assert::same(strtoupper($result[SpecimenIdService::REGEX_HERBARIUM]), strtoupper(preg_replace('/[\s\-–_].*/', '', $id)));
         Assert::true(is_numeric($result[SpecimenIdService::REGEX_SPECIMEN]));
     }
@@ -51,7 +52,7 @@ test('splitSpecimenId throws on invalid specimenIds', function (): void {
 
     foreach ($invalids as $id) {
         Assert::exception(
-            fn() => (new \ReflectionMethod($service, 'splitSpecimenId'))->invoke($service, $id),
+            fn() => (new ReflectionMethod($service, 'splitSpecimenId'))->invoke($service, $id),
             SpecimenIdException::class,
             'invalid name format: ' . $id
         );

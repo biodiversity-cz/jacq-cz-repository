@@ -4,9 +4,11 @@ namespace Tests\Cases\Unit\Services;
 
 use App\Exceptions\S3Exception;
 use App\Services\S3Service;
+use ArrayIterator;
 use Aws\Result;
 use Aws\S3\S3Client;
 use DateTimeImmutable;
+use Iterator;
 use Mockery;
 use Tester\Assert;
 
@@ -155,7 +157,7 @@ test('listObjectsNamesOnly returns array of keys from S3 iterator', function ():
     $mock->shouldReceive('getIterator')
         ->once()
         ->with('ListObjects', ['Bucket' => 'bucket'])
-        ->andReturn(new \ArrayIterator([
+        ->andReturn(new ArrayIterator([
             ['Key' => 'file1.txt'],
             ['Key' => 'file2.txt'],
         ]));
@@ -166,7 +168,7 @@ test('listObjectsNamesOnly returns array of keys from S3 iterator', function ():
 
 test('listObjects returns an Iterator from S3Client', function (): void {
     $mock = Mockery::mock(S3Client::class);
-    $iter = new \ArrayIterator([
+    $iter = new ArrayIterator([
         ['Key' => 'a'],
         ['Key' => 'b'],
     ]);
@@ -177,7 +179,7 @@ test('listObjects returns an Iterator from S3Client', function (): void {
 
     $service = createS3Service($mock);
     $result = $service->listObjects('bucket');
-    Assert::type(\Iterator::class, $result);
+    Assert::type(Iterator::class, $result);
     Assert::same(['Key' => 'a'], $result->current());
 });
 
