@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-final readonly class AppConfiguration
+class AppConfiguration
 {
 
     public const string VERSION_VARIABLE = 'GIT_TAG';

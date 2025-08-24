@@ -4,13 +4,14 @@ namespace App\Model\Database\Entity;
 
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Repository\HerbariaRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\PersistentCollection;
 
 #[Entity(repositoryClass: HerbariaRepository::class)]
 #[Table(name: 'herbaria', options: ['comment' => 'List of involved herbaria'])]
@@ -43,18 +44,22 @@ class Herbaria
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'address of the institution/herbarium'])]
     protected ?string $address;
 
-    /** @var PersistentCollection<int, Photos> */
     #[OneToMany(mappedBy: 'herbarium', targetEntity: Photos::class)]
-    protected PersistentCollection $photos;
+    protected Collection $photos;
 
-    /** @var PersistentCollection<int, User> */
     #[OneToMany(mappedBy: 'herbarium', targetEntity: User::class)]
-    protected PersistentCollection $users;
+    protected Collection $users;
 
-    /** @var PersistentCollection<int, Contact> */
     #[OneToMany(mappedBy: 'herbarium', targetEntity: Contact::class)]
     #[OrderBy(['surname' => 'ASC'])]
-    protected PersistentCollection $contacts;
+    protected Collection $contacts;
+
+    public function __construct()
+    {
+        $this->photos = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
+    }
 
     public function getAcronym(): string
     {
@@ -102,7 +107,7 @@ class Herbaria
         return $this->address;
     }
 
-    public function getUsers(): PersistentCollection
+    public function getUsers(): Collection
     {
         return $this->users;
     }
@@ -114,16 +119,9 @@ class Herbaria
         return $this;
     }
 
-    public function getContacts(): PersistentCollection
+    public function getContacts(): Collection
     {
         return $this->contacts;
-    }
-
-    public function setContacts(PersistentCollection $contacts): Herbaria
-    {
-        $this->contacts = $contacts;
-
-        return $this;
     }
 
     public function getRegexBarcode(): string
@@ -155,13 +153,6 @@ class Herbaria
         return $this->fallbackFilename;
     }
 
-    public function setFilenameFallback(bool $fallbackFilename): Herbaria
-    {
-        $this->fallbackFilename = $fallbackFilename;
-
-        return $this;
-    }
-
     public function setBucket(string $bucket): Herbaria
     {
         $this->bucket = $bucket;
@@ -174,5 +165,20 @@ class Herbaria
         return $this;
     }
 
+    public function addContact(Contact $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(Contact $contact): self
+    {
+        $this->contacts->removeElement($contact);
+
+        return $this;
+    }
 
 }

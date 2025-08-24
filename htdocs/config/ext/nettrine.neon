@@ -20,7 +20,7 @@ nettrine.dbal:
             port: %database.port%
     types:
         enum_databot_result_status: App\Model\Database\Enums\EnumDatabotStatusType
-        enum_databot_role: App\Model\Database\Enums\EnumDatabotRole
+        enum_databot_role: App\Model\Database\Enums\EnumDatabotRoleType
     typesMapping:
         enum_databot_role: enum_databot_role
         enum_databot_result_status: enum_databot_result_status

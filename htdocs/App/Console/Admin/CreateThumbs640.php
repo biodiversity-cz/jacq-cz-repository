@@ -59,6 +59,8 @@ class CreateThumbs640 extends Command
     {
         $startTime = microtime(true);
         foreach ($this->getListOfPhotos() as $photo) {
+            if ($this->s3Service->objectExists($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->createS3DatabotThumbName($photo)))
+            continue;
             $output->writeln("Processing photoId: {$photo->getId()}");
             $this->curatorService->getArchiveFile($photo, $this->tempFile());
 
@@ -67,7 +69,7 @@ class CreateThumbs640 extends Command
             $imagick->writeImage($this->tempFile2());
             $imagick->clear();
             unlink($this->tempFile());
-            $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->createS3DatabotThumbName($photo));
+
             $this->s3Service->putJp2IfNotExists($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->createS3DatabotThumbName($photo), $this->tempFile2());
             unlink($this->tempFile2());
         }

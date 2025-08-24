@@ -61,12 +61,12 @@ class DatabotResult
         return $this;
     }
 
-    public function getStatus(): string
+    public function getStatus(): DatabotResultStatus
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): DatabotResult
+    public function setStatus(DatabotResultStatus $status): DatabotResult
     {
         $this->status = $status;
         return $this;
