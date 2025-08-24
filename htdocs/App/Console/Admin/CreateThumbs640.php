@@ -60,18 +60,26 @@ class CreateThumbs640 extends Command
         $startTime = microtime(true);
         foreach ($this->getListOfPhotos() as $photo) {
             if ($this->s3Service->objectExists($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->createS3DatabotThumbName($photo)))
-            continue;
-            $output->writeln("Processing photoId: {$photo->getId()}");
-            $this->curatorService->getArchiveFile($photo, $this->tempFile());
+                continue;
 
-            $imagick = $this->imageService->createImagick($this->tempFile());
-            $imagick = $this->imageService->preparePngThumb($imagick);
-            $imagick->writeImage($this->tempFile2());
-            $imagick->clear();
-            unlink($this->tempFile());
+            try {
+                $output->writeln("Processing photoId: {$photo->getId()}");
+                $this->curatorService->getArchiveFile($photo, $this->tempFile());
+                $imagick = $this->imageService->createImagick($this->tempFile());
+                $imagick = $this->imageService->preparePngThumb($imagick);
+                $imagick->writeImage($this->tempFile2());
+                $imagick->clear();
+                unlink($this->tempFile());
+                $this->s3Service->putPngIfNotExists($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->createS3DatabotThumbName($photo), $this->tempFile2());
+                unlink($this->tempFile2());
+            } catch (\ImagickException $e) {
+                $output->writeln("Error with ID {$photo->getId()} -->  ".$e->getMessage());
+                $output->writeln("Check the original file manually via: rclone copy repository_jacq:archive/{$photo->getArchiveFilename()} . --progress");
+            } finally {
+                unlink($this->tempFile());
+                unlink($this->tempFile2());
+            }
 
-            $this->s3Service->putJp2IfNotExists($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->createS3DatabotThumbName($photo), $this->tempFile2());
-            unlink($this->tempFile2());
         }
 
         $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
