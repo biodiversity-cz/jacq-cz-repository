@@ -16,7 +16,7 @@ use Nette\Security\User;
  * @method Photos[] findBy(array $criteria, array $orderBy = NULL, ?int $limit = NULL, ?int $offset = NULL)
  * @extends AbstractRepository<Photos>
  */
-final class PhotosRepository extends AbstractRepository
+class PhotosRepository extends AbstractRepository
 {
 
     /**

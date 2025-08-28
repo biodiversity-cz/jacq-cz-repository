@@ -4,6 +4,8 @@ namespace Tests\Cases\Unit\Model\Database\Entity;
 
 use App\Model\Database\Entity\Contact;
 use App\Model\Database\Entity\Herbaria;
+use App\Model\Database\Entity\User;
+use Doctrine\Common\Collections\Collection;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../../../bootstrap.php';
@@ -68,3 +70,26 @@ test('Herbaria entity AddAndRemoveContact', function (): void {
     $herbarium->removeContact($contact);
     Assert::count(0, $herbarium->getContacts());
 });
+
+test('testGetUsersInitiallyEmpty', function (): void {
+    $herbaria = new Herbaria();
+
+    $users = $herbaria->getUsers();
+
+    Assert::type(Collection::class, $users);
+    Assert::count(0, $users);
+});
+
+test('testGetUsersAfterAddingUser', function (): void {
+
+    $herbaria = new Herbaria();
+
+    $user = \Mockery::mock(User::class);
+
+    $herbaria->getUsers()->add($user);
+
+    $users = $herbaria->getUsers();
+    Assert::count(1, $users);
+    Assert::same($user, $users->first());
+});
+
