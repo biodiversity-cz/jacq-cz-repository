@@ -41,7 +41,10 @@ abstract class AbstractRepository extends EntityRepository
             $qb->addOrderBy($column, $order);
         }
 
-        return array_map(fn ($row) => reset($row), $qb->getQuery()->getArrayResult());
-    }
+        $result = [];
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $result[$row[$key]] = $row[$value];
+        }
+        return $result;    }
 
 }

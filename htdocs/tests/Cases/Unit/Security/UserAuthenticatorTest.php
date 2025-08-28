@@ -1,0 +1,111 @@
+<?php declare(strict_types=1);
+
+namespace Tests\Cases\Unit\Security;
+
+use App\Bootstrap;
+use App\Model\Database\Entity\Herbaria;
+use App\Security\Identity;
+use App\Security\UserAuthenticator;
+use App\Services\EntityServices\HerbariumService;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Mockery;
+use Nette\Security\AuthenticationException;
+use Nette\Security\Passwords;
+use Nette\Security\Role;
+use Nette\Security\SimpleIdentity;
+use Nette\Security\User;
+use Tester\Assert;
+
+require_once __DIR__ . '/../../../bootstrap.php';
+
+
+test('UserAuthenticator::authenticate returns SimpleIdentity for valid credentials', function (): void {
+    $user = \Mockery::mock(User::class);
+    $user->shouldReceive('getId')->andReturn(42);
+    $user->shouldReceive('getFullname')->andReturn('John Doe');
+    $user->shouldReceive('getPassword')->andReturn('hashedpassword');
+    $user->shouldReceive('getRole')->andReturn(\Mockery::mock(Role::class, function ($m) {
+        $m->shouldReceive('getName')->andReturn('admin');
+    }));
+    $user->shouldReceive('getHerbarium')->andReturn(\Mockery::mock(Herbaria::class, function ($m) {
+        $m->shouldReceive('getId')->andReturn(99);
+    }));
+
+    $repo = \Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+    $repo->shouldReceive('findOneByUsername')->with('john')->andReturn($user);
+
+    $em = \Mockery::mock(EntityManagerInterface::class);
+    $em->shouldReceive('getRepository')->andReturn($repo);
+
+    $passwords = \Mockery::mock(Passwords::class);
+    $passwords->shouldReceive('verify')->with('secret', 'hashedpassword')->andReturn(true);
+
+    $auth = new UserAuthenticator($em, $passwords);
+    $identity = $auth->authenticate('john', 'secret');
+
+    Assert::type(SimpleIdentity::class, $identity);
+    Assert::equal(42, $identity->getId());
+    Assert::equal(['admin'], $identity->getRoles());
+    Assert::equal(['name' => 'John Doe', 'herbarium' => 99], $identity->getData());
+});
+
+test('UserAuthenticator::authenticate throws exception when user not found', function (): void {
+    $repo = \Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+    $repo->shouldReceive('findOneByUsername')->with('john')->andReturn(null);
+
+    $em = \Mockery::mock(EntityManagerInterface::class);
+    $em->shouldReceive('getRepository')->andReturn($repo);
+
+    $passwords = \Mockery::mock(Passwords::class); // nemusí mít žádné expectations
+
+    $auth = new UserAuthenticator($em, $passwords);
+
+    Assert::exception(function () use ($auth) {
+        $auth->authenticate('john', 'secret');
+    }, AuthenticationException::class, 'User not found.');
+});
+
+test('UserAuthenticator::authenticate throws exception for invalid password', function (): void {
+    $user = \Mockery::mock(User::class);
+    $user->shouldReceive('getPassword')->andReturn('hashedpassword');
+
+    $repo = \Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+    $repo->shouldReceive('findOneByUsername')->with('john')->andReturn($user);
+
+    $em = \Mockery::mock(EntityManagerInterface::class);
+    $em->shouldReceive('getRepository')->withAnyArgs()->andReturn($repo);
+
+    $passwords = \Mockery::mock(Passwords::class);
+    $passwords->shouldReceive('verify')->with('wrong', 'hashedpassword')->andReturn(false);
+
+    $auth = new UserAuthenticator($em, $passwords);
+
+    Assert::exception(function () use ($auth) {
+        $auth->authenticate('john', 'wrong');
+    }, AuthenticationException::class, 'Invalid password.');
+});
+
+test('UserAuthenticator::calculateHash returns hash for given password', function (): void {
+    $passwords = \Mockery::mock(Passwords::class);
+    $passwords->shouldReceive('hash')->with('mysecret')->andReturn('hashed-mysecret');
+
+    $em = \Mockery::mock(EntityManagerInterface::class);
+    $auth = new UserAuthenticator($em, $passwords);
+
+    $hash = $auth->calculateHash('mysecret');
+    Assert::equal('hashed-mysecret', $hash);
+});
+
+test('UserAuthenticator::calculateHash returns hash for default password when empty', function (): void {
+    $passwords = \Mockery::mock(Passwords::class);
+    $passwords->shouldReceive('hash')->with(UserAuthenticator::DEFAULT_PASSWORD)->andReturn('hashed-default');
+
+    $em = \Mockery::mock(EntityManagerInterface::class);
+    $auth = new UserAuthenticator($em, $passwords);
+
+    $hash = $auth->calculateHash('');
+    Assert::equal('hashed-default', $hash);
+});
+
+\Mockery::close();

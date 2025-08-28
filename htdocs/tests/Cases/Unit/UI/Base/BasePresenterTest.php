@@ -6,7 +6,6 @@ use App\Bootstrap;
 use App\Services\AppConfiguration;
 use App\Services\EntityServices\MaintenanceService;
 use App\UI\Base\BasePresenter;
-use Latte\Runtime\Template;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../../bootstrap.php';

@@ -11,7 +11,7 @@ use App\Model\Database\Entity\Herbaria;
  * @method Herbaria[] findBy(array $criteria, array $orderBy = NULL, ?int $limit = NULL, ?int $offset = NULL)
  * @extends AbstractRepository<Herbaria>
  */
-final class HerbariaRepository extends AbstractRepository
+class HerbariaRepository extends AbstractRepository
 {
 
     public function findOneWithAcronym(string $acronym): ?Herbaria

@@ -6,7 +6,7 @@ use App\Exceptions\SpecimenIdException;
 use App\Model\Database\Entity\Herbaria;
 use App\Services\EntityServices\HerbariumService;
 
-readonly class SpecimenIdService
+class SpecimenIdService
 {
 
     public const string REGEX_SPECIMEN = 'specimenId';

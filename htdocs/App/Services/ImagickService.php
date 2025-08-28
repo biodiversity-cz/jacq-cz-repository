@@ -4,7 +4,7 @@ namespace App\Services;
 
 use Imagick;
 
-readonly class ImagickService
+class ImagickService
 {
 
     /**
