@@ -2,14 +2,15 @@
 
 namespace App\Grids;
 
-use Ublaboo\DataGrid\DataGrid;
+
+use Contributte\Datagrid\Datagrid;
 
 class BaseGridFactory
 {
 
     public const array FILTER_NOTHING = ['' => ' - - - - - '];
 
-    protected DataGrid $grid;
+    protected Datagrid $grid;
 
     public function createBaseDatagrid(): DataGrid
     {
