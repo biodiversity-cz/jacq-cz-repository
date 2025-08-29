@@ -54,7 +54,7 @@ class FixturePhotosStatus extends FixtureBase
 
     public function getOrder(): int
     {
-        return 4;
+        return 40;
     }
 
 }

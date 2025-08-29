@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
@@ -44,15 +46,19 @@ class Herbaria
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'address of the institution/herbarium'])]
     protected ?string $address;
 
-    #[OneToMany(mappedBy: 'herbarium', targetEntity: Photos::class)]
+    #[OneToMany(targetEntity: Photos::class, mappedBy: 'herbarium')]
     protected Collection $photos;
 
-    #[OneToMany(mappedBy: 'herbarium', targetEntity: User::class)]
+    #[OneToMany(targetEntity: User::class, mappedBy: 'herbarium')]
     protected Collection $users;
 
-    #[OneToMany(mappedBy: 'herbarium', targetEntity: Contact::class)]
+    #[OneToMany(targetEntity: Contact::class, mappedBy: 'herbarium')]
     #[OrderBy(['surname' => 'ASC'])]
     protected Collection $contacts;
+
+    #[ManyToOne(targetEntity: License::class)]
+    #[JoinColumn(name: 'license_id', referencedColumnName: 'id', nullable: false)]
+    protected License $license;
 
     public function __construct()
     {
@@ -180,5 +186,23 @@ class Herbaria
 
         return $this;
     }
+
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function getLicense(): License
+    {
+        return $this->license;
+    }
+
+    public function setLicense(License $license): Herbaria
+    {
+        $this->license = $license;
+        return $this;
+    }
+
+
 
 }
