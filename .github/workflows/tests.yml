@@ -68,7 +68,7 @@ jobs:
 
             -   name: Run tests
                 working-directory: ./htdocs
-                run: vendor/bin/tester -p phpdbg tests -s -C --coverage ./coverage.xml --coverage-src App
+                run: vendor/bin/tester -p phpdbg tests/Unit -s -C
 
             -   name: Upload results to Codecov
                 uses: codecov/codecov-action@v5

@@ -54,4 +54,14 @@ readonly class StageFactory
         return new TransferStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->appConfiguration, $this->s3Service);
     }
 
+    public function createCleanupTempFilesStage(): CleanupTempFilesStage
+    {
+        return new CleanupTempFilesStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
+    }
+
+    public function createCleanupCuratorBucketStage(): CleanCuratorBucketStage
+    {
+        return new CleanCuratorBucketStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->s3Service, $this->appConfiguration);
+    }
+
 }

@@ -1,7 +1,8 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Facades;
 
+use App\Model\Database\Entity\ImportError;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\Entity\PhotosType;
@@ -14,7 +15,6 @@ use App\Services\S3Service;
 use App\Services\SpecimenIdService;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use League\Pipeline\Pipeline;
 use Nette\Neon\Exception;
 use Nette\Security\AuthenticationException;
@@ -71,18 +71,26 @@ readonly class CuratorFacade
     /**
      * @return FileInsideCuratorBucket[]
      */
+    protected function getEligibleCuratorBucketFiles(User $user): array
+    {
+        return array_filter($this->getAvailableCuratorBucketFiles($user), fn($item) => $item->isEligibleToBeImported() === true);
+    }
+
+    /**
+     * @return FileInsideCuratorBucket[]
+     */
     public function getAvailableCuratorBucketFiles(User $user): array
     {
         $files = [];
         $unprocessedPhotos = $this->photoService->findUnprocessedPhotos($user);
         foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium($user)->getBucket()) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {
-                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], false, false, null, null);
+                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], false, false, null, null);
             } else {
                 $entity = $unprocessedPhotos[$filename['Key']];
                 $alreadyWaiting = $entity->getStatus()->getId() === PhotosStatus::WAITING;
                 $hasControlError = $entity->getStatus()->getId() === PhotosStatus::CONTROL_ERROR;
-                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getError()?->getMessage());
+                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getError()?->getMessage());
             }
 
             $files[] = $file;
@@ -91,9 +99,9 @@ readonly class CuratorFacade
         return $files;
     }
 
-    public function importNewFiles(): Pipeline
+    public function importNewFilesPipeline(): Pipeline
     {
-        return (new Pipeline())
+        return new Pipeline()
             ->pipe($this->stageFactory->createDownloadStage())
             ->pipe($this->stageFactory->createThumbnailStage())
             ->pipe($this->stageFactory->createMetadataStage())
@@ -101,6 +109,57 @@ readonly class CuratorFacade
             ->pipe($this->stageFactory->createDuplicityStage())
             ->pipe($this->stageFactory->createConvertStage())
             ->pipe($this->stageFactory->createTransferStage());
+    }
+
+    public function importMultiplierPipeline(): Pipeline
+    {
+        return new Pipeline()
+            ->pipe($this->stageFactory->createThumbnailStage()) //to generate thumb into ImportError just for case of error..
+            ->pipe($this->stageFactory->createDuplicityStage())
+            ->pipe($this->stageFactory->createTransferStage());
+    }
+
+    public function importCleanupPipeline(): Pipeline
+    {
+        return new Pipeline()
+            ->pipe($this->stageFactory->createCleanupTempFilesStage())
+            ->pipe($this->stageFactory->createCleanupCuratorBucketStage());
+    }
+
+    /**
+     * @return Photos[]
+     */
+    public function multiplyPhotos(Photos $originalPhoto): array
+    {
+        $newItems = [];
+        foreach ($originalPhoto->getMultiplier()->getBarcodes() as $barcode) {
+
+            $copy = new Photos();
+            $importError = new ImportError();
+            $importError->setPhoto($copy);
+            $copy->setError($importError);
+            $copy->setOriginalFilename($originalPhoto->getOriginalFilename());
+            $copy->setHerbarium($originalPhoto->getHerbarium());
+            $copy->setStatus($originalPhoto->getStatus());
+            $copy->setSpecimenId($barcode);
+            $copy->setWidth($originalPhoto->getWidth());
+            $copy->setHeight($originalPhoto->getHeight());
+            $copy->setArchiveFileSize($originalPhoto->getArchiveFileSize());
+            $copy->setJp2FileSize($originalPhoto->getJp2FileSize());
+            $copy->setExif($originalPhoto->getExif());
+            $copy->setIdentify($originalPhoto->getIdentify());
+            $copy->setType($originalPhoto->getType());
+
+            $this->entityManager->persist($importError);
+            $this->entityManager->persist($copy);
+            $newItems[] = $copy;
+        }
+        $this->entityManager->remove($originalPhoto->getMultiplier());
+        $originalPhoto->setMultiplier(null);
+
+        $this->entityManager->flush();
+
+        return $newItems;
     }
 
     /**
@@ -201,14 +260,6 @@ readonly class CuratorFacade
         $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename(), $destination);
 
         return $this;
-    }
-
-    /**
-     * @return FileInsideCuratorBucket[]
-     */
-    protected function getEligibleCuratorBucketFiles(User $user): array
-    {
-        return array_filter($this->getAvailableCuratorBucketFiles($user), fn ($item) => $item->isEligibleToBeImported() === true);
     }
 
 }

@@ -3,13 +3,13 @@
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
 use App\Model\Database\Entity\Photos;
-use App\Model\Database\Entity\PhotosError;
+use App\Model\Database\Entity\ImportError;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../../../bootstrap.php';
 
 test('PhotosError entity basic getters/setters and TId trait', function (): void {
-    $photosError = new PhotosError();
+    $photosError = new ImportError();
 
     // Mock nebo reálný objekt Photos (zde jednoduchý mock)
     $photoMock = \Mockery::mock(Photos::class);

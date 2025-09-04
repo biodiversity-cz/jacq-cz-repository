@@ -6,10 +6,16 @@ code_management:
 	vendor/bin/phpstan analyse --level 3 App # analyze errors with PHPStan
 	vendor/bin/phpstan analyse --level 3 --configuration phpstan.neon App --generate-baseline # https://phpstan.org/user-guide/baseline
 
-tests:
-	vendor/bin/tester -s -p php --colors 1 -C tests
-	vendor/bin/tester -s -p php --colors 1 -C tests --coverage tests/coverage.html --coverage-src App  # HTML report
-	vendor/bin/tester -s -p php --colors 1 -C tests --coverage coverage.xml --coverage-src App # Clover XML report
+tests: #Integration tests have to be run in a single thread
+	vendor/bin/tester -s -c /usr/local/etc/php/php.ini \
+ 		-d "extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" \
+ 		--colors 1 -j 1 tests
+	vendor/bin/tester -s -c /usr/local/etc/php/php.ini -d \
+		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" \
+		--colors 1 -j 1 tests --coverage tests/coverage.html --coverage-src App  # HTML report
+	vendor/bin/tester -s -c /usr/local/etc/php/php.ini -d \
+		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" \
+		--colors 1 -j 1 tests --coverage coverage.xml --coverage-src App # Clover XML report
 
 build:
  	NETTE_DEBUG=1 bin/console migrations:generate #  generate empty migration class
@@ -18,7 +24,7 @@ build:
 	NETTE_DEBUG=1 bin/console orm:schema-tool:drop --force --full-database
 	NETTE_DEBUG=1 bin/console migrations:migrate --dry-run
 	NETTE_DEBUG=1 bin/console migrations:migrate --no-interaction
-	NETTE_DEBUG=1 bin/console migrations:migrate first # revert to empty db
+	NETTE_DEBUG=1 bin/console migrations:migrate first --no-interaction # revert to empty db
 #	NETTE_DEBUG=1 bin/console migrations:migrate Database\\Migrations\\Version1
 	NETTE_DEBUG=1 bin/console doctrine:fixtures:load # --purge=truncate
 #	NETTE_DEBUG=1 bin/console orm:schema-tool:update --dump-sql --complete

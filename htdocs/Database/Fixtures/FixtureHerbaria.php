@@ -22,7 +22,8 @@ class FixtureHerbaria extends FixtureBase
         $herbariumTest = new Herbaria()
             ->setAcronym('TEST')
             ->setBucket('herbarium-test')
-            ->setFallbackFilename(true)
+            ->setFallbackFilename(false)
+            ->setMultipleBarcodeMultiplier(false)
             ->setLicense($license)
             ->setRegexBarcode('/^(?<herbarium>test)[\s\-–_](?<specimenId>\d+)$/i')
             ->setRegexFilename('/^(?<herbarium>test)_(?<specimenId>\d+)(?<supplement>[_\-a-z]*)\.(?<extension>tif)$/i');
@@ -35,6 +36,7 @@ class FixtureHerbaria extends FixtureBase
             ->setAddress('Benátská 2, Prague')
             ->setLogo('https://cas.cuni.cz/cas/images/UK-logo.png')
             ->setFallbackFilename(false)
+            ->setMultipleBarcodeMultiplier(false)
             ->setRegexBarcode('/^(?<herbarium>prc)[\s\-–_](?<specimenId>\d+)$/i')
             ->setRegexFilename('/^(?<herbarium>prc)_(?<specimenId>\d+)(?<supplement>[_\-a-z]*)\.(?<extension>tif)$/i');
 

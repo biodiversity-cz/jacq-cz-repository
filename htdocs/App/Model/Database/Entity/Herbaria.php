@@ -34,17 +34,20 @@ class Herbaria
     #[Column(unique: false, nullable: false, options: ['comment' => 'RegEx for image filenames'])]
     protected string $regexFilename;
 
-    #[Column(unique: false, nullable: false, options: ['comment' => 'Allow use filenam when barcode is not present in the image', 'default' => false])]
-    protected bool $fallbackFilename;
+    #[Column(unique: false, nullable: false, options: ['comment' => 'Allow use filename when barcode is not present in the image', 'default' => false])]
+    protected bool $fallbackFilename = false;
+
+    #[Column(unique: false, nullable: false, options: ['comment' => 'When multiple valid barcodes are present, multiply image to all these IDs', 'default' => false])]
+    protected bool $multipleBarcodeMultiplier = false;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'logo URL'])]
-    protected ?string $logo;
+    protected ?string $logo = null;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'full name of the herbarium'])]
-    protected ?string $fullname;
+    protected ?string $fullname = null;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'address of the institution/herbarium'])]
-    protected ?string $address;
+    protected ?string $address = null;
 
     #[OneToMany(targetEntity: Photos::class, mappedBy: 'herbarium')]
     protected Collection $photos;
@@ -157,6 +160,17 @@ class Herbaria
     public function usesFilenameFallback(): bool
     {
         return $this->fallbackFilename;
+    }
+
+    public function hasMultipleBarcodeMultiplier(): bool
+    {
+        return $this->multipleBarcodeMultiplier;
+    }
+
+    public function setMultipleBarcodeMultiplier(bool $multipleBarcodeMultiplier): Herbaria
+    {
+        $this->multipleBarcodeMultiplier = $multipleBarcodeMultiplier;
+        return $this;
     }
 
     public function setBucket(string $bucket): Herbaria

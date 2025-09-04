@@ -12,9 +12,9 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity()]
-#[Table(name: 'photos_error', options: ['comment' => 'Errors that occur during the import'])]
+#[Table(name: 'import_error', options: ['comment' => 'Errors that occur during the import'])]
 // phpcs:disable SlevomatCodingStandard.Classes.SuperfluousErrorNaming.SuperfluousSuffix
-class PhotosError
+class ImportError
 {
 
 // phpcs:enable
@@ -42,7 +42,7 @@ class PhotosError
         return $this->photo;
     }
 
-    public function setPhoto(Photos $photo): PhotosError
+    public function setPhoto(Photos $photo): ImportError
     {
         $this->photo = $photo;
 
@@ -54,7 +54,7 @@ class PhotosError
         return $this->duplicateTo;
     }
 
-    public function setDuplicateTo(?Photos $duplicateTo): PhotosError
+    public function setDuplicateTo(?Photos $duplicateTo): ImportError
     {
         $this->duplicateTo = $duplicateTo;
 
@@ -66,7 +66,7 @@ class PhotosError
         return $this->message;
     }
 
-    public function setMessage(string $message): PhotosError
+    public function setMessage(string $message): ImportError
     {
         $this->message = $message;
 
@@ -78,7 +78,7 @@ class PhotosError
         return $this->barcodes;
     }
 
-    public function setBarcodes(?string $barcodes): PhotosError
+    public function setBarcodes(?string $barcodes): ImportError
     {
         $this->barcodes = $barcodes;
 
@@ -90,7 +90,7 @@ class PhotosError
         return $this->thumbnail;
     }
 
-    public function setThumbnail(mixed $thumbnail): PhotosError
+    public function setThumbnail(mixed $thumbnail): ImportError
     {
         $this->thumbnail = $thumbnail;
 

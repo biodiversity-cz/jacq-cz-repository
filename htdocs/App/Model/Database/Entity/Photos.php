@@ -75,8 +75,11 @@ class Photos
     #[JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Type of the photo', 'default' => 1])]
     protected PhotosType $type;
 
-    #[OneToOne(targetEntity: PhotosError::class, mappedBy: 'photo', cascade: ['remove'])]
-    private ?PhotosError $error = null;
+    #[OneToOne(targetEntity: ImportError::class, mappedBy: 'photo', cascade: ['remove'])]
+    private ?ImportError $error = null;
+
+    #[OneToOne(targetEntity: ImportMultiplier::class, mappedBy: 'photo', cascade: ['remove'])]
+    private ?ImportMultiplier $multiplier = null;
 
     #[OneToMany(targetEntity: DatabotResult::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $databotResults;
@@ -252,14 +255,26 @@ class Photos
         return $this;
     }
 
-    public function getError(): ?PhotosError
+    public function getError(): ?ImportError
     {
         return $this->error;
     }
 
-    public function setError(?PhotosError $error): Photos
+    public function setError(?ImportError $error): Photos
     {
         $this->error = $error;
+
+        return $this;
+    }
+
+    public function getMultiplier(): ?ImportMultiplier
+    {
+        return $this->multiplier;
+    }
+
+    public function setMultiplier(?ImportMultiplier $multiplier): Photos
+    {
+        $this->multiplier = $multiplier;
 
         return $this;
     }

@@ -6,7 +6,7 @@ use App\Model\Database\Entity\Databot;
 use App\Model\Database\Entity\DatabotResult;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
-use App\Model\Database\Entity\PhotosError;
+use App\Model\Database\Entity\ImportError;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\Entity\PhotosType;
 use App\Model\Database\Entity\UserRole;
@@ -97,7 +97,7 @@ test('Photos entity getters and setters', function (): void {
     $photos->setType($type);
     Assert::same($type, $photos->getType());
 
-    $error = new PhotosError();
+    $error = new ImportError();
     $photos->setError($error);
     Assert::same($error, $photos->getError());
 
