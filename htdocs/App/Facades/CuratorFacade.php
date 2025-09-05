@@ -137,18 +137,21 @@ readonly class CuratorFacade
             $copy = new Photos();
             $importError = new ImportError();
             $importError->setPhoto($copy);
-            $copy->setError($importError);
-            $copy->setOriginalFilename($originalPhoto->getOriginalFilename());
-            $copy->setHerbarium($originalPhoto->getHerbarium());
-            $copy->setStatus($originalPhoto->getStatus());
-            $copy->setSpecimenId($barcode);
-            $copy->setWidth($originalPhoto->getWidth());
-            $copy->setHeight($originalPhoto->getHeight());
-            $copy->setArchiveFileSize($originalPhoto->getArchiveFileSize());
-            $copy->setJp2FileSize($originalPhoto->getJp2FileSize());
-            $copy->setExif($originalPhoto->getExif());
-            $copy->setIdentify($originalPhoto->getIdentify());
-            $copy->setType($originalPhoto->getType());
+            $copy->setError($importError)
+                ->setOriginalFilename($originalPhoto->getOriginalFilename())
+                ->setHerbarium($originalPhoto->getHerbarium())
+                ->setStatus($originalPhoto->getStatus())
+                ->setSpecimenId($barcode)
+                ->setWidth($originalPhoto->getWidth())
+                ->setHeight($originalPhoto->getHeight())
+                ->setArchiveFileSize($originalPhoto->getArchiveFileSize())
+                ->setJp2FileSize($originalPhoto->getJp2FileSize())
+                ->setExif($originalPhoto->getExif())
+                ->setIdentify($originalPhoto->getIdentify())
+                ->setType($originalPhoto->getType())
+                ->setCreatedAt()
+                ->setLastEditAt();
+
 
             $this->entityManager->persist($importError);
             $this->entityManager->persist($copy);

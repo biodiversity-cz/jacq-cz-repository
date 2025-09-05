@@ -127,23 +127,15 @@ class ProceedCuratorImage extends Command
     protected function prepareImportMessagesStorage(Photos $photo): Photos
     {
         $photo->setLastEditAt();
-        if ($photo->getError() !== null) {
-            $this->entityManager->remove($photo->getError());
-        }
-        if ($photo->getMultiplier() !== null) {
-            $this->entityManager->remove($photo->getMultiplier());
-        }
 
-        $photo->setError(null);
-        $this->entityManager->flush();
-        $importError = new ImportError();
-        $multiplier = new ImportMultiplier();
-        $importError->setPhoto($photo);
-        $multiplier->setPhoto($photo);
-        $photo->setError($importError);
-        $photo->setMultiplier($multiplier);
-        $this->entityManager->persist($multiplier);
-        $this->entityManager->persist($importError);
+        //remove from potential previous run
+        $photo->removeImportError();
+        $photo->removeMultiplie();
+
+        $photo->addImportError()->setMessage('');
+        $photo->addMultiplier();
+
+        $this->entityManager->persist($photo);
 
         return $photo;
     }
