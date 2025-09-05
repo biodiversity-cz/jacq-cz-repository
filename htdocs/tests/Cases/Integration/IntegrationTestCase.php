@@ -2,6 +2,7 @@
 
 namespace Tests\Cases\Integration;
 
+use App\Console\Scheduled\ProceedCuratorImage;
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
@@ -108,7 +109,10 @@ abstract class IntegrationTestCase extends TestCase
         $waiting = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING]);
         Assert::count(count($this::SPECIMENS), $waiting, 'al images marked as waiting');
 
-        $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true,], 'import images failed');
+        $rounds = ceil(count($this::SPECIMENS)/ProceedCuratorImage::LIMIT);
+        for ($i = 0; $i < $rounds; $i++) {
+            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true,], 'import images failed');
+        }
 
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::CONTROL_ERROR]);
         Assert::count(count($this::SPECIMENS), $waitingAfterImport, 'images with error');
