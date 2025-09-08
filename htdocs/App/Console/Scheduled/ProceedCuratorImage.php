@@ -7,6 +7,7 @@ use App\Model\Database\Entity\ImportError;
 use App\Model\Database\Entity\ImportMultiplier;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
+use App\Model\ImportStages\Exceptions\DuplicityStageException;
 use App\Model\ImportStages\Exceptions\ImportStageException;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
@@ -49,13 +50,16 @@ class ProceedCuratorImage extends Command
             if ($photoProcessed === null) {
                 continue;
             }
-            if ($photoProcessed->getHerbarium()->hasMultipleBarcodeMultiplier() && !empty($photoProcessed->getMultiplier()->getBarcodes())) {
+            if ($photoProcessed->getHerbarium()->hasMultipleBarcodeMultiplier() && !empty($photoProcessed->getMultiplier()?->getBarcodes())) {
                 try {
                     $this->proceedMultiplier($output, $photoProcessed);
                 } catch (ImportStageException $e) {
                     $output->writeln("\n".$e->getMessage());
                     return Command::FAILURE;
                 }
+            }else{
+//                $photoProcessed->removeMultiplier();
+                $this->entityManager->flush();
             }
             try {
                 $this->curatorFacade->importCleanupPipeline()->process($photoProcessed);
@@ -87,7 +91,7 @@ class ProceedCuratorImage extends Command
             $this->curatorFacade->importNewFilesPipeline()->process($photo);
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMPORTED));
             $this->entityManager->remove($photo->getError());
-            $photo->setError(null);
+            $photo->removeImportError();
         } catch (ImportStageException $e) {
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR));
             $photo->getError()->setMessage($e->getMessage());
@@ -130,11 +134,9 @@ class ProceedCuratorImage extends Command
 
         //remove from potential previous run
         $photo->removeImportError();
-        $photo->removeMultiplie();
+        $photo->removeMultiplier();
 
         $photo->addImportError()->setMessage('');
-        $photo->addMultiplier();
-
         $this->entityManager->persist($photo);
 
         return $photo;
@@ -147,15 +149,14 @@ class ProceedCuratorImage extends Command
 
         foreach ($newItems as $newItem) {
             try {
-                $output->write("\n multiply " . $mainPhoto->getId() . " into " . $newItem->getId() . "\n");
+                $output->write("\n multiply from ID " . $mainPhoto->getId() . " into ID " . $newItem->getId() . "\n");
                 $this->curatorFacade->importMultiplierPipeline()->process($newItem);
                 $newItem->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMPORTED));
                 $this->entityManager->remove($newItem->getError());
-                $newItem->setError(null);
-            } catch (ImportStageException $e) {
-                $newItem->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR));
-                $newItem->getError()->setMessage($e->getMessage());
-                $output->write("\n ERROR: " . $e->getMessage() . "\n");
+                $newItem->removeImportError();
+            } catch (DuplicityStageException $e) {
+                $this->entityManager->remove($newItem);
+                $output->write("\n ERROR: " . $e->getMessage() . ", row deleted \n");
             } catch (\Throwable $e) {
                 $this->entityManager->getConnection()->rollBack();
                 $output->write("\n ERROR: " . $e->getMessage() . "\n");

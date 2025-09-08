@@ -97,9 +97,8 @@ test('Photos entity getters and setters', function (): void {
     $photos->setType($type);
     Assert::same($type, $photos->getType());
 
-    $error = new ImportError();
-    $photos->setError($error);
-    Assert::same($error, $photos->getError());
+    $photos->addImportError();
+    Assert::type(ImportError::class, $photos->getError());
 
     // Test specimenId a getFullSpecimenId, getJacqPid (nutno mít nastavené herbarium s akronymem)
     $herbariumReflection = new \ReflectionClass(Herbaria::class);

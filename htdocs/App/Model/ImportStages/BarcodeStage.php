@@ -114,7 +114,7 @@ class BarcodeStage extends BaseStage implements StageInterface
         //multiple valid barcodes
         if ($this->item->getHerbarium()->hasMultipleBarcodeMultiplier()) {
             $this->item->setSpecimenId(array_shift($validCodes));
-            $this->item->getMultiplier()->setBarcodes($validCodes);
+            $this->item->addMultiplier()->setBarcodes($validCodes);
         } else {
             $this->item->getError()->setBarcodes(implode($this->barcodes));
             throw new BarcodeStageException('Multiple valid barcodes detected');

@@ -2,7 +2,6 @@
 
 namespace App\Facades;
 
-use App\Model\Database\Entity\ImportError;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\Entity\PhotosType;
@@ -135,12 +134,11 @@ readonly class CuratorFacade
         foreach ($originalPhoto->getMultiplier()->getBarcodes() as $barcode) {
 
             $copy = new Photos();
-            $importError = new ImportError();
-            $importError->setPhoto($copy);
-            $copy->setError($importError)
-                ->setOriginalFilename($originalPhoto->getOriginalFilename())
+            $copy->addImportError();
+            $copy->setOriginalFilename($originalPhoto->getOriginalFilename())
+                ->setOriginalFileAt($originalPhoto->getOriginalFileAt())
                 ->setHerbarium($originalPhoto->getHerbarium())
-                ->setStatus($originalPhoto->getStatus())
+                ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR))
                 ->setSpecimenId($barcode)
                 ->setWidth($originalPhoto->getWidth())
                 ->setHeight($originalPhoto->getHeight())
@@ -152,13 +150,10 @@ readonly class CuratorFacade
                 ->setCreatedAt()
                 ->setLastEditAt();
 
-
-            $this->entityManager->persist($importError);
             $this->entityManager->persist($copy);
             $newItems[] = $copy;
         }
-        $this->entityManager->remove($originalPhoto->getMultiplier());
-        $originalPhoto->setMultiplier(null);
+        $originalPhoto->removeMultiplier();
 
         $this->entityManager->flush();
 
@@ -219,6 +214,7 @@ readonly class CuratorFacade
                 case PhotosStatus::DEVELOP_PROCEED:
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryImageServerBucket(), $lockedEntity->getJp2Filename());
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $lockedEntity->getArchiveFilename());
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $lockedEntity->getDatabotThumbFilename());
                     break;
             }
 
@@ -245,9 +241,9 @@ readonly class CuratorFacade
         if ($this->herbariumService->getCurrentUserHerbarium($user) === $photo->getHerbarium()) {
             if ($photo->getError() !== null) {
                 $this->entityManager->remove($photo->getError());
+                $photo->removeImportError();
                 $photo
                     ->setLastEditAt()
-                    ->setError(null)
                     ->setSpecimenId($manualSpecimenId)
                     ->setStatus($this->photoService->getWaitingStatus());
                 $this->entityManager->flush();

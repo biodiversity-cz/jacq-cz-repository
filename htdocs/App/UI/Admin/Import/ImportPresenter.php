@@ -167,6 +167,33 @@ final class ImportPresenter extends SecuredPresenter
         $this->redirect(':default');
     }
 
+    public function renderDatabotThumbImage(int $id): void
+    {
+        $photo = $this->photoService->getPhoto($this->user, $id);
+        if ($photo === null) {
+            $this->error('The requested photo does not exists.');
+        }
+
+        $bucket = $this->repositoryConfiguration->getRepositoryDatabotThumbsBucket();
+        $filename = $photo->getDatabotThumbFilename();
+        if ($this->s3Service->objectExists($bucket, $filename)) {
+            $head = $this->s3Service->headObject($bucket, $filename);
+            $stream = $this->s3Service->getStreamOfObject($bucket, $filename);
+
+            $callback = function (IRequest $httpRequest, Response $httpResponse) use ($filename, $head, $stream): void {
+                $httpResponse->setHeader('Content-Type', $head['ContentType']);
+                $httpResponse->setHeader('Content-Disposition', 'inline; filename' . $filename);
+                fpassthru($stream);
+                fclose($stream);
+            };
+
+            $response = new CallbackResponse($callback);
+            $this->sendResponse($response);
+        } else {
+            $this->error('The requested image does not exists.');
+        }
+    }
+
     public function renderSpecimen(?int $specimenNumericPartOfId): void
     {
         try {

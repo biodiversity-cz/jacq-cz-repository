@@ -22,7 +22,7 @@ class ImportMultiplier
 
     #[OneToOne(targetEntity: Photos::class)]
     #[JoinColumn(name: 'photo_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE', options: ['comment' => 'photo to which this multiplier belongs'])]
-    protected ?Photos $photo;
+    protected Photos $photo;
 
     #[Column(type: "json")]
     private array $barcodes = [];
@@ -33,7 +33,7 @@ class ImportMultiplier
         return $this->photo;
     }
 
-    public function setPhoto(?Photos $photo): ImportMultiplier
+    public function setPhoto(Photos $photo): ImportMultiplier
     {
         $this->photo = $photo;
 

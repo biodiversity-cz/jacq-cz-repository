@@ -260,13 +260,6 @@ class Photos
         return $this->error;
     }
 
-    public function setError(?ImportError $error): Photos
-    {
-        $this->error = $error;
-
-        return $this;
-    }
-
     public function addImportError(): ImportError
     {
         if ($this->error === null) {
@@ -280,7 +273,6 @@ class Photos
     public function removeImportError(): void
     {
         if ($this->error !== null) {
-            $this->error->setPhoto(null);
             $this->error = null;
         }
     }
@@ -290,27 +282,18 @@ class Photos
         return $this->multiplier;
     }
 
-    public function setMultiplier(?ImportMultiplier $multiplier): Photos
-    {
-        $this->multiplier = $multiplier;
-
-        return $this;
-    }
-
     public function addMultiplier(): ImportMultiplier
     {
         if ($this->multiplier === null) {
-            $this->multiplier = new ImportMultiplier();
-            $this->multiplier->setPhoto($this);
+            $this->multiplier = new ImportMultiplier()->setPhoto($this);
         }
 
         return $this->multiplier;
     }
 
-    public function removeMultiplie(): Photos
+    public function removeMultiplier(): Photos
     {
         if ($this->multiplier !== null) {
-            $this->multiplier->setPhoto(null);
             $this->multiplier = null;
         }
         return $this;

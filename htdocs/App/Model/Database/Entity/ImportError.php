@@ -22,7 +22,7 @@ class ImportError
 
     #[OneToOne(targetEntity: Photos::class)]
     #[JoinColumn(name: 'photo_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE', options: ['comment' => 'photo to which this error belongs'])]
-    protected ?Photos $photo;
+    protected Photos $photo;
 
     #[ManyToOne(targetEntity: Photos::class)]
     #[JoinColumn(name: 'duplicate_id', referencedColumnName: 'id', unique: false, nullable: true, options: ['comment' => 'already imported photo to which is this probably duplicity'])]
@@ -42,7 +42,7 @@ class ImportError
         return $this->photo;
     }
 
-    public function setPhoto(?Photos $photo): ImportError
+    public function setPhoto(Photos $photo): ImportError
     {
         $this->photo = $photo;
 
