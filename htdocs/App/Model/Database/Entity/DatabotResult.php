@@ -10,7 +10,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity()]
-#[ORM\Table(name: 'databot_results', options: ['comment' => 'Results of Databot runs per photo'])]
+#[ORM\Table(name: 'databot_results', schema: 'databots', options: ['comment' => 'Results of Databot runs per photo'])]
 #[ORM\UniqueConstraint(columns: ['databot_id', 'photo_id'])]
 class DatabotResult
 {

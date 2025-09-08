@@ -7,7 +7,7 @@ use Doctrine\DBAL\Types\Type;
 
 final class EnumDatabotStatusType extends Type
 {
-    public const NAME = 'enum_databot_result_status';
+    public const NAME = 'databots.' . 'enum_databot_result_status';
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {

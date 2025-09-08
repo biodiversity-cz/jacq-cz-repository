@@ -23,6 +23,7 @@ final class PrepareServicesTest extends IntegrationTestCase
         $schema = 'public';
         $connection->executeStatement("DROP SCHEMA IF EXISTS {$schema} CASCADE");
         $connection->executeStatement("DROP SCHEMA IF EXISTS front CASCADE");
+        $connection->executeStatement("DROP SCHEMA IF EXISTS databots CASCADE");
         $connection->executeStatement("CREATE SCHEMA {$schema}");
 //TODO add check for emptiness
         // db migration
