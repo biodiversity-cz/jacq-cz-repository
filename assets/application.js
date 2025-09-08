@@ -7,6 +7,7 @@ import importForm from "./js/import";
 import joinLinks from "./js/specimen";
 import {initCopyButtons} from "./js/copyButton";
 import mirador from "./js/mirador";
+import setSettings from "./js/herbarium";
 
 require('@contributte/datagrid/assets/datagrid.css');
 require('@contributte/datagrid/assets/datagrid-spinners.css');
@@ -17,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     importForm();
     joinLinks();
     initCopyButtons();
+    setSettings();
 
     if (document.querySelector('#mirador')) {
         import('./js/mirador').then((module) => {
