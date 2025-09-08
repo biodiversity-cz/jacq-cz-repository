@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\UI\Admin\Import;
 
@@ -18,7 +18,6 @@ use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;
 use Nette\Http\IRequest;
 use Nette\Http\Response;
-use Nette\Security\User;
 
 final class ImportPresenter extends SecuredPresenter
 {
@@ -30,17 +29,23 @@ final class ImportPresenter extends SecuredPresenter
     public PhotoService $photoService;
 
 
-    /** @inject */ public FormFactory $formFactory;
+    /** @inject */
+    public FormFactory $formFactory;
 
-    /** @inject */ public RepositoryConfiguration $repositoryConfiguration;
+    /** @inject */
+    public RepositoryConfiguration $repositoryConfiguration;
 
-    /** @inject */ public S3Service $s3Service;
+    /** @inject */
+    public S3Service $s3Service;
 
-    /** @inject */ public SpecimenFactory $specimenFactory;
+    /** @inject */
+    public SpecimenFactory $specimenFactory;
 
-    /** @inject */ public DetailControlFactory $detailControlFactory;
+    /** @inject */
+    public DetailControlFactory $detailControlFactory;
 
-    /** @inject */ public ImportFormFactory $importFormFactory;
+    /** @inject */
+    public ImportFormFactory $importFormFactory;
 
     public ?Photos $photo;
 
@@ -53,10 +58,10 @@ final class ImportPresenter extends SecuredPresenter
         $this->template->totalPendingPhotos = array_sum(array_column($this->photoService->pendingPhotosCount(), 'count'));
 
         $this->template->orphanedItems = $this->curatorFacade->getOrphanedItems($this->user);
-        $this->template->eligible = count(array_filter($files, fn ($item) => $item->isEligibleToBeImported() === true));
-        $this->template->erroneous = count(array_filter($files, fn ($item) => $item->hasControlError() === true));
-        $this->template->waiting = count(array_filter($files, fn ($item) => $item->isAlreadyWaiting() === true));
-        $this->template->preliminaryError = count(array_filter($files, fn ($item) => $item->isSizeOK() === false || $item->isTypeOK() === false));
+        $this->template->eligible = count(array_filter($files, fn($item) => $item->isEligibleToBeImported() === true));
+        $this->template->erroneous = count(array_filter($files, fn($item) => $item->hasControlError() === true));
+        $this->template->waiting = count(array_filter($files, fn($item) => $item->isAlreadyWaiting() === true));
+        $this->template->preliminaryError = count(array_filter($files, fn($item) => $item->isSizeOK() === false || $item->isTypeOK() === false));
         $this->template->herbarium = $this->herbariumService->find($this->user->getIdentity()->herbarium);
     }
 
@@ -151,12 +156,12 @@ final class ImportPresenter extends SecuredPresenter
     public function specimenIdFormSucceeded(Form $form, array $values): void
     {
         try {
-            $photo = $this->photoService->getPhotoWithError($this->user, (int) $values['photoId']);
+            $photo = $this->photoService->getPhotoWithError($this->user, (int)$values['photoId']);
             if ($photo === null) {
                 $this->error('Photo not found');
             }
 
-            $this->curatorFacade->reimportPhoto($this->user, $this->photoService->getPhotoReference((int) $values['photoId']), (string) $values['specimen']);
+            $this->curatorFacade->reimportPhoto($this->user, $this->photoService->getPhotoReference((int)$values['photoId']), (string)$values['specimen']);
 
             $fullID = $this->herbarium->getAcronym() . '-' . $values['specimen'];
             $this->flashMessage('File successfully marked to be re-processed with ID ' . $fullID, 'success');
@@ -167,22 +172,51 @@ final class ImportPresenter extends SecuredPresenter
         $this->redirect(':default');
     }
 
-    public function renderDatabotThumbImage(int $id): void
+    public function actionDatabotThumbImage(int $id): void
     {
         $photo = $this->photoService->getPhoto($this->user, $id);
         if ($photo === null) {
             $this->error('The requested photo does not exists.');
         }
 
-        $bucket = $this->repositoryConfiguration->getRepositoryDatabotThumbsBucket();
-        $filename = $photo->getDatabotThumbFilename();
+        $this->sendFile($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $photo->getDatabotThumbFilename());
+
+    }
+
+    public function actionMasterImage(int $id): void
+    {
+        $photo = $this->photoService->getPhoto($this->user, $id);
+        if ($photo === null) {
+            $this->error('The requested photo does not exists.');
+        }
+
+        $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename());
+
+    }
+
+    public function actionJP2Image(int $id): void
+    {
+        $photo = $this->photoService->getPhoto($this->user, $id);
+        if ($photo === null) {
+            $this->error('The requested photo does not exists.');
+        }
+
+        $this->sendFile($this->repositoryConfiguration->getRepositoryImageServerBucket(), $photo->getJp2Filename());
+
+    }
+
+    protected function sendFile(string $bucket, string $filename)
+    {
         if ($this->s3Service->objectExists($bucket, $filename)) {
             $head = $this->s3Service->headObject($bucket, $filename);
             $stream = $this->s3Service->getStreamOfObject($bucket, $filename);
 
             $callback = function (IRequest $httpRequest, Response $httpResponse) use ($filename, $head, $stream): void {
                 $httpResponse->setHeader('Content-Type', $head['ContentType']);
-                $httpResponse->setHeader('Content-Disposition', 'inline; filename' . $filename);
+                $httpResponse->setHeader(
+                    'Content-Disposition',
+                    "attachment; filename=\"" . basename($filename) . "\"; filename*=UTF-8''" . rawurlencode($filename)
+                );
                 fpassthru($stream);
                 fclose($stream);
             };
@@ -217,33 +251,6 @@ final class ImportPresenter extends SecuredPresenter
         $this->template->manifestAbsoluteLink = $this->link('//:Front:Iiif:manifest', $specimen->getStandardizedId());
     }
 
-    public function renderArchiveImage(int $id): void
-    {
-        $photo = $this->photoService->getPhoto($this->user, $id);
-        if ($photo === null) {
-            $this->error('The requested photo does not exists.');
-        }
-//TODO user security police and only public images..
-        $bucket = $this->repositoryConfiguration->getRepositoryArchiveBucket();
-        $filename = $photo->getArchiveFilename();
-        if ($this->s3Service->objectExists($bucket, $filename)) {
-            $head = $this->s3Service->headObject($bucket, $filename);
-            $stream = $this->s3Service->getStreamOfObject($bucket, $filename);
-
-            $callback = function (IRequest $httpRequest, Response $httpResponse) use ($filename, $head, $stream): void {
-                $httpResponse->setHeader('Content-Type', $head['ContentType']);
-                $httpResponse->setHeader('Content-Disposition', 'inline; filename' . $filename);
-                fpassthru($stream);
-                fclose($stream);
-            };
-
-            $response = new CallbackResponse($callback);
-            $this->sendResponse($response);
-        } else {
-            $this->error('The requested image does not exists.');
-        }
-    }
-
     public function renderPhoto(int $id): void
     {
         $photo = $this->photoService->getPhoto($this->user, $id);
@@ -268,7 +275,7 @@ final class ImportPresenter extends SecuredPresenter
 
     protected function createComponentDetail(): Multiplier
     {
-        return new Multiplier(fn ($id) => $this->detailControlFactory->create((int) $id));
+        return new Multiplier(fn($id) => $this->detailControlFactory->create((int)$id));
     }
 
     protected function createComponentImportForm(): Form

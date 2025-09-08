@@ -1,13 +1,11 @@
 <div class="col-4">
-    {if $photo->getStatus()->getId() > 2}
     <img
-        src="https://herbarium-iiif.dyn.cloud.e-infra.cz/iiif/3/{$photo->getJp2Filename()}/full/900,/0/default.jpg"
+        src="{plink Import:databotThumbImage $photo->getId()}"
         class="img-fluid rounded-start" style="height: 90vh; object-fit: cover;">
-    {/if}
 </div>
 <div class="col-4">
-    <h5>ID {$photo->getId()} <span class="fs-6">(back to <a
-        href="{plink Import:specimen $photo->getSpecimenId()}">specimen info</a>)</span></h5>
+    <h5>ID {$photo->getId()}, belongs to the specimen <span class="fs-6"><a
+        href="{plink Import:specimen $photo->getSpecimenId()}">{$photo->getFullSpecimenId()}</a></span></h5>
     <p>W×H: {$photo->getWidth()}×{$photo->getHeight()}</p>
     <p>Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
     <p>Status: <span class="badge bg-{$photo->getStatus()->getColor()}">{$photo->getStatus()->getName()}</span>
@@ -24,9 +22,15 @@
     go to the errors' <a href="{plink :revise $photo->getId()}">resolve</a> page
     {/if}
     {else}
-        <p class="card-text"><h5>Archive Master</h5> filename: {$photo->getArchiveFilename()} <br>
-            <a href="{plink :Front:Repository:archiveImage $photo->getId()}">download</a>
+        <p class="card-text"><h5>Archive Master (original TIF file)</h5> filename: {$photo->getArchiveFilename()} <br>
+            <a href="{plink Import:masterImage $photo->getId()}">download</a>
         </p>
+    <p class="card-text"><h5>JP2 Master (quality as Master but much lower filesize) </h5> filename: {$photo->getArchiveFilename()} <br>
+    <a href="{plink Import:jp2Image $photo->getId()}">download</a>
+    </p>
+    <p class="card-text"><h5>DataBot thumb (640px)</h5> filename: {$photo->getArchiveFilename()} <br>
+    <a href="{plink Import:databotThumbImage $photo->getId()}">download</a>
+    </p>
     {/if}
     <hr>
     <a class="btn btn-outline-danger deleteButton" n:href="delete!" role="button">Delete</a>

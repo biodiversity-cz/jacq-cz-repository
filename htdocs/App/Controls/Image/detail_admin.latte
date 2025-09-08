@@ -4,7 +4,7 @@
             <div class="col-md-4">
                 {if $photo->getStatus()->getId() === 3 || $photo->getStatus()->getId() === 4}
                 <img
-                    src="https://herbarium-iiif.dyn.cloud.e-infra.cz/iiif/3/{$photo->getJp2Filename()}/full/300,/0/default.jpg"
+                    src="{plink Import:databotThumbImage $photo->getId()}"
                     width="300px" class="img-fluid rounded-start">
                 {/if}
             </div>
