@@ -3,8 +3,6 @@
 namespace App\Console\Scheduled;
 
 use App\Facades\CuratorFacade;
-use App\Model\Database\Entity\ImportError;
-use App\Model\Database\Entity\ImportMultiplier;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\ImportStages\Exceptions\DuplicityStageException;
@@ -41,30 +39,30 @@ class ProceedCuratorImage extends Command
     {
         $startTime = microtime(true);
         for ($i = 0; $i < self::LIMIT; $i++) {
+            //mainPhoto
             try {
                 $photoProcessed = $this->proceedMainPhoto($output);
             } catch (ImportStageException $e) {
-                $output->writeln("\n".$e->getMessage());
+                $output->writeln("\n" . $e->getMessage());
                 return Command::FAILURE;
             }
             if ($photoProcessed === null) {
                 continue;
             }
+            //multiply when needed
             if ($photoProcessed->getHerbarium()->hasMultipleBarcodeMultiplier() && !empty($photoProcessed->getMultiplier()?->getBarcodes())) {
                 try {
                     $this->proceedMultiplier($output, $photoProcessed);
                 } catch (ImportStageException $e) {
-                    $output->writeln("\n".$e->getMessage());
+                    $output->writeln("\n" . $e->getMessage());
                     return Command::FAILURE;
                 }
-            }else{
-//                $photoProcessed->removeMultiplier();
-                $this->entityManager->flush();
             }
+            //clean individual Photo run
             try {
                 $this->curatorFacade->importCleanupPipeline()->process($photoProcessed);
             } catch (\Throwable $e) {
-                $output->writeln("\n".$e->getMessage());
+                $output->writeln("\n" . $e->getMessage());
                 return Command::FAILURE;
             }
         }
@@ -96,7 +94,7 @@ class ProceedCuratorImage extends Command
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR));
             $photo->getError()->setMessage($e->getMessage());
             $output->write("\n ERROR: " . $e->getMessage() . "\n");
-             //mainPhoto did not succeeded,
+            //mainPhoto did not succeeded,
             $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
             return null;

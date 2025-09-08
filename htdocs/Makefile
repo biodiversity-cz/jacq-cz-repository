@@ -10,7 +10,7 @@ tests: #Integration tests have to be run in a single thread
 	vendor/bin/tester -s -c /usr/local/etc/php/php.ini \
  		-d "extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" \
  		--colors 1 -j 1 tests
-	vendor/bin/tester -s -c /usr/local/etc/php/php.ini -d \
+	clear && vendor/bin/tester -s -c /usr/local/etc/php/php.ini -d \
 		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" \
 		--colors 1 -j 1 tests --coverage tests/coverage.html --coverage-src App  # HTML report
 	vendor/bin/tester -s -c /usr/local/etc/php/php.ini -d \
