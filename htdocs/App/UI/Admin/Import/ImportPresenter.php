@@ -248,6 +248,15 @@ final class ImportPresenter extends SecuredPresenter
         $this->template->specimen = $specimen;
         $this->template->images = $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
 
+        $hasPublicImage = false;
+        foreach ($this->template->images as $image) {
+            if ($image->isPublic()) {
+                $hasPublicImage = true;
+            }
+        }
+
+        $this->template->hasPublicImage = $hasPublicImage;
+        
         $this->template->manifestAbsoluteLink = $this->link('//:Front:Iiif:manifest', $specimen->getStandardizedId());
     }
 

@@ -335,7 +335,7 @@ class Photos
 
     public function isPublic(): bool
     {
-        return in_array($this->status->getId(), PhotosStatus::PASSED_PUBLIC, true);
+        return in_array($this->status->getId(), [PhotosStatus::PUBLIC], true);
     }
 
 }
