@@ -8,4 +8,6 @@ ENV GIT_TAG=$GIT_TAG
 
 # devoted for Kubernetes, where the app has to be copied into final destination (/srv) after the container starts
 COPY  --chown=www:www htdocs /app
-RUN chmod -R 777 /app/temp
+RUN chmod -R 777 /app/temp && \
+    rm -rf /app/tests
+
