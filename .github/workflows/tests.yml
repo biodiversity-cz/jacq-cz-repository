@@ -48,7 +48,7 @@ jobs:
 
             -   name: Run tests
                 working-directory: ./htdocs
-                run: vendor/bin/tester -s -p "$(which php)" --colors 1 tests/Cases/Unit
+                run: vendor/bin/tester -p phpdbg tests/Cases/Unit -s -C #vendor/bin/tester -s -p "$(which php)" --colors 1 tests/Cases/Unit
 
             -   name: Upload results to Codecov
                 uses: codecov/codecov-action@v5
