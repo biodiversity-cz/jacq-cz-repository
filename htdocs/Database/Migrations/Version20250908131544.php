@@ -85,9 +85,6 @@ final class Version20250908131544 extends AbstractMigration
         $this->addSql('COMMENT ON FUNCTION databots.register_databot(TEXT, TEXT, INTEGER, databots.enum_databot_role)
 IS \'Register databot. Return TRUE if a databot is successfully registered and allowed to proceed, otherwise returns FALSE - that mean dependabot should stop and leave.\';');
 
-//        // vytvoření uživatele
-//        $this->addSql("CREATE ROLE databot LOGIN PASSWORD 'databots'");
-
 //        GRANT USAGE ON SCHEMA public TO databot;
 //        GRANT SELECT ON public.photos TO databot;
 //
@@ -103,6 +100,24 @@ IS \'Register databot. Return TRUE if a databot is successfully registered and a
 //
 //        GRANT USAGE ON TYPE databots.enum_databot_role TO databot;
 //        GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot;
+
+        $this->addSql("GRANT USAGE ON SCHEMA public TO databot");
+        $this->addSql("GRANT SELECT ON public.photos TO databot");
+
+        // schéma databots (plná práva)
+        $this->addSql("GRANT USAGE ON SCHEMA databots TO databot");
+        $this->addSql("GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA databots TO databot");
+        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO databot");
+
+        $this->addSql("GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA databots TO databot");
+        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO databot");
+
+        $this->addSql("GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA databots TO databot");
+        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT EXECUTE ON FUNCTIONS TO databot");
+
+        // přidání práv na typy (enumy atd.)
+        $this->addSql("GRANT USAGE ON TYPE databots.enum_databot_role TO databot");
+        $this->addSql("GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot");
 
     }
 
