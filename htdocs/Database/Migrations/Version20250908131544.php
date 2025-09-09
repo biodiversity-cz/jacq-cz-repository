@@ -25,32 +25,84 @@ final class Version20250908131544 extends AbstractMigration
         $this->addSql('ALTER FUNCTION public.register_databot SET SCHEMA databots;');
         $this->addSql('ALTER TYPE public.enum_databot_result_status SET SCHEMA databots');
         $this->addSql('ALTER TYPE public.enum_databot_role SET SCHEMA databots');
+        $this->addSql('
+                        CREATE OR REPLACE FUNCTION databots.register_databot(
+                    p_name TEXT,
+                    p_description TEXT,
+                    p_version INTEGER,
+                    p_role databots.enum_databot_role
+                )
+                RETURNS INTEGER
+                LANGUAGE plpgsql
+                AS $$
+                DECLARE
+                    existing_bot_id INT;
+                    existing_enabled BOOLEAN;
+                BEGIN
+                    -- Najdi bota podle jména a verze
+                    SELECT id, enabled
+                    INTO existing_bot_id, existing_enabled
+                    FROM databots.databot
+                    WHERE name = p_name AND version = p_version;
+
+                    IF FOUND THEN
+                        IF existing_enabled THEN
+                            -- Verze existuje a je povolená – aktualizuj last_run
+                            UPDATE databots.databot
+                            SET last_run = NOW(),
+                            description = p_description
+                            WHERE id = existing_bot_id;
+
+                            RETURN existing_bot_id;
+                        ELSE
+                            -- Verze existuje, ale je zakázaná – neumožni spuštění
+                            RETURN NULL;
+                        END IF;
+                    ELSE
+                        -- Zakázat všechny starší verze se stejným jménem
+                        UPDATE databots.databot
+                        SET enabled = FALSE
+                        WHERE name = p_name AND version < p_version;
+
+                        -- Vložit nového bota
+                        INSERT INTO databots.databot (
+                            name, description, version, role, enabled,
+                            created_at, last_run
+                        )
+                        VALUES (
+                            p_name, p_description, p_version, p_role, TRUE,
+                            NOW(), NOW()
+                        )
+
+                        RETURNING id INTO existing_bot_id;
+
+                        RETURN existing_bot_id;
+
+                    END IF;
+                END;
+                $$;
+                ');
+        $this->addSql('COMMENT ON FUNCTION databots.register_databot(TEXT, TEXT, INTEGER, databots.enum_databot_role)
+IS \'Register databot. Return TRUE if a databot is successfully registered and allowed to proceed, otherwise returns FALSE - that mean dependabot should stop and leave.\';');
 
 //        // vytvoření uživatele
 //        $this->addSql("CREATE ROLE databot LOGIN PASSWORD 'databots'");
-//
-//        // přístup do public (jen čtení)
-//        $this->addSql("GRANT USAGE ON SCHEMA public TO databot");
-//        $this->addSql("GRANT SELECT ON ALL TABLES IN SCHEMA public TO databot");
-//        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO databot");
-//
-//        // schéma databots (plná práva)
-//        $this->addSql("GRANT USAGE ON SCHEMA databots TO databot");
-//        $this->addSql("GRANT CREATE ON SCHEMA databots TO databot");
-//
-//        $this->addSql("GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA databots TO databot");
-//        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO databot");
-//
-//        $this->addSql("GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA databots TO databot");
-//        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO databot");
-//
-//        $this->addSql("GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA databots TO databot");
-//        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT EXECUTE ON FUNCTIONS TO databot");
-//
-//        // přidání práv na typy (enumy atd.)
-//        $this->addSql("GRANT USAGE ON TYPE databots.enum_databot_role TO databot");
-//        $this->addSql("GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot");
 
+//        GRANT USAGE ON SCHEMA public TO databot;
+//        GRANT SELECT ON public.photos TO databot;
+//
+//        GRANT USAGE ON SCHEMA databots TO databot;
+//        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA databots TO databot;
+//        ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO databot;
+//
+//        GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA databots TO databot;
+//        ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO databot;
+//
+//        GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA databots TO databot;
+//        ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT EXECUTE ON FUNCTIONS TO databot;
+//
+//        GRANT USAGE ON TYPE databots.enum_databot_role TO databot;
+//        GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot;
 
     }
 
