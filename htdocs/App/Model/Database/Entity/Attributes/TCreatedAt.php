@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping\Column;
 trait TCreatedAt
 {
 
-    #[Column(type: Types::DATETIME_IMMUTABLE, nullable: false)]
+    #[Column(type: Types::DATETIME_IMMUTABLE, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
     protected DateTimeImmutable $createdAt;
 
     public function getCreatedAt(): DateTimeImmutable
