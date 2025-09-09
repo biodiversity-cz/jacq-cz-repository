@@ -7,23 +7,8 @@ on:
     workflow_dispatch:  # Manual run
 jobs:
     test:
-        name: Run tests and collect coverage
+        name: Run unit tests
         runs-on: ubuntu-latest
-        services:
-            postgres:
-                image: postgres:16
-                env:
-                    POSTGRES_DB: jacq_test
-                    POSTGRES_USER: jacq_test
-                    POSTGRES_PASSWORD: jacq_test
-                ports:
-                    - 5432:5432
-                options: >-
-                    --health-cmd pg_isready
-                    --health-interval 10s
-                    --health-timeout 5s
-                    --health-retries 5
-
         steps:
             -   name: Checkout
                 uses: actions/checkout@v5
@@ -60,7 +45,7 @@ jobs:
 
             -   name: Run tests
                 working-directory: ./htdocs
-                run: vendor/bin/tester -p phpdbg tests/Cases/Unit
+                run: vendor/bin/tester -s -p php --colors 1 tests/Cases/Unit
 
             -   name: Upload results to Codecov
                 uses: codecov/codecov-action@v5
