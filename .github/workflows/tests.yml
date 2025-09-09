@@ -21,7 +21,10 @@ jobs:
                 with:
                     php-version: '8.4'
                     tools: composer:v2
-                    extensions: mbstring, json, tokenizer
+                    extensions: mbstring
+
+            -   name: Show loaded PHP extensions
+                run: php -m
 
             -   name: Get composer cache directory
                 id: composer-cache
@@ -45,7 +48,7 @@ jobs:
 
             -   name: Run tests
                 working-directory: ./htdocs
-                run: vendor/bin/tester -s -p php --colors 1 tests/Cases/Unit
+                run: vendor/bin/tester -s -p "$(which php)" --colors 1 tests/Cases/Unit
 
             -   name: Upload results to Codecov
                 uses: codecov/codecov-action@v5
