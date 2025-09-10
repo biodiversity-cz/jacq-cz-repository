@@ -15,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateThumbs640 extends Command
+class CreateThumbs1280 extends Command
 {
 
     protected const string TEMPNAME = DIRECTORY_SEPARATOR . 'thumb640.tif';
@@ -66,7 +66,7 @@ class CreateThumbs640 extends Command
                 $output->writeln("Processing photoId: {$photo->getId()}");
                 $this->curatorService->getArchiveFile($photo, $this->tempFile());
                 $imagick = $this->imageService->createImagick($this->tempFile());
-                $imagick = $this->imageService->preparePngThumb($imagick);
+                $imagick = $this->imageService->preparePngThumb($imagick, 1280);
                 $imagick->writeImage($this->tempFile2());
                 $imagick->clear();
                 unlink($this->tempFile());

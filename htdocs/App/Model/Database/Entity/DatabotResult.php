@@ -6,10 +6,11 @@ use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Enums\DatabotResultStatus;
 use App\Model\Database\Enums\EnumDatabotStatusType;
+use App\Model\Database\Repository\DatabotResultRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity()]
+#[ORM\Entity(repositoryClass: DatabotResultRepository::class)]
 #[ORM\Table(name: 'databot_results', schema: 'databots', options: ['comment' => 'Results of Databot runs per photo'])]
 #[ORM\UniqueConstraint(columns: ['databot_id', 'photo_id'])]
 class DatabotResult
@@ -26,7 +27,7 @@ class DatabotResult
     protected Photos $photo;
 
     #[ORM\Column(
-        type: EnumDatabotStatusType::NAME,
+        type: 'string',
         nullable: false,
         enumType: DatabotResultStatus::class,
         options: ['comment' => 'Result status: ok, error, warning...', 'default' => DatabotResultStatus::OK])]

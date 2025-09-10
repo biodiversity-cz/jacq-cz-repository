@@ -38,7 +38,7 @@ class Databot
     protected ?\DateTimeInterface $lastRun = null;
 
     #[Column(
-        type: EnumDatabotRoleType::NAME,
+        type: 'string',
         nullable: false,
         enumType: DatabotRole::class,
         options: ['default' => DatabotRole::VALIDATOR])]

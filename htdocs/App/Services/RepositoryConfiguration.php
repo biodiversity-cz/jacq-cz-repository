@@ -68,6 +68,11 @@ final readonly class RepositoryConfiguration
         return $this->getKey('previewImageSize');
     }
 
+    public function getDatabotImageSize(): int
+    {
+        return $this->getKey('databotImageSite');
+    }
+
     public function getPreviewQuality(): int
     {
         return $this->getKey('previewQuality');

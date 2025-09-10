@@ -10,6 +10,8 @@
     <p>Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
     <p>Status: <span class="badge bg-{$photo->getStatus()->getColor()}">{$photo->getStatus()->getName()}</span>
     </p>
+    <p>Quality metric: {$metric}
+    </p>
     <p>Type: <span
         class="badge bg-{$photo->getType()->getColor()}">{$photo->getType()->getName()}</span></p>
     <p><small class="text-muted">File created at
@@ -28,17 +30,17 @@
     <p class="card-text"><h5>JP2 Master (quality as Master but much lower filesize) </h5> filename: {$photo->getArchiveFilename()} <br>
     <a href="{plink Import:jp2Image $photo->getId()}">download</a>
     </p>
-    <p class="card-text"><h5>DataBot thumb (640px)</h5> filename: {$photo->getArchiveFilename()} <br>
+    <p class="card-text"><h5>DataBot thumb (1280px)</h5> filename: {$photo->getArchiveFilename()} <br>
     <a href="{plink Import:databotThumbImage $photo->getId()}">download</a>
     </p>
     {/if}
     <hr>
     <a class="btn btn-outline-danger deleteButton" n:href="delete!" role="button">Delete</a>
+
 </div>
 <div class="col-4">
-    <h4>EXIF info</h4>
-    <code>{$photo->getExif()|dumpArray|noescape}</code>
-    <h4>Identify description</h4>
-    <code>{$photo->getIdentify()|dumpArray|noescape}</code>
-
+    <h4>Import analyse</h4>
+    <code>{$coreInfo|dumpArray|noescape}</code>
+    <h4>DataBots</h4>
+    <code>{$databots|dumpArray|noescape}</code>
 </div>

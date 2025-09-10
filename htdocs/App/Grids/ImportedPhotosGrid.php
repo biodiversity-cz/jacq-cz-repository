@@ -5,6 +5,7 @@ namespace App\Grids;
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
+use App\Services\DatabotsService;
 use App\Services\EntityServices\PhotoService;
 use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 use Contributte\Datagrid\Datagrid;
@@ -20,7 +21,7 @@ class ImportedPhotosGrid extends Control
 
     private DataGrid $grid;
 
-    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user)
+    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsService $databotsService)
     {
         $this->grid = $this->gridFactory->createBaseDatagrid();
     }
@@ -61,7 +62,14 @@ class ImportedPhotosGrid extends Control
     public function createComponentGrid(): Datagrid
     {
         $this->grid->setDataSource($this->defaultDatasource($this->user))->setDefaultSort(['id' => 'DESC'])->setRememberState(false);
-        $this->grid->addColumnNumber('id', 'ID');
+        $this->grid->addColumnNumber('id', 'ID')
+            ->setRenderer(function (Photos $item) {
+                $el = Html::el(null);
+                $url = $this->presenter->link('Import:photo', ['id' => $item->getId()]);
+                $el->addHtml('<a href="' . $url . '">' . $item->getId() . '</a>');
+
+                return $el;
+            });
         $this->grid->addColumnDateTime('lastEditAt', 'processed at')->setFormat('d.m.Y H:i')->setFilterDate('lastEdit')->setFormat('j. n. Y', 'd. m. Y');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
@@ -89,7 +97,10 @@ class ImportedPhotosGrid extends Control
         $this->grid->addColumnNumber('width', 'width [px]');
         $this->grid->addColumnNumber('height', 'height [px]');
         $this->grid->addColumnNumber('archiveFileSize', 'archiveFileSize [B]');
-
+        $this->grid->addColumnNumber('qualityCheck', 'qualityCheck')
+            ->setRenderer(function (Photos $item) {
+                return $this->databotsService->getQualityEvaluation($item);
+            });
 
 
         $this->grid->addAction('delete', '', 'delete!')
