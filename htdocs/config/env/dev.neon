@@ -11,7 +11,7 @@ parameters:
     storage:
         archiveBucket: test-archive
         jp2Bucket: test-iiif
-        thumbBucket: test-thumbs640
+        thumbBucket: test-thumbs1280
 
 services:
     cache.storage: Nette\Caching\Storages\DevNullStorage

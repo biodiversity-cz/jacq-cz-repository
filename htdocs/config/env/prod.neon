@@ -9,7 +9,7 @@ parameters:
     storage:
         archiveBucket: archive
         jp2Bucket: iiif
-        thumbBucket: thumbs640
+        thumbBucket: thumbs1280
 
 
 aws:
