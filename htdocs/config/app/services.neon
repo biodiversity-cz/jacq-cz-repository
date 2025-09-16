@@ -14,6 +14,7 @@ services:
     - {factory: App\Console\Admin\RefreshJp2, tags: {console.command: admin:refreshJp2}}
     - {factory: App\Console\Admin\BatchDelete, tags: {console.command: admin:batchDelete}}
     - {factory: App\Console\Admin\CreateThumbs1280, tags: {console.command: admin:generate1280Thumbs}}
+    - {factory: App\Console\Admin\dbUpdateThumbs1280, tags: {console.command: admin:dbUpdate1280Thumbs}}
 
     - GuzzleHttp\Client
 

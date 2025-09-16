@@ -41,5 +41,6 @@ admin:
 	NETTE_DEBUG=1 bin/console admin:refreshJp2
 	NETTE_DEBUG=1 bin/console admin:batchDelete
 	NETTE_DEBUG=1 bin/console admin:generate1280Thumbs
+	NETTE_DEBUG=1 bin/console admin:dbUpdate1280Thumbs
 
 
