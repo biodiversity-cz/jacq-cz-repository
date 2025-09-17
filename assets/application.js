@@ -9,8 +9,8 @@ import {initCopyButtons} from "./js/copyButton";
 import mirador from "./js/mirador";
 import setSettings from "./js/herbarium";
 
-require('@contributte/datagrid/assets/datagrid.css');
-require('@contributte/datagrid/assets/datagrid-spinners.css');
+import '@contributte/datagrid/assets/datagrid.css';
+import '@contributte/datagrid/assets/datagrid-spinners.css';
 
 document.addEventListener("DOMContentLoaded", function (event) {
 

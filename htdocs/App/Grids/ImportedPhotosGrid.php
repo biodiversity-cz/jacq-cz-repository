@@ -70,7 +70,7 @@ class ImportedPhotosGrid extends Control
 
                 return $el;
             });
-        $this->grid->addColumnDateTime('lastEditAt', 'processed at')->setFormat('d.m.Y H:i')->setFilterDate('lastEdit')->setFormat('j. n. Y', 'd. m. Y');
+        $this->grid->addColumnDateTime('lastEditAt', 'processed at')->setRenderer(function (Photos $item){return $item->getLastEditAt()->format('j. n. Y H:s');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
