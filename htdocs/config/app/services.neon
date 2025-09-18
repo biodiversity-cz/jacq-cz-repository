@@ -18,6 +18,16 @@ services:
 
     - GuzzleHttp\Client
 
+    # OAI-PMH services
+    OaiPmhRecordProvider:
+            class: App\Services\OaiPmh\OaiPmhRecordProvider
+    - App\Services\OaiPmh\MetadataFormat\DublinCoreFormat
+    - App\Services\OaiPmh\MetadataFormat\CcmmFormat
+    myOaiPmhPresenter:              # název služby, alfa-numerický
+            class: App\UI\Front\OaiPmh\OaiPmhPresenter
+            arguments:
+                recordProvider: @OaiPmhRecordProvider
+
 search:
     in: %appDir%
     classes:

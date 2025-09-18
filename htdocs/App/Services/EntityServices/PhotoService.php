@@ -31,6 +31,11 @@ class PhotoService extends BaseEntityService
         return $this->repository->getDefaultDatasource($user);
     }
 
+    public function getPublishedPhotosDatasource(): QueryBuilder
+    {
+        return $this->repository->getPublishedPhotosDatasource();
+    }
+
     /**
      * @return Photos[]
      */
@@ -115,6 +120,11 @@ class PhotoService extends BaseEntityService
             ->setParameter('status', PhotosStatus::WAITING);
 
         return $qb->getQuery()->getResult();
+    }
+
+    public function clearEntityManager(): void
+    {
+        $this->entityManager->clear();
     }
 
 }
