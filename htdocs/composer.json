@@ -48,6 +48,7 @@
 
     "68publishers/asset": "^3",
     "68publishers/webpack-encore-bundle": "^3",
+    "mk-j/php_xlsxwriter": "^0"
   },
 	"require-dev": {
     "contributte/qa": "^0",
