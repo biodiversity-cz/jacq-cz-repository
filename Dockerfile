@@ -1,4 +1,4 @@
-FROM ghcr.io/biodiversity-cz/jacq-repository-base:main@sha256:cab0f38af85c973f90299fd753438c03af6c2a422d772e0034029883ef6f99a0
+FROM ghcr.io/biodiversity-cz/jacq-repository-base:main@sha256:c5cc9f626da87a37843073c30afc0caac596e2b8300b65e290864bd5cfc94d8d
 
 MAINTAINER Petr Novotný <novotp@natur.cuni.cz>
 LABEL org.opencontainers.image.source=https://github.com/biodiversity-cz/jacq-repository
@@ -8,4 +8,6 @@ ENV GIT_TAG=$GIT_TAG
 
 # devoted for Kubernetes, where the app has to be copied into final destination (/srv) after the container starts
 COPY  --chown=www:www htdocs /app
-RUN chmod -R 777 /app/temp
+RUN chmod -R 777 /app/temp && \
+    rm -rf /app/tests
+

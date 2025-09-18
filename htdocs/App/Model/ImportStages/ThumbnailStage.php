@@ -26,7 +26,7 @@ class ThumbnailStage extends BaseStage implements StageInterface
      */
     protected function createThumbnailDatabot(Imagick $imagick): Imagick
     {
-        return $this->imagickService->preparePngThumb($imagick);
+        return $this->imagickService->preparePngThumb($imagick, $this->repositoryConfiguration->getDatabotImageSize());
     }
 
     public function __invoke(mixed $payload): mixed

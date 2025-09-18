@@ -13,9 +13,20 @@ services:
     - {factory: App\Console\Admin\HarvestExif, tags: {console.command: admin:harvestExif}}
     - {factory: App\Console\Admin\RefreshJp2, tags: {console.command: admin:refreshJp2}}
     - {factory: App\Console\Admin\BatchDelete, tags: {console.command: admin:batchDelete}}
-    - {factory: App\Console\Admin\CreateThumbs640, tags: {console.command: admin:generate640Thumbs}}
+    - {factory: App\Console\Admin\CreateThumbs1280, tags: {console.command: admin:generate1280Thumbs}}
+    - {factory: App\Console\Admin\dbUpdateThumbs1280, tags: {console.command: admin:dbUpdate1280Thumbs}}
 
     - GuzzleHttp\Client
+
+    # OAI-PMH services
+    OaiPmhRecordProvider:
+            class: App\Services\OaiPmh\OaiPmhRecordProvider
+    - App\Services\OaiPmh\MetadataFormat\DublinCoreFormat
+    - App\Services\OaiPmh\MetadataFormat\CcmmFormat
+    myOaiPmhPresenter:              # název služby, alfa-numerický
+            class: App\UI\Front\OaiPmh\OaiPmhPresenter
+            arguments:
+                recordProvider: @OaiPmhRecordProvider
 
 search:
     in: %appDir%

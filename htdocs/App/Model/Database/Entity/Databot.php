@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[Entity(repositoryClass: DatabotRepository::class)]
-#[Table(name: 'databot')]
+#[Table(name: 'databot', schema: 'databots')]
 #[UniqueConstraint(columns: ['name', 'version'],options: ['comment' => 'List of bots registered'])]
 class Databot
 {
@@ -38,7 +38,7 @@ class Databot
     protected ?\DateTimeInterface $lastRun = null;
 
     #[Column(
-        type: EnumDatabotRoleType::NAME,
+        type: 'string',
         nullable: false,
         enumType: DatabotRole::class,
         options: ['default' => DatabotRole::VALIDATOR])]

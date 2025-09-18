@@ -13,5 +13,6 @@ parameters:
         zbarImageHeight: 3000  #px size of image used for zbar barcode recognition
         thumbImageWidth: 400  #px size of image used for manifest thumbnail
         previewImageSize: 1800 #px size of preview shown to curator on pipeline error
+        databotImageSite: 1280 #px size of images used for all databots operations
         previewQuality: 80 #JPEG compression of preview shown to curator on pipeline error
 

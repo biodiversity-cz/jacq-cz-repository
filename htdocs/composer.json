@@ -16,6 +16,8 @@
     "ext-intl": "*",
     "ext-exif": "*",
     "ext-zip": "*",
+    "ext-dom": "*",
+    "ext-xmlwriter": "*",
 
 		"nette/application": "^3",
 		"nette/bootstrap": "^3",
@@ -46,7 +48,7 @@
 
     "68publishers/asset": "^3",
     "68publishers/webpack-encore-bundle": "^3",
-		"mk-j/php_xlsxwriter": "^0"
+    "mk-j/php_xlsxwriter": "^0"
   },
 	"require-dev": {
     "contributte/qa": "^0",

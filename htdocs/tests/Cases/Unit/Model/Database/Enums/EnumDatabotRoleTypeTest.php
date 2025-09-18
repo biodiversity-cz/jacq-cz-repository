@@ -17,9 +17,9 @@ test('EnumDatabotRole conversion and metadata behavior', function (): void {
     $type = new EnumDatabotRoleType();
     $platform = \Mockery::mock(AbstractPlatform::class);
 
-    Assert::same('enum_databot_result_status', $type->getName());
+    Assert::same('databots.enum_databot_role', $type->getName());
     Assert::true($type->requiresSQLCommentHint($platform));
-    Assert::same('enum_databot_result_status', $type->getSQLDeclaration([], $platform));
+    Assert::same('databots.enum_databot_role', $type->getSQLDeclaration([], $platform));
 
     // PHP -> DB
     Assert::same('validator', $type->convertToDatabaseValue(DatabotRole::VALIDATOR, $platform));

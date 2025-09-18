@@ -15,11 +15,11 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateThumbs640 extends Command
+class CreateThumbs1280 extends Command
 {
 
-    protected const string TEMPNAME = DIRECTORY_SEPARATOR . 'thumb640.tif';
-    protected const string TEMPNAME2 = DIRECTORY_SEPARATOR . 'thumb640.png';
+    protected const string TEMPNAME = DIRECTORY_SEPARATOR . 'thumb1280.tif';
+    protected const string TEMPNAME2 = DIRECTORY_SEPARATOR . 'thumb1280.png';
 
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorService, protected readonly TempDir $tempDir, protected readonly ImagickService $imageService, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service, ?string $name = null)
     {
@@ -41,7 +41,7 @@ class CreateThumbs640 extends Command
 
     protected function configure(): void
     {
-        $this->setName('admin:generate640Thumbs');
+        $this->setName('admin:generate1280Thumbs');
         $this->setDescription('generate new png files with low resolution used for AI etc.');
     }
 
@@ -66,7 +66,7 @@ class CreateThumbs640 extends Command
                 $output->writeln("Processing photoId: {$photo->getId()}");
                 $this->curatorService->getArchiveFile($photo, $this->tempFile());
                 $imagick = $this->imageService->createImagick($this->tempFile());
-                $imagick = $this->imageService->preparePngThumb($imagick);
+                $imagick = $this->imageService->preparePngThumb($imagick, 1280);
                 $imagick->writeImage($this->tempFile2());
                 $imagick->clear();
                 unlink($this->tempFile());

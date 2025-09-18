@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Services;
 
@@ -25,46 +25,6 @@ readonly class S3Service
         return $this->putFileIfNotExists($bucket, $key, $path, 'image/tiff');
     }
 
-    public function getObjectSize(string $bucket, string $key): int
-    {
-        $result = $this->s3->headObject([
-            'Bucket' => $bucket,
-            'Key' => $key,
-        ]);
-
-        return $result['ContentLength'];
-    }
-
-    public function headObject(string $bucket, string $key): Result
-    {
-        return $this->s3->headObject([
-            'Bucket' => $bucket,
-            'Key' => $key,
-        ]);
-    }
-
-    public function getObjectOriginalTimestamp(string $bucket, string $key): ?DateTimeImmutable
-    {
-        $result = $this->s3->headObject([
-            'Bucket' => $bucket,
-            'Key' => $key,
-        ]);
-        $data = $result->get('Metadata');
-        if (isset($data['origin-date-iso8601'])) {
-            return new DateTimeImmutable($data['origin-date-iso8601']);
-        }
-
-        return null;
-    }
-
-    public function deleteObject(string $bucket, string $key): Result
-    {
-        return $this->s3->deleteObject([
-            'Bucket' => $bucket,
-            'Key' => $key,
-        ]);
-    }
-
     public function putFileIfNotExists(string $bucket, string $key, string $path, string $contentType): Result
     {
         if ($this->s3->doesObjectExist($bucket, $key)) {
@@ -87,6 +47,71 @@ readonly class S3Service
         }
 
         return $result;
+    }
+
+    public function getObjectSize(string $bucket, string $key): int
+    {
+        $result = $this->s3->headObject([
+            'Bucket' => $bucket,
+            'Key' => $key,
+        ]);
+
+        return $result['ContentLength'];
+    }
+
+    public function headObject(string $bucket, string $key): Result
+    {
+        return $this->s3->headObject([
+            'Bucket' => $bucket,
+            'Key' => $key,
+        ]);
+    }
+
+    public function deleteObject(string $bucket, string $key): Result
+    {
+        return $this->s3->deleteObject([
+            'Bucket' => $bucket,
+            'Key' => $key,
+        ]);
+    }
+
+    public function deleteBucket(string $bucket): Result
+    {
+        return $this->s3->deleteBucket(['Bucket' => $bucket]);
+    }
+
+    public function createBucket(string $bucket): Result
+    {
+        return $this->s3->createBucket(['Bucket' => $bucket]);
+    }
+
+    public function doesBucketExist(string $bucket): bool
+    {
+        return $this->s3->doesBucketExist($bucket);
+    }
+
+    public function getObjectOriginalTimestamp(string $bucket, string $key): ?DateTimeImmutable
+    {
+        $result = $this->s3->headObject([
+            'Bucket' => $bucket,
+            'Key' => $key,
+        ]);
+        $data = $result->get('Metadata');
+        if (isset($data['origin-date-iso8601'])) {
+            return new DateTimeImmutable($data['origin-date-iso8601']);
+        }
+
+        return null;
+    }
+
+    public function copyObject(string $source, string $targetBucket, string $targetFilename, string $contentType): Result
+    {
+        return $this->s3->copyObject([
+            'Bucket' => $targetBucket,
+            'Key' => $targetFilename,
+            'CopySource' => $source, // bucket/key
+            'ContentType' => $contentType,
+        ]);
     }
 
     public function putJp2IfNotExists(string $bucket, string $key, string $path): Result

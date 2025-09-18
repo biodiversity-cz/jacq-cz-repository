@@ -1,9 +1,10 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Controls\Image;
 
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
+use App\Services\DatabotsService;
 use App\Services\EntityServices\PhotoService;
 use Nette\Application\UI\Control;
 use Nette\Neon\Exception;
@@ -14,7 +15,7 @@ class DetailControl extends Control
 
     private Photos $photo;
 
-    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user)
+    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user,  protected DatabotsService $databotsService)
     {
         $this->photo = $this->photoService->getPhoto($this->user, $this->id);
     }
@@ -28,12 +29,15 @@ class DetailControl extends Control
     {
         $template = $this->template;
         $template->photo = $this->photo;
+        $template->coreInfo = ['EXIF'=>$this->photo->getExif(), 'Identify' => $this->photo->getIdentify()];
+        $template->databots = $this->databotsService->databotResultsToArray($this->photo);
+        $template->metric = $this->databotsService->getQualityEvaluation($this->photo);
         if ($forPublic) {
             $template->setFile(__DIR__ . '/detail_front.latte');
         } else {
             if ($fullInfo) {
                 $template->setFile(__DIR__ . '/detail_adminFull.latte');
-            }else{
+            } else {
                 $template->setFile(__DIR__ . '/detail_admin.latte');
             }
 

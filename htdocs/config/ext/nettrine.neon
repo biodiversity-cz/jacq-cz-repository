@@ -19,11 +19,11 @@ nettrine.dbal:
             dbname: %database.dbname%
             port: %database.port%
     types:
-        enum_databot_result_status: App\Model\Database\Enums\EnumDatabotStatusType
-        enum_databot_role: App\Model\Database\Enums\EnumDatabotRoleType
+        databots.enum_databot_result_status: App\Model\Database\Enums\EnumDatabotStatusType
+        databots.enum_databot_role: App\Model\Database\Enums\EnumDatabotRoleType
     typesMapping:
-        enum_databot_role: enum_databot_role
-        enum_databot_result_status: enum_databot_result_status
+        enum_databot_role: databots.enum_databot_role
+        enum_databot_result_status: databots.enum_databot_result_status
 
 nettrine.orm:
     managers:

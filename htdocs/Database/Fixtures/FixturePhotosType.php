@@ -48,7 +48,7 @@ class FixturePhotosType extends FixtureBase
 
     public function getOrder(): int
     {
-        return 6;
+        return 60;
     }
 
 }

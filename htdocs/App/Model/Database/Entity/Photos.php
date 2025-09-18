@@ -75,8 +75,11 @@ class Photos
     #[JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Type of the photo', 'default' => 1])]
     protected PhotosType $type;
 
-    #[OneToOne(targetEntity: PhotosError::class, mappedBy: 'photo', cascade: ['remove'])]
-    private ?PhotosError $error = null;
+    #[OneToOne(targetEntity: ImportError::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
+    private ?ImportError $error = null;
+
+    #[OneToOne(targetEntity: ImportMultiplier::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
+    private ?ImportMultiplier $multiplier = null;
 
     #[OneToMany(targetEntity: DatabotResult::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $databotResults;
@@ -252,15 +255,47 @@ class Photos
         return $this;
     }
 
-    public function getError(): ?PhotosError
+    public function getError(): ?ImportError
     {
         return $this->error;
     }
 
-    public function setError(?PhotosError $error): Photos
+    public function addImportError(): ImportError
     {
-        $this->error = $error;
+        if ($this->error === null) {
+            $this->error = new ImportError();
+            $this->error->setPhoto($this);
+        }
 
+        return $this->error;
+    }
+
+    public function removeImportError(): void
+    {
+        if ($this->error !== null) {
+            $this->error = null;
+        }
+    }
+
+    public function getMultiplier(): ?ImportMultiplier
+    {
+        return $this->multiplier;
+    }
+
+    public function addMultiplier(): ImportMultiplier
+    {
+        if ($this->multiplier === null) {
+            $this->multiplier = new ImportMultiplier()->setPhoto($this);
+        }
+
+        return $this->multiplier;
+    }
+
+    public function removeMultiplier(): Photos
+    {
+        if ($this->multiplier !== null) {
+            $this->multiplier = null;
+        }
         return $this;
     }
 
@@ -298,5 +333,9 @@ class Photos
         return $this;
     }
 
+    public function isPublic(): bool
+    {
+        return in_array($this->status->getId(), [PhotosStatus::PUBLIC], true);
+    }
 
 }

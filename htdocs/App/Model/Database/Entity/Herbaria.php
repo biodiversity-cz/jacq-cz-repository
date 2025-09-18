@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
@@ -32,27 +34,34 @@ class Herbaria
     #[Column(unique: false, nullable: false, options: ['comment' => 'RegEx for image filenames'])]
     protected string $regexFilename;
 
-    #[Column(unique: false, nullable: false, options: ['comment' => 'Allow use filenam when barcode is not present in the image', 'default' => false])]
-    protected bool $fallbackFilename;
+    #[Column(unique: false, nullable: false, options: ['comment' => 'Allow use filename when barcode is not present in the image', 'default' => false])]
+    protected bool $fallbackFilename = false;
+
+    #[Column(unique: false, nullable: false, options: ['comment' => 'When multiple valid barcodes are present, multiply image to all these IDs', 'default' => false])]
+    protected bool $multipleBarcodeMultiplier = false;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'logo URL'])]
-    protected ?string $logo;
+    protected ?string $logo = null;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'full name of the herbarium'])]
-    protected ?string $fullname;
+    protected ?string $fullname = null;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'address of the institution/herbarium'])]
-    protected ?string $address;
+    protected ?string $address = null;
 
-    #[OneToMany(mappedBy: 'herbarium', targetEntity: Photos::class)]
+    #[OneToMany(targetEntity: Photos::class, mappedBy: 'herbarium')]
     protected Collection $photos;
 
-    #[OneToMany(mappedBy: 'herbarium', targetEntity: User::class)]
+    #[OneToMany(targetEntity: User::class, mappedBy: 'herbarium')]
     protected Collection $users;
 
-    #[OneToMany(mappedBy: 'herbarium', targetEntity: Contact::class)]
+    #[OneToMany(targetEntity: Contact::class, mappedBy: 'herbarium')]
     #[OrderBy(['surname' => 'ASC'])]
     protected Collection $contacts;
+
+    #[ManyToOne(targetEntity: License::class)]
+    #[JoinColumn(name: 'license_id', referencedColumnName: 'id', nullable: false)]
+    protected License $license;
 
     public function __construct()
     {
@@ -153,6 +162,17 @@ class Herbaria
         return $this->fallbackFilename;
     }
 
+    public function hasMultipleBarcodeMultiplier(): bool
+    {
+        return $this->multipleBarcodeMultiplier;
+    }
+
+    public function setMultipleBarcodeMultiplier(bool $multipleBarcodeMultiplier): Herbaria
+    {
+        $this->multipleBarcodeMultiplier = $multipleBarcodeMultiplier;
+        return $this;
+    }
+
     public function setBucket(string $bucket): Herbaria
     {
         $this->bucket = $bucket;
@@ -180,5 +200,23 @@ class Herbaria
 
         return $this;
     }
+
+    public function getPhotos(): Collection
+    {
+        return $this->photos;
+    }
+
+    public function getLicense(): License
+    {
+        return $this->license;
+    }
+
+    public function setLicense(License $license): Herbaria
+    {
+        $this->license = $license;
+        return $this;
+    }
+
+
 
 }

@@ -18,6 +18,7 @@ final class LatteExtension extends Extension
             'email' => [$this, 'email'],
             'timeInterval' => [$this, 'formatSeconds'],
             'dumpArray' => [$this, 'dumpArray'],
+            'ordinalSuffix' => [$this, 'ordinalSuffix'],
         ];
     }
 
@@ -119,6 +120,22 @@ final class LatteExtension extends Extension
 
         $output .= '</ul>';
         return $output;
+    }
+
+    public function ordinalSuffix(int $number): Html
+    {
+        $absNumber = abs($number);
+        $suffix = 'th';
+
+        if ($absNumber % 100 < 11 || $absNumber % 100 > 13) {
+            switch ($absNumber % 10) {
+                case 1: $suffix = 'st'; break;
+                case 2: $suffix = 'nd'; break;
+                case 3: $suffix = 'rd'; break;
+            }
+        }
+        $html = Html::el()->setHtml($number . '<sup>' . $suffix . '</sup>');
+        return $html;
     }
 
 }

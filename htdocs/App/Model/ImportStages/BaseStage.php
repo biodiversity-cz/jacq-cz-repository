@@ -24,27 +24,31 @@ abstract class BaseStage implements StageInterface
 
     protected function getDatabotThumbTempPath(): string
     {
-        return $this->tempDir->getPath(self::THUMB_FOR_DATABOT . '_' . $this->item->getId() . '.png');
+        return $this->tempDir->getPath(self::THUMB_FOR_DATABOT . '.png');
     }
 
     protected function getZbarThumbTempPath(): string
     {
-        return $this->tempDir->getPath(self::ZBAR . '_' . $this->item->getId() . '.png');
+        return $this->tempDir->getPath(self::ZBAR .  '.png');
     }
 
     protected function getIiifTempPath(): string
     {
-        return $this->tempDir->getPath(self::JP2_FOR_IIIF . '_' . $this->item->getId() . 'jp2');
+        return $this->tempDir->getPath(self::JP2_FOR_IIIF .  '.jp2');
     }
 
     protected function getMasterTempPath(): string
     {
-        return $this->tempDir->getPath(self::ARCHIVE_MASTER . '_' . $this->item->getId() . '.' . pathinfo($this->item->getOriginalFilename(), PATHINFO_EXTENSION));
+        return $this->tempDir->getPath(self::ARCHIVE_MASTER . '.' . $this->getOriginalFileExtension($this->item));
     }
 
     protected function getDuplicateTempPath(Photos $photo): string
     {
-        return $this->tempDir->getPath(self::DUPLICATE . '_' . $photo->getId() . '.' . pathinfo($photo->getOriginalFilename(), PATHINFO_EXTENSION));
+        return $this->tempDir->getPath(self::DUPLICATE . '.' . $this->getOriginalFileExtension($photo));
     }
 
+    protected function getOriginalFileExtension(Photos $photo): string
+    {
+        return pathinfo($photo->getOriginalFilename(), PATHINFO_EXTENSION);
+    }
 }

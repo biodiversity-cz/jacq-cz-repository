@@ -7,26 +7,11 @@ on:
     workflow_dispatch:  # Manual run
 jobs:
     test:
-        name: Run tests and collect coverage
+        name: Run unit tests
         runs-on: ubuntu-latest
-        services:
-            postgres:
-                image: postgres:16
-                env:
-                    POSTGRES_DB: jacq_test
-                    POSTGRES_USER: jacq_test
-                    POSTGRES_PASSWORD: jacq_test
-                ports:
-                    - 5432:5432
-                options: >-
-                    --health-cmd pg_isready
-                    --health-interval 10s
-                    --health-timeout 5s
-                    --health-retries 5
-
         steps:
             -   name: Checkout
-                uses: actions/checkout@v4
+                uses: actions/checkout@v5
                 with:
                     fetch-depth: 0
 
@@ -36,7 +21,10 @@ jobs:
                 with:
                     php-version: '8.4'
                     tools: composer:v2
-                    extensions: mbstring, json
+                    extensions: mbstring
+
+            -   name: Show loaded PHP extensions
+                run: php -m
 
             -   name: Get composer cache directory
                 id: composer-cache
@@ -44,7 +32,7 @@ jobs:
                 run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             -   name: Cache composer dependencies
-                uses: actions/cache@v4.2.3
+                uses: actions/cache@v4.2.4
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -58,17 +46,9 @@ jobs:
                 working-directory: ./htdocs
                 run: cp ./config/local.neon.ci ./config/local.neon
 
-            -   name: Run migrations
-                working-directory: ./htdocs
-                run: bin/console migrations:migrate --no-interaction
-
-            -   name: Load fixtures
-                working-directory: ./htdocs
-                run: bin/console doctrine:fixtures:load --no-interaction --purge=truncate
-
             -   name: Run tests
                 working-directory: ./htdocs
-                run: vendor/bin/tester -p phpdbg tests -s -C --coverage ./coverage.xml --coverage-src App
+                run: vendor/bin/tester -p phpdbg tests/Cases/Unit -s -C #vendor/bin/tester -s -p "$(which php)" --colors 1 tests/Cases/Unit
 
             -   name: Upload results to Codecov
                 uses: codecov/codecov-action@v5

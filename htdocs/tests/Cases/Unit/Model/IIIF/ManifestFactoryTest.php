@@ -4,6 +4,7 @@ namespace Tests\Cases\Unit\Model\Database\Entity;
 
 use App\Bootstrap;
 use App\Model\Database\Entity\Herbaria;
+use App\Model\Database\Entity\License;
 use App\Model\Database\Entity\Photos;
 use App\Model\IIIF\ManifestFactory;
 use App\Model\Specimen\Specimen;
@@ -25,7 +26,10 @@ test('ManifestFactory creates manifest with thumbnail and sequence', function ()
 
     $specimen = \Mockery::mock(Specimen::class);
     $herbarium = \Mockery::mock(Herbaria::class);
+    $license = \Mockery::mock(License::class);
+    $license->shouldReceive('getLink')->andReturn('http://license');
     $herbarium->shouldReceive('getLogo')->andReturn('http://logo.png');
+    $herbarium->shouldReceive('getLicense')->andReturn($license);
     $specimen->shouldReceive('getHerbarium')->andReturn($herbarium);
 
     $photoService = \Mockery::mock(PhotoService::class);
@@ -70,6 +74,9 @@ test('ManifestFactory omits logo when herbarium has no logo', function (): void 
     $photo->shouldReceive('getHeight')->andReturn(600);
 
     $herbarium = \Mockery::mock(Herbaria::class);
+    $license = \Mockery::mock(License::class);
+    $license->shouldReceive('getLink')->andReturn('http://license');
+    $herbarium->shouldReceive('getLicense')->andReturn($license);
     $herbarium->shouldReceive('getLogo')->andReturn(null);
 
     $specimen = \Mockery::mock(Specimen::class);

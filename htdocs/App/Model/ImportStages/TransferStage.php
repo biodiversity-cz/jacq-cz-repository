@@ -24,16 +24,6 @@ class TransferStage extends BaseStage implements StageInterface
         $this->uploadJp2toRepository();
         $this->uploadTiftoRepository();
         $this->uploadDatabotThumbToRepository();
-        if ($this->appConfiguration->isProduction()) {
-            $this->deleteTifFromCuratorBucket();
-        }
-
-        $files = [$this->getIiifTempPath(), $this->getMasterTempPath(), $this->getDatabotThumbTempPath()];
-        foreach ($files as $path) {
-            if ($path && file_exists($path)) {
-                @unlink($path);
-            }
-        }
 
         return $payload;
     }
@@ -74,15 +64,6 @@ class TransferStage extends BaseStage implements StageInterface
             $this->item->setDatabotThumbFilename($this->repositoryConfiguration->createS3DatabotThumbName($this->item));
         } catch (\Throwable $exception) {
             throw new TransferStageException('databot png upload error (' . $exception->getMessage() . ')');
-        }
-    }
-
-    protected function deleteTifFromCuratorBucket(): void
-    {
-        try {
-            $this->s3Service->deleteObject($this->item->getHerbarium()->getBucket(), $this->item->getOriginalFilename());
-        } catch (\Throwable $exception) {
-            throw new TransferStageException('deleting tif from curatorBucket error (' . $exception->getMessage() . ')');
         }
     }
 

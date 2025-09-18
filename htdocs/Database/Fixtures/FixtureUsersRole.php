@@ -43,7 +43,7 @@ class FixtureUsersRole extends FixtureBase
 
     public function getOrder(): int
     {
-        return 2;
+        return 20;
     }
 
 }

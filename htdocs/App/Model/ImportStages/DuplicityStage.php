@@ -37,6 +37,7 @@ class DuplicityStage extends BaseStage implements StageInterface
 
                 $imagickFromDuplicateCandidate->clear();
                 unset($imagickFromDuplicateCandidate);
+                unlink($this->getDuplicateTempPath($duplicate));
             }
 
             $imagickNewFile->clear();

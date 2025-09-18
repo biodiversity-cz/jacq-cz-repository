@@ -50,9 +50,8 @@
             <img src="{link :thumbnail $photo->getId()}" class="img-fluid"  style="height: 90vh; object-fit: cover;">
         </div>
         <div class="col-md-4">
-            <h5>EXISTING image from the repository</h5>
-            <img
-                src="https://herbarium-iiif.dyn.cloud.e-infra.cz/iiif/3/{$photo->getError()->getDuplicateTo()->getJp2Filename()}/full/900,/0/default.jpg"
+            <h5>EXISTING image from the repository (thumb)</h5>
+            <img src="{link :databotThumbImage $photo->getError()->getDuplicateTo()->getId()}"
                 class="img-fluid rounded-start" style="height: 90vh; object-fit: cover;">
         </div>
         {else}

@@ -13,13 +13,13 @@ export default function regexValidation() {
             setTimeout(() => checkBarcodeRegexMatch(this.value), 0);
         });
     }
-     element = document.getElementById('barcodeRegexInput');
+     element = document.getElementById('filenameRegexInput');
     if (element) {
         document.getElementById('filenameRegexInput').addEventListener('keyup', function () {
             checkFilenameRegexMatch(this.value);
         });
     }
-     element = document.getElementById('barcodeRegexInput');
+     element = document.getElementById('filenameRegexInput');
     if (element) {
         document.getElementById('filenameRegexInput').addEventListener('paste', function (event) {
             setTimeout(() => checkFilenameRegexMatch(this.value), 0);

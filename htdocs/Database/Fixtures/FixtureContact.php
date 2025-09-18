@@ -33,7 +33,7 @@ class FixtureContact extends FixtureBase
 
     public function getOrder(): int
     {
-        return 5;
+        return 50;
     }
 
 }

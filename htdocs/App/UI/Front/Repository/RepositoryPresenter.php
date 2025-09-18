@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\UI\Front\Repository;
 
@@ -17,32 +17,63 @@ use Nette\Http\Response;
 final class RepositoryPresenter extends UnsecuredPresenter
 {
 
-    /** @inject */ public S3Service $s3Service;
+    /** @inject */
+    public S3Service $s3Service;
 
-    /** @inject */ public SpecimenFactory $specimenFactory;
+    /** @inject */
+    public SpecimenFactory $specimenFactory;
 
-    /** @inject */ public PhotoService $photoService;
+    /** @inject */
+    public PhotoService $photoService;
 
-    /** @inject */ public RepositoryConfiguration $repositoryConfiguration;
+    /** @inject */
+    public RepositoryConfiguration $repositoryConfiguration;
 
-    /** @inject */ public DetailControlFactory $detailControlFactory;
+    /** @inject */
+    public DetailControlFactory $detailControlFactory;
 
-    public function renderArchiveImage(int $id): void
+    public function actionArchiveImage(int $id): void
     {
         $photo = $this->photoService->getPublicPhoto($id);
         if ($photo === null) {
             $this->error('The requested photo does not exists.');
         }
 
-        $bucket = $this->repositoryConfiguration->getRepositoryArchiveBucket();
-        $filename = $photo->getArchiveFilename();
+        $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename());
+    }
+
+    public function actionJP2Image(int $id): void
+    {
+        $photo = $this->photoService->getPublicPhoto($id);
+        if ($photo === null) {
+            $this->error('The requested photo does not exists.');
+        }
+
+        $this->sendFile($this->repositoryConfiguration->getRepositoryImageServerBucket(), $photo->getJp2Filename());
+    }
+
+    public function actionDatabotThumbImage(int $id): void
+    {
+        $photo = $this->photoService->getPublicPhoto($id);
+        if ($photo === null) {
+            $this->error('The requested photo does not exists.');
+        }
+
+        $this->sendFile($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $photo->getDatabotThumbFilename());
+    }
+
+    protected function sendFile(string $bucket, string $filename)
+    {
         if ($this->s3Service->objectExists($bucket, $filename)) {
             $head = $this->s3Service->headObject($bucket, $filename);
             $stream = $this->s3Service->getStreamOfObject($bucket, $filename);
 
             $callback = function (IRequest $httpRequest, Response $httpResponse) use ($filename, $head, $stream): void {
                 $httpResponse->setHeader('Content-Type', $head['ContentType']);
-                $httpResponse->setHeader('Content-Disposition', 'inline; filename' . $filename);
+                $httpResponse->setHeader(
+                    'Content-Disposition',
+                    "attachment; filename=\"" . basename($filename) . "\"; filename*=UTF-8''" . rawurlencode($filename)
+                );
                 fpassthru($stream);
                 fclose($stream);
             };
@@ -79,7 +110,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
 
     protected function createComponentDetail(): Multiplier
     {
-        return new Multiplier(fn ($id) => $this->detailControlFactory->create((int) $id));
+        return new Multiplier(fn($id) => $this->detailControlFactory->create((int)$id));
     }
 
 }

@@ -62,9 +62,9 @@ test('BaseStage temp paths are correct', function(): void {
     $stage = new TestStage($tempDir, $repoConfig, $imagickService);
     $stage->setItem($photo);
 
-    Assert::same('/tmp/databot_42.png', $stage->callGetDatabotThumbTempPath());
-    Assert::same('/tmp/zbar_42.png', $stage->callGetZbarThumbTempPath());
-    Assert::same('/tmp/iiif_42jp2', $stage->callGetIiifTempPath());
-    Assert::same('/tmp/archive_42.tiff', $stage->callGetMasterTempPath());
-    Assert::same('/tmp/duplicate_42.tiff', $stage->callGetDuplicateTempPath($photo));
+    Assert::same('/tmp/databot.png', $stage->callGetDatabotThumbTempPath());
+    Assert::same('/tmp/zbar.png', $stage->callGetZbarThumbTempPath());
+    Assert::same('/tmp/iiif.jp2', $stage->callGetIiifTempPath());
+    Assert::same('/tmp/archive.tiff', $stage->callGetMasterTempPath());
+    Assert::same('/tmp/duplicate.tiff', $stage->callGetDuplicateTempPath($photo));
 });

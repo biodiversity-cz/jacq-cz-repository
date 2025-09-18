@@ -47,7 +47,8 @@ class ManifestFactory
             ->addDescription('A preserved herbarium specimen')
             ->setViewingDirection(ViewingDirection::LEFT_TO_RIGHT)
             ->addThumbnail($this->createThumbnail())
-            ->addSequence($this->createSequence());
+            ->addSequence($this->createSequence())
+            ->addAttribution($specimen->getHerbarium()->getLicense()->getLink());
 
         if ($specimen->getHerbarium()->getLogo() !== null) {
             $manifest->addLogo((new Logo())->setID($specimen->getHerbarium()->getLogo()));

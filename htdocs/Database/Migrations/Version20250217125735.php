@@ -23,7 +23,7 @@ final class Version20250217125735 extends AbstractMigration
         $this->addSql('ALTER TABLE herbaria ADD fallback_filename BOOLEAN DEFAULT false NOT NULL');
         $this->addSql('ALTER TABLE herbaria ALTER regex_barcode DROP DEFAULT');
         $this->addSql('ALTER TABLE herbaria ALTER regex_filename DROP DEFAULT');
-        $this->addSql('COMMENT ON COLUMN herbaria.fallback_filename IS \'Allow use filenam when barcode is not present in the image\'');
+        $this->addSql('COMMENT ON COLUMN herbaria.fallback_filename IS \'Allow use filename when barcode is not present in the image\'');
         $this->addSql('ALTER TABLE photos DROP use_barcode');
         $this->addSql('COMMENT ON COLUMN photos.original_filename IS \'Filename that was provided during curator upload, could make sense or completely missing semantic content\'');
     }

@@ -20,4 +20,19 @@ class HerbariumService extends BaseEntityService
         return $this->repository->findOneWithAcronym($acronym);
     }
 
+    public function setFilenameFallback(User $user, bool $value): HerbariumService
+    {
+        $herbarium = $this->getCurrentUserHerbarium($user);
+        $herbarium->setFallbackFilename($value);
+        $this->entityManager->flush();
+        return $this;
+    }
+
+    public function setMultiplier(User $user, bool $value): HerbariumService
+    {
+        $herbarium = $this->getCurrentUserHerbarium($user);
+        $herbarium->setMultipleBarcodeMultiplier($value);
+        $this->entityManager->flush();
+        return $this;
+    }
 }
