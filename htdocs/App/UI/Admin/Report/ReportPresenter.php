@@ -2,13 +2,16 @@
 
 namespace App\UI\Admin\Report;
 
+use App\Services\DatabotsService;
 use App\UI\Base\SecuredPresenter;
 use Nette\Application\Responses\TextResponse;
 
 final class ReportPresenter extends SecuredPresenter
 {
 
-    public function actionDatabotStatus(): void
+    /** @inject  */
+    public DatabotsService $databotsService;
+    public function actionDatabotStatusRaw(): void
     {
 
         $path = '';
@@ -38,5 +41,45 @@ final class ReportPresenter extends SecuredPresenter
 
         $this->getHttpResponse()->setContentType($contentType);
         $this->sendResponse(new TextResponse($content));
+    }
+
+    public function actionDatabotStatus(): void
+    {
+
+        $path = '';
+        $url = rtrim($this->appConfiguration->getDatabotBasePath(), '/') . '/' . ltrim($path, '/');
+        $context = stream_context_create([
+            'http' => [
+                'timeout' => 5,
+                'ignore_errors' => true,
+            ],
+        ]);
+
+        $content = @file_get_contents($url, false, $context);
+
+        if ($content === false) {
+            $this->error("Unable fetch $url", 502);
+        }
+
+        $data = json_decode($content, true);
+
+        if ($data === null) {
+            $this->error("Invalid JSON from $url", 502);
+        }
+
+        $this->template->databotData = $data;
+    }
+
+
+    public function renderStats()
+    {
+        $this->template->sharpness =  json_encode($this->databotsService->getStats("sharpness", 2));
+        $this->template->contrast =  json_encode($this->databotsService->getStats("contrast", 2));
+        $this->template->clarity =  json_encode($this->databotsService->getStats("clarity", 2));
+        $this->template->resolution =  json_encode($this->databotsService->getStats("resolution", 2));
+        $this->template->brisque_score =  json_encode($this->databotsService->getStats("brisque_score", 2));
+
+
+        $this->template->databot = $this->databotsService->getDatabot(2);
     }
 }
