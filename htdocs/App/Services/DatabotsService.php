@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Model\Database\Entity\Databot;
 use App\Model\Database\Entity\DatabotResult;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Enums\DatabotResultStatus;
@@ -100,5 +101,51 @@ class DatabotsService
         return $value;
     }
 
+
+    public function getStats(string $variableName, int $databotId): array
+    {
+        $values = [];
+        $sql = "SELECT percentile_cont(0.25) WITHIN GROUP (ORDER BY (elem->>'value')::float) AS q1,
+                percentile_cont(0.5)  WITHIN
+                GROUP (ORDER BY (elem->>'value'):: float) AS median,
+                    percentile_cont(0.75) WITHIN
+                GROUP (ORDER BY (elem->>'value'):: float) AS q3,
+                        MIN ((elem->>'value'):: float) AS min_val,
+                        MAX ((elem->>'value'):: float) AS max_val
+                    FROM databots.databot_results, LATERAL jsonb_array_elements(result_data) AS elem
+                WHERE elem->>'name' = :variableName AND databot_id = :databotId ";
+
+        $result = $this->entityManager->getConnection()->executeQuery($sql, ['variableName' => $variableName, 'databotId' => $databotId]);
+        $values['all'] = $result->fetchNumeric();
+
+        $sql = "SELECT
+                h.acronym,
+                percentile_cont(0.25) WITHIN GROUP (ORDER BY (elem->>'value')::float) AS q1,
+                percentile_cont(0.5)  WITHIN GROUP (ORDER BY (elem->>'value')::float) AS median,
+                percentile_cont(0.75) WITHIN GROUP (ORDER BY (elem->>'value')::float) AS q3,
+                MIN((elem->>'value')::float) AS min_val,
+                MAX((elem->>'value')::float) AS max_val
+            FROM databots.databot_results AS r
+            JOIN photos AS p ON p.id = r.photo_id
+                JOIN herbaria h ON p.herbarium_id = h.id
+            CROSS JOIN LATERAL jsonb_array_elements(r.result_data) AS elem
+            WHERE elem->>'name' = :variableName
+              AND r.databot_id = :databotId
+            GROUP BY h.acronym
+            ORDER BY h.acronym";
+        $result = $this->entityManager->getConnection()->executeQuery($sql, ['variableName' => $variableName, 'databotId' => $databotId]);
+        $herbaria = $result->fetchAllNumeric();
+        foreach ($herbaria as $h) {
+            $acronym = $h[0];
+            unset($h[0]);
+            $values[$acronym] = array_values($h);
+        }
+        return $values;
+    }
+
+    public function getDatabot(int $databotId): Databot
+    {
+        return $this->entityManager->getRepository(Databot::class)->find($databotId);
+    }
 
 }

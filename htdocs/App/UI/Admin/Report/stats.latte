@@ -1,5 +1,31 @@
 {block content}
-<h2>Stats</h2>
-<a n:href=":default">back to Reports</a>
+<div class="container">
+    <h2 id="stats">Stats</h2>
+    <a n:href=":default">back to Reports</a>
 
-this is Nice2have: records count, size histogram, space occupied etc.
+    <div class="row">
+        <div class="col">
+            <div class="row variable" data-variable="sharpness" data-values='{$sharpness}'>
+                <div class="col boxplot"></div>
+            </div>
+            <div class="row variable" data-variable="contrast" data-values='{$contrast}'>
+                <div class="col boxplot"></div>
+            </div>
+            <div class="row variable" data-variable="clarity" data-values='{$clarity}'>
+                <div class="col boxplot">
+                </div>
+            </div>
+            <div class="row variable" data-variable="resolution" data-values='{$resolution}'>
+                <div class="col boxplot">
+                </div>
+            </div>
+            <div class="row variable" data-variable="brisque_score" data-values='{$brisque_score}'>
+                <div class="col boxplot">
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            {$databot->getDescription()|noescape}
+        </div>
+    </div>
+</div>

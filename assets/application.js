@@ -11,6 +11,7 @@ import setSettings from "./js/herbarium";
 
 import '@contributte/datagrid/assets/datagrid.css';
 import '@contributte/datagrid/assets/datagrid-spinners.css';
+import drawBoxplot from "./js/stats";
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     joinLinks();
     initCopyButtons();
     setSettings();
+    drawBoxplot();
 
     if (document.querySelector('#mirador')) {
         import('./js/mirador').then((module) => {
