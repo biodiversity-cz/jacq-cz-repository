@@ -45,4 +45,9 @@ class AppConfiguration
         return ($result !== 'off');
     }
 
+    public function getDatabotBasePath(): string
+    {
+        return $this->config['databot']['basePath'];
+    }
+
 }

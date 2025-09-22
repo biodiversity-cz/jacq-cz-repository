@@ -10,6 +10,8 @@ parameters:
         archiveBucket: archive
         jp2Bucket: iiif
         thumbBucket: thumbs1280
+    databot:
+        basePath: http://127.0.0.1:5000
 
 
 aws:
