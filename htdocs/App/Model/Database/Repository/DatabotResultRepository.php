@@ -45,5 +45,14 @@ final class DatabotResultRepository extends AbstractRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+// vypsat si fotky s určenými hodnotami
+//
+//SELECT photo_id, (elem->>'value')::float AS val
+//FROM databots.databot_results dr
+//, LATERAL jsonb_array_elements(dr.result_data) AS elem
+//WHERE dr.databot_id = 2
+//AND elem->>'name' = 'brisque_score'
+//AND (elem->>'value')::float > 60;
+
 
 }
