@@ -32,7 +32,7 @@ final class UserAuthenticator implements Authenticator
         return new SimpleIdentity(
             $row->getId(),
             $row->getRole()->getName(),
-            ['name' => $row->getFullname(), 'herbarium' => $row->getHerbarium()->getId()],
+            ['name' => $row->getFullname(), 'herbariums' => $row->getHerbariums()->map(fn($h) => $h->getId())->toArray(), 'lastVisitedHerbarium' => $row->getLastVisitedHerbarium()->getId()],
         );
     }
 

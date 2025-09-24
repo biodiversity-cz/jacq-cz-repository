@@ -5,10 +5,14 @@ namespace App\Model\Database\Entity;
 use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
@@ -48,9 +52,9 @@ class User
     #[Column(nullable: true, options: ['comment' => 'OpenID refresh token'])]
     protected ?string $openidRefreshToken = null;
 
-    #[ManyToOne(targetEntity: Herbaria::class, inversedBy: 'users')]
-    #[JoinColumn(name: 'herbarium_id', referencedColumnName: 'id', nullable: true, options: ['comment' => 'Herbarium'],)]
-    protected ?Herbaria $herbarium = null;
+    #[ManyToOne(targetEntity: Herbaria::class)]
+    #[JoinColumn(name: 'last_visited_herbarium',   referencedColumnName: 'id', nullable: true, options: ['comment' => 'Last visited herbarium'])]
+    protected ?Herbaria $lastVisitedHerbarium = null;
 
     #[ManyToOne(targetEntity: UserRole::class)]
     #[JoinColumn(name: 'role_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Role for ACL'])]
@@ -61,6 +65,15 @@ class User
 
     #[Column(type: Types::TEXT, length: 60000, nullable: true, options: ['comment' => 'additional information about user'])]
     protected ?string $comment;
+
+    #[ManyToMany(targetEntity: Herbaria::class)]
+    #[JoinTable(name: 'user_herbaria')]
+    protected Collection $herbariums;
+
+    public function __construct()
+    {
+        $this->herbariums = new ArrayCollection();
+    }
 
     public function getUsername(): string
     {
@@ -94,18 +107,6 @@ class User
     public function setEmail(string $email): User
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    public function getHerbarium(): ?Herbaria
-    {
-        return $this->herbarium;
-    }
-
-    public function setHerbarium(?Herbaria $herbarium): User
-    {
-        $this->herbarium = $herbarium;
 
         return $this;
     }
@@ -216,6 +217,39 @@ class User
     public function setOpenidRefreshToken(?string $openidRefreshToken): User
     {
         $this->openidRefreshToken = $openidRefreshToken;
+        return $this;
+    }
+
+    public function getHerbariums(): Collection
+    {
+        return $this->herbariums;
+    }
+
+    public function addHerbarium(Herbaria $herbarium): User
+    {
+        if (!$this->herbariums->contains($herbarium)) {
+            $this->herbariums->add($herbarium);
+        }
+
+        return $this;
+    }
+
+    public function removeHerbarium(Herbaria $herbarium): User
+    {
+        $this->herbariums->removeElement($herbarium);
+
+        return $this;
+    }
+
+    public function getLastVisitedHerbarium(): ?Herbaria
+    {
+        return $this->lastVisitedHerbarium;
+    }
+
+    public function setLastVisitedHerbarium(?Herbaria $lastVisitedHerbarium): User
+    {
+        $this->lastVisitedHerbarium = $lastVisitedHerbarium;
+
         return $this;
     }
 }

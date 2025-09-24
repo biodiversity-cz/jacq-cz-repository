@@ -39,8 +39,9 @@ test('User entity with TId, TCreatedAt and TLastEditAt traits', function (): voi
 
     // Mockované entity
     $herbarium = new Herbaria();
-    $user->setHerbarium($herbarium);
-    Assert::same($herbarium, $user->getHerbarium());
+
+    $user->setLastVisitedHerbarium($herbarium);
+    Assert::same($herbarium, $user->getLastVisitedHerbarium());
 
     $role = new UserRole();
     $user->setRole($role);

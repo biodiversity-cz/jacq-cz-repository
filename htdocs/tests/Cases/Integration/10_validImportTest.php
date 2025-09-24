@@ -16,7 +16,7 @@ final class ValidImportTest extends IntegrationTestCase
     {
         $this->checkBefore();
 
-        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->herbarium)
+        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->lastVisitedHerbarium)
             ->setFallbackFilename(false)
             ->setMultipleBarcodeMultiplier(false);
         $this->em->flush();

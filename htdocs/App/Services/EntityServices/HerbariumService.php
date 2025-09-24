@@ -12,7 +12,18 @@ class HerbariumService extends BaseEntityService
 
     public function getCurrentUserHerbarium(User $user): ?Herbaria
     {
-        return $this->entityManager->getReference($this->entityName, $user->getIdentity()->herbarium);
+        $lastVisitedHerbariumId = $user->getIdentity()->lastVisitedHerbarium;
+        if ($lastVisitedHerbariumId) {
+            return $this->entityManager->getReference($this->entityName, $lastVisitedHerbariumId);
+        }
+
+        // If no last visited herbarium, return the first one from the user's herbariums
+        $herbariums = $user->getIdentity()->herbariums;
+        if (!empty($herbariums)) {
+            return $this->entityManager->getReference($this->entityName, $herbariums[0]);
+        }
+
+        return null;
     }
 
     public function findOneWithAcronym(string $acronym): ?Herbaria
@@ -23,16 +34,20 @@ class HerbariumService extends BaseEntityService
     public function setFilenameFallback(User $user, bool $value): HerbariumService
     {
         $herbarium = $this->getCurrentUserHerbarium($user);
-        $herbarium->setFallbackFilename($value);
-        $this->entityManager->flush();
+        if ($herbarium) {
+            $herbarium->setFallbackFilename($value);
+            $this->entityManager->flush();
+        }
         return $this;
     }
 
     public function setMultiplier(User $user, bool $value): HerbariumService
     {
         $herbarium = $this->getCurrentUserHerbarium($user);
-        $herbarium->setMultipleBarcodeMultiplier($value);
-        $this->entityManager->flush();
+        if ($herbarium) {
+            $herbarium->setMultipleBarcodeMultiplier($value);
+            $this->entityManager->flush();
+        }
         return $this;
     }
 }

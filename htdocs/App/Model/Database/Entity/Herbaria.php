@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
@@ -52,7 +53,7 @@ class Herbaria
     #[OneToMany(targetEntity: Photos::class, mappedBy: 'herbarium')]
     protected Collection $photos;
 
-    #[OneToMany(targetEntity: User::class, mappedBy: 'herbarium')]
+    #[ManyToMany(targetEntity: User::class, mappedBy: 'herbariums')]
     protected Collection $users;
 
     #[OneToMany(targetEntity: Contact::class, mappedBy: 'herbarium')]

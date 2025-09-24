@@ -27,7 +27,7 @@
 </div>
 <br><hr><br>
 <div class="col">
-<h3>Only for testing purposes: </h3>
+<h3>Experimental: </h3>
     <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}" role="alert">
         {$flash->message}
     </div>
@@ -39,6 +39,10 @@
 
         <a n:href="openID provider => 'orcid'" class="btn btn-secondary btn-lg">
             <i class="bi bi-shield-lock"></i> Sign in with ORCID
+        </a>
+
+        <a n:href="openID provider => 'mock'" class="btn btn-secondary btn-lg">
+            <i class="bi bi-shield-lock"></i> Sign in with mocked provider
         </a>
     </div>
 

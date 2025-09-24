@@ -17,7 +17,7 @@ final class NonValidImportFilenameReviseTest extends IntegrationTestCase
     public function testRegisterNewFiles(): void
     {
         $this->checkBefore();
-        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->herbarium)
+        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->lastVisitedHerbarium)
             ->setFallbackFilename(true)
             ->setMultipleBarcodeMultiplier(false);
         $this->em->flush();

@@ -48,7 +48,7 @@ abstract class IntegrationTestCase extends TestCase
 
     protected function provideLoggedCuratorUser()
     {
-        $identity = new Identity(2, ['curator'], ['herbarium' => 1]);
+        $identity = new Identity(2, ['curator'], ['lastVisitedHerbarium' => 1, 'herbariums' => [1]]);
         $this->user = $this->container->getByType(User::class);
         $this->user->login($identity);
     }

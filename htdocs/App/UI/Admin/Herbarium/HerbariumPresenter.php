@@ -14,7 +14,7 @@ final class HerbariumPresenter extends SecuredPresenter
     public function renderDefault(): void
     {
         $this->template->title = 'Herbarium overview';
-        $this->template->herbarium = $this->herbariumService->find($this->user->getIdentity()->herbarium);
+        $this->template->herbarium = $this->herbariumService->getCurrentUserHerbarium($this->user);
     }
 
     public function actionSetSettings(string $feature, ?string $value): void

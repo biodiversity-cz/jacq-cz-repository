@@ -20,7 +20,7 @@ final class ValidImportMultiplierTest extends IntegrationTestCase
     {
         $this->checkBefore();
 
-        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->herbarium)
+        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->lastVisitedHerbarium)
             ->setFallbackFilename(false)
             ->setMultipleBarcodeMultiplier(true);
         $this->em->flush();

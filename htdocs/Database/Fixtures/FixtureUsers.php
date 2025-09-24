@@ -31,7 +31,8 @@ class FixtureUsers extends FixtureBase
             ->setName('Petr')
             ->setSurname('Novotný')
             ->setEmail('krkabol@gmail.com')
-            ->setHerbarium($herbariumPrc)
+            ->addHerbarium($herbariumPrc)
+            ->setLastVisitedHerbarium($herbariumPrc)
             ->setCreatedAt()
             ->setLastEditAt()
             ->setRole($manager->getRepository(UserRole::class)->findOneBy(['name' => 'superadmin']));
@@ -42,7 +43,8 @@ class FixtureUsers extends FixtureBase
             ->setName('Zdeněk')
             ->setSurname('Vaněček')
             ->setEmail('krkabol@gmail.com')
-            ->setHerbarium($herbariumPrc)
+            ->addHerbarium($herbariumPrc)
+            ->setLastVisitedHerbarium($herbariumPrc)
             ->setCreatedAt()
             ->setLastEditAt()
             ->setRole($manager->getRepository(UserRole::class)->findOneBy(['name' => 'curator']));
@@ -53,7 +55,8 @@ class FixtureUsers extends FixtureBase
             ->setName('test')
             ->setSurname('ONLY')
             ->setEmail('krkabol@gmail.com')
-            ->setHerbarium($herbariumTest)
+            ->addHerbarium($herbariumTest)
+            ->setLastVisitedHerbarium($herbariumTest)
             ->setCreatedAt()
             ->setLastEditAt()
             ->setRole($manager->getRepository(UserRole::class)->findOneBy(['name' => 'curator']));

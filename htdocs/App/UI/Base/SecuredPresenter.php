@@ -28,14 +28,15 @@ abstract class SecuredPresenter extends BasePresenter
     {
 
         $identity = $this->user->getIdentity();
-        $herbariumId = $identity->data['herbarium'] ?? null;
+        $herbariumId = $identity->data['lastVisitedHerbarium'] ?? null;
 
         if ($herbariumId) {
             $this->herbarium = $this->herbariumService->getCurrentUserHerbarium($this->user);
+            $this->template->herbarium = $this->herbarium;
         } else {
             // Handle users without herbarium (new OpenID users)
             // Redirect to a page where they can select/request a herbarium
-            if (!$this->presenter->isLinkCurrent('Admin:Herbarium:request')) {
+            if (!$this->presenter->isLinkCurrent(':Admin:Herbarium:request')) {
                 $this->redirect(':Admin:Herbarium:request');
             }
         }
@@ -43,11 +44,6 @@ abstract class SecuredPresenter extends BasePresenter
         parent::startup();
     }
 
-    public function beforeRender(): void
-    {
-        $this->template->herbarium = $this->herbarium;
 
-        parent::beforeRender();
-    }
 
 }

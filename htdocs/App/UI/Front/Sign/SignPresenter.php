@@ -127,6 +127,7 @@ final class SignPresenter extends UnsecuredPresenter
 
     public function processLoginForm(Form $form): void
     {
+//        $form->addError('Password authentication is disabled. Please use OpenID to sign in.');
         try {
             $this->getUser()->setExpiration($form->values->remember ? '14 days' : '20 minutes');
             $this->getUser()->login($form->values->username, $form->values->password);

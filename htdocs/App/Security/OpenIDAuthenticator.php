@@ -48,7 +48,8 @@ final class OpenIDAuthenticator
             $user->getRole()->getName(),
             [
                 'name' => $user->getFullname(),
-                'herbarium' => $user->getHerbarium() ? $user->getHerbarium()->getId() : null,
+                'lastVisitedHerbarium' => $user->getLastVisitedHerbarium()?->getId(),
+                'herbariums' => $user->getHerbariums()->map(fn($h) => $h->getId())->toArray(),
                 'openidSubject' => $user->getOpenidSubject(),
                 'openidProvider' => $user->getOpenidProvider()
             ]

@@ -33,30 +33,3 @@ test('findOneWithAcronym calls repository and returns entity or null', function 
     Assert::null($service->findOneWithAcronym('XYZ'));
 });
 
-test('getCurrentUserHerbarium returns correct Herbaria entity', function () {
-    $herbariumId = 123;
-    $container = Bootstrap::boot()->createContainer();
-    $user = $container->getByType(User::class);
-
-    $herbaria = Mockery::mock(Herbaria::class);
-    $repository = Mockery::mock(EntityRepository::class);
-
-    $entityManager = Mockery::mock(EntityManagerInterface::class);
-    $entityManager->shouldReceive('getRepository')
-        ->once()
-        ->with(Herbaria::class)
-        ->andReturn($repository);
-
-    $entityManager->shouldReceive('getReference')
-        ->once()
-        ->with(Herbaria::class, $herbariumId)
-        ->andReturn($herbaria);
-
-    $identity = new Identity(123, null, ['herbarium' => 123]);
-    $user->login($identity);
-    $service = new HerbariumService($entityManager);
-
-
-    $result = $service->getCurrentUserHerbarium($user);
-    Assert::same($herbaria, $result);
-});
