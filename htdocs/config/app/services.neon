@@ -1,6 +1,7 @@
 services:
     - App\Core\RouterFactory::createRouter
     - App\Security\UserAuthenticator
+    - App\Security\OpenIDAuthenticator
     - App\Services\WebDir(%wwwDir%)
     - App\Services\TempDir(%tempDir%)
     - App\Services\RepositoryConfiguration(%storage%)

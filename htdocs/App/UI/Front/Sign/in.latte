@@ -25,4 +25,24 @@
 
 </form>
 </div>
+<br><hr><br>
+<div class="col">
+<h3>Only for testing purposes: </h3>
+    <div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}" role="alert">
+        {$flash->message}
+    </div>
 
+    <div class="d-grid gap-2">
+        <a n:href="openID provider => 'cesnet'" class="btn btn-primary btn-lg">
+            <i class="bi bi-google"></i> Sign in with CESNET AAI
+        </a>
+
+        <a n:href="openID provider => 'orcid'" class="btn btn-secondary btn-lg">
+            <i class="bi bi-shield-lock"></i> Sign in with ORCID
+        </a>
+    </div>
+
+    <div class="mt-3 text-center">
+        <small class="text-muted">New users will be registered automatically with no Herbarium assigned.</small>
+    </div>
+</div>

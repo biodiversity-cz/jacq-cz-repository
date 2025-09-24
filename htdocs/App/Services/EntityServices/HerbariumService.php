@@ -10,7 +10,7 @@ class HerbariumService extends BaseEntityService
 
     protected string $entityName = Herbaria::class;
 
-    public function getCurrentUserHerbarium(User $user): Herbaria
+    public function getCurrentUserHerbarium(User $user): ?Herbaria
     {
         return $this->entityManager->getReference($this->entityName, $user->getIdentity()->herbarium);
     }

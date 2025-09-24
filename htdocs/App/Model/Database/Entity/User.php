@@ -36,9 +36,21 @@ class User
     #[Column(nullable: false, options: ['comment' => 'User email address'])]
     protected string $email;
 
+    #[Column(nullable: true, options: ['comment' => 'OpenID subject identifier'])]
+    protected ?string $openidSubject = null;
+
+    #[Column(nullable: true, options: ['comment' => 'OpenID provider'])]
+    protected ?string $openidProvider = null;
+
+    #[Column(nullable: true, options: ['comment' => 'OpenID ID token'])]
+    protected ?string $openidIdToken = null;
+
+    #[Column(nullable: true, options: ['comment' => 'OpenID refresh token'])]
+    protected ?string $openidRefreshToken = null;
+
     #[ManyToOne(targetEntity: Herbaria::class, inversedBy: 'users')]
-    #[JoinColumn(name: 'herbarium_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Herbarium'],)]
-    protected Herbaria $herbarium;
+    #[JoinColumn(name: 'herbarium_id', referencedColumnName: 'id', nullable: true, options: ['comment' => 'Herbarium'],)]
+    protected ?Herbaria $herbarium = null;
 
     #[ManyToOne(targetEntity: UserRole::class)]
     #[JoinColumn(name: 'role_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Role for ACL'])]
@@ -86,12 +98,12 @@ class User
         return $this;
     }
 
-    public function getHerbarium(): Herbaria
+    public function getHerbarium(): ?Herbaria
     {
         return $this->herbarium;
     }
 
-    public function setHerbarium(Herbaria $herbarium): User
+    public function setHerbarium(?Herbaria $herbarium): User
     {
         $this->herbarium = $herbarium;
 
@@ -163,4 +175,47 @@ class User
         return $this;
     }
 
+    public function getOpenidSubject(): ?string
+    {
+        return $this->openidSubject;
+    }
+
+    public function setOpenidSubject(?string $openidSubject): User
+    {
+        $this->openidSubject = $openidSubject;
+        return $this;
+    }
+
+    public function getOpenidProvider(): ?string
+    {
+        return $this->openidProvider;
+    }
+
+    public function setOpenidProvider(?string $openidProvider): User
+    {
+        $this->openidProvider = $openidProvider;
+        return $this;
+    }
+
+    public function getOpenidIdToken(): ?string
+    {
+        return $this->openidIdToken;
+    }
+
+    public function setOpenidIdToken(?string $openidIdToken): User
+    {
+        $this->openidIdToken = $openidIdToken;
+        return $this;
+    }
+
+    public function getOpenidRefreshToken(): ?string
+    {
+        return $this->openidRefreshToken;
+    }
+
+    public function setOpenidRefreshToken(?string $openidRefreshToken): User
+    {
+        $this->openidRefreshToken = $openidRefreshToken;
+        return $this;
+    }
 }

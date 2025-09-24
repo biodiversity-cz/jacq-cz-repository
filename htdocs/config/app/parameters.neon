@@ -16,3 +16,19 @@ parameters:
         databotImageSite: 1280 #px size of images used for all databots operations
         previewQuality: 80 #JPEG compression of preview shown to curator on pipeline error
 
+    openid:
+        providers:
+            cesnet:
+                enabled: true
+                clientId: aa123 # %env.CESNET_CLIENT_ID%
+                clientSecret: aa456 # %env.CESNET_CLIENT_SECRET%
+
+            orcid:
+                enabled: true
+                clientId: %env.ORCID_CLIENT_ID%
+                clientSecret: %env.ORCID_CLIENT_SECRET%
+                authorizationEndpoint: 'https://orcid.org/oauth/authorize'
+                tokenEndpoint: 'https://orcid.org/oauth/token'
+                userInfoEndpoint: 'https://pub.orcid.org/v3.0/{id}/person'
+                scopes: 'openid profile email'
+

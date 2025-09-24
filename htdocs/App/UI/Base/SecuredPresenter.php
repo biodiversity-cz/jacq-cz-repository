@@ -10,7 +10,7 @@ abstract class SecuredPresenter extends BasePresenter
 
     /** @inject */ public HerbariumService $herbariumService;
 
-    protected Herbaria $herbarium;
+    protected ?Herbaria $herbarium;
 
     public function checkRequirements(\ReflectionClass|\ReflectionMethod $element): void
     {
@@ -26,7 +26,19 @@ abstract class SecuredPresenter extends BasePresenter
 
     public function startup(): void
     {
-        $this->herbarium = $this->herbariumService->getCurrentUserHerbarium($this->user);
+
+        $identity = $this->user->getIdentity();
+        $herbariumId = $identity->data['herbarium'] ?? null;
+
+        if ($herbariumId) {
+            $this->herbarium = $this->herbariumService->getCurrentUserHerbarium($this->user);
+        } else {
+            // Handle users without herbarium (new OpenID users)
+            // Redirect to a page where they can select/request a herbarium
+            if (!$this->presenter->isLinkCurrent('Admin:Herbarium:request')) {
+                $this->redirect(':Admin:Herbarium:request');
+            }
+        }
 
         parent::startup();
     }

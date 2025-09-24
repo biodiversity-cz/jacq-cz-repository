@@ -50,4 +50,9 @@ class AppConfiguration
         return $this->config['databot']['basePath'];
     }
 
+    public function getOpenIDProviders(string $provider): array
+    {
+        return $this->config['openid']['providers'][$provider];
+    }
+
 }
