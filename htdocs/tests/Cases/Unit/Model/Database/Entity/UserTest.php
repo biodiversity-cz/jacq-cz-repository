@@ -43,9 +43,7 @@ test('User entity with TId, TCreatedAt and TLastEditAt traits', function (): voi
     $user->setLastVisitedHerbarium($herbarium);
     Assert::same($herbarium, $user->getLastVisitedHerbarium());
 
-    $role = new UserRole();
-    $user->setRole($role);
-    Assert::same($role, $user->getRole());
+
 
     // --- Test TId trait ---
     $refId = new \ReflectionProperty($user, 'id');

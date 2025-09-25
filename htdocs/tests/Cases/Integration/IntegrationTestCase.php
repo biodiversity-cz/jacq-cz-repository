@@ -27,7 +27,7 @@ abstract class IntegrationTestCase extends TestCase
     protected Container $container;
     protected S3Service $s3Service;
     protected RepositoryConfiguration $repositoryConfiguration;
-    protected User $user;
+    protected ?User $user;
     protected CuratorFacade $curatorFacade;
     protected Application $application;
 
@@ -43,19 +43,21 @@ abstract class IntegrationTestCase extends TestCase
         $this->application = $this->container->getByType(Application::class);
         $this->application->setAutoExit(false);
 
-        $this->provideLoggedCuratorUser();
     }
 
-    protected function provideLoggedCuratorUser()
+    protected function provideLoggedCuratorUser(): User
     {
-        $identity = new Identity(2, ['curator'], ['lastVisitedHerbarium' => 1, 'herbariums' => [1]]);
-        $this->user = $this->container->getByType(User::class);
-        $this->user->login($identity);
+        if (empty($this->user)) {
+            $identity = new Identity($this->getUserEntity(3));
+            $this->user = $this->container->getByType(User::class);
+            $this->user->login($identity);
+        }
+        return $this->user;
     }
 
-    protected function getUserEntity(): \App\Model\Database\Entity\User
+    protected function getUserEntity(int $id): \App\Model\Database\Entity\User
     {
-        return $this->em->getRepository(\App\Model\Database\Entity\User::class)->find($this->user->getIdentity()->id);
+        return $this->em->getRepository(\App\Model\Database\Entity\User::class)->find($id);
     }
 
     protected function checkBefore()

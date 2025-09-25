@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Nette\Security\AuthenticationException;
 use Nette\Security\Authenticator;
 use Nette\Security\Passwords;
-use Nette\Security\SimpleIdentity;
 
 final class UserAuthenticator implements Authenticator
 {
@@ -18,7 +17,7 @@ final class UserAuthenticator implements Authenticator
     {
     }
 
-    public function authenticate(string $username, string $password): SimpleIdentity
+    public function authenticate(string $username, string $password): Identity
     {
         $row = $this->entityManager->getRepository(User::class)->findOneByUsername($username);
         if (!$row) {
@@ -29,11 +28,7 @@ final class UserAuthenticator implements Authenticator
             throw new AuthenticationException('Invalid password.');
         }
 
-        return new SimpleIdentity(
-            $row->getId(),
-            $row->getRole()->getName(),
-            ['name' => $row->getFullname(), 'herbariums' => $row->getHerbariums()->map(fn($h) => $h->getId())->toArray(), 'lastVisitedHerbarium' => $row->getLastVisitedHerbarium()->getId()],
-        );
+        return new Identity($row, $this->entityManager);
     }
 
     /**

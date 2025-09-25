@@ -32,6 +32,7 @@ final class PrepareServicesTest extends IntegrationTestCase
             '--no-interaction' => true,
         ], 'Migrations failed');
 
+
         // fixtures
         $this->runCommand([
             'command' => 'doctrine:fixtures:load',

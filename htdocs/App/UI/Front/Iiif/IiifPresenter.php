@@ -6,6 +6,7 @@ use App\Exceptions\SpecimenIdException;
 use App\Model\IIIF\ManifestFactory;
 use App\Model\Specimen\Specimen;
 use App\Model\Specimen\SpecimenFactory;
+use App\Services\EntityServices\ImageDownloadLogService;
 use App\Services\EntityServices\PhotoService;
 use App\UI\Base\UnsecuredPresenter;
 
@@ -18,10 +19,22 @@ final class IiifPresenter extends UnsecuredPresenter
 
     /** @inject */ public PhotoService $photoService;
 
+    /** @inject */ public ImageDownloadLogService $imageDownloadLogService;
+
     public function actionManifest(string $id): void
     {
         $specimen = $this->getSpecimen($id);
         $manifest = $this->manifestFactory->createManifest($specimen, $this->link('//this'));
+
+        // Log the download request
+        $this->imageDownloadLogService->logDownload(
+            $this->photoService->getPublicPhotosOfSpecimen($specimen)[0]->getId(),
+            'iiif_manifest',
+            $this->getHttpRequest()->getRemoteAddress(),
+            $this->getHttpRequest()->getHeader('User-Agent'),
+            $this->getHttpRequest()->getHeader('Referer')
+        );
+
         $this->sendJson($manifest->toArray());
     }
 

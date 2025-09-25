@@ -6,9 +6,7 @@ namespace App\Security;
 use App\Model\Database\Entity\User;
 use App\Model\Database\Entity\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
-use Nette\Security\AuthenticationException;
 use Jumbojett\OpenIDConnectClient;
-use Nette\Security\SimpleIdentity;
 
 final class OpenIDAuthenticator
 {
@@ -18,7 +16,7 @@ final class OpenIDAuthenticator
     {
     }
 
-    public function authenticate(string $provider, array $config): SimpleIdentity
+    public function authenticate(string $provider, array $config): Identity
     {
         $oidc = new OpenIDConnectClient(
             $config['issuer'] ?? null,
@@ -43,17 +41,7 @@ final class OpenIDAuthenticator
         // Find or create user
         $user = $this->findOrCreateUser($subject, $provider, $userInfo, $idToken, $refreshToken);
 
-        return new Identity(
-            $user->getId(),
-            $user->getRole()->getName(),
-            [
-                'name' => $user->getFullname(),
-                'lastVisitedHerbarium' => $user->getLastVisitedHerbarium()?->getId(),
-                'herbariums' => $user->getHerbariums()->map(fn($h) => $h->getId())->toArray(),
-                'openidSubject' => $user->getOpenidSubject(),
-                'openidProvider' => $user->getOpenidProvider()
-            ]
-        );
+        return new Identity($user, $this->entityManager);
     }
 
     public function signOut(User $user, array $config): string
@@ -131,11 +119,12 @@ final class OpenIDAuthenticator
         // Assign default role (guest for new users)
         $role = $this->entityManager->getRepository(UserRole::class)->find(UserRole::USER);
         if ($role) {
-            $user->setRole($role);
+            // For new users, we need to assign a role to a herbarium
+            // For now, we'll just leave this for later assignment
         }
 
         // No herbarium for new users (will be assigned later)
-        $user->setHerbarium(null);
+        $user->setLastVisitedHerbarium(null);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

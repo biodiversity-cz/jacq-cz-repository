@@ -53,8 +53,8 @@ class Herbaria
     #[OneToMany(targetEntity: Photos::class, mappedBy: 'herbarium')]
     protected Collection $photos;
 
-    #[ManyToMany(targetEntity: User::class, mappedBy: 'herbariums')]
-    protected Collection $users;
+    #[OneToMany(targetEntity: UserHerbariumRole::class, mappedBy: 'herbarium')]
+    protected Collection $userHerbariumRoles;
 
     #[OneToMany(targetEntity: Contact::class, mappedBy: 'herbarium')]
     #[OrderBy(['surname' => 'ASC'])]
@@ -67,7 +67,7 @@ class Herbaria
     public function __construct()
     {
         $this->photos = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        $this->userHerbariumRoles = new ArrayCollection();
         $this->contacts = new ArrayCollection();
     }
 
@@ -117,9 +117,9 @@ class Herbaria
         return $this->address;
     }
 
-    public function getUsers(): Collection
+    public function getUserHerbariumRoles(): Collection
     {
-        return $this->users;
+        return $this->userHerbariumRoles;
     }
 
     public function setAddress(string $address): Herbaria

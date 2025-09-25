@@ -20,11 +20,11 @@ final class ValidImportMultiplierTest extends IntegrationTestCase
     {
         $this->checkBefore();
 
-        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->lastVisitedHerbarium)
+        $this->em->getRepository(Herbaria::class)->find($this->provideLoggedCuratorUser()->getIdentity()->getCurrentHerbariumId())
             ->setFallbackFilename(false)
             ->setMultipleBarcodeMultiplier(true);
         $this->em->flush();
-        $this->curatorFacade->registerNewFiles($this->user, ['photoType' => 4]);
+        $this->curatorFacade->registerNewFiles($this->provideLoggedCuratorUser(), ['photoType' => 4]);
 
         $this->expectAllImported();
     }

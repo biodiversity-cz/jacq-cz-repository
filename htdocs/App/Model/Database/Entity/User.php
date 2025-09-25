@@ -11,9 +11,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
-use Doctrine\ORM\Mapping\JoinTable;
-use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity()]
@@ -56,23 +55,18 @@ class User
     #[JoinColumn(name: 'last_visited_herbarium',   referencedColumnName: 'id', nullable: true, options: ['comment' => 'Last visited herbarium'])]
     protected ?Herbaria $lastVisitedHerbarium = null;
 
-    #[ManyToOne(targetEntity: UserRole::class)]
-    #[JoinColumn(name: 'role_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Role for ACL'])]
-    protected UserRole $role;
-
     #[Column(type: Types::BOOLEAN, nullable: false, options: ['comment' => 'Option to disable access for a specific user'])]
     protected bool $active = true;
 
     #[Column(type: Types::TEXT, length: 60000, nullable: true, options: ['comment' => 'additional information about user'])]
     protected ?string $comment;
 
-    #[ManyToMany(targetEntity: Herbaria::class)]
-    #[JoinTable(name: 'user_herbaria')]
-    protected Collection $herbariums;
+    #[OneToMany(targetEntity: UserHerbariumRole::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    protected Collection $userHerbariumRoles;
 
     public function __construct()
     {
-        $this->herbariums = new ArrayCollection();
+        $this->userHerbariumRoles = new ArrayCollection();
     }
 
     public function getUsername(): string
@@ -111,17 +105,6 @@ class User
         return $this;
     }
 
-    public function getRole(): UserRole
-    {
-        return $this->role;
-    }
-
-    public function setRole(UserRole $role): User
-    {
-        $this->role = $role;
-
-        return $this;
-    }
 
     public function isActive(): bool
     {
@@ -220,24 +203,80 @@ class User
         return $this;
     }
 
-    public function getHerbariums(): Collection
+    public function getUserHerbariumRoles(): Collection
     {
-        return $this->herbariums;
+        return $this->userHerbariumRoles;
     }
 
-    public function addHerbarium(Herbaria $herbarium): User
+    public function addUserHerbariumRole(UserHerbariumRole $userHerbariumRole): User
     {
-        if (!$this->herbariums->contains($herbarium)) {
-            $this->herbariums->add($herbarium);
+        if (!$this->userHerbariumRoles->contains($userHerbariumRole)) {
+            $this->userHerbariumRoles->add($userHerbariumRole);
+            $userHerbariumRole->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeHerbarium(Herbaria $herbarium): User
+    public function removeUserHerbariumRole(UserHerbariumRole $userHerbariumRole): User
     {
-        $this->herbariums->removeElement($herbarium);
+        $this->userHerbariumRoles->removeElement($userHerbariumRole);
 
+        return $this;
+    }
+
+    /**
+     * Get all herbaria this user has access to
+     */
+    public function getHerbaria(): Collection
+    {
+        return $this->userHerbariumRoles->map(fn(UserHerbariumRole $uhr) => $uhr->getHerbarium());
+    }
+
+    /**
+     * Get the role of this user in a specific herbarium
+     */
+    public function getRoleInHerbarium(Herbaria $herbarium): ?UserRole
+    {
+        foreach ($this->userHerbariumRoles as $userHerbariumRole) {
+            if ($userHerbariumRole->getHerbarium()->getId() === $herbarium->getId()) {
+                return $userHerbariumRole->getRole();
+            }
+        }
+        
+        return null;
+    }
+
+    /**
+     * Check if user has a specific role in a herbarium
+     */
+    public function hasRoleInHerbarium(Herbaria $herbarium, string $roleName): bool
+    {
+        $role = $this->getRoleInHerbarium($herbarium);
+        return $role && $role->getName() === $roleName;
+    }
+
+    /**
+     * Assign a role to this user in a specific herbarium
+     */
+    public function assignRoleToHerbarium(Herbaria $herbarium, UserRole $role): User
+    {
+        // Check if user already has a role in this herbarium
+        foreach ($this->userHerbariumRoles as $userHerbariumRole) {
+            if ($userHerbariumRole->getHerbarium()->getId() === $herbarium->getId()) {
+                $userHerbariumRole->setRole($role);
+                return $this;
+            }
+        }
+        
+        // Create new UserHerbariumRole
+        $userHerbariumRole = new UserHerbariumRole();
+        $userHerbariumRole->setUser($this);
+        $userHerbariumRole->setHerbarium($herbarium);
+        $userHerbariumRole->setRole($role);
+        
+        $this->userHerbariumRoles->add($userHerbariumRole);
+        
         return $this;
     }
 

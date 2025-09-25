@@ -3,6 +3,7 @@
 namespace App\Services\EntityServices;
 
 use App\Model\Database\Entity\Herbaria;
+use App\Security\Identity;
 use Nette\Security\User;
 
 class HerbariumService extends BaseEntityService
@@ -12,13 +13,15 @@ class HerbariumService extends BaseEntityService
 
     public function getCurrentUserHerbarium(User $user): ?Herbaria
     {
-        $lastVisitedHerbariumId = $user->getIdentity()->lastVisitedHerbarium;
+        $identity = $user->getIdentity();
+
+        $lastVisitedHerbariumId = $identity->getCurrentHerbariumId();
         if ($lastVisitedHerbariumId) {
             return $this->entityManager->getReference($this->entityName, $lastVisitedHerbariumId);
         }
 
         // If no last visited herbarium, return the first one from the user's herbariums
-        $herbariums = $user->getIdentity()->herbariums;
+        $herbariums = $identity->herbariums;
         if (!empty($herbariums)) {
             return $this->entityManager->getReference($this->entityName, $herbariums[0]);
         }
