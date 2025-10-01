@@ -35,7 +35,7 @@ jobs:
                 run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             -   name: Cache composer dependencies
-                uses: actions/cache@v4.2.4
+                uses: actions/cache@v4.3.0
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -47,7 +47,7 @@ jobs:
 
             #docker image
             -   name: Log in to the Container registry
-                uses: docker/login-action@v3.5.0
+                uses: docker/login-action@v3.6.0
                 with:
                     registry: ${{ env.REGISTRY }}
                     username: ${{ github.actor }}
