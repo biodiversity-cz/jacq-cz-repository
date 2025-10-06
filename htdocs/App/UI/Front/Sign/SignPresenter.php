@@ -8,8 +8,6 @@ use App\Security\OpenIDAuthenticator;
 use App\UI\Base\BasePresenter;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\AbortException;
-use Nette\Application\UI\Form;
-use Nette\Security\AuthenticationException;
 
 final class SignPresenter extends UnsecuredPresenter
 {
@@ -22,13 +20,6 @@ final class SignPresenter extends UnsecuredPresenter
 
     /** @inject  */ public FormFactory $formFactory;
     /** @inject  */ public OpenIDAuthenticator $openIDAuthenticator;
-
-    public function actionIn(): void
-    {
-        if ($this->user->isLoggedIn()) {
-            $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
-        }
-    }
 
     public function actionOut(): void
     {
@@ -106,41 +97,4 @@ final class SignPresenter extends UnsecuredPresenter
         return $config;
     }
 
-    protected function createComponentLoginForm(): Form
-    {
-        // Keep the form for backward compatibility, but it won't be used for authentication
-        $form = $this->formFactory->forFrontend();
-        $form->addText('username')
-            ->setRequired(true);
-        $form->addPassword('password')
-            ->setRequired(true);
-        $form->addCheckbox('remember')
-            ->setDefaultValue(true);
-        $form->addSubmit('submit');
-        $form->onSuccess[] = [$this, 'processLoginForm'];
-
-        return $form;
-    }
-
-    public function processLoginForm(Form $form): void
-    {
-
-//        // This method is kept for backward compatibility but will show a message
-//        $form->addError('Password authentication is disabled. Please use OpenID to sign in.');
-        try {
-            $this->getUser()->setExpiration($form->values->remember ? '14 days' : '20 minutes');
-            $this->getUser()->login($form->values->username, $form->values->password);
-        } catch (AuthenticationException $e) {
-            $form->addError('Invalid credentials');
-
-            return;
-        }
-
-        if ($this->backlink !== null) {
-
-            $this->restoreRequest($this->backlink);
-        }
-
-        $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
-    }
 }
