@@ -80,6 +80,8 @@ final class SignPresenter extends UnsecuredPresenter
 
             $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
         } catch (\Exception $e) {
+//            var_dump($config);
+//            var_dump($e->getMessage());exit;
             $this->flashMessage('OpenID authentication failed: ' . $e->getMessage(), 'danger');
             $this->redirect('in');
         }

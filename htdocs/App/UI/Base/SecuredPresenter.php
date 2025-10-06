@@ -3,15 +3,19 @@
 namespace App\UI\Base;
 
 use App\Model\Database\Entity\Herbaria;
+use App\Model\Database\Entity\User;
 use App\Security\Identity;
 use App\Services\EntityServices\HerbariumService;
+use App\Services\EntityServices\UserService;
 
 abstract class SecuredPresenter extends BasePresenter
 {
 
     /** @inject */ public HerbariumService $herbariumService;
+    /** @inject */ public UserService $userService;
 
     protected ?Herbaria $herbarium;
+    protected ?User $userEntity;
 
     public function checkRequirements(\ReflectionClass|\ReflectionMethod $element): void
     {
@@ -28,7 +32,7 @@ abstract class SecuredPresenter extends BasePresenter
     public function startup(): void
     {
         $identity = $this->user->getIdentity();
-
+        $this->userEntity = $this->userService->find($identity->getId());
         // If we have an EnhancedIdentity, use its method
         if ($identity instanceof Identity) {
             $this->herbarium = $this->herbariumService->find($identity->getCurrentHerbariumId());

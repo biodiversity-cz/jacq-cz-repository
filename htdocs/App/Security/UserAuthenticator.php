@@ -28,7 +28,7 @@ final class UserAuthenticator implements Authenticator
             throw new AuthenticationException('Invalid password.');
         }
 
-        return new Identity($row, $this->entityManager);
+        return new Identity($row);
     }
 
     /**
@@ -43,14 +43,5 @@ final class UserAuthenticator implements Authenticator
         return $this->passwords->hash($password);
     }
 
-//    public function changePassword(\Nette\Security\User $user, $formValues)
-//    {
-//        $userEntity = $this->em->getUserRepository()->find($user->getIdentity()->getId());
-//        if ($userEntity === NULL || !$this->passwords->verify($formValues->password_old, $userEntity->getPasswordHash())) {
-//            throw new InvalidArgumentException('Wrong current password');
-//        }
-//        $userEntity->setPassword($this->calculateHash($formValues->password_new));
-//        $this->em->flush();
-//    }
 
 }

@@ -56,10 +56,6 @@ final class OpenIDAuthenticator
         $logoutUrl = null;
 
         switch ($user->getOpenidProvider()) {
-            case 'google':
-                // Google doesn't support RP-initiated logout, just return home URL
-                $logoutUrl = 'https://accounts.google.com/logout';
-                break;
             case 'keycloak':
                 // Keycloak supports RP-initiated logout
                 $logoutUrl = rtrim($config['baseUrl'], '/') . '/realms/' . $config['realm'] .

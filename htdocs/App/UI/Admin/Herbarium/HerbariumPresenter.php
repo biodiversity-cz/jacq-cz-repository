@@ -22,7 +22,7 @@ final class HerbariumPresenter extends SecuredPresenter
     {
         $this->template->title = 'Herbarium overview';
         $this->template->herbarium = $this->herbariumService->getCurrentUserHerbarium($this->user);
-        $this->template->availableHerbaria = $this->getAvailableHerbaria();
+        $this->template->availableHerbaria = $this->userEntity->getHerbaria();
     }
 
     public function actionSetSettings(string $feature, ?string $value): void
