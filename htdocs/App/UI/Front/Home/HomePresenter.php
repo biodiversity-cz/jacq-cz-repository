@@ -18,7 +18,7 @@ final class HomePresenter extends UnsecuredPresenter
 
     public function actionGdpr(): void
     {
-        $this->redirectUrl('https://biodiversity-cz.github.io/herbarium-documentation/docs/legal/');
+        $this->redirectUrl('https://biodiversity-cz.github.io/herbarium-documentation/docs/legal/gdpr');
     }
 
 }
