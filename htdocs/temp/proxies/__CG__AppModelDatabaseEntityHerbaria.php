@@ -26,6 +26,7 @@ class Herbaria extends \App\Model\Database\Entity\Herbaria implements \Doctrine\
         "\0".'*'."\0".'address' => [parent::class, 'address', null, 8],
         "\0".'*'."\0".'bucket' => [parent::class, 'bucket', null, 8],
         "\0".'*'."\0".'contacts' => [parent::class, 'contacts', null, 8],
+        "\0".'*'."\0".'externalDatabase' => [parent::class, 'externalDatabase', null, 8],
         "\0".'*'."\0".'fallbackFilename' => [parent::class, 'fallbackFilename', null, 8],
         "\0".'*'."\0".'fullname' => [parent::class, 'fullname', null, 8],
         "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
@@ -35,11 +36,12 @@ class Herbaria extends \App\Model\Database\Entity\Herbaria implements \Doctrine\
         "\0".'*'."\0".'photos' => [parent::class, 'photos', null, 8],
         "\0".'*'."\0".'regexBarcode' => [parent::class, 'regexBarcode', null, 8],
         "\0".'*'."\0".'regexFilename' => [parent::class, 'regexFilename', null, 8],
-        "\0".'*'."\0".'users' => [parent::class, 'users', null, 8],
+        "\0".'*'."\0".'userHerbariumRoles' => [parent::class, 'userHerbariumRoles', null, 8],
         'acronym' => [parent::class, 'acronym', null, 8],
         'address' => [parent::class, 'address', null, 8],
         'bucket' => [parent::class, 'bucket', null, 8],
         'contacts' => [parent::class, 'contacts', null, 8],
+        'externalDatabase' => [parent::class, 'externalDatabase', null, 8],
         'fallbackFilename' => [parent::class, 'fallbackFilename', null, 8],
         'fullname' => [parent::class, 'fullname', null, 8],
         'id' => [parent::class, 'id', null, 8],
@@ -49,7 +51,7 @@ class Herbaria extends \App\Model\Database\Entity\Herbaria implements \Doctrine\
         'photos' => [parent::class, 'photos', null, 8],
         'regexBarcode' => [parent::class, 'regexBarcode', null, 8],
         'regexFilename' => [parent::class, 'regexFilename', null, 8],
-        'users' => [parent::class, 'users', null, 8],
+        'userHerbariumRoles' => [parent::class, 'userHerbariumRoles', null, 8],
     ];
 
     public function __isInitialized(): bool
