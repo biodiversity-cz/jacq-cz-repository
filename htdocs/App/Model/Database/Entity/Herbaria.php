@@ -23,6 +23,10 @@ class Herbaria
 
     use TId;
 
+    #[ManyToOne(targetEntity: ExternalDatabase::class)]
+    #[JoinColumn(name: 'external_database_id', referencedColumnName: 'id', nullable: false)]
+    protected ExternalDatabase $externalDatabase;
+
     #[Column(unique: true, nullable: false, options: ['comment' => 'Acronym of herbarium according to Index Herbariorum'])]
     protected string $acronym;
 
@@ -69,6 +73,17 @@ class Herbaria
         $this->photos = new ArrayCollection();
         $this->userHerbariumRoles = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+    }
+
+    public function getExternalDatabase(): ExternalDatabase
+    {
+        return $this->externalDatabase;
+    }
+
+    public function setExternalDatabase(ExternalDatabase $externalDatabase): Herbaria
+    {
+        $this->externalDatabase = $externalDatabase;
+        return $this;
     }
 
     public function getAcronym(): string
