@@ -24,7 +24,7 @@ class FixtureUsers extends FixtureBase
         $herbariumTest = $manager->getRepository(Herbaria::class)->findOneBy(['acronym' => 'TEST']);
         $herbariumPrc = $manager->getRepository(Herbaria::class)->findOneBy(['acronym' => 'PRC']);
         $password = $this->container->getByType(UserAuthenticator::class)->calculateHash('heslo');
-        
+
         $superadminRole = $manager->getRepository(UserRole::class)->findOneBy(['name' => 'superadmin']);
         $curatorRole = $manager->getRepository(UserRole::class)->findOneBy(['name' => 'curator']);
 
@@ -33,13 +33,13 @@ class FixtureUsers extends FixtureBase
             ->setPassword($password)
             ->setName('Petr')
             ->setSurname('Novotný')
-            ->setEmail('krkabol@gmail.com')
-            ->setLastVisitedHerbarium($herbariumPrc)
+            ->setEmail('petr.novotny@natur.cuni.cz')
+            ->setLastVisitedHerbarium($herbariumTest)
             ->setCreatedAt()
             ->setLastEditAt();
-            
+
         // Assign role to herbarium
-        $u1->assignRoleToHerbarium($herbariumPrc, $superadminRole);
+        $u1->assignRoleToHerbarium($herbariumTest, $superadminRole);
 
         $u2 = new User();
         $u2->setUsername('curator_prc_1')
@@ -50,7 +50,7 @@ class FixtureUsers extends FixtureBase
             ->setLastVisitedHerbarium($herbariumPrc)
             ->setCreatedAt()
             ->setLastEditAt();
-            
+
         // Assign role to herbarium
         $u2->assignRoleToHerbarium($herbariumPrc, $curatorRole);
 
@@ -63,7 +63,7 @@ class FixtureUsers extends FixtureBase
             ->setLastVisitedHerbarium($herbariumTest)
             ->setCreatedAt()
             ->setLastEditAt();
-            
+
         // Assign role to herbarium
         $u3->assignRoleToHerbarium($herbariumTest, $curatorRole);
 

@@ -4,19 +4,19 @@ declare(strict_types=1);
 namespace App\Security;
 
 use App\Model\Database\Entity\User;
-use App\Model\Database\Entity\UserRole;
 use Doctrine\ORM\EntityManagerInterface;
 use Jumbojett\OpenIDConnectClient;
+use Nette\Application\LinkGenerator;
 
 final class OpenIDAuthenticator
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager, private LinkGenerator $linkGenerator
     )
     {
     }
 
-    public function authenticate(string $provider, array $config): Identity
+    public function authenticate(array $config): Identity
     {
         $oidc = new OpenIDConnectClient(
             $config['issuer'] ?? null,
@@ -24,7 +24,7 @@ final class OpenIDAuthenticator
             $config['clientSecret']
         );
 
-        $oidc->setRedirectURL($config['redirectUri']);
+        $oidc->setRedirectURL($this->linkGenerator->link('Front:Sign:open-id-callback'));
 
         // Set up scopes
         $scopesString = $config['scopes'];
@@ -41,7 +41,7 @@ final class OpenIDAuthenticator
         $refreshToken = $oidc->getRefreshToken();
 
         // Find or create user
-        $user = $this->findOrCreateUser($subject, $provider, $userInfo, $idToken, $refreshToken);
+        $user = $this->findOrCreateUser($subject, $userInfo, $idToken, $refreshToken);
 
         return new Identity($user);
     }
@@ -68,34 +68,34 @@ final class OpenIDAuthenticator
         return $logoutUrl;
     }
 
-    private function findOrCreateUser(string $subject, string $provider, object $userInfo, string $idToken, ?string $refreshToken): User
+    private function findOrCreateUser(string $subject,   object $userInfo, string $idToken, ?string $refreshToken): User
     {
         // Try to find existing user by OpenID subject and provider
         $user = $this->entityManager->getRepository(User::class)
-            ->findOneBy(['openidSubject' => $subject, 'openidProvider' => $provider]);
+            ->findOneBy(['openidSubject' => $subject, 'openidProvider' => 'cesnet']);
 
         if ($user) {
-            // Update user info and tokens if needed
             $user->setName($userInfo->given_name ?? '')
                 ->setSurname($userInfo->family_name ?? '')
                 ->setEmail($userInfo->email ?? '')
                 ->setOpenidIdToken($idToken)
-                ->setOpenidRefreshToken($refreshToken);
+                ->setOpenidRefreshToken($refreshToken)
+                ->initializeCurrentHerbarium();
 
             $this->entityManager->flush();
             return $user;
         }
 
-        // Try to find existing user by email
+        // Try to find existing user by email = Link existing user to OpenID
         $user = $this->entityManager->getRepository(User::class)
             ->findOneBy(['email' => $userInfo->email ?? '']);
 
         if ($user) {
-            // Link existing user to OpenID
             $user->setOpenidSubject($subject)
-                ->setOpenidProvider($provider)
+                ->setOpenidProvider('cesnet')
                 ->setOpenidIdToken($idToken)
-                ->setOpenidRefreshToken($refreshToken);
+                ->setOpenidRefreshToken($refreshToken)
+                ->initializeCurrentHerbarium();
 
             $this->entityManager->flush();
             return $user;
@@ -109,20 +109,12 @@ final class OpenIDAuthenticator
             ->setSurname($userInfo->family_name ?? '')
             ->setEmail($userInfo->email ?? '')
             ->setOpenidSubject($subject)
-            ->setOpenidProvider($provider)
+            ->setOpenidProvider('cesnet')
             ->setOpenidIdToken($idToken)
             ->setOpenidRefreshToken($refreshToken)
-            ->setActive(true);
-
-        // Assign default role (guest for new users)
-        $role = $this->entityManager->getRepository(UserRole::class)->find(UserRole::USER);
-        if ($role) {
-            // For new users, we need to assign a role to a herbarium
-            // For now, we'll just leave this for later assignment
-        }
-
-        // No herbarium for new users (will be assigned later)
-        $user->setLastVisitedHerbarium(null);
+            ->setActive(false)
+            ->setCreatedAt()
+            ->setLastEditAt();
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

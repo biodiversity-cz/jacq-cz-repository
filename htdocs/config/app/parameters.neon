@@ -22,27 +22,5 @@ parameters:
                 enabled: true
                 clientId: %env.CESNET_CLIENT_ID%
                 clientSecret: %env.CESNET_CLIENT_SECRET%
-                metadataEndpoint: 'https://login.cesnet.cz/oidc/.well-known/openid-configuration'
-                authorizationEndpoint: 'https://login.cesnet.cz/oidc/authorize'
-                tokenEndpoint: 'https://login.cesnet.cz/oidc/token'
-                userInfoEndpoint: 'https://login.cesnet.cz/oidc/userinfo'
+                issuer: 'https://login.cesnet.cz/oidc/'
                 scopes: 'openid profile email isCesnetEligibleLastSeen'
-
-            orcid:
-                enabled: true
-                clientId: %env.ORCID_CLIENT_ID%
-                clientSecret: %env.ORCID_CLIENT_SECRET%
-                authorizationEndpoint: 'https://orcid.org/oauth/authorize'
-                tokenEndpoint: 'https://orcid.org/oauth/token'
-                userInfoEndpoint: 'https://pub.orcid.org/v3.0/{id}/person'
-                scopes: 'openid profile email'
-
-            mock:
-                enabled: true
-                clientId: test-client
-                clientSecret: test-secret
-                providerUrl: 'http://keycloak:8080/realms/test-realm'
-                authorizationEndpoint: 'http://localhost:9080/realms/test-realm/protocol/openid-connect/auth'
-                tokenEndpoint: 'http://keycloak:8080/realms/test-realm/protocol/openid-connect/token'
-                userInfoEndpoint: 'http://keycloak:8080/realms/test-realm/protocol/openid-connect/userinfo'
-                scopes: 'openid profile email'

@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Security;
 
@@ -10,10 +10,16 @@ class Identity extends SimpleIdentity
     private ?int $currentHerbariumId = null;
     private array $herbariums = [];
 
-    public function __construct(User $userEntity) {
+    public function __construct(User $userEntity)
+    {
 
-        $this->currentHerbariumId = $userEntity->getLastVisitedHerbarium()->getId();
         $this->herbariums = $userEntity->getHerbaria()->map(fn($h) => $h->getId())->toArray();
+
+        $currentHerbariumId = $userEntity->getLastVisitedHerbarium()?->getId();
+
+        if ($currentHerbariumId !== null && in_array($currentHerbariumId, $this->herbariums)) {
+            $this->currentHerbariumId = $currentHerbariumId;
+        }
         // Set the user ID as the identity ID
         parent::__construct($userEntity->getId(), $this->getUserRoles($userEntity), [
             'name' => $userEntity->getFullname(),
@@ -21,7 +27,6 @@ class Identity extends SimpleIdentity
             'username' => $userEntity->getUsername()
         ]);
     }
-
 
 
     /**
@@ -32,7 +37,7 @@ class Identity extends SimpleIdentity
         $roles = [];
 
         // If there's a current herbarium, get the role for that herbarium
-        $currentHerbarium =$userEntity->getLastVisitedHerbarium();
+        $currentHerbarium = $userEntity->getLastVisitedHerbarium();
         if ($currentHerbarium) {
             $role = $userEntity->getRoleInHerbarium($currentHerbarium);
             if ($role) {

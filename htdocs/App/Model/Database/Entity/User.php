@@ -39,16 +39,16 @@ class User
     #[Column(nullable: false, options: ['comment' => 'User email address'])]
     protected string $email;
 
-    #[Column(nullable: true, options: ['comment' => 'OpenID subject identifier'])]
+    #[Column(type: Types::TEXT, length: 5000, nullable: true, options: ['comment' => 'OpenID subject identifier'])]
     protected ?string $openidSubject = null;
 
-    #[Column(nullable: true, options: ['comment' => 'OpenID provider'])]
+    #[Column(type: Types::TEXT, length: 5000, nullable: true, options: ['comment' => 'OpenID provider'])]
     protected ?string $openidProvider = null;
 
-    #[Column(nullable: true, options: ['comment' => 'OpenID ID token'])]
+    #[Column(type: Types::TEXT, length: 5000, nullable: true, options: ['comment' => 'OpenID ID token'])]
     protected ?string $openidIdToken = null;
 
-    #[Column(nullable: true, options: ['comment' => 'OpenID refresh token'])]
+    #[Column(type: Types::TEXT, length: 5000, nullable: true, options: ['comment' => 'OpenID refresh token'])]
     protected ?string $openidRefreshToken = null;
 
     #[ManyToOne(targetEntity: Herbaria::class)]
@@ -243,7 +243,7 @@ class User
                 return $userHerbariumRole->getRole();
             }
         }
-        
+
         return null;
     }
 
@@ -268,15 +268,15 @@ class User
                 return $this;
             }
         }
-        
+
         // Create new UserHerbariumRole
         $userHerbariumRole = new UserHerbariumRole();
         $userHerbariumRole->setUser($this);
         $userHerbariumRole->setHerbarium($herbarium);
         $userHerbariumRole->setRole($role);
-        
+
         $this->userHerbariumRoles->add($userHerbariumRole);
-        
+
         return $this;
     }
 
@@ -290,5 +290,13 @@ class User
         $this->lastVisitedHerbarium = $lastVisitedHerbarium;
 
         return $this;
+    }
+
+    public function initializeCurrentHerbarium(): User
+    {
+        if ($this->getLastVisitedHerbarium() === null && !empty($this->getUserHerbariumRoles())) {
+            $this->setLastVisitedHerbarium($this->getUserHerbariumRoles()[0]);
+        }
+        return  $this;
     }
 }

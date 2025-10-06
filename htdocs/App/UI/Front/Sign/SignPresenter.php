@@ -7,6 +7,7 @@ use App\Model\Database\Entity\User;
 use App\Security\OpenIDAuthenticator;
 use App\UI\Base\BasePresenter;
 use App\UI\Base\UnsecuredPresenter;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Form;
 use Nette\Security\AuthenticationException;
 
@@ -66,12 +67,12 @@ final class SignPresenter extends UnsecuredPresenter
         $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_OUT);
     }
 
-    public function actionOpenID(string $provider = 'orcid'): void
+    public function actionOpenId(): void
     {
-        $config = $this->getOpenIDConfig($provider);
+        $config = $this->getOpenIDConfig('cesnet');
 
-//        try {
-            $identity = $this->openIDAuthenticator->authenticate($provider, $config);
+        try {
+            $identity = $this->openIDAuthenticator->authenticate($config);
             $this->user->login($identity);
 
             if ($this->backlink !== null) {
@@ -79,12 +80,12 @@ final class SignPresenter extends UnsecuredPresenter
             }
 
             $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
-//        } catch (\Exception $e) {
-//            var_dump($config);
-//            var_dump($e->getMessage());exit;
-//            $this->flashMessage('OpenID authentication failed: ' . $e->getMessage(), 'danger');
-//            $this->redirect('in');
-//        }
+        }catch (AbortException $e){
+            throw $e;
+        }
+        catch (\Exception $e) {
+            $this->error($e->getMessage());
+        }
     }
 
     public function actionOpenIdCallback(): void

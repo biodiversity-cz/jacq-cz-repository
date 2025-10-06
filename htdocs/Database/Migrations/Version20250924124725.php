@@ -26,10 +26,10 @@ final class Version20250924124725 extends AbstractMigration
         $this->addSql('ALTER TABLE user_herbaria ADD CONSTRAINT FK_A052C6BA1F5637D3 FOREIGN KEY (herbaria_id) REFERENCES herbaria (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE users DROP CONSTRAINT fk_1483a5e9dd127992');
         $this->addSql('DROP INDEX idx_1483a5e9dd127992');
-        $this->addSql('ALTER TABLE users ADD openid_subject VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE users ADD openid_provider VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE users ADD openid_id_token VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE users ADD openid_refresh_token VARCHAR(255) DEFAULT NULL');
+        $this->addSql('ALTER TABLE users ADD openid_subject TEXT DEFAULT NULL');
+        $this->addSql('ALTER TABLE users ADD openid_provider TEXT DEFAULT NULL');
+        $this->addSql('ALTER TABLE users ADD openid_id_token TEXT DEFAULT NULL');
+        $this->addSql('ALTER TABLE users ADD openid_refresh_token TEXT DEFAULT NULL');
         $this->addSql('ALTER TABLE users ADD last_visited_herbarium INT DEFAULT NULL');
         $this->addSql('UPDATE users SET last_visited_herbarium = herbarium_id');
         $this->addSql('ALTER TABLE users DROP herbarium_id');
