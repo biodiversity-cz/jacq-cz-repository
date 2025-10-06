@@ -70,7 +70,7 @@ final class SignPresenter extends UnsecuredPresenter
     {
         $config = $this->getOpenIDConfig($provider);
 
-        try {
+//        try {
             $identity = $this->openIDAuthenticator->authenticate($provider, $config);
             $this->user->login($identity);
 
@@ -79,18 +79,18 @@ final class SignPresenter extends UnsecuredPresenter
             }
 
             $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
-        } catch (\Exception $e) {
+//        } catch (\Exception $e) {
 //            var_dump($config);
 //            var_dump($e->getMessage());exit;
-            $this->flashMessage('OpenID authentication failed: ' . $e->getMessage(), 'danger');
-            $this->redirect('in');
-        }
+//            $this->flashMessage('OpenID authentication failed: ' . $e->getMessage(), 'danger');
+//            $this->redirect('in');
+//        }
     }
 
-    public function actionOpenIDCallback(string $provider): void
+    public function actionOpenIdCallback(): void
     {
         // This action handles the callback from OpenID providers
-        $this->actionOpenID($provider);
+        $this->actionOpenID();
     }
 
     private function getOpenIDConfig(string $provider): array
@@ -121,14 +121,10 @@ final class SignPresenter extends UnsecuredPresenter
         return $form;
     }
 
-//    public function processLoginForm(Form $form): void
-//    {
-//        // This method is kept for backward compatibility but will show a message
-//        $form->addError('Password authentication is disabled. Please use OpenID to sign in.');
-//    }
-
     public function processLoginForm(Form $form): void
     {
+
+//        // This method is kept for backward compatibility but will show a message
 //        $form->addError('Password authentication is disabled. Please use OpenID to sign in.');
         try {
             $this->getUser()->setExpiration($form->values->remember ? '14 days' : '20 minutes');

@@ -20,17 +20,18 @@ parameters:
         providers:
             cesnet:
                 enabled: true
-                clientId: aa123 # %env.CESNET_CLIENT_ID%
-                clientSecret: aa456 # %env.CESNET_CLIENT_SECRET%
-                authorizationEndpoint: 'https://orcid.org/oauth/authorize'
-                tokenEndpoint: 'https://orcid.org/oauth/token'
-                userInfoEndpoint: 'https://pub.orcid.org/v3.0/{id}/person'
-                scopes: 'openid profile email'
+                clientId: %env.CESNET_CLIENT_ID%
+                clientSecret: %env.CESNET_CLIENT_SECRET%
+                metadataEndpoint: 'https://login.cesnet.cz/oidc/.well-known/openid-configuration'
+                authorizationEndpoint: 'https://login.cesnet.cz/oidc/authorize'
+                tokenEndpoint: 'https://login.cesnet.cz/oidc/token'
+                userInfoEndpoint: 'https://login.cesnet.cz/oidc/userinfo'
+                scopes: 'openid profile email isCesnetEligibleLastSeen'
 
             orcid:
                 enabled: true
-                clientId: aa123 #%env.ORCID_CLIENT_ID%
-                clientSecret: aa123 #%env.ORCID_CLIENT_SECRET%
+                clientId: %env.ORCID_CLIENT_ID%
+                clientSecret: %env.ORCID_CLIENT_SECRET%
                 authorizationEndpoint: 'https://orcid.org/oauth/authorize'
                 tokenEndpoint: 'https://orcid.org/oauth/token'
                 userInfoEndpoint: 'https://pub.orcid.org/v3.0/{id}/person'

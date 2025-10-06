@@ -27,21 +27,23 @@ final class OpenIDAuthenticator
         $oidc->setRedirectURL($config['redirectUri']);
 
         // Set up scopes
-        $oidc->addScope(['openid', 'profile', 'email']);
+        $scopesString = $config['scopes'];
+        $scopesArray = explode(' ', $scopesString);
+        $oidc->addScope($scopesArray);
 
         // Authenticate
         $oidc->authenticate();
 
         // Get user info
+        $subject = $oidc->requestUserInfo('sub');
         $userInfo = $oidc->requestUserInfo();
-        $subject = $oidc->getSubject();
         $idToken = $oidc->getIdToken();
         $refreshToken = $oidc->getRefreshToken();
 
         // Find or create user
         $user = $this->findOrCreateUser($subject, $provider, $userInfo, $idToken, $refreshToken);
 
-        return new Identity($user, $this->entityManager);
+        return new Identity($user);
     }
 
     public function signOut(User $user, array $config): string
