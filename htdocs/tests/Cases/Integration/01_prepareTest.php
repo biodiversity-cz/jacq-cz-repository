@@ -24,8 +24,9 @@ final class PrepareServicesTest extends IntegrationTestCase
         $connection->executeStatement("DROP SCHEMA IF EXISTS {$schema} CASCADE");
         $connection->executeStatement("DROP SCHEMA IF EXISTS front CASCADE");
         $connection->executeStatement("DROP SCHEMA IF EXISTS databots CASCADE");
+        $connection->executeStatement("DROP SCHEMA IF EXISTS cache CASCADE");
         $connection->executeStatement("CREATE SCHEMA {$schema}");
-//TODO add check for emptiness
+
         // db migration
         $this->runCommand([
             'command' => 'migrations:migrate',
