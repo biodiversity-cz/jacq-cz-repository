@@ -58,7 +58,7 @@ final class SignPresenter extends UnsecuredPresenter
         $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_OUT);
     }
 
-    public function actionOpenId(): void
+    public function actionIn(): void
     {
         $config = $this->getOpenIDConfig('cesnet');
 
@@ -82,7 +82,7 @@ final class SignPresenter extends UnsecuredPresenter
     public function actionOpenIdCallback(): void
     {
         // This action handles the callback from OpenID providers
-        $this->actionOpenID();
+        $this->actionIn();
     }
 
     private function getOpenIDConfig(string $provider): array
