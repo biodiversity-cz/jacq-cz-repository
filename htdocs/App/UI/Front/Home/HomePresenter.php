@@ -16,4 +16,9 @@ final class HomePresenter extends UnsecuredPresenter
         $this->template->herbaria = $this->herbariumService->findAll();
     }
 
+    public function actionGdpr(): void
+    {
+        $this->redirectUrl('https://biodiversity-cz.github.io/herbarium-documentation/docs/legal/gdpr');
+    }
+
 }

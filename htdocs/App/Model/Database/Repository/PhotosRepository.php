@@ -43,7 +43,7 @@ class PhotosRepository extends AbstractRepository
 
     public function getDefaultDatasource(User $user): QueryBuilder
     {
-        return $this->createQueryBuilder('p')->andWhere('p.herbarium = :userHerbarium  OR :isAdmin = true')->setParameter('userHerbarium', $user->getIdentity()->herbarium)->setParameter('isAdmin', $user->isInRole('ROLE_ADMIN'));
+        return $this->createQueryBuilder('p')->andWhere('p.herbarium = :userHerbarium  OR :isAdmin = true')->setParameter('userHerbarium', $user->getIdentity()->getCurrentHerbariumId())->setParameter('isAdmin', $user->isInRole('ROLE_ADMIN'));
     }
 
     public function getPublishedPhotosDatasource(): QueryBuilder

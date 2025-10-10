@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
@@ -21,6 +22,10 @@ class Herbaria
 {
 
     use TId;
+
+    #[ManyToOne(targetEntity: ExternalDatabase::class)]
+    #[JoinColumn(name: 'external_database_id', referencedColumnName: 'id', nullable: false)]
+    protected ExternalDatabase $externalDatabase;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'Acronym of herbarium according to Index Herbariorum'])]
     protected string $acronym;
@@ -52,8 +57,8 @@ class Herbaria
     #[OneToMany(targetEntity: Photos::class, mappedBy: 'herbarium')]
     protected Collection $photos;
 
-    #[OneToMany(targetEntity: User::class, mappedBy: 'herbarium')]
-    protected Collection $users;
+    #[OneToMany(targetEntity: UserHerbariumRole::class, mappedBy: 'herbarium')]
+    protected Collection $userHerbariumRoles;
 
     #[OneToMany(targetEntity: Contact::class, mappedBy: 'herbarium')]
     #[OrderBy(['surname' => 'ASC'])]
@@ -66,8 +71,19 @@ class Herbaria
     public function __construct()
     {
         $this->photos = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        $this->userHerbariumRoles = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+    }
+
+    public function getExternalDatabase(): ExternalDatabase
+    {
+        return $this->externalDatabase;
+    }
+
+    public function setExternalDatabase(ExternalDatabase $externalDatabase): Herbaria
+    {
+        $this->externalDatabase = $externalDatabase;
+        return $this;
     }
 
     public function getAcronym(): string
@@ -116,9 +132,9 @@ class Herbaria
         return $this->address;
     }
 
-    public function getUsers(): Collection
+    public function getUserHerbariumRoles(): Collection
     {
-        return $this->users;
+        return $this->userHerbariumRoles;
     }
 
     public function setAddress(string $address): Herbaria

@@ -3,10 +3,11 @@
 namespace App\UI\Front\Sign;
 
 use App\Forms\FormFactory;
+use App\Model\Database\Entity\User;
+use App\Security\OpenIDAuthenticator;
 use App\UI\Base\BasePresenter;
 use App\UI\Base\UnsecuredPresenter;
-use Nette\Application\UI\Form;
-use Nette\Security\AuthenticationException;
+use Nette\Application\AbortException;
 
 final class SignPresenter extends UnsecuredPresenter
 {
@@ -18,55 +19,82 @@ final class SignPresenter extends UnsecuredPresenter
     public $backlink;
 
     /** @inject  */ public FormFactory $formFactory;
-
-    public function actionIn(): void
-    {
-        if ($this->getUser()->isLoggedIn()) {
-            $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
-        }
-    }
+    /** @inject  */ public OpenIDAuthenticator $openIDAuthenticator;
 
     public function actionOut(): void
     {
-        if ($this->getUser()->isLoggedIn()) {
-            $this->getUser()->logout();
+        if ($this->user->isLoggedIn()) {
+            // Get user's OpenID provider
+            $identity = $this->user->getIdentity();
+            $provider = $identity->data['openidProvider'] ?? null;
+
+            if ($provider) {
+                // Get user entity
+                $userRepository = $this->entityManager->getRepository(User::class);
+                $userEntity = $userRepository->find($identity->getId());
+
+                if ($userEntity) {
+                    // Get provider config
+                    $config = $this->getOpenIDConfig($provider);
+
+                    // Perform OpenID sign out
+                    $logoutUrl = $this->openIDAuthenticator->signOut($userEntity, $config);
+
+                    // Log out locally
+                    $this->user->logout();
+
+                    // Redirect to provider logout if available
+                    if ($logoutUrl) {
+                        $this->redirectUrl($logoutUrl);
+                        return;
+                    }
+                }
+            }
+
+            // Standard logout if no OpenID provider or error
+            $this->user->logout();
         }
 
         $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_OUT);
     }
 
-    public function processLoginForm(Form $form): void
+    public function actionIn(): void
     {
+        $config = $this->getOpenIDConfig('cesnet');
+
         try {
-            $this->getUser()->setExpiration($form->values->remember ? '14 days' : '20 minutes');
-            $this->getUser()->login($form->values->username, $form->values->password);
-        } catch (AuthenticationException $e) {
-            $form->addError('Invalid credentials');
+            $identity = $this->openIDAuthenticator->authenticate($config);
+            $this->user->login($identity);
 
-            return;
+            if ($this->backlink !== null) {
+                $this->restoreRequest($this->backlink);
+            }
+
+            $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
+        }catch (AbortException $e){
+            throw $e;
         }
-
-        if ($this->backlink !== null) {
-
-            $this->restoreRequest($this->backlink);
+        catch (\Exception $e) {
+            $this->error($e->getMessage());
         }
-
-        $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
     }
 
-    protected function createComponentLoginForm(): Form
+    public function actionOpenIdCallback(): void
     {
-        $form = $this->formFactory->forFrontend();
-        $form->addText('username')
-            ->setRequired(true);
-        $form->addPassword('password')
-            ->setRequired(true);
-        $form->addCheckbox('remember')
-            ->setDefaultValue(true);
-        $form->addSubmit('submit');
-        $form->onSuccess[] = [$this, 'processLoginForm'];
+        // This action handles the callback from OpenID providers
+        $this->actionIn();
+    }
 
-        return $form;
+    private function getOpenIDConfig(string $provider): array
+    {
+        $config = $this->appConfiguration->getOpenIDProviders($provider);
+        if (empty($config))  {
+            throw new \InvalidArgumentException("OpenID provider '$provider' not configured");
+        }
+        $config['redirectUri'] = $this->link(':openid-callback');
+        $config['signoutRedirectUri'] = $this->link(':out');
+
+        return $config;
     }
 
 }

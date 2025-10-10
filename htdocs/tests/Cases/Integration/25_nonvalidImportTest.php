@@ -18,16 +18,16 @@ final class NonValidImportTest extends IntegrationTestCase
     {
 
         $this->checkBefore();
-        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->herbarium)
+        $this->em->getRepository(Herbaria::class)->find($this->provideLoggedCuratorUser()->getIdentity()->getCurrentHerbariumId())
             ->setFallbackFilename(false)
             ->setMultipleBarcodeMultiplier(false);
         $this->em->flush();
-        $this->curatorFacade->registerNewFiles($this->user, ['photoType' => 2]);
+        $this->curatorFacade->registerNewFiles($this->provideLoggedCuratorUser(), ['photoType' => 2]);
 
         $this->expectAllError();
 
         foreach ($this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::CONTROL_ERROR]) as $photo) {
-            $this->curatorFacade->deletePhoto($this->user, $photo);
+            $this->curatorFacade->deletePhoto($this->provideLoggedCuratorUser(), $photo);
             $this->em->flush();
         }
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::CONTROL_ERROR]);

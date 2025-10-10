@@ -16,3 +16,11 @@ parameters:
         databotImageSite: 1280 #px size of images used for all databots operations
         previewQuality: 80 #JPEG compression of preview shown to curator on pipeline error
 
+    openid:
+        providers:
+            cesnet:
+                enabled: true
+                clientId: %env.CESNET_CLIENT_ID%
+                clientSecret: %env.CESNET_CLIENT_SECRET%
+                issuer: 'https://login.cesnet.cz/oidc/'
+                scopes: 'openid profile email isCesnetEligibleLastSeen'

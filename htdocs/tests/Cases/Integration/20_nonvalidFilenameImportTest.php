@@ -19,16 +19,16 @@ final class NonValidImportFilenameTest extends IntegrationTestCase
 
         $this->checkBefore();
 //        $this->getUserEntity()->getHerbarium() //tohle nějak nepersistuje, musí se vzít rovnou ta entita
-        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->herbarium)
+        $this->em->getRepository(Herbaria::class)->find($this->provideLoggedCuratorUser()->getIdentity()->getCurrentHerbariumId())
             ->setFallbackFilename(true)
             ->setMultipleBarcodeMultiplier(false);
         $this->em->flush();
-        $this->curatorFacade->registerNewFiles($this->user, ['photoType' => 1]);
+        $this->curatorFacade->registerNewFiles($this->provideLoggedCuratorUser(), ['photoType' => 1]);
 
         $this->expectAllError();
 
         foreach ($this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::CONTROL_ERROR]) as $photo) {
-            $this->curatorFacade->deletePhoto($this->user, $photo);
+            $this->curatorFacade->deletePhoto($this->provideLoggedCuratorUser(), $photo);
             $this->em->flush();
         }
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::CONTROL_ERROR]);

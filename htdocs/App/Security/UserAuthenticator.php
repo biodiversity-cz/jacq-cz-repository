@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Nette\Security\AuthenticationException;
 use Nette\Security\Authenticator;
 use Nette\Security\Passwords;
-use Nette\Security\SimpleIdentity;
 
 final class UserAuthenticator implements Authenticator
 {
@@ -18,7 +17,7 @@ final class UserAuthenticator implements Authenticator
     {
     }
 
-    public function authenticate(string $username, string $password): SimpleIdentity
+    public function authenticate(string $username, string $password): Identity
     {
         $row = $this->entityManager->getRepository(User::class)->findOneByUsername($username);
         if (!$row) {
@@ -29,11 +28,7 @@ final class UserAuthenticator implements Authenticator
             throw new AuthenticationException('Invalid password.');
         }
 
-        return new SimpleIdentity(
-            $row->getId(),
-            $row->getRole()->getName(),
-            ['name' => $row->getFullname(), 'herbarium' => $row->getHerbarium()->getId()],
-        );
+        return new Identity($row);
     }
 
     /**
@@ -48,14 +43,5 @@ final class UserAuthenticator implements Authenticator
         return $this->passwords->hash($password);
     }
 
-//    public function changePassword(\Nette\Security\User $user, $formValues)
-//    {
-//        $userEntity = $this->em->getUserRepository()->find($user->getIdentity()->getId());
-//        if ($userEntity === NULL || !$this->passwords->verify($formValues->password_old, $userEntity->getPasswordHash())) {
-//            throw new InvalidArgumentException('Wrong current password');
-//        }
-//        $userEntity->setPassword($this->calculateHash($formValues->password_new));
-//        $this->em->flush();
-//    }
 
 }

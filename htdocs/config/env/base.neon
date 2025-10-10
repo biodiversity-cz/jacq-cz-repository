@@ -17,6 +17,7 @@ php:
 session:
 	expiration: 14 days
 	autoStart: true
+	cookieHttponly: true
 
 latte:
 	locale: en
@@ -53,3 +54,4 @@ http:
         Access-Control-Allow-Origin: *
         Access-Control-Allow-Methods: GET
     frames: true
+    cookieSecure: %productionMode%

@@ -16,11 +16,11 @@ final class ValidImportTest extends IntegrationTestCase
     {
         $this->checkBefore();
 
-        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->herbarium)
+        $this->em->getRepository(Herbaria::class)->find($this->provideLoggedCuratorUser()->getIdentity()->getCurrentHerbariumId())
             ->setFallbackFilename(false)
             ->setMultipleBarcodeMultiplier(false);
         $this->em->flush();
-        $this->curatorFacade->registerNewFiles($this->user, ['photoType' => 1]);
+        $this->curatorFacade->registerNewFiles($this->provideLoggedCuratorUser(), ['photoType' => 1]);
 //        //         https://phpfashion.com/cs/velestrucne-testovani-presenteru-v-nette
 ////        https://github.com/webnazakazku/mango-presenter-tester
 ////        $presenterFactory = $this->container->getByType(IPresenterFactory::class);

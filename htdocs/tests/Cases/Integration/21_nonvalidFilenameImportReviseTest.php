@@ -17,16 +17,16 @@ final class NonValidImportFilenameReviseTest extends IntegrationTestCase
     public function testRegisterNewFiles(): void
     {
         $this->checkBefore();
-        $this->em->getRepository(Herbaria::class)->find($this->user->getIdentity()->herbarium)
+        $this->em->getRepository(Herbaria::class)->find($this->provideLoggedCuratorUser()->getIdentity()->getCurrentHerbariumId())
             ->setFallbackFilename(true)
             ->setMultipleBarcodeMultiplier(false);
         $this->em->flush();
-        $this->curatorFacade->registerNewFiles($this->user, ['photoType' => 1]);
+        $this->curatorFacade->registerNewFiles($this->provideLoggedCuratorUser(), ['photoType' => 1]);
         $this->expectAllError();
 
         $i=0;
         foreach ($this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::CONTROL_ERROR]) as $photo) {
-            $this->curatorFacade->reimportPhoto($this->user, $photo,  $this::SPECIMENS[$i++]);
+            $this->curatorFacade->reimportPhoto($this->provideLoggedCuratorUser(), $photo,  $this::SPECIMENS[$i++]);
             $this->em->flush();
         }
 

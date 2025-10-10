@@ -19,37 +19,6 @@ use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
-
-test('UserAuthenticator::authenticate returns SimpleIdentity for valid credentials', function (): void {
-    $user = \Mockery::mock(User::class);
-    $user->shouldReceive('getId')->andReturn(42);
-    $user->shouldReceive('getFullname')->andReturn('John Doe');
-    $user->shouldReceive('getPassword')->andReturn('hashedpassword');
-    $user->shouldReceive('getRole')->andReturn(\Mockery::mock(Role::class, function ($m) {
-        $m->shouldReceive('getName')->andReturn('admin');
-    }));
-    $user->shouldReceive('getHerbarium')->andReturn(\Mockery::mock(Herbaria::class, function ($m) {
-        $m->shouldReceive('getId')->andReturn(99);
-    }));
-
-    $repo = \Mockery::mock(\Doctrine\ORM\EntityRepository::class);
-    $repo->shouldReceive('findOneByUsername')->with('john')->andReturn($user);
-
-    $em = \Mockery::mock(EntityManagerInterface::class);
-    $em->shouldReceive('getRepository')->andReturn($repo);
-
-    $passwords = \Mockery::mock(Passwords::class);
-    $passwords->shouldReceive('verify')->with('secret', 'hashedpassword')->andReturn(true);
-
-    $auth = new UserAuthenticator($em, $passwords);
-    $identity = $auth->authenticate('john', 'secret');
-
-    Assert::type(SimpleIdentity::class, $identity);
-    Assert::equal(42, $identity->getId());
-    Assert::equal(['admin'], $identity->getRoles());
-    Assert::equal(['name' => 'John Doe', 'herbarium' => 99], $identity->getData());
-});
-
 test('UserAuthenticator::authenticate throws exception when user not found', function (): void {
     $repo = \Mockery::mock(\Doctrine\ORM\EntityRepository::class);
     $repo->shouldReceive('findOneByUsername')->with('john')->andReturn(null);

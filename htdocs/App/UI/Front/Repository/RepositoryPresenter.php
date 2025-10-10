@@ -5,6 +5,7 @@ namespace App\UI\Front\Repository;
 use App\Controls\Image\DetailControlFactory;
 use App\Exceptions\SpecimenIdException;
 use App\Model\Specimen\SpecimenFactory;
+use App\Services\EntityServices\ImageDownloadLogService;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
@@ -32,6 +33,8 @@ final class RepositoryPresenter extends UnsecuredPresenter
     /** @inject */
     public DetailControlFactory $detailControlFactory;
 
+    /** @inject */ public ImageDownloadLogService $imageDownloadLogService;
+
     public function actionArchiveImage(int $id): void
     {
         $photo = $this->photoService->getPublicPhoto($id);
@@ -39,7 +42,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename());
+        $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename(), $id, 'archive');
     }
 
     public function actionJP2Image(int $id): void
@@ -49,7 +52,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryImageServerBucket(), $photo->getJp2Filename());
+        $this->sendFile($this->repositoryConfiguration->getRepositoryImageServerBucket(), $photo->getJp2Filename(), $id, 'jp2');
     }
 
     public function actionDatabotThumbImage(int $id): void
@@ -59,11 +62,20 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $photo->getDatabotThumbFilename());
+        $this->sendFile($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $photo->getDatabotThumbFilename(), $id, 'databot_thumb');
     }
 
-    protected function sendFile(string $bucket, string $filename)
+    protected function sendFile(string $bucket, string $filename, int $photoId, string $imageType)
     {
+        // Log the download request
+        $this->imageDownloadLogService->logDownload(
+            $photoId,
+            $imageType,
+            $this->getHttpRequest()->getRemoteAddress(),
+            $this->getHttpRequest()->getHeader('User-Agent'),
+            $this->getHttpRequest()->getHeader('Referer')
+        );
+
         if ($this->s3Service->objectExists($bucket, $filename)) {
             $head = $this->s3Service->headObject($bucket, $filename);
             $stream = $this->s3Service->getStreamOfObject($bucket, $filename);

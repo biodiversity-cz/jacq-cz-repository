@@ -9,6 +9,8 @@ use App\Model\Database\Entity\Attributes\TOriginalFileAt;
 use App\Model\Database\Repository\PhotosRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -84,9 +86,13 @@ class Photos
     #[OneToMany(targetEntity: DatabotResult::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $databotResults;
 
+    #[OneToMany(targetEntity: SpecimenMetadata::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $specimenMetadata;
+
     public function __construct()
     {
         $this->databotResults = new ArrayCollection();
+        $this->specimenMetadata = new ArrayCollection();
     }
 
     public function getArchiveFilename(): ?string
@@ -336,6 +342,20 @@ class Photos
     public function isPublic(): bool
     {
         return in_array($this->status->getId(), [PhotosStatus::PUBLIC], true);
+    }
+
+    public function getSpecimenMetadata(): Collection
+    {
+        $criteria = Criteria::create()
+            ->orderBy(['timestamp' => Order::Descending]);
+
+        return $this->specimenMetadata->matching($criteria);
+    }
+
+    public function getLatestSpecimenMetadata(): ?SpecimenMetadata
+    {
+        $metadata = $this->getSpecimenMetadata();
+        return $metadata->first() ?: null;
     }
 
 }

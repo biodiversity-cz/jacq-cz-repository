@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Fixtures;
 
+use App\Model\Database\Entity\ExternalDatabase;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\License;
 use Database\Base\FixtureBase;
@@ -19,6 +20,7 @@ class FixtureHerbaria extends FixtureBase
     public function load(ObjectManager $manager): void
     {
         $license = $manager->getRepository(License::class)->findOneBy(['default' => true]);
+        $externalDb = $manager->getRepository(ExternalDatabase::class)->find(1);
         $herbariumTest = new Herbaria()
             ->setAcronym('TEST')
             ->setBucket('herbarium-test')
@@ -26,7 +28,8 @@ class FixtureHerbaria extends FixtureBase
             ->setMultipleBarcodeMultiplier(false)
             ->setLicense($license)
             ->setRegexBarcode('/^(?<herbarium>test)[\s\-–_](?<specimenId>\d+)$/i')
-            ->setRegexFilename('/^(?<herbarium>test)_(?<specimenId>\d+)(?<supplement>[_\-a-z]*)\.(?<extension>tif)$/i');
+            ->setRegexFilename('/^(?<herbarium>test)_(?<specimenId>\d+)(?<supplement>[_\-a-z]*)\.(?<extension>tif)$/i')
+            ->setExternalDatabase($externalDb);
 
         $herbariumPrc = new Herbaria()
             ->setAcronym('PRC')
@@ -38,7 +41,8 @@ class FixtureHerbaria extends FixtureBase
             ->setFallbackFilename(false)
             ->setMultipleBarcodeMultiplier(false)
             ->setRegexBarcode('/^(?<herbarium>prc)[\s\-–_](?<specimenId>\d+)$/i')
-            ->setRegexFilename('/^(?<herbarium>prc)_(?<specimenId>\d+)(?<supplement>[_\-a-z]*)\.(?<extension>tif)$/i');
+            ->setRegexFilename('/^(?<herbarium>prc)_(?<specimenId>\d+)(?<supplement>[_\-a-z]*)\.(?<extension>tif)$/i')
+            ->setExternalDatabase($externalDb);
 
         $manager->persist($herbariumTest);
         $manager->persist($herbariumPrc);
