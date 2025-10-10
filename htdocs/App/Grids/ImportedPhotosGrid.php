@@ -97,10 +97,10 @@ class ImportedPhotosGrid extends Control
         $this->grid->addColumnNumber('width', 'width [px]');
         $this->grid->addColumnNumber('height', 'height [px]');
         $this->grid->addColumnNumber('archiveFileSize', 'archiveFileSize [B]');
-        $this->grid->addColumnNumber('qualityCheck', 'qualityCheck')
-            ->setRenderer(function (Photos $item) {
-                return $this->databotsService->getQualityEvaluation($item);
-            });
+//        $this->grid->addColumnNumber('qualityCheck', 'qualityCheck')
+//            ->setRenderer(function (Photos $item) {
+//                return $this->databotsService->getQualityEvaluation($item);
+//            });
 
 
         $this->grid->addAction('delete', '', 'delete!')
