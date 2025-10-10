@@ -30,7 +30,7 @@ class DetailControl extends Control
         $template = $this->template;
         $template->photo = $this->photo;
         $template->coreInfo = ['EXIF'=>$this->photo->getExif(), 'Identify' => $this->photo->getIdentify()];
-//        $template->databots = $this->databotsService->databotResultsToArray($this->photo);
+        $template->databots = [];//$this->databotsService->databotResultsToArray($this->photo);
 //        $template->metric = $this->databotsService->getQualityEvaluation($this->photo);
         if ($forPublic) {
             $template->setFile(__DIR__ . '/detail_front.latte');
