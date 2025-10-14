@@ -7,7 +7,7 @@
 <h3>Participating herbaria</h3>
 <hr class="col-4" />
 {foreach $herbaria as $herbarium}
-<div class="row">
+<div class="row mt-4">
     <div class="col-md-2">
         <h4>Herbarium {$herbarium->getAcronym()}</h4>
 {if $herbarium->getLogo()!==null}<img src="{$herbarium->getLogo()}" class="img-fluid">{/if}
@@ -19,17 +19,17 @@
         <table class="table table-striped table-hover">
             <thead>
             <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Position</th>
-                <th scope="col">Email</th>
+                <th scope="col" class="w-30">Name</th>
+                <th scope="col" class="w-40">Position</th>
+                <th scope="col" class="w-30">Email</th>
             </tr>
             </thead>
             <tbody>
             {foreach $herbarium->getContacts() as $contact}
             <tr>
-                <td>{$contact->getFullname()}</td>
-                <td>{$contact->getDescription()}</td>
-                <td>{$contact->getEmail()|email}</td>
+                <td class="w-30">{$contact->getFullname()}</td>
+                <td class="w-40">{$contact->getDescription()}</td>
+                <td class="w-30">{$contact->getEmail()|email}</td>
             </tr>
             {/foreach}
             </tbody>
