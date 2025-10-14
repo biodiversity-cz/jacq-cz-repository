@@ -107,3 +107,12 @@
     padding: 1rem;
     opacity: revert;
 }
+
+// tables in contact
+.table-fixed {
+    table-layout: fixed;
+    width: 100%;
+}
+
+.w-30 { width: 30% !important; }
+.w-40 { width: 40% !important; }

@@ -22,7 +22,7 @@ class FixtureExternalDatabase extends FixtureBase
             ->setUrl('https://api.jacq.org/v1/stableIdentifier/resolve/')
             ->setElement('specimenID')
             ->setDescription('default external database');
-//        $manager->persist($db);
+        $manager->persist($db);
 
         $manager->flush();
     }

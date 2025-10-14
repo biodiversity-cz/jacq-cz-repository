@@ -26,7 +26,6 @@ final class Version20250829100649 extends AbstractMigration
         $this->addSql('COMMENT ON TABLE license IS \'Licenses available in the repository\'');
         $this->addSql('COMMENT ON COLUMN license.acronym IS \'acronym\'');
         $this->addSql('COMMENT ON COLUMN license.link IS \'link to full text\'');
-        $this->addSql('INSERT INTO license VALUES (default, \'CC-BY\', \'https://creativecommons.org/licenses/by/4.0/\', true)');
         $this->addSql('ALTER TABLE herbaria ADD license_id INT NOT NULL default 1');
         $this->addSql('ALTER TABLE herbaria ALTER COLUMN license_id DROP default');
         $this->addSql('ALTER TABLE herbaria ADD CONSTRAINT FK_40DF22BA460F904B FOREIGN KEY (license_id) REFERENCES license (id) NOT DEFERRABLE');

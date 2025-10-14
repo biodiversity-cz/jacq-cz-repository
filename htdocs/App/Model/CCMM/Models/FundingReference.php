@@ -1,0 +1,105 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Model\CCMM\Models;
+
+use App\Model\CCMM\XmlSerializable;
+use App\Model\CCMM\Traits\XmlSerializableTrait;
+
+/**
+ * Represents a funding reference with identifier, title, program and funder
+ */
+class FundingReference implements XmlSerializable
+{
+    use XmlSerializableTrait;
+
+    private ?string $iri = null;
+    private ?string $localIdentifier = null;
+    private ?string $awardTitle = null;
+    private ?string $fundingProgram = null;
+    private ?Funder $funder = null;
+
+    public function __construct() {
+    }
+
+
+    // Getters
+    public function getIri(): ?string {
+        return $this->iri;
+    }
+
+    public function getLocalIdentifier(): ?string {
+        return $this->localIdentifier;
+    }
+
+    public function getAwardTitle(): ?string {
+        return $this->awardTitle;
+    }
+
+    public function getFundingProgram(): ?string {
+        return $this->fundingProgram;
+    }
+
+    public function getFunder(): ?Funder {
+        return $this->funder;
+    }
+
+    // Setters
+    public function setIri(?string $iri): self {
+        $this->iri = $iri;
+        return $this;
+    }
+
+    public function setLocalIdentifier(?string $localIdentifier): self {
+        $this->localIdentifier = $localIdentifier;
+        return $this;
+    }
+
+    public function setAwardTitle(?string $awardTitle): self {
+        $this->awardTitle = $awardTitle;
+        return $this;
+    }
+
+    public function setFundingProgram(?string $fundingProgram): self {
+        $this->fundingProgram = $fundingProgram;
+        return $this;
+    }
+
+    public function setFunder(?Funder $funder): self {
+        $this->funder = $funder;
+        return $this;
+    }
+
+/**
+     * @inheritDoc
+     */
+    public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
+    {
+        $element = $this->createElement($document, $elementName ?? 'funding_reference');
+
+        if ($this->getIri() !== null) {
+            $iriElement = $this->createElement($document, 'iri', $this->getIri());
+            $element->appendChild($iriElement);
+        }
+
+        if ($this->getLocalIdentifier() !== null) {
+            $localIdElement = $this->createElement($document, 'local_identifier', $this->getLocalIdentifier());
+            $element->appendChild($localIdElement);
+        }
+
+        if ($this->getAwardTitle() !== null) {
+            $titleElement = $this->createElement($document, 'award_title', $this->getAwardTitle());
+            $element->appendChild($titleElement);
+        }
+
+        if ($this->getFundingProgram() !== null) {
+            $programElement = $this->createElement($document, 'funding_program', $this->getFundingProgram());
+            $element->appendChild($programElement);
+        }
+
+        $this->appendChildIfNotNull($element, $this->getFunder());
+
+        return $element;
+    }
+}
