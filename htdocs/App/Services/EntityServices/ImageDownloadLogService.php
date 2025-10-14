@@ -10,6 +10,13 @@ class ImageDownloadLogService extends BaseEntityService
 
     protected string $entityName = ImageDownloadLog::class;
 
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        private readonly ExcludedDownloadLogService $excludedDownloadLogService
+    ) {
+        parent::__construct($entityManager);
+    }
+
     public function logDownload(
         int $photoId,
         string $imageType,
@@ -17,6 +24,12 @@ class ImageDownloadLogService extends BaseEntityService
         ?string $userAgent = null,
         ?string $referrer = null
     ): void {
+        // Check if the IP address is excluded from logging
+        if ($ipAddress !== null && $this->excludedDownloadLogService->isIpExcluded($ipAddress)) {
+            // IP is excluded, do not log the download
+            return;
+        }
+
         $downloadRequest = new ImageDownloadLog();
         $downloadRequest->setPhotoId($photoId)
             ->setImageType($imageType)
