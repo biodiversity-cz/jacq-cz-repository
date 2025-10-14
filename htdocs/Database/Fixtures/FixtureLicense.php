@@ -21,7 +21,7 @@ class FixtureLicense extends FixtureBase
             ->setAcronym('CC-BY')
             ->setLink('https://creativecommons.org/licenses/by/4.0/')
             ->setDefault(true);
-//        $manager->persist($license);
+        $manager->persist($license);
 
         $manager->flush();
     }
