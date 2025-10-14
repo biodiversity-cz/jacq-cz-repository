@@ -1,0 +1,75 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Model\CCMM\Models;
+
+use App\Model\CCMM\XmlSerializable;
+use App\Model\CCMM\Traits\XmlSerializableTrait;
+
+/**
+ * Represents an organization with name and identifier
+ */
+class Organization implements XmlSerializable
+{
+    use XmlSerializableTrait;
+
+    private ?string $iri = null;
+    private ?Identifier $identifier = null;
+    private ?string $name = null;
+
+    public function __construct() {
+    }
+
+
+    // Getters
+    public function getIri(): ?string {
+        return $this->iri;
+    }
+
+    public function getIdentifier(): ?Identifier {
+        return $this->identifier;
+    }
+
+    public function getName(): ?string {
+        return $this->name;
+    }
+
+    // Setters
+    public function setIri(?string $iri): self {
+        $this->iri = $iri;
+        return $this;
+    }
+
+    public function setIdentifier(?Identifier $identifier): self {
+        $this->identifier = $identifier;
+        return $this;
+    }
+
+    public function setName(?string $name): self {
+        $this->name = $name;
+        return $this;
+    }
+
+/**
+     * @inheritDoc
+     */
+    public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
+    {
+        $element = $this->createElement($document, $elementName ?? 'organization');
+
+        if ($this->getIri() !== null) {
+            $iriElement = $this->createElement($document, 'iri', $this->getIri());
+            $element->appendChild($iriElement);
+        }
+
+        $this->appendChildIfNotNull($element, $this->getIdentifier());
+
+        if ($this->getName() !== null) {
+            $nameElement = $this->createElement($document, 'name', $this->getName());
+            $element->appendChild($nameElement);
+        }
+
+        return $element;
+    }
+}
