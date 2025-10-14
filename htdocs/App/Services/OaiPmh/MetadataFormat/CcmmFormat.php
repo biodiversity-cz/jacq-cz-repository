@@ -2,7 +2,13 @@
 
 namespace App\Services\OaiPmh\MetadataFormat;
 
+use App\Model\CCMM\Enum\Language;
+use App\Model\CCMM\Models\Dataset;
+use App\Model\CCMM\Models\Distribution;
+use App\Model\CCMM\Models\DistributionDataService;
+use App\Model\CCMM\Models\Documentation;
 use App\Model\Database\Entity\Photos;
+use Nette\Application\LinkGenerator;
 
 /**
  * CCMM metadata format placeholder implementation
@@ -10,6 +16,10 @@ use App\Model\Database\Entity\Photos;
  */
 final class CcmmFormat implements MetadataFormatInterface
 {
+    public function __construct(protected LinkGenerator $linkGenerator)
+    {
+    }
+
     public function getMetadataPrefix(): string
     {
         return 'ccmm';
@@ -17,19 +27,17 @@ final class CcmmFormat implements MetadataFormatInterface
 
     public function getSchema(): string
     {
-        // TODO: Replace with actual CCMM schema URL when available
-        return 'http://example.com/ccmm.xsd';
+        return 'https://techlib.github.io/CCMM/dataset/schema.xsd';
     }
 
     public function getMetadataNamespace(): string
     {
-        // TODO: Replace with actual CCMM namespace when available
-        return 'http://example.com/ccmm/';
+        return 'https://github.com/techlib/CCMM';
     }
 
     public function getFormatName(): string
     {
-        return 'CCMM Format';
+        return 'Czech Core Metadata Model';
     }
 
     public function toXml(mixed $item, string $oaiIdentifier): \DOMElement
@@ -40,68 +48,53 @@ final class CcmmFormat implements MetadataFormatInterface
 
         $doc = new \DOMDocument('1.0', 'UTF-8');
 
-        // Create root element with placeholder namespace
-        $ccmm = $doc->createElementNS($this->getMetadataNamespace(), 'ccmm:record');
-        $ccmm->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation',
-            $this->getMetadataNamespace() . ' ' . $this->getSchema());
-
-        $doc->appendChild($ccmm);
-
-        // TODO: Implement actual CCMM field mapping
-        // Placeholder basic structure:
-
-        // Basic identification
-        $this->addElement($doc, $ccmm, 'ccmm:identifier', $oaiIdentifier);
-        $this->addElement($doc, $ccmm, 'ccmm:specimenId', $item->getFullSpecimenId());
-
-        // Institution information
-        $institution = $doc->createElement('ccmm:institution');
-        $this->addElement($doc, $institution, 'ccmm:code', $item->getHerbarium()->getAcronym());
-        if ($item->getHerbarium()->getFullname()) {
-            $this->addElement($doc, $institution, 'ccmm:name', $item->getHerbarium()->getFullname());
-        }
-        $ccmm->appendChild($institution);
-
-        // Digital object information
-        $digitalObject = $doc->createElement('ccmm:digitalObject');
-        $this->addElement($doc, $digitalObject, 'ccmm:type', 'image');
-        if ($item->getWidth() && $item->getHeight()) {
-            $this->addElement($doc, $digitalObject, 'ccmm:width', (string) $item->getWidth());
-            $this->addElement($doc, $digitalObject, 'ccmm:height', (string) $item->getHeight());
-        }
-        if ($item->getOriginalFilename()) {
-            $this->addElement($doc, $digitalObject, 'ccmm:originalFilename', $item->getOriginalFilename());
-        }
-        $ccmm->appendChild($digitalObject);
-
-        // Temporal information
-        if ($item->getCreatedAt()) {
-            $this->addElement($doc, $ccmm, 'ccmm:dateCreated', $item->getCreatedAt()->format('c'));
-        }
-        if ($item->getLastEditAt()) {
-            $this->addElement($doc, $ccmm, 'ccmm:dateModified', $item->getLastEditAt()->format('c'));
+        $dataset = new Dataset();
+        foreach ($this->addDistributions($item) as $distribution) {
+            $dataset->addDistribution($distribution);
         }
 
-        // TODO: Add more CCMM-specific fields as needed:
-        // - Taxonomic information
-        // - Collection event data
-        // - Geographic coordinates
-        // - Collector information
-        // - Determination history
-        // - etc.
+        return $dataset->toXml($doc);
 
-        return $ccmm;
     }
 
     /**
-     * Helper method to add CCMM elements
+     * @return Distribution[]
      */
-    private function addElement(\DOMDocument $doc, \DOMElement $parent, string $name, string $value): void
+    private function addDistributions(Photos $photo): array
     {
-        if (!empty(trim($value))) {
-            $element = $doc->createElement($name);
-            $element->appendChild($doc->createTextNode(trim($value)));
-            $parent->appendChild($element);
-        }
+        $items = [];
+
+        //Databot thumbnails
+        $dataService = new DistributionDataService();
+        $documentation = new Documentation();
+        $documentation
+            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/databotThumb');
+        $dataService
+            ->setIri($this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->getId()]))
+            ->addTitle('1024px thumbnail',Language::EN)
+            ->addDescription('Serves image as thumbnail suitable for aI processing with length = 1024px',Language::EN)
+            ->setDocumentation($documentation);
+
+        $distribution = new Distribution();
+        $distribution->setDistributionDataService($dataService);
+        $items[] = $distribution;
+
+        //JPEG2000 thumbnails
+        $dataService = new DistributionDataService();
+        $documentation = new Documentation();
+        $documentation
+            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/JPEG2000');
+        $dataService
+            ->setIri($this->linkGenerator->link('Front:Repository:JP2Image', [$photo->getId()]))
+            ->addTitle('JPEG 2000',Language::EN)
+            ->addDescription('Serves full size image in JPEG 2000 format.',Language::EN)
+            ->setDocumentation($documentation);
+
+        $distribution = new Distribution();
+        $distribution->setDistributionDataService($dataService);
+        $items[] = $distribution;
+
+        return $items;
     }
+
 }

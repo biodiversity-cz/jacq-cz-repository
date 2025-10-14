@@ -291,7 +291,7 @@ class Dataset implements XmlSerializable
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         // Create the root element with namespaces
-        $element = $document->createElementNS('https://schema.ccmm.cz/research-data/1.0', 'dataset');
+        $element = $document->createElementNS('https://schema.ccmm.cz/research-data/1.0', 'ccmm:dataset');
         $element->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation', 'https://schema.ccmm.cz/research-data/1.0 https://raw.githubusercontent.com/techlib/CCMM/refs/heads/main/dataset/schema.xsd');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:gml', 'http://www.opengis.net/gml/3.2');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
