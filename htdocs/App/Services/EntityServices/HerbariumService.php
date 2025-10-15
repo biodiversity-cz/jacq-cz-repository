@@ -6,6 +6,7 @@ use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Security\Identity;
 use App\Services\Exceptions\RiskOfUnpredictabilityException;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\Security\User;
 
@@ -62,5 +63,10 @@ class HerbariumService extends BaseEntityService
             $this->entityManager->flush();
         }
         return $this;
+    }
+
+    public function getList(): array
+    {
+        return $this->repository->findBy([], ['id' => 'ASC']);
     }
 }
