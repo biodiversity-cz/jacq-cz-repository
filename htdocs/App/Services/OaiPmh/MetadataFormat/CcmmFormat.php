@@ -6,7 +6,11 @@ use App\Model\CCMM\Enum\Language;
 use App\Model\CCMM\Models\Dataset;
 use App\Model\CCMM\Models\Distribution;
 use App\Model\CCMM\Models\DistributionDataService;
+use App\Model\CCMM\Models\DistributionDownloadableFile;
 use App\Model\CCMM\Models\Documentation;
+use App\Model\CCMM\Models\DownloadUrl;
+use App\Model\CCMM\Models\Format;
+use App\Model\CCMM\Models\MediaType;
 use App\Model\Database\Entity\Photos;
 use Nette\Application\LinkGenerator;
 
@@ -71,15 +75,15 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/databotThumb');
         $dataService
             ->setIri($this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->getId()]))
-            ->addTitle('1024px thumbnail',Language::EN)
-            ->addDescription('Serves image as thumbnail suitable for aI processing with length = 1024px',Language::EN)
+            ->addTitle('1280px thumbnail',Language::EN)
+            ->addDescription('Serves image as thumbnail suitable for AI processing with longer side equal to 1280px',Language::EN)
             ->setDocumentation($documentation);
 
         $distribution = new Distribution();
         $distribution->setDistributionDataService($dataService);
         $items[] = $distribution;
 
-        //JPEG2000 thumbnails
+        //JPEG2000 fullsize
         $dataService = new DistributionDataService();
         $documentation = new Documentation();
         $documentation
@@ -92,6 +96,30 @@ final class CcmmFormat implements MetadataFormatInterface
 
         $distribution = new Distribution();
         $distribution->setDistributionDataService($dataService);
+        $items[] = $distribution;
+
+        //TIFF Master
+        $dataDownload = new DistributionDownloadableFile();
+        $format = new Format()
+            ->addLabel('TIFF')
+            ->addLabel('TIFF', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
+        $mediaType = new MediaType()
+            ->addLabel('TIFF')
+            ->addLabel('TIFF', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
+        $downloadUrl = new DownloadUrl()->setIri($this->linkGenerator->link('Front:Repository:ArchiveImage', [$photo->getId()]))->addLabel('original data', Language::EN);
+        $documentation = new Documentation();
+        $documentation
+            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/TIFF');
+        $dataDownload
+            ->setDownloadUrl($downloadUrl)
+            ->setFormat($format)
+            ->setMediaType($mediaType)
+            ->addTitle('original data',Language::EN);
+
+        $distribution = new Distribution();
+        $distribution->setDistributionDownloadableFile($dataDownload);
         $items[] = $distribution;
 
         return $items;
