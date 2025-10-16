@@ -3,6 +3,7 @@
 namespace App\Services\OaiPmh\MetadataFormat;
 
 use App\Model\CCMM\Enum\Language;
+use App\Model\CCMM\Models\Checksum;
 use App\Model\CCMM\Models\Dataset;
 use App\Model\CCMM\Models\Distribution;
 use App\Model\CCMM\Models\DistributionDataService;
@@ -15,8 +16,7 @@ use App\Model\Database\Entity\Photos;
 use Nette\Application\LinkGenerator;
 
 /**
- * CCMM metadata format placeholder implementation
- * This is a basic structure - full implementation to be completed later
+ * CCMM metadata format
  */
 final class CcmmFormat implements MetadataFormatInterface
 {
@@ -72,7 +72,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataService = new DistributionDataService();
         $documentation = new Documentation();
         $documentation
-            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/databotThumb');
+            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-thumb');
         $dataService
             ->setIri($this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->getId()]))
             ->addTitle('1280px thumbnail',Language::EN)
@@ -87,9 +87,9 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataService = new DistributionDataService();
         $documentation = new Documentation();
         $documentation
-            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/JPEG2000');
+            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-jp2');
         $dataService
-            ->setIri($this->linkGenerator->link('Front:Repository:JP2Image', [$photo->getId()]))
+            ->setIri($this->linkGenerator->link('Front:Repository:Jp2Image', [$photo->getId()]))
             ->addTitle('JPEG 2000',Language::EN)
             ->addDescription('Serves full size image in JPEG 2000 format.',Language::EN)
             ->setDocumentation($documentation);
@@ -100,6 +100,10 @@ final class CcmmFormat implements MetadataFormatInterface
 
         //TIFF Master
         $dataDownload = new DistributionDownloadableFile();
+        //TODO provide checksum (wwe have pixel level checksum, but file level is expected)
+        $checksum = new Checksum()
+            ->setChecksumValue('')
+            ->setAlgorithm('sha256');
         $format = new Format()
             ->addLabel('TIFF')
             ->addLabel('TIFF', Language::EN)
@@ -111,10 +115,12 @@ final class CcmmFormat implements MetadataFormatInterface
         $downloadUrl = new DownloadUrl()->setIri($this->linkGenerator->link('Front:Repository:ArchiveImage', [$photo->getId()]))->addLabel('original data', Language::EN);
         $documentation = new Documentation();
         $documentation
-            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/TIFF');
+            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-master-file');
         $dataDownload
             ->setDownloadUrl($downloadUrl)
             ->setFormat($format)
+            ->setByteSize($photo->getArchiveFileSize())
+//            ->setChecksum($checksum)
             ->setMediaType($mediaType)
             ->addTitle('original data',Language::EN);
 
