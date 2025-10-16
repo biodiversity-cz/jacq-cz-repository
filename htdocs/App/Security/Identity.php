@@ -8,6 +8,7 @@ use Nette\Security\SimpleIdentity;
 class Identity extends SimpleIdentity
 {
     private ?int $currentHerbariumId = null;
+    private ?string $currentHerbariumAcronym = null;
     private array $herbariums = [];
 
     public function __construct(User $userEntity)
@@ -16,9 +17,11 @@ class Identity extends SimpleIdentity
         $this->herbariums = $userEntity->getHerbaria()->map(fn($h) => $h->getId())->toArray();
 
         $currentHerbariumId = $userEntity->getLastVisitedHerbarium()?->getId();
+        $currentHerbariumAcronym = $userEntity->getLastVisitedHerbarium()?->getAcronym();
 
         if ($currentHerbariumId !== null && in_array($currentHerbariumId, $this->herbariums)) {
             $this->currentHerbariumId = $currentHerbariumId;
+            $this->currentHerbariumAcronym = $currentHerbariumAcronym;
         }
         // Set the user ID as the identity ID
         parent::__construct($userEntity->getId(), $this->getUserRoles($userEntity), [
@@ -55,8 +58,14 @@ class Identity extends SimpleIdentity
      */
     public function getCurrentHerbariumId(): ?int
     {
-
         return $this->currentHerbariumId;
     }
+
+    public function getCurrentHerbariumAcronym(): ?string
+    {
+        return $this->currentHerbariumAcronym;
+    }
+
+
 
 }

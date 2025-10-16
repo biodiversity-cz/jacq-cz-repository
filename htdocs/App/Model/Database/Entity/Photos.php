@@ -89,6 +89,10 @@ class Photos
     #[OneToMany(targetEntity: SpecimenMetadata::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $specimenMetadata;
 
+    #[ManyToOne(targetEntity: Funding::class)]
+    #[JoinColumn(name: 'funding_id', referencedColumnName: 'id', nullable: true, options: ['comment' => 'Funding'])]
+    protected ?Funding $funding = null;
+
     public function __construct()
     {
         $this->databotResults = new ArrayCollection();
@@ -356,6 +360,17 @@ class Photos
     {
         $metadata = $this->getSpecimenMetadata();
         return $metadata->first() ?: null;
+    }
+
+    public function getFunding(): ?Funding
+    {
+        return $this->funding;
+    }
+
+    public function setFunding(?Funding $funding): Photos
+    {
+        $this->funding = $funding;
+        return $this;
     }
 
 }

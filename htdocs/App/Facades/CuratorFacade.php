@@ -2,6 +2,7 @@
 
 namespace App\Facades;
 
+use App\Model\Database\Entity\Funding;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\Entity\PhotosType;
@@ -42,6 +43,17 @@ readonly class CuratorFacade
         return $this->entityManager->getRepository(PhotosType::class)->findPairs('id', 'name');
     }
 
+    public function getAllAvailableFundings(User $user): array
+    {
+        $fundings = $this->entityManager->getRepository(Funding::class)->findAllAvailableActive($user);
+        $pairs = [];
+        foreach ($fundings as $entity) {
+            $pairs[$entity->getId()] = $entity->getName();
+        }
+
+        return $pairs;
+    }
+
     /**
      * On curator request read curatorBucket and insert files basic info into the database
      *
@@ -59,6 +71,9 @@ readonly class CuratorFacade
                 ->setHerbarium($this->herbariumService->getCurrentUserHerbarium($user))
                 ->setArchiveFileSize($file->size)
                 ->setType($this->entityManager->getReference(PhotosType::class, $formData['photoType']));
+            if (!empty($formData['funding'])) {
+                $entity->setFunding($this->entityManager->getReference(Funding::class, $formData['funding']));
+            }
             $this->entityManager->persist($entity);
         }
 

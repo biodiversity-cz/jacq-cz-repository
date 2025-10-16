@@ -17,6 +17,7 @@ final readonly class ImportFormFactory
     {
         $form = $this->formFactory->forBackend();
         $form->addSelect('photoType', 'Type:', $this->curatorFacade->getAllPhotoTypes())->setPrompt('----')->setRequired();
+        $form->addSelect('funding', 'Funding:', $this->curatorFacade->getAllAvailableFundings($this->user))->setPrompt('----');
         $form->addSubmit('send', 'Send to repository');
         $form->onSuccess[] = [$this, 'processForm'];
 

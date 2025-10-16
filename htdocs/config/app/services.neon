@@ -36,3 +36,4 @@ search:
         - *Facade
         - *Service
         - *Grid
+        - *Form

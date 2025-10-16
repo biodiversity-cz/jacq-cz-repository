@@ -41,4 +41,9 @@ abstract class BaseEntityService
         return $this->repository->find($id);
     }
 
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
 }
