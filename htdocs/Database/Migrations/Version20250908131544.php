@@ -100,7 +100,19 @@ IS \'Register databot. Return TRUE if a databot is successfully registered and a
 //
 //        GRANT USAGE ON TYPE databots.enum_databot_role TO databot;
 //        GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot;
-
+        $this->addSql("
+        DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1
+                    FROM pg_roles
+                    WHERE rolname = 'databot'
+                ) THEN
+                    CREATE ROLE databot LOGIN PASSWORD 'databot';
+                END IF;
+            END
+            $$;
+        ");
         $this->addSql("GRANT USAGE ON SCHEMA public TO databot");
         $this->addSql("GRANT SELECT ON public.photos TO databot");
 
