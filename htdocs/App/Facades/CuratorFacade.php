@@ -72,7 +72,8 @@ readonly class CuratorFacade
                 ->setArchiveFileSize($file->size)
                 ->setType($this->entityManager->getReference(PhotosType::class, $formData['photoType']));
             if (!empty($formData['funding'])) {
-                $entity->setFunding($this->entityManager->getReference(Funding::class, $formData['funding']));
+                $funding = $this->entityManager->getRepository(Funding::class)->findAssignable($formData['funding'], $user);
+                $entity->setFunding($funding);
             }
             $this->entityManager->persist($entity);
         }

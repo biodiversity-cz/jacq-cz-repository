@@ -27,8 +27,8 @@ class FixtureFunding extends FixtureBase
             ->setCreatedAt()
             ->setLastEditAt();
 
-        $s3 = new Funding();
-        $s3->setName('Grant nonactive')
+        $s2 = new Funding();
+        $s2->setName('Grant nonactive')
             ->setDescription('obecný grant do kterého mohou přispívat všichni')
             ->setCode('56.789')
             ->setFunder('funded by funder')
@@ -38,10 +38,10 @@ class FixtureFunding extends FixtureBase
             ->setCreatedAt()
             ->setLastEditAt();
 
-        $herbariumTest =  $manager->getRepository(Herbaria::class)->find(1);
-        $s2 = new Funding();
-        $s2->setName('Grant 2 private')
-            ->setDescription('TEST only avaialable')
+        $herbariumTest =  $manager->getRepository(Herbaria::class)->findOneBy(['acronym'=>'PRC']);
+        $s3 = new Funding();
+        $s3->setName('Grant 2 private')
+            ->setDescription('PRC only avaialable')
             ->setHerbarium($herbariumTest)
             ->setActive(true)
             ->setCreatedAt()
