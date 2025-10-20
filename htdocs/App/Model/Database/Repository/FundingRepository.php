@@ -42,7 +42,7 @@ class FundingRepository extends AbstractRepository
 
     public function findAssignable(int $id, User $user): Funding
     {
-        return $this->createQueryBuilder('p')->andWhere('(p.herbarium = :userHerbarium   AND p.id = :id AND p.active = true ) OR :isAdmin = true')
+        return $this->createQueryBuilder('p')->andWhere('((p.herbarium = :userHerbarium  OR p.herbarium IS NULL)  AND p.id = :id AND p.active = true ) OR :isAdmin = true')
             ->setParameter('userHerbarium', $user->getIdentity()->getCurrentHerbariumId())
             ->setParameter('isAdmin', $user->isInRole('ROLE_ADMIN'))
             ->setParameter('id', $id)->getQuery()->getSingleResult();

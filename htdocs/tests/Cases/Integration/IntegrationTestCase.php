@@ -73,7 +73,7 @@ abstract class IntegrationTestCase extends TestCase
         $waiting = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING]);
         Assert::count(0, $waiting, 'no other images are waiting for processing');
         $importedBeforeImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMPORTED, 'specimenId' => $this::SPECIMENS]);
-        Assert::count(0, $importedBeforeImport, 'these specimens do not exists in the db');
+        Assert::count(0, $importedBeforeImport, 'these specimens already exists in the db');
     }
 
     protected function uploadFiles(): void
