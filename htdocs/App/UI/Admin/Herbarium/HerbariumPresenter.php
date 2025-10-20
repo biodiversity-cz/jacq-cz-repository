@@ -5,6 +5,8 @@ namespace App\UI\Admin\Herbarium;
 use App\Model\Database\Entity\Herbaria;
 use App\Security\Identity;
 use App\Services\EntityServices\HerbariumService;
+use App\Services\EntityServices\UserService;
+use App\UI\Base\BasePresenter;
 use App\UI\Base\SecuredPresenter;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\Application\UI\Form;
@@ -16,7 +18,7 @@ final class HerbariumPresenter extends SecuredPresenter
     public HerbariumService $herbariumService;
 
     /** @inject */
-    public EntityManagerInterface $entityManager;
+    public UserService $userService;
 
     public function renderDefault(): void
     {
@@ -46,27 +48,14 @@ final class HerbariumPresenter extends SecuredPresenter
     public function handleSwitchHerbarium(int $herbariumId): void
     {
         // Get the herbarium entity
-        $herbarium = $this->entityManager->getRepository(Herbaria::class)->find($herbariumId);
-
-        if (!$herbarium) {
+        $herbarium = $this->herbariumService->find($herbariumId);
+        if (!$herbarium || !$this->user->getIdentity()->isEligibleForHerbarium($herbarium)){
             $this->flashMessage('Herbarium not found.', 'danger');
             $this->redirect('this');
         }
-
-        // Check if user has access to this herbarium
-        $identity = $this->user->getIdentity();
-        if ($identity instanceof Identity) {
-            try {
-                $identity->switchHerbarium($herbarium);
-                $this->flashMessage('Switched to herbarium ' . $herbarium->getAcronym(), 'success');
-            } catch (\InvalidArgumentException $e) {
-                $this->flashMessage('You do not have access to this herbarium.', 'danger');
-            }
-        } else {
-            $this->flashMessage('Unable to switch herbarium.', 'danger');
-        }
-
-        $this->redirect('this');
+        $this->userService->changeActiveHerbarium($this->userEntity, $herbarium);
+        $this->user->logout();
+        $this->redirect(':Front:Sign:in');
     }
 
     private function getAvailableHerbaria(): array

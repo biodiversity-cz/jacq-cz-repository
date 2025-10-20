@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\User;
 use Nette\Security\SimpleIdentity;
 
@@ -64,6 +65,11 @@ class Identity extends SimpleIdentity
     public function getCurrentHerbariumAcronym(): ?string
     {
         return $this->currentHerbariumAcronym;
+    }
+
+    public function isEligibleForHerbarium(Herbaria $herbarium): bool
+    {
+        return in_array($herbarium->getId(), $this->herbariums, true);
     }
 
 
