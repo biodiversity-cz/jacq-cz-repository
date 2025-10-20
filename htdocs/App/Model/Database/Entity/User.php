@@ -295,7 +295,7 @@ class User
     public function initializeCurrentHerbarium(): User
     {
         if ($this->getLastVisitedHerbarium() === null && !empty($this->getUserHerbariumRoles())) {
-            $this->setLastVisitedHerbarium($this->getUserHerbariumRoles()[0]);
+            $this->setLastVisitedHerbarium($this->getUserHerbariumRoles()[0]->getHerbarium());
         }
         return  $this;
     }
