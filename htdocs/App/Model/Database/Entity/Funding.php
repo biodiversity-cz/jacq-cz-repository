@@ -45,6 +45,9 @@ class Funding
     #[Column(type: Types::BOOLEAN, unique: false, nullable: false, options: ['default' => true])]
     protected bool $active = true;
 
+    #[Column(name:'ccmm_format', type: Types::TEXT, nullable: true, options: ['comment' => 'Structured XML data for OAI-PMH CCMM export'])]
+    protected ?string $ccmmFormat = null;
+
     public function getName(): string
     {
         return $this->name;
@@ -121,5 +124,23 @@ class Funding
         $this->active = $active;
         return $this;
     }
+
+    public function getCcmmFormat(): ?string
+    {
+        return $this->ccmmFormat;
+    }
+
+    public function setCcmmFormat(?string $ccmmFormat): Funding
+    {
+        $this->ccmmFormat = $ccmmFormat;
+        return $this;
+    }
+
+    public function getFullname():string
+    {
+        return $this->getName() . ' (' . $this->getCode() . ')';
+    }
+
+
 
 }

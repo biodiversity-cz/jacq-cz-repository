@@ -17,6 +17,15 @@ final class FundingPresenter extends SecuredPresenter
 
     protected ?Funding $funding = null;
 
+    public function checkRequirements(\ReflectionMethod|\ReflectionClass $element): void
+    {
+        //TODO unsure to whom allow editing the Funding
+        if (!$this->user->isInRole('ROLE_ADMIN')){
+            $this->redirect(':Admin:Home:');
+        }
+        parent::checkRequirements($element);
+    }
+
     public function renderDefault(): void
     {
         $this->template->title = 'Funding Affiliation Management';

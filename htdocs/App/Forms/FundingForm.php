@@ -33,6 +33,7 @@ final readonly class FundingForm
                     ->setFunder($values['funder'])
                     ->setNote($values['note'])
                     ->setActive($values['active'])
+                    ->setCcmmFormat($values['ccmm_format'])
                     ->setLastEditAt();
 
                 $resultEntity = $this->fundingService->update($this->user, $funding);
@@ -46,6 +47,7 @@ final readonly class FundingForm
                     ->setFunder($values['funder'])
                     ->setNote($values['note'])
                     ->setActive($values['active'])
+                    ->setCcmmFormat($values['ccmm_format'])
                     ->setHerbarium($this->herbariumService->getCurrentUserHerbarium($this->user))
                     ->setCreatedAt()
                     ->setLastEditAt();
@@ -82,6 +84,8 @@ final readonly class FundingForm
         $form->addTextArea('note', 'Internal note:')
             ->addRule(Form::MaxLength, 'Note cannot exceed 65535 characters.', 65535);
 
+        $form->addTextArea('ccmm_format', 'CCMM (XML):')
+            ->addRule(Form::MaxLength, 'CCMM cannot exceed 65535 characters.', 65535);
 
         $form->addCheckbox('active', 'Active')
             ->setDefaultValue(true);
@@ -106,6 +110,7 @@ final readonly class FundingForm
             'code' => $funding->getCode(),
             'funder' => $funding->getFunder(),
             'note' => $funding->getNote(),
+            'ccmm_format' => $funding->getCcmmFormat(),
             'active' => $funding->isActive()
         ];
         return $form->setDefaults($defaults);

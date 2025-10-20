@@ -57,6 +57,8 @@ final class CcmmFormat implements MetadataFormatInterface
             $dataset->addDistribution($distribution);
         }
 
+        $dataset->setRawFundingReference($this->addFunding($item));
+
         return $dataset->toXml($doc);
 
     }
@@ -131,4 +133,14 @@ final class CcmmFormat implements MetadataFormatInterface
         return $items;
     }
 
+    private function addFunding(Photos $photo): ?string
+    {
+        $funding = $photo->getFunding();
+        if(empty($funding))
+        {
+            return null;
+        }
+
+        return $funding->getCcmmFormat();
+    }
 }

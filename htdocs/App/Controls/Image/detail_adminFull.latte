@@ -14,6 +14,10 @@
     </p>
     <p>Type: <span
         class="badge bg-{$photo->getType()->getColor()}">{$photo->getType()->getName()}</span></p>
+    {if $photo->getFunding() !== null}
+    <p>Funding: <span
+        class="fst-italic">{$photo->getFunding()?->getFullname()}</span></p>
+    {/if}
     <p><small class="text-muted">File created at
         {$photo->getCreatedAt()|localDate}</small></p>
     {if $photo->getStatus()->getId() === \App\Model\Database\Entity\PhotosStatus::CONTROL_ERROR}

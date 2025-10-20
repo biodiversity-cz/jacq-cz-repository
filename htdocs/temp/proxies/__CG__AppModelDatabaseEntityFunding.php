@@ -23,6 +23,7 @@ class Funding extends \App\Model\Database\Entity\Funding implements \Doctrine\OR
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
         "\0".'*'."\0".'active' => [parent::class, 'active', null, 8],
+        "\0".'*'."\0".'ccmmFormat' => [parent::class, 'ccmmFormat', null, 8],
         "\0".'*'."\0".'code' => [parent::class, 'code', null, 8],
         "\0".'*'."\0".'createdAt' => [parent::class, 'createdAt', null, 8],
         "\0".'*'."\0".'description' => [parent::class, 'description', null, 8],
@@ -33,6 +34,7 @@ class Funding extends \App\Model\Database\Entity\Funding implements \Doctrine\OR
         "\0".'*'."\0".'name' => [parent::class, 'name', null, 8],
         "\0".'*'."\0".'note' => [parent::class, 'note', null, 8],
         'active' => [parent::class, 'active', null, 8],
+        'ccmmFormat' => [parent::class, 'ccmmFormat', null, 8],
         'code' => [parent::class, 'code', null, 8],
         'createdAt' => [parent::class, 'createdAt', null, 8],
         'description' => [parent::class, 'description', null, 8],

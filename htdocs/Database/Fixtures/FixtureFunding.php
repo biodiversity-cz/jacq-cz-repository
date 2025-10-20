@@ -24,6 +24,25 @@ class FixtureFunding extends FixtureBase
             ->setNote('internal note')
             ->setHerbarium(null)
             ->setActive(true)
+            ->setCcmmFormat('<funding_reference>
+        <iri>https://funder-org.org/grants/123456789</iri>
+        <local_identifier>https://doi.org/award-identifier</local_identifier>
+        <award_title>Program for air pollution research</award_title>
+        <funding_program>https://funder-org.org/program/abcdefgh</funding_program>
+        <funder>
+            <organization>
+                <iri>https://ror.org/01pv73b02</iri>
+                <identifier>
+                    <value>01pv73b02</value>
+                    <scheme>
+                        <iri>https://ror.org/</iri>
+                        <label xml:lang="">ROR</label>
+                    </scheme>
+                </identifier>
+                <name>Grantová agentura České republiky</name>
+            </organization>
+        </funder>
+    </funding_reference>')
             ->setCreatedAt()
             ->setLastEditAt();
 

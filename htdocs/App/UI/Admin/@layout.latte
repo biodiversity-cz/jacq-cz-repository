@@ -24,10 +24,10 @@
                         <a class="nav-link {if $presenter->isLinkCurrent('Report:')}active{/if}"
                            n:href="Report:">Reports</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {if $presenter->isLinkCurrent('Funding:')}active{/if}"
-                           n:href="Funding:">Funding</a>
-                    </li>
+<!--                    <li class="nav-item">-->
+<!--                        <a class="nav-link {if $presenter->isLinkCurrent('Funding:')}active{/if}"-->
+<!--                           n:href="Funding:">Funding</a>-->
+<!--                    </li>-->
                 </ul>
                 <form class="d-flex" action="{link Import:specimen}" method="GET">
                     <input name="specimenNumericPartOfId" class="form-control me-2" type="search" placeholder="put numeric part of ID"

@@ -31,6 +31,10 @@ class Dataset implements XmlSerializable
     private array $descriptions = [];
     private array $locations = [];
     private array $fundingReferences = [];
+    /**
+     * the Funding structure is overcomplicated for herbaria purposes, allow storing XL fragment to create OAI-PMH in case of Funding
+     */
+    private ?string $fundingReferencesRaw = null;
     private array $relatedResources = [];
     private array $distributions = [];
     private ?ValidationResult $validationResult = null;
@@ -255,6 +259,17 @@ class Dataset implements XmlSerializable
         return $this;
     }
 
+    public function setRawFundingReference(?string $fundingReference): self {
+        $this->fundingReferencesRaw = $fundingReference;
+        return $this;
+    }
+
+    public function getRawFundingReferences(): ?string
+    {
+        return $this->fundingReferencesRaw;
+
+    }
+
     public function setRelatedResources(array $relatedResources): self {
         $this->relatedResources = $relatedResources;
         return $this;
@@ -374,6 +389,12 @@ class Dataset implements XmlSerializable
         foreach ($this->getFundingReferences() as $fundingReference) {
             $fundingElement = $fundingReference->toXml($document);
             $element->appendChild($fundingElement);
+        }
+
+        if(!empty($this->fundingReferencesRaw)){
+            $fragment = $document->createDocumentFragment();
+            $fragment->appendXML($this->getRawFundingReferences());
+            $element->appendChild($fragment);
         }
 
         foreach ($this->getRelatedResources() as $relatedResource) {
