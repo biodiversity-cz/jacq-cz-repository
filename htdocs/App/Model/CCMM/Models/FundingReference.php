@@ -20,11 +20,6 @@ class FundingReference implements XmlSerializable
     private ?string $fundingProgram = null;
     private ?Funder $funder = null;
 
-    public function __construct() {
-    }
-
-
-    // Getters
     public function getIri(): ?string {
         return $this->iri;
     }
@@ -71,9 +66,6 @@ class FundingReference implements XmlSerializable
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'funding_reference');

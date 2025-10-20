@@ -21,6 +21,9 @@ services:
 aws:
     endpoint: http://minio:9000
     use_path_style_endpoint: true
+    credentials:
+            key: test
+            secret: testSecret
 
 nettrine.dbal:
  debug:

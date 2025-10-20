@@ -26,7 +26,7 @@ trait XmlSerializableTrait
         ?string $value = null,
         array $attributes = []
     ): \DOMElement {
-        $element = $document->createElement($elementName);
+        $element = $document->createElement('ccmm:'.$elementName);
 
         if ($value !== null) {
             $element->textContent = $value;

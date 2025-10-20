@@ -22,12 +22,12 @@ class Documentation implements XmlSerializable
 
     // Getters
     public function getIri(): ?string {
-        return $this->Iri;
+        return $this->iri;
     }
 
     // Setters
     public function setIri(?string $iri): self {
-        $this->Iri = $iri;
+        $this->iri = $iri;
         return $this;
     }
 

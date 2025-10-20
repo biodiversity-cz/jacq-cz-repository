@@ -45,7 +45,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
         $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename(), $id, 'archive');
     }
 
-    public function actionJP2Image(int $id): void
+    public function actionJp2Image(int $id): void
     {
         $photo = $this->photoService->getPublicPhoto($id);
         if ($photo === null) {

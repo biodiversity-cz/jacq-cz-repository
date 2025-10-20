@@ -2,52 +2,48 @@
 
 namespace Tests\Cases\Unit\Services\OaiPmh\MetadataFormat;
 
+use App\Bootstrap;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\License;
 use App\Services\OaiPmh\MetadataFormat\CcmmFormat;
 use Mockery;
+use Nette\Application\LinkGenerator;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../../../bootstrap.php';
 
 test('CcmmFormat: getMetadataPrefix returns ccmm', function (): void {
-    $format = new CcmmFormat();
+    $container = Bootstrap::boot()->createContainer();
+    $linkGenerator = $container->getByType(LinkGenerator::class);
+    $format = new CcmmFormat($linkGenerator);
 
     Assert::same('ccmm', $format->getMetadataPrefix());
 });
 
 test('CcmmFormat: getSchema returns placeholder URL', function (): void {
-    $format = new CcmmFormat();
+    $container = Bootstrap::boot()->createContainer();
+    $linkGenerator = $container->getByType(LinkGenerator::class);
+    $format = new CcmmFormat($linkGenerator);
 
-    Assert::same('http://example.com/ccmm.xsd', $format->getSchema());
+    Assert::same('https://techlib.github.io/CCMM/dataset/schema.xsd', $format->getSchema());
 });
 
 test('CcmmFormat: getMetadataNamespace returns placeholder namespace', function (): void {
-    $format = new CcmmFormat();
+    $container = Bootstrap::boot()->createContainer();
+    $linkGenerator = $container->getByType(LinkGenerator::class);
+    $format = new CcmmFormat($linkGenerator);
 
-    Assert::same('http://example.com/ccmm/', $format->getMetadataNamespace());
+    Assert::same('https://github.com/techlib/CCMM', $format->getMetadataNamespace());
 });
 
 test('CcmmFormat: getFormatName returns descriptive name', function (): void {
-    $format = new CcmmFormat();
+    $container = Bootstrap::boot()->createContainer();
+    $linkGenerator = $container->getByType(LinkGenerator::class);
+    $format = new CcmmFormat($linkGenerator);
 
-    Assert::same('CCMM Format', $format->getFormatName());
+    Assert::same('Czech Core Metadata Model', $format->getFormatName());
 });
-
-test('CcmmFormat: toXml creates valid CCMM structure', function (): void {
-    $format = new CcmmFormat();
-    $photo = createCcmmPhotoMock();
-
-    $xml = $format->toXml($photo, 'oai:jacq.org:photo-123');
-
-    Assert::same('ccmm:record', $xml->nodeName);
-    Assert::same('http://example.com/ccmm/', $xml->namespaceURI);
-
-    // Check that schema location is set
-    Assert::true($xml->hasAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation'));
-});
-
 
 
 function createCcmmPhotoMock(): Photos

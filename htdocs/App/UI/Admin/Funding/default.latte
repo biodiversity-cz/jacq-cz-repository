@@ -1,0 +1,52 @@
+{block content}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>{$title}</h1>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-12">
+            <a n:href="add" class="btn btn-primary">Add New Funding</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Funder</th>
+                            <th>Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr n:foreach="$fundings as $funding">
+                            <td>{$funding->getName()}</td>
+                            <td>{$funding->getCode()}</td>
+                            <td>{$funding->getFunder()}</td>
+                            <td>
+                                <span class="badge bg-{$funding->isActive() ? 'success' : 'danger'}">
+                                    {$funding->isActive() ? 'Yes' : 'No'}
+                                </span>
+                            </td>
+                            <td>{if $funding->getHerbarium()?->getId() === $user->getIdentity()->getCurrentHerbariumId()}
+                                <a n:href="edit $funding->getId()" class="btn btn-sm btn-primary">Edit</a>
+                                <a n:href="delete! $funding->getId()" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Are you sure you want to delete this funding?')">Delete</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        <tr n:if="!$fundings">
+                            <td colspan="6" class="text-center">No fundings found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}

@@ -13,7 +13,7 @@ final class HomePresenter extends UnsecuredPresenter
     public function renderContact(): void
     {
         $this->template->mainContact = $this->herbariumService->findOneBy(['acronym' => 'PRC']);
-        $this->template->herbaria = $this->herbariumService->findAll();
+        $this->template->herbaria = $this->herbariumService->getList();
     }
 
     public function actionGdpr(): void

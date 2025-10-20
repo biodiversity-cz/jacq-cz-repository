@@ -337,7 +337,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     private function getBaseUrl(): string
     {
         $request = $this->getHttpRequest();
-        return $request->getUrl()->getBaseUrl() . '/oai-pmh';
+        return $request->getUrl()->getBaseUrl() . 'oai-pmh';
     }
 
     private function parseDate(string $date): \DateTimeInterface

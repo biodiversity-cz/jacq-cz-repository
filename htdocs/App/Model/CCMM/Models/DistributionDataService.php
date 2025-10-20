@@ -6,6 +6,7 @@ namespace App\Model\CCMM\Models;
 
 use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\Enum\Language;
 
 /**
  * Represents a distribution data service
@@ -15,11 +16,11 @@ class DistributionDataService implements XmlSerializable
     use XmlSerializableTrait;
 
     private ?string $iri = null;
-    private ?string $title = null;
+    private array $titles = [];
     private ?AccessService $accessService = null;
     private ?Specification $specification = null;
     private ?Documentation $documentation = null;
-    private ?string $description = null;
+    private array $descriptions = [];
 
     public function __construct() {
     }
@@ -27,57 +28,57 @@ class DistributionDataService implements XmlSerializable
 
     // Getters
     public function getIri(): ?string {
-        return $this->Iri;
-    }
-
-    public function getTitle(): ?string {
-        return $this->Title;
+        return $this->iri;
     }
 
     public function getAccessService(): ?AccessService {
-        return $this->AccessService;
+        return $this->accessService;
     }
 
     public function getSpecification(): ?Specification {
-        return $this->Specification;
+        return $this->specification;
     }
 
     public function getDocumentation(): ?Documentation {
-        return $this->Documentation;
+        return $this->documentation;
     }
 
-    public function getDescription(): ?string {
-        return $this->Description;
+    public function getTitles(): array {
+        return $this->titles;
+    }
+
+    public function getDescriptions(): array {
+        return $this->descriptions;
     }
 
     // Setters
     public function setIri(?string $iri): self {
-        $this->Iri = $iri;
+        $this->iri = $iri;
         return $this;
     }
 
-    public function setTitle(?string $title): self {
-        $this->Title = $title;
+    public function addTitle(string $title, Language $lang = Language::CS): self {
+        $this->titles[$lang->value] = $title;
         return $this;
     }
 
     public function setAccessService(?AccessService $accessService): self {
-        $this->AccessService = $accessService;
+        $this->accessService = $accessService;
         return $this;
     }
 
     public function setSpecification(?Specification $specification): self {
-        $this->Specification = $specification;
+        $this->specification = $specification;
         return $this;
     }
 
     public function setDocumentation(?Documentation $documentation): self {
-        $this->Documentation = $documentation;
+        $this->documentation = $documentation;
         return $this;
     }
 
-    public function setDescription(?string $description): self {
-        $this->Description = $description;
+    public function addDescription(string $description, Language $lang = Language::CS): self {
+        $this->descriptions[$lang->value] = $description;
         return $this;
     }
 
@@ -93,20 +94,24 @@ class DistributionDataService implements XmlSerializable
             $element->appendChild($iriElement);
         }
 
-        if ($this->getTitle() !== null) {
-            $titleElement = $this->createElement($document, 'title', $this->getTitle());
-            $titleElement->setAttribute('xml:lang', 'cs');
-            $element->appendChild($titleElement);
+        if (!empty($this->getTitles())) {
+            foreach ($this->getTitles() as $lang => $text) {
+                $titleElement = $this->createElement($document, 'title', $text);
+                $titleElement->setAttribute('xml:lang', $lang);
+                $element->appendChild($titleElement);
+            }
         }
 
         $this->appendChildIfNotNull($element, $this->getAccessService(), 'access_service');
         $this->appendChildIfNotNull($element, $this->getSpecification());
         $this->appendChildIfNotNull($element, $this->getDocumentation());
 
-        if ($this->getDescription() !== null) {
-            $descElement = $this->createElement($document, 'description', $this->getDescription());
-            $descElement->setAttribute('xml:lang', 'cs');
-            $element->appendChild($descElement);
+        if (!empty($this->getDescriptions())) {
+            foreach ($this->getDescriptions() as $lang => $text) {
+                $descElement = $this->createElement($document, 'description', $text);
+                $descElement->setAttribute('xml:lang', $lang);
+                $element->appendChild($descElement);
+            }
         }
 
         return $element;
