@@ -50,7 +50,8 @@ final readonly class RepositoryConfiguration
 
     public function getImageServerInfoUrl(string $jp2ObjectName): string
     {
-        return $this->getImageServerBaseUrl() . $jp2ObjectName;
+        return $this->getImageServerBaseUrl() .$this->getEncodedIiifId($jp2ObjectName);
+
     }
 
     protected function getImageServerBaseUrl(): string
@@ -80,7 +81,7 @@ final readonly class RepositoryConfiguration
 
     public function getImageServerUrlThumbnail(string $jp2ObjectName): string
     {
-        return $this->getImageServerBaseUrl() . $jp2ObjectName . '/full/' . $this->getThumbnailSize() . ',/0/default.jpg';
+        return $this->getImageServerBaseUrl() . $this->getEncodedIiifId($jp2ObjectName) . '/full/' . $this->getThumbnailSize() . ',/0/default.jpg';
     }
 
     public function getThumbnailSize(): int
@@ -103,4 +104,10 @@ final readonly class RepositoryConfiguration
         return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.tif';
     }
 
+    protected function getEncodedIiifId(string $name): string
+    {
+        $objectId = 's3://' . $this->getRepositoryImageServerBucket() . '/' . $name;
+        return rawurlencode($objectId);
+
+    }
 }

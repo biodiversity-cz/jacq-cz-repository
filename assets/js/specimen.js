@@ -1,6 +1,6 @@
 export default async function joinLinks() {
-    makeJACQLinks();
-    makeGbifLink();
+    // makeJACQLinks();
+    // makeGbifLink();
 }
 
 
@@ -23,10 +23,16 @@ async function makeJACQLinks() {
         });
 
         if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
+            console.error("makeJACQLinks: JSON parse error:", error);
+            return;
         }
 
-        const data = await response.json();
+        const data = await response.json().catch(err => {
+            console.error("makeJACQLinks: JSON parse error:", err);
+            return null;
+        });
+
+        if (!data) return;
 
         if (!data.specimenID) {
             console.error("missing key 'specimenID'.");
@@ -50,6 +56,7 @@ async function makeJACQLinks() {
         }
 
     } catch (error) {
+        console.error("makeJACQLinks: unexpected error:", error);
     }
 
 }
@@ -73,10 +80,16 @@ async function makeGbifLink() {
         });
 
         if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
+            console.error("makeJACQLinks: JSON parse error:", error);
+            return;
         }
 
-        const data = await response.json();
+        const data = await response.json().catch(err => {
+            console.error("makeJACQLinks: JSON parse error:", err);
+            return null;
+        });
+
+        if (!data) return;
 
         if (Array.isArray(data.results) && data.results.length > 0) {
             let firstKey = data.results[0].key;            gbifElement.href = `https://gbif.org/occurrence/${firstKey}`;
@@ -84,6 +97,7 @@ async function makeGbifLink() {
           }
 
     } catch (error) {
+        console.error("makeGbifLinks: unexpected error:", error);
     }
 
 }

@@ -1,4 +1,4 @@
-import Mirador from 'mirador/dist/mirador.min';
+import Mirador from 'mirador';
 
 export default function waitForManifest() {
     let initialized = false;
