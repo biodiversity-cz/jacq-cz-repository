@@ -2,8 +2,8 @@
 <div class="container" xmlns:n="http://www.w3.org/1999/xhtml">
     <div class="row">
         <p>The internal process of the repository is ilustrated at figure below. A curator uploads an Archive Master files (large resolution TIF) via general S3 client (<a href="https://du.cesnet.cz/cs/navody/object_storage/cesnet_s3/winscp/start">WinSCP</a>, <a href="https://du.cesnet.cz/cs/navody/object_storage/s3browser/start">S3Browser</a>, <a href="https://www.crossftp.com/">CrossFTP</a> or other according to CESNET <a href="https://du.cesnet.cz/cs/navody/object_storage/cesnet_s3/start">documentation</a>. Every participating herbarium has its own S3 access provided by central coordinator.</p>
-        <p>When uploaded, the files are listed <a n:href="Import:">in this repository application</a> as "waiting before control" (see bellow). The curator starts the import process - it is proceeded by asynchronous runner processing the prepared files. Successfully processed files are transferred immediately into the repository. Files those did not pass some of the automatic control are listed to the curator and requires her/his decision. </p>
-        <p></p>
+        <p>When uploaded, the files are listed <a n:href="Import:">in this repository application</a> as "zero status" (see bellow). The curator starts the import process - it is proceeded by asynchronous runner processing the prepared files. Successfully processed files are transferred immediately into the repository, see the <a href="https://biodiversity-cz.github.io/herbarium-documentation/docs/deposition/workflow.html">documentation</a> of the workflow. </p><p><em>Keep in mind:</em> files that have not yet been processed, as well as those that did not pass some of the automatic checks, are present both in your S3 bucket and in the repository’s preliminary storage. Do not delete these files manually in the bucket (otherwise their information in the repository will get orphaned); use the repository’s built-in function instead. </p>
+
 
         <figure class="figure">
             <svg viewbox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
@@ -32,34 +32,15 @@
                     <tspan dy="1em">control error</tspan>
                 </text>
 
-                <text x="750" y="150" font-family="Arial" font-size="26" fill="#dddddd" text-anchor="middle">
-                    <tspan dy="1em">imported</tspan>
+                <text x="800" y="210" font-family="Arial" font-size="26" fill="#dddddd" text-anchor="middle">
+                    <tspan dy="1em">all other statuses</tspan>
                 </text>
-                <text x="770" y="210" font-family="Arial" font-size="26" fill="#dddddd" text-anchor="middle">
-                    <tspan dy="1em">published (TBD)</tspan>
-                </text>
-                <text x="770" y="270" font-family="Arial" font-size="26" fill="#dddddd" text-anchor="middle">
-                    <tspan dy="1em">hidden (TBD)</tspan>
-                </text>
-
             </svg>
 
 
-            <figcaption class="figure-caption text-end">Files processing schema {*(<a href="https://editsvgcode.com/">editor</a> )*}</figcaption>
+            <figcaption class="figure-caption text-end">File transfer schema {*(<a href="https://editsvgcode.com/">editor</a> )*}</figcaption>
         </figure>
 
 
-    </div>
-    <hr>
-    <div class="row">
-        <h4>Possible statuses of photos in the repository</h4>
-        <dl class="row">
-            <dt class="col-sm-3">"zero status"</dt>
-            <dd class="col-sm-9">Files uploaded to the S3 bucket and not marked to be imported yet. These files are just resting in the folder, and the repository does not keep any evidence about them.</dd>
-            {foreach $statuses as $status}
-            <dt class="col-sm-3"><span class="badge bg-{$status->getColor()}"> </span> {$status->getName()} </dt>
-            <dd class="col-sm-9">{$status->getDescription()}</dd>
-            {/foreach}
-        </dl>
     </div>
 </div>
