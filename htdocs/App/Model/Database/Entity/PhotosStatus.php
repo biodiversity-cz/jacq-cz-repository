@@ -15,13 +15,15 @@ class PhotosStatus
     use TId;
 
     public const int WAITING = 1;
-    public const int CONTROL_ERROR = 2;
-    public const int IMPORTED = 3;
-    public const int PUBLIC = 4;
-    public const int HIDDEN = 5;
+    public const int IMAGE_CONTROL_ERROR = 2;
+    public const int IMAGE_CONTROL_OK = 3;
+    public const int PUBLISHED = 4;
+    public const int EMBARGO = 5;
+    public const int SPECIMEN_CONTROL_OK = 6;
+    public const int WAITING_FOR_PUBLISHING = 7;
     public const int DEVELOP_PROCEED = 100;
-    public const array PASSED = [self::IMPORTED, self::PUBLIC, self::HIDDEN];
-    public const array PASSED_PUBLIC = [self::IMPORTED, self::PUBLIC];
+    public const array PASSED = [self::IMAGE_CONTROL_OK, self::PUBLISHED, self::EMBARGO];
+    public const array PASSED_PUBLIC = [self::IMAGE_CONTROL_OK, self::PUBLISHED];
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'name of the status'])]
     protected string $name;
@@ -29,8 +31,11 @@ class PhotosStatus
     #[Column(unique: true, nullable: false, options: ['comment' => 'short description'])]
     protected string $description;
 
-    #[Column(unique: true, nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
+    #[Column(nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
     protected string $color;
+
+    #[Column(unique: true, nullable: false, options: ['comment' => 'how to order statuses when presented, not necessary the only succession that exists'])]
+    protected int $succession;
 
     public function getName(): string
     {
@@ -66,6 +71,15 @@ class PhotosStatus
         return $this;
     }
 
+    public function getSuccession(): int
+    {
+        return $this->succession;
+    }
 
+    public function setSuccession(int $succession): PhotosStatus
+    {
+        $this->succession = $succession;
+        return $this;
+    }
 
 }

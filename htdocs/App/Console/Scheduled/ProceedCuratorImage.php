@@ -87,11 +87,11 @@ class ProceedCuratorImage extends Command
             $photo = $this->prepareImportMessagesStorage($photo);
 
             $this->curatorFacade->importNewFilesPipeline()->process($photo);
-            $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMPORTED));
+            $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_OK));
             $this->entityManager->remove($photo->getError());
             $photo->removeImportError();
         } catch (ImportStageException $e) {
-            $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR));
+            $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_ERROR));
             $photo->getError()->setMessage($e->getMessage());
             $output->write("\n ERROR: " . $e->getMessage() . "\n");
             //mainPhoto did not succeeded,
@@ -149,7 +149,7 @@ class ProceedCuratorImage extends Command
             try {
                 $output->write("\n multiply from ID " . $mainPhoto->getId() . " into ID " . $newItem->getId() . "\n");
                 $this->curatorFacade->importMultiplierPipeline()->process($newItem);
-                $newItem->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMPORTED));
+                $newItem->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_OK));
                 $this->entityManager->remove($newItem->getError());
                 $newItem->removeImportError();
             } catch (DuplicityStageException $e) {

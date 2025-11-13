@@ -26,7 +26,7 @@ class PhotosRepository extends AbstractRepository
      */
     public function getOrphanable(User $user): array
     {
-        $qb = $this->getDefaultDatasource($user)->andWhere('p.status IN (:status)')->setParameter('status', [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR])->orderBy('p.lastEdit', 'DESC');
+        $qb = $this->getDefaultDatasource($user)->andWhere('p.status IN (:status)')->setParameter('status', [PhotosStatus::WAITING, PhotosStatus::IMAGE_CONTROL_ERROR])->orderBy('p.lastEdit', 'DESC');
 
         return $qb->getQuery()->getResult();
     }
@@ -48,7 +48,7 @@ class PhotosRepository extends AbstractRepository
 
     public function getPublishedPhotosDatasource(): QueryBuilder
     {
-        return $this->createQueryBuilder('p')->andWhere('p.status = :publicStatus')->setParameter('publicStatus' , PhotosStatus::PUBLIC);
+        return $this->createQueryBuilder('p')->andWhere('p.status = :publicStatus')->setParameter('publicStatus' , PhotosStatus::PUBLISHED);
     }
 
     /**
@@ -103,14 +103,14 @@ class PhotosRepository extends AbstractRepository
      */
     public function findUnprocessedPhotos(User $user): array
     {
-        $qb = $this->getDefaultDatasource($user)->andWhere('p.status IN (:status)')->setParameter('status', [PhotosStatus::WAITING, PhotosStatus::CONTROL_ERROR]);
+        $qb = $this->getDefaultDatasource($user)->andWhere('p.status IN (:status)')->setParameter('status', [PhotosStatus::WAITING, PhotosStatus::IMAGE_CONTROL_ERROR]);
 
         return $qb->getQuery()->getResult();
     }
 
     protected function getControlErrorStatus(): PhotosStatus
     {
-        return $this->getEntityManager()->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR);
+        return $this->getEntityManager()->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_ERROR);
     }
 
 }

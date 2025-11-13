@@ -25,7 +25,7 @@ final class NonValidImportFilenameReviseTest extends IntegrationTestCase
         $this->expectAllError();
 
         $i=0;
-        foreach ($this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::CONTROL_ERROR]) as $photo) {
+        foreach ($this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_ERROR]) as $photo) {
             $this->curatorFacade->reimportPhoto($this->provideLoggedCuratorUser(), $photo,  $this::SPECIMENS[$i++]);
             $this->em->flush();
         }
