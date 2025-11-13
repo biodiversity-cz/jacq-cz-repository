@@ -26,10 +26,12 @@ class PhotosStatus extends \App\Model\Database\Entity\PhotosStatus implements \D
         "\0".'*'."\0".'description' => [parent::class, 'description', null, 8],
         "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
         "\0".'*'."\0".'name' => [parent::class, 'name', null, 8],
+        "\0".'*'."\0".'succession' => [parent::class, 'succession', null, 8],
         'color' => [parent::class, 'color', null, 8],
         'description' => [parent::class, 'description', null, 8],
         'id' => [parent::class, 'id', null, 8],
         'name' => [parent::class, 'name', null, 8],
+        'succession' => [parent::class, 'succession', null, 8],
     ];
 
     public function __isInitialized(): bool

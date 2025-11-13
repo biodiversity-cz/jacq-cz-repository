@@ -29,8 +29,11 @@ class PhotosStatus
     #[Column(unique: true, nullable: false, options: ['comment' => 'short description'])]
     protected string $description;
 
-    #[Column(unique: true, nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
+    #[Column(nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
     protected string $color;
+
+    #[Column(unique: true, nullable: false, options: ['comment' => 'how to order statuses when presented, not necessary the only succession that exists', 'default' => 1])]
+    protected int $succession;
 
     public function getName(): string
     {
@@ -66,6 +69,15 @@ class PhotosStatus
         return $this;
     }
 
+    public function getSuccession(): int
+    {
+        return $this->succession;
+    }
 
+    public function setSuccession(int $succession): PhotosStatus
+    {
+        $this->succession = $succession;
+        return $this;
+    }
 
 }
