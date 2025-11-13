@@ -32,7 +32,7 @@ readonly class CuratorFacade
      */
     public function getAllStatuses(): array
     {
-        return $this->entityManager->getRepository(PhotosStatus::class)->findBy([], ['id' => 'ASC']);
+        return $this->entityManager->getRepository(PhotosStatus::class)->findPairs('id', 'name');
     }
 
     /**

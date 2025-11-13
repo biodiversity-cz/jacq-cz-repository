@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -77,28 +77,21 @@ class Photos
     #[ManyToOne(targetEntity: PhotosType::class)]
     #[JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Type of the photo', 'default' => 1])]
     protected PhotosType $type;
-
-    #[OneToOne(targetEntity: ImportError::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
-    private ?ImportError $error = null;
-
-    #[OneToOne(targetEntity: ImportMultiplier::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
-    private ?ImportMultiplier $multiplier = null;
-
-    #[OneToMany(targetEntity: DatabotResult::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $databotResults;
-
-    #[OneToMany(targetEntity: SpecimenMetadata::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $specimenMetadata;
-
     #[ManyToOne(targetEntity: Funding::class)]
     #[JoinColumn(name: 'funding_id', referencedColumnName: 'id', nullable: true, options: ['comment' => 'Funding'])]
     protected ?Funding $funding = null;
-
     #[Column(type: Types::TEXT, length: 1000, unique: true, nullable: true, options: ['comment' => 'Persistent ID of photo'])]
     protected ?string $pid = null;
-
     #[Column(type: Types::TEXT, length: 1000, unique: false, nullable: true, options: ['comment' => 'Persistent ID of external specimen entity to which this photo belongs'])]
     protected ?string $specimenPid = null;
+    #[OneToOne(targetEntity: ImportError::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
+    private ?ImportError $error = null;
+    #[OneToOne(targetEntity: ImportMultiplier::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
+    private ?ImportMultiplier $multiplier = null;
+    #[OneToMany(targetEntity: DatabotResult::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $databotResults;
+    #[OneToMany(targetEntity: SpecimenMetadata::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $specimenMetadata;
 
     public function __construct()
     {
@@ -207,7 +200,7 @@ class Photos
         return $this;
     }
 
-    public function getJacqPid(): string
+    public function getExpectedJacqPid(): string
     {
         return 'https://' . strtolower($this->getHerbarium()->getAcronym()) . '.jacq.org/' . strtoupper($this->getHerbarium()->getAcronym()) . $this->getSpecimenId();
     }
@@ -355,18 +348,18 @@ class Photos
         return in_array($this->status->getId(), [PhotosStatus::PUBLISHED], true);
     }
 
+    public function getLatestSpecimenMetadata(): ?SpecimenMetadata
+    {
+        $metadata = $this->getSpecimenMetadata();
+        return $metadata->first() ?: null;
+    }
+
     public function getSpecimenMetadata(): Collection
     {
         $criteria = Criteria::create()
             ->orderBy(['timestamp' => Order::Descending]);
 
         return $this->specimenMetadata->matching($criteria);
-    }
-
-    public function getLatestSpecimenMetadata(): ?SpecimenMetadata
-    {
-        $metadata = $this->getSpecimenMetadata();
-        return $metadata->first() ?: null;
     }
 
     public function getFunding(): ?Funding
@@ -387,7 +380,7 @@ class Photos
 
     public function setPid(string $pid): Photos
     {
-        if (!empty($this->pid)){
+        if (!empty($this->pid)) {
             throw new RiskOfPidOverwritten();
         }
         $this->pid = $pid;
@@ -403,6 +396,16 @@ class Photos
     {
         $this->specimenPid = $specimenPid;
         return $this;
+    }
+
+    public function getSpecimenPidApiEndpoint(): string
+    {
+        $externalDatabase = $this->getHerbarium()->getExternalDatabase();
+        $baseurl = $externalDatabase->getUrl();
+        if ($externalDatabase->getId() === ExternalDatabase::JACQ) {
+            return $baseurl . rawurlencode($this->getExpectedJacqPid());
+        }
+        return $baseurl . $this->getSpecimenId();
     }
 
 }

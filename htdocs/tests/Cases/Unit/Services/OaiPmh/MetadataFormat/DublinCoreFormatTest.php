@@ -89,7 +89,7 @@ function createDetailedPhotoMock(): Photos
     $photo->shouldReceive('getOriginalFilename')->andReturn('specimen_123.tif');
     $photo->shouldReceive('getArchiveFilename')->andReturn('PRC_000123_789.tif');
     $photo->shouldReceive('getJp2Filename')->andReturn('test.jp2');
-    $photo->shouldReceive('getJacqPid')->andReturn('https://prc.jacq.org/PRC123');
+    $photo->shouldReceive('getExpectedJacqPid')->andReturn('https://prc.jacq.org/PRC123');
 
     $createdAt = new \DateTimeImmutable('2023-01-15 10:30:00');
     $lastEdit = new \DateTime('2023-01-16 14:20:00');
@@ -120,7 +120,7 @@ function createMinimalPhotoMock(): object
     $photo->shouldReceive('getOriginalFilename')->andReturn(null);
     $photo->shouldReceive('getArchiveFilename')->andReturn(null);
     $photo->shouldReceive('getJp2Filename')->andReturn(null);
-    $photo->shouldReceive('getJacqPid')->andReturn('https://min.jacq.org/MIN456');
+    $photo->shouldReceive('getExpectedJacqPid')->andReturn('https://min.jacq.org/MIN456');
 
     $createdAt = new \DateTimeImmutable('2023-01-01 00:00:00');
     $lastEdit = new \DateTime('2023-01-16 14:20:00');

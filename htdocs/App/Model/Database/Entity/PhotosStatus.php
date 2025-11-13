@@ -3,11 +3,12 @@
 namespace App\Model\Database\Entity;
 
 use App\Model\Database\Entity\Attributes\TId;
+use App\Model\Database\Repository\PhotosStatusRepository;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity()]
+#[Entity(repositoryClass: PhotosStatusRepository::class)]
 #[Table(name: 'photos_status', options: ['comment' => 'List of allowed photo statuses'])]
 class PhotosStatus
 {
