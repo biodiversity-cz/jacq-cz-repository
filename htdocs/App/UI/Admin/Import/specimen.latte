@@ -9,7 +9,7 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="mb-1">Specimen Persistent ID</h5>
-                        <small class="text-body-secondary"><b id="copyJacqPid">{$images[0]->getJacqPid()}</b> <span
+                        <small class="text-body-secondary"><b id="copyJacqPid">{$images[0]->getExpectedJacqPid()}</b> <span
                             class="copyIcon" data-copy-target="#copyJacqPid" title="Copy">
             <i class="fa-regular fa-copy"></i>
         </span></small><br>
@@ -17,8 +17,8 @@
                             JACQ</small>
                     </div>
                     <div>
-                        <a href="{$images[0]->getJacqPid()}"><span id="PID"
-                                                                   data-url="https://api.jacq.org/v1/stableIdentifier/resolve/{$images[0]->getJacqPid()}">link</span></a>
+                        <a href="{$images[0]->getExpectedJacqPid()}"><span id="PID"
+                                                                   data-url="https://api.jacq.org/v1/stableIdentifier/resolve/{$images[0]->getExpectedJacqPid()}">link</span></a>
                     </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -44,8 +44,8 @@
                     </div>
                     <div>
                         <a id="GBIF"
-                           data-url="https://api.gbif.org/v1/occurrence/search?occurrenceId={$images[0]->getJacqPid()}"
-                           href="https://www.gbif.org/occurrence/search?occurrence_id={$images[0]->getJacqPid()}">link</a>
+                           data-url="https://api.gbif.org/v1/occurrence/search?occurrenceId={$images[0]->getExpectedJacqPid()}"
+                           href="https://www.gbif.org/occurrence/search?occurrence_id={$images[0]->getExpectedJacqPid()}">link</a>
                     </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">

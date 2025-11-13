@@ -100,7 +100,7 @@ test('Photos entity getters and setters', function (): void {
     $photos->addImportError();
     Assert::type(ImportError::class, $photos->getError());
 
-    // Test specimenId a getFullSpecimenId, getJacqPid (nutno mít nastavené herbarium s akronymem)
+    // Test specimenId a getFullSpecimenId, getExpectedJacqPid (nutno mít nastavené herbarium s akronymem)
     $herbariumReflection = new \ReflectionClass(Herbaria::class);
     $acronymProp = $herbariumReflection->getProperty('acronym');
     $acronymProp->setAccessible(true);
