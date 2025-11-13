@@ -14,6 +14,7 @@ class ExternalDatabase
 {
     use TId;
 
+    public const int JACQ = 1;
     #[Column(type: Types::STRING, unique: true, nullable: false)]
     protected string $name;
 

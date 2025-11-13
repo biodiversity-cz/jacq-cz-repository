@@ -111,7 +111,7 @@ final class DublinCoreFormat implements MetadataFormatInterface
 
         // dc:identifier - Various identifiers
         $this->addElement($doc, $dc, 'dc:identifier', $oaiIdentifier);
-        $this->addElement($doc, $dc, 'dc:identifier', $item->getJacqPid());
+        $this->addElement($doc, $dc, 'dc:identifier', $item->getExpectedJacqPid());
         $this->addElement($doc, $dc, 'dc:identifier', $item->getFullSpecimenId());
 
         // dc:source - Archive filename if available

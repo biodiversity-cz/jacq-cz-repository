@@ -21,7 +21,6 @@ final class HomePresenter extends SecuredPresenter
     public function renderDefault(): void
     {
         $this->template->title = 'Admin';
-        $this->template->statuses = $this->curatorService->getAllStatuses();
     }
 
     public function createComponentImportedGrid(): ImportedPhotosGrid
