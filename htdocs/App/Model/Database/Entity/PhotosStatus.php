@@ -23,8 +23,8 @@ class PhotosStatus
     public const int SPECIMEN_CONTROL_OK = 6;
     public const int WAITING_FOR_PUBLISHING = 7;
     public const int DEVELOP_PROCEED = 100;
-    public const array PASSED = [self::IMAGE_CONTROL_OK, self::PUBLISHED, self::EMBARGO];
-    public const array PASSED_PUBLIC = [self::IMAGE_CONTROL_OK, self::PUBLISHED];
+    public const array PASSED = [self::IMAGE_CONTROL_OK,  self::SPECIMEN_CONTROL_OK, self::PUBLISHED, self::EMBARGO];
+    public const array PASSED_PUBLIC = [self::IMAGE_CONTROL_OK, self::SPECIMEN_CONTROL_OK, self::PUBLISHED];
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'name of the status'])]
     protected string $name;
