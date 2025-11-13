@@ -26,11 +26,11 @@ final class NonValidImportTest extends IntegrationTestCase
 
         $this->expectAllError();
 
-        foreach ($this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::CONTROL_ERROR]) as $photo) {
+        foreach ($this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_ERROR]) as $photo) {
             $this->curatorFacade->deletePhoto($this->provideLoggedCuratorUser(), $photo);
             $this->em->flush();
         }
-        $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::CONTROL_ERROR]);
+        $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_ERROR]);
         Assert::count(0, $waitingAfterImport, 'images with error');
 
         $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);

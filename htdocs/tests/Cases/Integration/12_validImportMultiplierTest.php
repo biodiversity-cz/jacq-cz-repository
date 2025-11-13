@@ -41,7 +41,7 @@ final class ValidImportMultiplierTest extends IntegrationTestCase
 
         $waiting = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING]);
         Assert::count(0, $waiting, 'no other images are waiting for processing');
-        $importedBeforeImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMPORTED, 'specimenId' => $this::SPECIMENS]);
+        $importedBeforeImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_OK, 'specimenId' => $this::SPECIMENS]);
         Assert::count(0, $importedBeforeImport, 'these specimens do not exists in the db');
     }
 
@@ -57,7 +57,7 @@ final class ValidImportMultiplierTest extends IntegrationTestCase
 
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING, 'specimenId' => $this::SPECIMENS]);
         Assert::count(0, $waitingAfterImport, 'images processed, no more waiting');
-        $importedAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMPORTED, 'specimenId' => $this::SPECIMENS]);
+        $importedAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_OK, 'specimenId' => $this::SPECIMENS]);
         Assert::count(count($this::SPECIMENS), $importedAfterImport, 'exact ids imported');
 
         $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);

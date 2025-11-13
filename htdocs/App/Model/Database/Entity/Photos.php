@@ -7,6 +7,7 @@ use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
 use App\Model\Database\Entity\Attributes\TOriginalFileAt;
 use App\Model\Database\Repository\PhotosRepository;
+use App\Services\Exceptions\RiskOfPidOverwritten;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -92,6 +93,12 @@ class Photos
     #[ManyToOne(targetEntity: Funding::class)]
     #[JoinColumn(name: 'funding_id', referencedColumnName: 'id', nullable: true, options: ['comment' => 'Funding'])]
     protected ?Funding $funding = null;
+
+    #[Column(type: Types::TEXT, length: 1000, unique: true, nullable: true, options: ['comment' => 'Persistent ID of photo'])]
+    protected ?string $pid = null;
+
+    #[Column(type: Types::TEXT, length: 1000, unique: false, nullable: true, options: ['comment' => 'Persistent ID of external specimen entity to which this photo belongs'])]
+    protected ?string $specimenPid = null;
 
     public function __construct()
     {
@@ -345,7 +352,7 @@ class Photos
 
     public function isPublic(): bool
     {
-        return in_array($this->status->getId(), [PhotosStatus::PUBLIC], true);
+        return in_array($this->status->getId(), [PhotosStatus::PUBLISHED], true);
     }
 
     public function getSpecimenMetadata(): Collection
@@ -370,6 +377,31 @@ class Photos
     public function setFunding(?Funding $funding): Photos
     {
         $this->funding = $funding;
+        return $this;
+    }
+
+    public function getPid(): ?string
+    {
+        return $this->pid;
+    }
+
+    public function setPid(string $pid): Photos
+    {
+        if (!empty($this->pid)){
+            throw new RiskOfPidOverwritten();
+        }
+        $this->pid = $pid;
+        return $this;
+    }
+
+    public function getSpecimenPid(): ?string
+    {
+        return $this->specimenPid;
+    }
+
+    public function setSpecimenPid(?string $specimenPid): Photos
+    {
+        $this->specimenPid = $specimenPid;
         return $this;
     }
 

@@ -104,7 +104,7 @@ readonly class CuratorFacade
             } else {
                 $entity = $unprocessedPhotos[$filename['Key']];
                 $alreadyWaiting = $entity->getStatus()->getId() === PhotosStatus::WAITING;
-                $hasControlError = $entity->getStatus()->getId() === PhotosStatus::CONTROL_ERROR;
+                $hasControlError = $entity->getStatus()->getId() === PhotosStatus::IMAGE_CONTROL_ERROR;
                 $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getError()?->getMessage());
             }
 
@@ -154,7 +154,7 @@ readonly class CuratorFacade
             $copy->setOriginalFilename($originalPhoto->getOriginalFilename())
                 ->setOriginalFileAt($originalPhoto->getOriginalFileAt())
                 ->setHerbarium($originalPhoto->getHerbarium())
-                ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::CONTROL_ERROR))
+                ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_ERROR))
                 ->setSpecimenId($barcode)
                 ->setWidth($originalPhoto->getWidth())
                 ->setHeight($originalPhoto->getHeight())
@@ -217,16 +217,16 @@ readonly class CuratorFacade
 
             switch ($lockedEntity->getStatus()->getId()) {
                 case PhotosStatus::WAITING:
-                case PhotosStatus::CONTROL_ERROR:
+                case PhotosStatus::IMAGE_CONTROL_ERROR:
                     $this->s3Service->deleteObject($lockedEntity->getHerbarium()->getBucket(), $lockedEntity->getOriginalFilename());
                     break;
                 /**
                  * @deprecated
                  * //TODO delete is not allowed in the final repository
                  */
-                case PhotosStatus::IMPORTED:
-                case PhotosStatus::PUBLIC:
-                case PhotosStatus::HIDDEN:
+                case PhotosStatus::IMAGE_CONTROL_OK:
+                case PhotosStatus::PUBLISHED:
+                case PhotosStatus::EMBARGO:
                 case PhotosStatus::DEVELOP_PROCEED:
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryImageServerBucket(), $lockedEntity->getJp2Filename());
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $lockedEntity->getArchiveFilename());

@@ -34,7 +34,7 @@ class BatchDownload extends Command
         $rsm = new ResultSetMappingBuilder($this->entityManager);
         $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
         $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id = ? ORDER BY id asc', $rsm);
-        $query->setParameter(1, PhotosStatus::HIDDEN);
+        $query->setParameter(1, PhotosStatus::EMBARGO);
 
         return $query->execute();
     }
