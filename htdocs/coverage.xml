@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<coverage generated="1760093923">
-  <project timestamp="1760093923">
-    <metrics packages="0" files="122" loc="8634" ncloc="8090" classes="114" methods="608" coveredmethods="353" statements="3028" coveredstatements="1108" elements="3636" coveredelements="1461" conditionals="0" coveredconditionals="0"/>
+<coverage generated="1763477938">
+  <project timestamp="1763477938">
+    <metrics packages="0" files="190" loc="13594" ncloc="12552" classes="180" methods="1061" coveredmethods="365" statements="4694" coveredstatements="1110" elements="5755" coveredelements="1475" conditionals="0" coveredconditionals="0"/>
     <file name="/srv/App/Core/RouterFactory.php">
       <metrics loc="40" ncloc="40" classes="1" methods="3" coveredmethods="3" statements="10" coveredstatements="10" elements="13" coveredelements="13" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Core" name="RouterFactory">
@@ -66,6 +66,12 @@
       <metrics loc="101" ncloc="86" classes="1" methods="7" coveredmethods="0" statements="42" coveredstatements="0" elements="49" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Console\Admin" name="BucketParity">
         <metrics methods="7" coveredmethods="0" statements="42" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="49" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Console/Scheduled/ResolveSpecimenPid.php">
+      <metrics loc="71" ncloc="68" classes="1" methods="5" coveredmethods="0" statements="28" coveredstatements="0" elements="33" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Console\Scheduled" name="ResolveSpecimenPid">
+        <metrics methods="5" coveredmethods="0" statements="28" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="33" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/Console/Scheduled/ProceedCuratorImage.php">
@@ -165,29 +171,33 @@
       </class>
     </file>
     <file name="/srv/App/Security/Identity.php">
-      <metrics loc="62" ncloc="52" classes="1" methods="3" coveredmethods="3" statements="17" coveredstatements="17" elements="20" coveredelements="20" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="77" ncloc="67" classes="1" methods="5" coveredmethods="3" statements="21" coveredstatements="19" elements="26" coveredelements="22" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Security" name="Identity">
-        <metrics methods="3" coveredmethods="3" statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" elements="20" coveredelements="20"/>
+        <metrics methods="5" coveredmethods="3" statements="21" coveredstatements="19" conditionals="0" coveredconditionals="0" elements="26" coveredelements="22"/>
       </class>
-      <line num="16" type="stmt" count="1"/>
       <line num="18" type="stmt" count="1"/>
       <line num="20" type="stmt" count="1"/>
       <line num="21" type="stmt" count="1"/>
+      <line num="23" type="stmt" count="1"/>
       <line num="24" type="stmt" count="1"/>
       <line num="25" type="stmt" count="1"/>
-      <line num="26" type="stmt" count="1"/>
-      <line num="27" type="stmt" count="1"/>
+      <line num="28" type="stmt" count="1"/>
       <line num="29" type="stmt" count="1"/>
-      <line num="37" type="stmt" count="1"/>
-      <line num="40" type="stmt" count="1"/>
+      <line num="30" type="stmt" count="1"/>
+      <line num="31" type="stmt" count="1"/>
+      <line num="33" type="stmt" count="1"/>
       <line num="41" type="stmt" count="1"/>
-      <line num="42" type="stmt" count="1"/>
-      <line num="43" type="stmt" count="1"/>
       <line num="44" type="stmt" count="1"/>
-      <line num="50" type="stmt" count="1"/>
-      <line num="59" type="stmt" count="1"/>
-      <line num="8" type="stmt" count="1"/>
-      <line num="63" type="stmt" count="1"/>
+      <line num="45" type="stmt" count="1"/>
+      <line num="46" type="stmt" count="1"/>
+      <line num="47" type="stmt" count="1"/>
+      <line num="48" type="stmt" count="1"/>
+      <line num="54" type="stmt" count="1"/>
+      <line num="62" type="stmt" count="1"/>
+      <line num="67" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="9" type="stmt" count="1"/>
+      <line num="78" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Security/UserAuthenticator.php">
       <metrics loc="47" ncloc="44" classes="1" methods="3" coveredmethods="2" statements="11" coveredstatements="10" elements="14" coveredelements="12" conditionals="0" coveredconditionals="0"/>
@@ -315,6 +325,342 @@
       <line num="38" type="stmt" count="1"/>
       <line num="42" type="stmt" count="1"/>
     </file>
+    <file name="/srv/App/Model/CCMM/XmlSerializable.php">
+      <metrics loc="20" ncloc="10" classes="0" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+    </file>
+    <file name="/srv/App/Model/CCMM/Traits/XmlSerializableTrait.php">
+      <metrics loc="77" ncloc="51" classes="1" methods="3" coveredmethods="0" statements="29" coveredstatements="0" elements="32" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Traits" name="XmlSerializableTrait">
+        <metrics methods="3" coveredmethods="0" statements="29" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="32" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Enum/Language.php">
+      <metrics loc="11" ncloc="10" classes="0" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Format.php">
+      <metrics loc="18" ncloc="15" classes="1" methods="1" coveredmethods="0" statements="1" coveredstatements="0" elements="2" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Format">
+        <metrics methods="1" coveredmethods="0" statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="2" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Person.php">
+      <metrics loc="58" ncloc="49" classes="1" methods="2" coveredmethods="0" statements="28" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Person">
+        <metrics methods="2" coveredmethods="0" statements="28" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Wkt.php">
+      <metrics loc="56" ncloc="48" classes="1" methods="6" coveredmethods="0" statements="11" coveredstatements="0" elements="17" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Wkt">
+        <metrics methods="6" coveredmethods="0" statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="17" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Documentation.php">
+      <metrics loc="48" ncloc="40" classes="1" methods="4" coveredmethods="0" statements="11" coveredstatements="0" elements="15" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Documentation">
+        <metrics methods="4" coveredmethods="0" statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="15" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/DescriptionType.php">
+      <metrics loc="63" ncloc="55" classes="1" methods="6" coveredmethods="0" statements="18" coveredstatements="0" elements="24" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="DescriptionType">
+        <metrics methods="6" coveredmethods="0" statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="24" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Specification.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Specification">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/MediaType.php">
+      <metrics loc="18" ncloc="15" classes="1" methods="1" coveredmethods="0" statements="1" coveredstatements="0" elements="2" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="MediaType">
+        <metrics methods="1" coveredmethods="0" statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="2" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Language.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Language">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/DistributionDownloadableFile.php">
+      <metrics loc="150" ncloc="142" classes="1" methods="20" coveredmethods="0" statements="48" coveredstatements="0" elements="68" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="DistributionDownloadableFile">
+        <metrics methods="20" coveredmethods="0" statements="48" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="68" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/TimeInstant.php">
+      <metrics loc="75" ncloc="67" classes="1" methods="8" coveredmethods="0" statements="22" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="TimeInstant">
+        <metrics methods="8" coveredmethods="0" statements="22" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/AccessUrl.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="AccessUrl">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/DistributionDataService.php">
+      <metrics loc="119" ncloc="111" classes="1" methods="14" coveredmethods="0" statements="41" coveredstatements="0" elements="55" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="DistributionDataService">
+        <metrics methods="14" coveredmethods="0" statements="41" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="55" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/ResourceType.php">
+      <metrics loc="45" ncloc="36" classes="1" methods="2" coveredmethods="0" statements="15" coveredstatements="0" elements="17" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="ResourceType">
+        <metrics methods="2" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="17" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/DownloadUrl.php">
+      <metrics loc="19" ncloc="16" classes="1" methods="1" coveredmethods="0" statements="1" coveredstatements="0" elements="2" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="DownloadUrl">
+        <metrics methods="1" coveredmethods="0" statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="2" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Provenance.php">
+      <metrics loc="46" ncloc="38" classes="1" methods="4" coveredmethods="0" statements="10" coveredstatements="0" elements="14" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Provenance">
+        <metrics methods="4" coveredmethods="0" statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="14" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/IdentifierScheme.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="IdentifierScheme">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/ValidationResult.php">
+      <metrics loc="46" ncloc="38" classes="1" methods="4" coveredmethods="0" statements="10" coveredstatements="0" elements="14" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="ValidationResult">
+        <metrics methods="4" coveredmethods="0" statements="10" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="14" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/ResourceRelationType.php">
+      <metrics loc="45" ncloc="36" classes="1" methods="2" coveredmethods="0" statements="15" coveredstatements="0" elements="17" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="ResourceRelationType">
+        <metrics methods="2" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="17" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/SubjectScheme.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="SubjectScheme">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/RelationType.php">
+      <metrics loc="45" ncloc="36" classes="1" methods="2" coveredmethods="0" statements="15" coveredstatements="0" elements="17" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="RelationType">
+        <metrics methods="2" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="17" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Organization.php">
+      <metrics loc="75" ncloc="67" classes="1" methods="8" coveredmethods="0" statements="22" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Organization">
+        <metrics methods="8" coveredmethods="0" statements="22" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/QualifiedRelation.php">
+      <metrics loc="61" ncloc="53" classes="1" methods="6" coveredmethods="0" statements="16" coveredstatements="0" elements="22" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="QualifiedRelation">
+        <metrics methods="6" coveredmethods="0" statements="16" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="22" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/OriginalRepository.php">
+      <metrics loc="48" ncloc="40" classes="1" methods="4" coveredmethods="0" statements="11" coveredstatements="0" elements="15" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="OriginalRepository">
+        <metrics methods="4" coveredmethods="0" statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="15" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/MetadataIdentification.php">
+      <metrics loc="65" ncloc="56" classes="1" methods="2" coveredmethods="0" statements="35" coveredstatements="0" elements="37" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="MetadataIdentification">
+        <metrics methods="2" coveredmethods="0" statements="35" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="37" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/ConformsToSchema.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="ConformsToSchema">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Identifier.php">
+      <metrics loc="74" ncloc="66" classes="1" methods="8" coveredmethods="0" statements="22" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Identifier">
+        <metrics methods="8" coveredmethods="0" statements="22" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Address.php">
+      <metrics loc="48" ncloc="40" classes="1" methods="4" coveredmethods="0" statements="11" coveredstatements="0" elements="15" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Address">
+        <metrics methods="4" coveredmethods="0" statements="11" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="15" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/DateType.php">
+      <metrics loc="45" ncloc="36" classes="1" methods="2" coveredmethods="0" statements="15" coveredstatements="0" elements="17" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="DateType">
+        <metrics methods="2" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="17" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/RelatedResource.php">
+      <metrics loc="101" ncloc="93" classes="1" methods="12" coveredmethods="0" statements="32" coveredstatements="0" elements="44" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="RelatedResource">
+        <metrics methods="12" coveredmethods="0" statements="32" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="44" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/ConformsToStandard.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="ConformsToStandard">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Subject.php">
+      <metrics loc="90" ncloc="82" classes="1" methods="10" coveredmethods="0" statements="29" coveredstatements="0" elements="39" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Subject">
+        <metrics methods="10" coveredmethods="0" statements="29" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="39" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Distribution.php">
+      <metrics loc="63" ncloc="55" classes="1" methods="6" coveredmethods="0" statements="18" coveredstatements="0" elements="24" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Distribution">
+        <metrics methods="6" coveredmethods="0" statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="24" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/ContactPoint.php">
+      <metrics loc="75" ncloc="67" classes="1" methods="8" coveredmethods="0" statements="22" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="ContactPoint">
+        <metrics methods="8" coveredmethods="0" statements="22" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Geometry.php">
+      <metrics loc="65" ncloc="53" classes="1" methods="6" coveredmethods="0" statements="20" coveredstatements="0" elements="26" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Geometry">
+        <metrics methods="6" coveredmethods="0" statements="20" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="26" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/EndpointUrl.php">
+      <metrics loc="63" ncloc="55" classes="1" methods="6" coveredmethods="0" statements="18" coveredstatements="0" elements="24" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="EndpointUrl">
+        <metrics methods="6" coveredmethods="0" statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="24" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Base/IriLabelsBase.php">
+      <metrics loc="62" ncloc="59" classes="1" methods="5" coveredmethods="0" statements="21" coveredstatements="0" elements="26" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models\Base" name="IriLabelsBase">
+        <metrics methods="5" coveredmethods="0" statements="21" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="26" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/AccessRights.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="AccessRights">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/RelatedObject.php">
+      <metrics loc="63" ncloc="55" classes="1" methods="6" coveredmethods="0" statements="18" coveredstatements="0" elements="24" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="RelatedObject">
+        <metrics methods="6" coveredmethods="0" statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="24" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Location.php">
+      <metrics loc="52" ncloc="43" classes="1" methods="2" coveredmethods="0" statements="22" coveredstatements="0" elements="24" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Location">
+        <metrics methods="2" coveredmethods="0" statements="22" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="24" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Checksum.php">
+      <metrics loc="63" ncloc="55" classes="1" methods="6" coveredmethods="0" statements="18" coveredstatements="0" elements="24" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Checksum">
+        <metrics methods="6" coveredmethods="0" statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="24" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/AlternateTitleType.php">
+      <metrics loc="45" ncloc="36" classes="1" methods="2" coveredmethods="0" statements="15" coveredstatements="0" elements="17" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="AlternateTitleType">
+        <metrics methods="2" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="17" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/AlternateTitle.php">
+      <metrics loc="58" ncloc="50" classes="1" methods="6" coveredmethods="0" statements="13" coveredstatements="0" elements="19" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="AlternateTitle">
+        <metrics methods="6" coveredmethods="0" statements="13" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="19" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Funder.php">
+      <metrics loc="44" ncloc="36" classes="1" methods="4" coveredmethods="0" statements="7" coveredstatements="0" elements="11" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Funder">
+        <metrics methods="4" coveredmethods="0" statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="11" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Dataset.php">
+      <metrics loc="445" ncloc="427" classes="1" methods="58" coveredmethods="0" statements="184" coveredstatements="0" elements="242" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Dataset">
+        <metrics methods="58" coveredmethods="0" statements="184" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="242" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/TimeReference.php">
+      <metrics loc="63" ncloc="55" classes="1" methods="6" coveredmethods="0" statements="18" coveredstatements="0" elements="24" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="TimeReference">
+        <metrics methods="6" coveredmethods="0" statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="24" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/License.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="License">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Title.php">
+      <metrics loc="56" ncloc="48" classes="1" methods="6" coveredmethods="0" statements="12" coveredstatements="0" elements="18" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Title">
+        <metrics methods="6" coveredmethods="0" statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="18" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Description.php">
+      <metrics loc="60" ncloc="52" classes="1" methods="6" coveredmethods="0" statements="15" coveredstatements="0" elements="21" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Description">
+        <metrics methods="6" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="21" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/BoundingBox.php">
+      <metrics loc="63" ncloc="55" classes="1" methods="6" coveredmethods="0" statements="18" coveredstatements="0" elements="24" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="BoundingBox">
+        <metrics methods="6" coveredmethods="0" statements="18" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="24" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/FundingReference.php">
+      <metrics loc="97" ncloc="93" classes="1" methods="11" coveredmethods="0" statements="35" coveredstatements="0" elements="46" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="FundingReference">
+        <metrics methods="11" coveredmethods="0" statements="35" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="46" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/TermsOfUse.php">
+      <metrics loc="83" ncloc="75" classes="1" methods="10" coveredmethods="0" statements="22" coveredstatements="0" elements="32" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="TermsOfUse">
+        <metrics methods="10" coveredmethods="0" statements="22" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="32" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/TimeInterval.php">
+      <metrics loc="75" ncloc="67" classes="1" methods="8" coveredmethods="0" statements="22" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="TimeInterval">
+        <metrics methods="8" coveredmethods="0" statements="22" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/AccessService.php">
+      <metrics loc="60" ncloc="52" classes="1" methods="6" coveredmethods="0" statements="15" coveredstatements="0" elements="21" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="AccessService">
+        <metrics methods="6" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="21" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/CCMM/Models/Role.php">
+      <metrics loc="64" ncloc="56" classes="1" methods="6" coveredmethods="0" statements="19" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\CCMM\Models" name="Role">
+        <metrics methods="6" coveredmethods="0" statements="19" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
     <file name="/srv/App/Model/Database/Entity/PhotosType.php">
       <metrics loc="63" ncloc="63" classes="1" methods="6" coveredmethods="6" statements="9" coveredstatements="9" elements="15" coveredelements="15" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Model\Database\Entity" name="PhotosType">
@@ -333,100 +679,124 @@
       <line num="64" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Model/Database/Entity/PhotosStatus.php">
-      <metrics loc="71" ncloc="71" classes="1" methods="6" coveredmethods="6" statements="9" coveredstatements="9" elements="15" coveredelements="15" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="89" ncloc="89" classes="1" methods="8" coveredmethods="7" statements="12" coveredstatements="11" elements="20" coveredelements="18" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Model\Database\Entity" name="PhotosStatus">
-        <metrics methods="6" coveredmethods="6" statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" elements="15" coveredelements="15"/>
+        <metrics methods="8" coveredmethods="7" statements="12" coveredstatements="11" conditionals="0" coveredconditionals="0" elements="20" coveredelements="18"/>
       </class>
-      <line num="37" type="stmt" count="1"/>
-      <line num="42" type="stmt" count="1"/>
-      <line num="47" type="stmt" count="1"/>
-      <line num="52" type="stmt" count="1"/>
-      <line num="54" type="stmt" count="1"/>
-      <line num="59" type="stmt" count="1"/>
-      <line num="60" type="stmt" count="1"/>
-      <line num="65" type="stmt" count="1"/>
-      <line num="66" type="stmt" count="1"/>
-      <line num="12" type="stmt" count="1"/>
-      <line num="72" type="stmt" count="1"/>
+      <line num="46" type="stmt" count="1"/>
+      <line num="51" type="stmt" count="1"/>
+      <line num="56" type="stmt" count="1"/>
+      <line num="61" type="stmt" count="1"/>
+      <line num="63" type="stmt" count="1"/>
+      <line num="68" type="stmt" count="1"/>
+      <line num="69" type="stmt" count="1"/>
+      <line num="74" type="stmt" count="1"/>
+      <line num="75" type="stmt" count="1"/>
+      <line num="80" type="stmt" count="0"/>
+      <line num="85" type="stmt" count="1"/>
+      <line num="86" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
+      <line num="90" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Model/Database/Entity/Photos.php">
-      <metrics loc="361" ncloc="347" classes="1" methods="42" coveredmethods="39" statements="71" coveredstatements="65" elements="113" coveredelements="104" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="431" ncloc="417" classes="1" methods="52" coveredmethods="40" statements="92" coveredstatements="67" elements="144" coveredelements="107" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Model\Database\Entity" name="Photos">
-        <metrics methods="42" coveredmethods="39" statements="71" coveredstatements="65" conditionals="0" coveredconditionals="0" elements="113" coveredelements="104"/>
+        <metrics methods="52" coveredmethods="40" statements="92" coveredstatements="67" conditionals="0" coveredconditionals="0" elements="144" coveredelements="107"/>
       </class>
-      <line num="94" type="stmt" count="1"/>
-      <line num="95" type="stmt" count="1"/>
-      <line num="96" type="stmt" count="1"/>
-      <line num="100" type="stmt" count="1"/>
-      <line num="105" type="stmt" count="1"/>
+      <line num="101" type="stmt" count="1"/>
+      <line num="102" type="stmt" count="1"/>
+      <line num="103" type="stmt" count="1"/>
       <line num="107" type="stmt" count="1"/>
       <line num="112" type="stmt" count="1"/>
-      <line num="117" type="stmt" count="1"/>
+      <line num="114" type="stmt" count="1"/>
       <line num="119" type="stmt" count="1"/>
       <line num="124" type="stmt" count="1"/>
-      <line num="129" type="stmt" count="1"/>
+      <line num="126" type="stmt" count="1"/>
       <line num="131" type="stmt" count="1"/>
       <line num="136" type="stmt" count="1"/>
-      <line num="141" type="stmt" count="1"/>
+      <line num="138" type="stmt" count="1"/>
       <line num="143" type="stmt" count="1"/>
       <line num="148" type="stmt" count="1"/>
-      <line num="153" type="stmt" count="1"/>
+      <line num="150" type="stmt" count="1"/>
       <line num="155" type="stmt" count="1"/>
       <line num="160" type="stmt" count="1"/>
-      <line num="165" type="stmt" count="1"/>
+      <line num="162" type="stmt" count="1"/>
       <line num="167" type="stmt" count="1"/>
       <line num="172" type="stmt" count="1"/>
-      <line num="177" type="stmt" count="1"/>
-      <line num="182" type="stmt" count="1"/>
+      <line num="174" type="stmt" count="1"/>
+      <line num="179" type="stmt" count="1"/>
       <line num="184" type="stmt" count="1"/>
       <line num="189" type="stmt" count="1"/>
-      <line num="194" type="stmt" count="1"/>
+      <line num="191" type="stmt" count="1"/>
       <line num="196" type="stmt" count="1"/>
       <line num="201" type="stmt" count="1"/>
-      <line num="206" type="stmt" count="1"/>
-      <line num="211" type="stmt" count="1"/>
+      <line num="203" type="stmt" count="1"/>
+      <line num="208" type="stmt" count="1"/>
       <line num="213" type="stmt" count="1"/>
       <line num="218" type="stmt" count="1"/>
-      <line num="223" type="stmt" count="1"/>
+      <line num="220" type="stmt" count="1"/>
       <line num="225" type="stmt" count="1"/>
-      <line num="233" type="stmt" count="1"/>
-      <line num="241" type="stmt" count="1"/>
-      <line num="243" type="stmt" count="1"/>
-      <line num="251" type="stmt" count="1"/>
-      <line num="259" type="stmt" count="1"/>
-      <line num="261" type="stmt" count="1"/>
+      <line num="230" type="stmt" count="1"/>
+      <line num="232" type="stmt" count="1"/>
+      <line num="240" type="stmt" count="1"/>
+      <line num="248" type="stmt" count="1"/>
+      <line num="250" type="stmt" count="1"/>
+      <line num="258" type="stmt" count="1"/>
       <line num="266" type="stmt" count="1"/>
-      <line num="271" type="stmt" count="1"/>
-      <line num="272" type="stmt" count="1"/>
+      <line num="268" type="stmt" count="1"/>
       <line num="273" type="stmt" count="1"/>
-      <line num="276" type="stmt" count="1"/>
-      <line num="281" type="stmt" count="1"/>
-      <line num="282" type="stmt" count="1"/>
-      <line num="284" type="stmt" count="1"/>
+      <line num="278" type="stmt" count="1"/>
+      <line num="279" type="stmt" count="1"/>
+      <line num="280" type="stmt" count="1"/>
+      <line num="283" type="stmt" count="1"/>
       <line num="288" type="stmt" count="1"/>
-      <line num="293" type="stmt" count="1"/>
-      <line num="294" type="stmt" count="1"/>
-      <line num="297" type="stmt" count="1"/>
-      <line num="302" type="stmt" count="1"/>
-      <line num="303" type="stmt" count="1"/>
-      <line num="305" type="stmt" count="1"/>
+      <line num="289" type="stmt" count="1"/>
+      <line num="291" type="stmt" count="1"/>
+      <line num="295" type="stmt" count="1"/>
+      <line num="300" type="stmt" count="1"/>
+      <line num="301" type="stmt" count="1"/>
+      <line num="304" type="stmt" count="1"/>
+      <line num="309" type="stmt" count="1"/>
       <line num="310" type="stmt" count="1"/>
-      <line num="315" type="stmt" count="1"/>
+      <line num="312" type="stmt" count="1"/>
       <line num="317" type="stmt" count="1"/>
       <line num="322" type="stmt" count="1"/>
-      <line num="327" type="stmt" count="1"/>
-      <line num="328" type="stmt" count="1"/>
-      <line num="333" type="stmt" count="1"/>
-      <line num="338" type="stmt" count="1"/>
-      <line num="339" type="stmt" count="1"/>
-      <line num="344" type="stmt" count="0"/>
-      <line num="349" type="stmt" count="0"/>
-      <line num="350" type="stmt" count="0"/>
-      <line num="352" type="stmt" count="0"/>
+      <line num="324" type="stmt" count="1"/>
+      <line num="329" type="stmt" count="1"/>
+      <line num="334" type="stmt" count="1"/>
+      <line num="335" type="stmt" count="1"/>
+      <line num="340" type="stmt" count="1"/>
+      <line num="345" type="stmt" count="1"/>
+      <line num="346" type="stmt" count="1"/>
+      <line num="351" type="stmt" count="0"/>
+      <line num="356" type="stmt" count="0"/>
       <line num="357" type="stmt" count="0"/>
-      <line num="358" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="1"/>
-      <line num="362" type="stmt" count="1"/>
+      <line num="362" type="stmt" count="0"/>
+      <line num="363" type="stmt" count="0"/>
+      <line num="365" type="stmt" count="0"/>
+      <line num="370" type="stmt" count="0"/>
+      <line num="375" type="stmt" count="1"/>
+      <line num="376" type="stmt" count="1"/>
+      <line num="381" type="stmt" count="0"/>
+      <line num="386" type="stmt" count="0"/>
+      <line num="387" type="stmt" count="0"/>
+      <line num="389" type="stmt" count="0"/>
+      <line num="390" type="stmt" count="0"/>
+      <line num="395" type="stmt" count="0"/>
+      <line num="400" type="stmt" count="0"/>
+      <line num="401" type="stmt" count="0"/>
+      <line num="406" type="stmt" count="0"/>
+      <line num="407" type="stmt" count="0"/>
+      <line num="408" type="stmt" count="0"/>
+      <line num="409" type="stmt" count="0"/>
+      <line num="411" type="stmt" count="0"/>
+      <line num="416" type="stmt" count="0"/>
+      <line num="421" type="stmt" count="0"/>
+      <line num="422" type="stmt" count="0"/>
+      <line num="427" type="stmt" count="0"/>
+      <line num="428" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="1"/>
+      <line num="432" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Model/Database/Entity/SpecimenMetadata.php">
       <metrics loc="135" ncloc="135" classes="1" methods="16" coveredmethods="0" statements="24" coveredstatements="0" elements="40" coveredelements="0" conditionals="0" coveredconditionals="0"/>
@@ -749,6 +1119,12 @@
       <line num="12" type="stmt" count="1"/>
       <line num="51" type="stmt" count="1"/>
     </file>
+    <file name="/srv/App/Model/Database/Entity/ExcludedDownloadLog.php">
+      <metrics loc="44" ncloc="44" classes="1" methods="4" coveredmethods="0" statements="6" coveredstatements="0" elements="10" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="ExcludedDownloadLog">
+        <metrics methods="4" coveredmethods="0" statements="6" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="10" coveredelements="0"/>
+      </class>
+    </file>
     <file name="/srv/App/Model/Database/Entity/Contact.php">
       <metrics loc="100" ncloc="100" classes="1" methods="11" coveredmethods="11" statements="16" coveredstatements="16" elements="27" coveredelements="27" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Model\Database\Entity" name="Contact">
@@ -774,24 +1150,24 @@
       <line num="101" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Model/Database/Entity/ExternalDatabase.php">
-      <metrics loc="73" ncloc="73" classes="1" methods="8" coveredmethods="4" statements="12" coveredstatements="8" elements="20" coveredelements="12" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="74" ncloc="74" classes="1" methods="8" coveredmethods="4" statements="12" coveredstatements="8" elements="20" coveredelements="12" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Model\Database\Entity" name="ExternalDatabase">
         <metrics methods="8" coveredmethods="4" statements="12" coveredstatements="8" conditionals="0" coveredconditionals="0" elements="20" coveredelements="12"/>
       </class>
-      <line num="31" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="1"/>
+      <line num="32" type="stmt" count="0"/>
       <line num="37" type="stmt" count="1"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="47" type="stmt" count="1"/>
+      <line num="38" type="stmt" count="1"/>
+      <line num="43" type="stmt" count="0"/>
       <line num="48" type="stmt" count="1"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="58" type="stmt" count="1"/>
+      <line num="49" type="stmt" count="1"/>
+      <line num="54" type="stmt" count="0"/>
       <line num="59" type="stmt" count="1"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="1"/>
+      <line num="60" type="stmt" count="1"/>
+      <line num="65" type="stmt" count="0"/>
       <line num="70" type="stmt" count="1"/>
+      <line num="71" type="stmt" count="1"/>
       <line num="13" type="stmt" count="1"/>
-      <line num="74" type="stmt" count="1"/>
+      <line num="75" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Model/Database/Entity/License.php">
       <metrics loc="63" ncloc="63" classes="1" methods="6" coveredmethods="3" statements="9" coveredstatements="6" elements="15" coveredelements="9" conditionals="0" coveredconditionals="0"/>
@@ -832,6 +1208,39 @@
       <line num="49" type="stmt" count="1"/>
       <line num="17" type="stmt" count="1"/>
       <line num="101" type="stmt" count="1"/>
+    </file>
+    <file name="/srv/App/Model/Database/Entity/Funding.php">
+      <metrics loc="146" ncloc="146" classes="1" methods="17" coveredmethods="8" statements="25" coveredstatements="16" elements="42" coveredelements="24" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Entity" name="Funding">
+        <metrics methods="17" coveredmethods="8" statements="25" coveredstatements="16" conditionals="0" coveredconditionals="0" elements="42" coveredelements="24"/>
+      </class>
+      <line num="53" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="1"/>
+      <line num="59" type="stmt" count="1"/>
+      <line num="64" type="stmt" count="0"/>
+      <line num="69" type="stmt" count="1"/>
+      <line num="70" type="stmt" count="1"/>
+      <line num="75" type="stmt" count="0"/>
+      <line num="80" type="stmt" count="1"/>
+      <line num="81" type="stmt" count="1"/>
+      <line num="86" type="stmt" count="0"/>
+      <line num="91" type="stmt" count="1"/>
+      <line num="92" type="stmt" count="1"/>
+      <line num="97" type="stmt" count="0"/>
+      <line num="102" type="stmt" count="1"/>
+      <line num="103" type="stmt" count="1"/>
+      <line num="108" type="stmt" count="0"/>
+      <line num="113" type="stmt" count="1"/>
+      <line num="114" type="stmt" count="1"/>
+      <line num="119" type="stmt" count="0"/>
+      <line num="124" type="stmt" count="1"/>
+      <line num="125" type="stmt" count="1"/>
+      <line num="130" type="stmt" count="0"/>
+      <line num="135" type="stmt" count="1"/>
+      <line num="136" type="stmt" count="1"/>
+      <line num="141" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="1"/>
+      <line num="147" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Model/Database/Enums/EnumDatabotRoleType.php">
       <metrics loc="37" ncloc="37" classes="1" methods="5" coveredmethods="5" statements="5" coveredstatements="5" elements="10" coveredelements="10" conditionals="0" coveredconditionals="0"/>
@@ -900,9 +1309,9 @@
       </class>
     </file>
     <file name="/srv/App/Model/Database/Repository/PhotosRepository.php">
-      <metrics loc="116" ncloc="89" classes="1" methods="12" coveredmethods="5" statements="19" coveredstatements="7" elements="31" coveredelements="12" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="121" ncloc="94" classes="1" methods="13" coveredmethods="5" statements="20" coveredstatements="7" elements="33" coveredelements="12" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Model\Database\Repository" name="PhotosRepository">
-        <metrics methods="12" coveredmethods="5" statements="19" coveredstatements="7" conditionals="0" coveredconditionals="0" elements="31" coveredelements="12"/>
+        <metrics methods="13" coveredmethods="5" statements="20" coveredstatements="7" conditionals="0" coveredconditionals="0" elements="33" coveredelements="12"/>
       </class>
       <line num="29" type="stmt" count="0"/>
       <line num="31" type="stmt" count="0"/>
@@ -910,21 +1319,22 @@
       <line num="41" type="stmt" count="0"/>
       <line num="46" type="stmt" count="1"/>
       <line num="51" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="0"/>
-      <line num="71" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="74" type="stmt" count="0"/>
       <line num="76" type="stmt" count="0"/>
-      <line num="78" type="stmt" count="0"/>
-      <line num="86" type="stmt" count="0"/>
-      <line num="88" type="stmt" count="0"/>
-      <line num="113" type="stmt" count="0"/>
-      <line num="59" type="stmt" count="1"/>
+      <line num="81" type="stmt" count="0"/>
+      <line num="83" type="stmt" count="0"/>
+      <line num="91" type="stmt" count="0"/>
+      <line num="93" type="stmt" count="0"/>
+      <line num="118" type="stmt" count="0"/>
       <line num="64" type="stmt" count="1"/>
-      <line num="96" type="stmt" count="1"/>
-      <line num="98" type="stmt" count="1"/>
-      <line num="106" type="stmt" count="1"/>
-      <line num="108" type="stmt" count="1"/>
+      <line num="69" type="stmt" count="1"/>
+      <line num="101" type="stmt" count="1"/>
+      <line num="103" type="stmt" count="1"/>
+      <line num="111" type="stmt" count="1"/>
+      <line num="113" type="stmt" count="1"/>
       <line num="19" type="stmt" count="1"/>
-      <line num="117" type="stmt" count="1"/>
+      <line num="122" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Model/Database/Repository/PhotosTypeRepository.php">
       <metrics loc="17" ncloc="10" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
@@ -936,6 +1346,30 @@
       <metrics loc="58" ncloc="43" classes="1" methods="2" coveredmethods="0" statements="23" coveredstatements="0" elements="25" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Model\Database\Repository" name="DatabotResultRepository">
         <metrics methods="2" coveredmethods="0" statements="23" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="25" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Model/Database/Repository/FundingRepository.php">
+      <metrics loc="50" ncloc="43" classes="1" methods="5" coveredmethods="1" statements="11" coveredstatements="4" elements="16" coveredelements="5" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Repository" name="FundingRepository">
+        <metrics methods="5" coveredmethods="1" statements="11" coveredstatements="4" conditionals="0" coveredconditionals="0" elements="16" coveredelements="5"/>
+      </class>
+      <line num="22" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
+      <line num="39" type="stmt" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="1"/>
+      <line num="46" type="stmt" count="1"/>
+      <line num="47" type="stmt" count="1"/>
+      <line num="48" type="stmt" count="1"/>
+      <line num="51" type="stmt" count="1"/>
+    </file>
+    <file name="/srv/App/Model/Database/Repository/PhotosStatusRepository.php">
+      <metrics loc="17" ncloc="10" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Model\Database\Repository" name="PhotosStatusRepository">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/Model/Database/Repository/MaintenanceRepository.php">
@@ -1098,9 +1532,9 @@
       <line num="106" type="stmt" count="1"/>
       <line num="107" type="stmt" count="1"/>
       <line num="108" type="stmt" count="1"/>
+      <line num="28" type="stmt" count="1"/>
       <line num="35" type="stmt" count="1"/>
       <line num="36" type="stmt" count="1"/>
-      <line num="28" type="stmt" count="1"/>
       <line num="82" type="stmt" count="1"/>
       <line num="11" type="stmt" count="1"/>
       <line num="19" type="stmt" count="1"/>
@@ -1479,15 +1913,15 @@
       </class>
     </file>
     <file name="/srv/App/UI/Admin/Herbarium/HerbariumPresenter.php">
-      <metrics loc="82" ncloc="77" classes="1" methods="4" coveredmethods="0" statements="46" coveredstatements="0" elements="50" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="71" ncloc="67" classes="1" methods="4" coveredmethods="0" statements="33" coveredstatements="0" elements="37" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\UI\Admin\Herbarium" name="HerbariumPresenter">
-        <metrics methods="4" coveredmethods="0" statements="46" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="50" coveredelements="0"/>
+        <metrics methods="4" coveredmethods="0" statements="33" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="37" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/UI/Admin/Home/HomePresenter.php">
-      <metrics loc="32" ncloc="30" classes="1" methods="2" coveredmethods="0" statements="3" coveredstatements="0" elements="5" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="40" ncloc="37" classes="1" methods="3" coveredmethods="0" statements="4" coveredstatements="0" elements="7" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\UI\Admin\Home" name="HomePresenter">
-        <metrics methods="2" coveredmethods="0" statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="5" coveredelements="0"/>
+        <metrics methods="3" coveredmethods="0" statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="7" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/UI/Admin/Import/ImportPresenter.php">
@@ -1502,10 +1936,16 @@
         <metrics methods="3" coveredmethods="0" statements="59" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="62" coveredelements="0"/>
       </class>
     </file>
+    <file name="/srv/App/UI/Admin/Funding/FundingPresenter.php">
+      <metrics loc="77" ncloc="74" classes="1" methods="6" coveredmethods="0" statements="34" coveredstatements="0" elements="40" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Admin\Funding" name="FundingPresenter">
+        <metrics methods="6" coveredmethods="0" statements="34" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="40" coveredelements="0"/>
+      </class>
+    </file>
     <file name="/srv/App/Grids/ImportedPhotosGrid.php">
-      <metrics loc="189" ncloc="183" classes="1" methods="8" coveredmethods="0" statements="132" coveredstatements="0" elements="140" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="261" ncloc="255" classes="1" methods="10" coveredmethods="0" statements="195" coveredstatements="0" elements="205" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Grids" name="ImportedPhotosGrid">
-        <metrics methods="8" coveredmethods="0" statements="132" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="140" coveredelements="0"/>
+        <metrics methods="10" coveredmethods="0" statements="195" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="205" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/Grids/ImportedPhotosGridFactory.php">
@@ -1518,9 +1958,9 @@
       </class>
     </file>
     <file name="/srv/App/Forms/ImportFormFactory.php">
-      <metrics loc="38" ncloc="35" classes="1" methods="3" coveredmethods="0" statements="12" coveredstatements="0" elements="15" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="39" ncloc="36" classes="1" methods="3" coveredmethods="0" statements="13" coveredstatements="0" elements="16" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Forms" name="ImportFormFactory">
-        <metrics methods="3" coveredmethods="0" statements="12" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="15" coveredelements="0"/>
+        <metrics methods="3" coveredmethods="0" statements="13" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="16" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/Forms/BaseForm.php">
@@ -1533,6 +1973,12 @@
       <metrics loc="28" ncloc="28" classes="1" methods="3" coveredmethods="0" statements="5" coveredstatements="0" elements="8" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Forms" name="FormFactory">
         <metrics methods="3" coveredmethods="0" statements="5" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="8" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Forms/FundingForm.php">
+      <metrics loc="118" ncloc="117" classes="1" methods="4" coveredmethods="0" statements="89" coveredstatements="0" elements="93" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Forms" name="FundingForm">
+        <metrics methods="4" coveredmethods="0" statements="89" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="93" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/Exceptions/S3Exception.php">
@@ -1576,48 +2022,75 @@
       <line num="21" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Services/OaiPmh/MetadataFormat/CcmmFormat.php">
-      <metrics loc="107" ncloc="84" classes="1" methods="6" coveredmethods="5" statements="36" coveredstatements="35" elements="42" coveredelements="40" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="146" ncloc="135" classes="1" methods="8" coveredmethods="5" statements="63" coveredstatements="6" elements="71" coveredelements="11" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Services\OaiPmh\MetadataFormat" name="CcmmFormat">
-        <metrics methods="6" coveredmethods="5" statements="36" coveredstatements="35" conditionals="0" coveredconditionals="0" elements="42" coveredelements="40"/>
+        <metrics methods="8" coveredmethods="5" statements="63" coveredstatements="6" conditionals="0" coveredconditionals="0" elements="71" coveredelements="11"/>
       </class>
-      <line num="38" type="stmt" count="0"/>
-      <line num="11" type="stmt" count="1"/>
-      <line num="15" type="stmt" count="1"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="53" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="71" type="stmt" count="0"/>
+      <line num="74" type="stmt" count="0"/>
+      <line num="75" type="stmt" count="0"/>
+      <line num="77" type="stmt" count="0"/>
+      <line num="79" type="stmt" count="0"/>
+      <line num="80" type="stmt" count="0"/>
+      <line num="81" type="stmt" count="0"/>
+      <line num="82" type="stmt" count="0"/>
+      <line num="84" type="stmt" count="0"/>
+      <line num="85" type="stmt" count="0"/>
+      <line num="86" type="stmt" count="0"/>
+      <line num="89" type="stmt" count="0"/>
+      <line num="90" type="stmt" count="0"/>
+      <line num="92" type="stmt" count="0"/>
+      <line num="94" type="stmt" count="0"/>
+      <line num="95" type="stmt" count="0"/>
+      <line num="96" type="stmt" count="0"/>
+      <line num="97" type="stmt" count="0"/>
+      <line num="99" type="stmt" count="0"/>
+      <line num="100" type="stmt" count="0"/>
+      <line num="101" type="stmt" count="0"/>
+      <line num="104" type="stmt" count="0"/>
+      <line num="106" type="stmt" count="0"/>
+      <line num="107" type="stmt" count="0"/>
+      <line num="108" type="stmt" count="0"/>
+      <line num="109" type="stmt" count="0"/>
+      <line num="110" type="stmt" count="0"/>
+      <line num="111" type="stmt" count="0"/>
+      <line num="112" type="stmt" count="0"/>
+      <line num="113" type="stmt" count="0"/>
+      <line num="114" type="stmt" count="0"/>
+      <line num="115" type="stmt" count="0"/>
+      <line num="116" type="stmt" count="0"/>
+      <line num="117" type="stmt" count="0"/>
+      <line num="118" type="stmt" count="0"/>
+      <line num="120" type="stmt" count="0"/>
+      <line num="122" type="stmt" count="0"/>
+      <line num="123" type="stmt" count="0"/>
+      <line num="124" type="stmt" count="0"/>
+      <line num="126" type="stmt" count="0"/>
+      <line num="127" type="stmt" count="0"/>
+      <line num="129" type="stmt" count="0"/>
+      <line num="130" type="stmt" count="0"/>
+      <line num="131" type="stmt" count="0"/>
+      <line num="133" type="stmt" count="0"/>
+      <line num="138" type="stmt" count="0"/>
+      <line num="139" type="stmt" count="0"/>
+      <line num="141" type="stmt" count="0"/>
+      <line num="144" type="stmt" count="0"/>
       <line num="21" type="stmt" count="1"/>
-      <line num="27" type="stmt" count="1"/>
-      <line num="32" type="stmt" count="1"/>
-      <line num="37" type="stmt" count="1"/>
-      <line num="41" type="stmt" count="1"/>
+      <line num="23" type="stmt" count="1"/>
+      <line num="25" type="stmt" count="1"/>
+      <line num="29" type="stmt" count="1"/>
+      <line num="34" type="stmt" count="1"/>
+      <line num="39" type="stmt" count="1"/>
       <line num="44" type="stmt" count="1"/>
-      <line num="45" type="stmt" count="1"/>
-      <line num="46" type="stmt" count="1"/>
-      <line num="48" type="stmt" count="1"/>
-      <line num="54" type="stmt" count="1"/>
-      <line num="55" type="stmt" count="1"/>
-      <line num="58" type="stmt" count="1"/>
-      <line num="59" type="stmt" count="1"/>
-      <line num="60" type="stmt" count="1"/>
-      <line num="61" type="stmt" count="1"/>
-      <line num="63" type="stmt" count="1"/>
-      <line num="66" type="stmt" count="1"/>
-      <line num="67" type="stmt" count="1"/>
-      <line num="68" type="stmt" count="1"/>
-      <line num="69" type="stmt" count="1"/>
-      <line num="70" type="stmt" count="1"/>
-      <line num="72" type="stmt" count="1"/>
-      <line num="73" type="stmt" count="1"/>
-      <line num="75" type="stmt" count="1"/>
-      <line num="78" type="stmt" count="1"/>
-      <line num="79" type="stmt" count="1"/>
-      <line num="81" type="stmt" count="1"/>
-      <line num="82" type="stmt" count="1"/>
-      <line num="93" type="stmt" count="1"/>
-      <line num="101" type="stmt" count="1"/>
-      <line num="102" type="stmt" count="1"/>
-      <line num="103" type="stmt" count="1"/>
-      <line num="104" type="stmt" count="1"/>
-      <line num="106" type="stmt" count="1"/>
-      <line num="108" type="stmt" count="1"/>
+      <line num="147" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Services/OaiPmh/MetadataFormat/MetadataFormatInterface.php">
       <metrics loc="35" ncloc="17" classes="0" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
@@ -1896,6 +2369,12 @@
       <line num="30" type="stmt" count="1"/>
       <line num="59" type="stmt" count="1"/>
     </file>
+    <file name="/srv/App/Services/Exceptions/RiskOfPidOverwritten.php">
+      <metrics loc="8" ncloc="8" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services\Exceptions" name="RiskOfPidOverwritten">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+      </class>
+    </file>
     <file name="/srv/App/Services/Exceptions/RiskOfUnpredictabilityException.php">
       <metrics loc="10" ncloc="10" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Services\Exceptions" name="RiskOfUnpredictabilityException">
@@ -1909,86 +2388,100 @@
       </class>
     </file>
     <file name="/srv/App/Services/EntityServices/HerbariumService.php">
-      <metrics loc="66" ncloc="65" classes="1" methods="4" coveredmethods="1" statements="25" coveredstatements="5" elements="29" coveredelements="6" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="72" ncloc="71" classes="1" methods="5" coveredmethods="1" statements="26" coveredstatements="5" elements="31" coveredelements="6" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Services\EntityServices" name="HerbariumService">
-        <metrics methods="4" coveredmethods="1" statements="25" coveredstatements="5" conditionals="0" coveredconditionals="0" elements="29" coveredelements="6"/>
+        <metrics methods="5" coveredmethods="1" statements="26" coveredstatements="5" conditionals="0" coveredconditionals="0" elements="31" coveredelements="6"/>
       </class>
-      <line num="18" type="stmt" count="1"/>
-      <line num="20" type="stmt" count="1"/>
+      <line num="19" type="stmt" count="1"/>
       <line num="21" type="stmt" count="1"/>
       <line num="22" type="stmt" count="1"/>
-      <line num="26" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="1"/>
       <line num="27" type="stmt" count="0"/>
       <line num="28" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="1"/>
-      <line num="41" type="stmt" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="1"/>
       <line num="42" type="stmt" count="0"/>
       <line num="43" type="stmt" count="0"/>
       <line num="44" type="stmt" count="0"/>
-      <line num="46" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
       <line num="47" type="stmt" count="0"/>
       <line num="48" type="stmt" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
       <line num="56" type="stmt" count="0"/>
       <line num="57" type="stmt" count="0"/>
       <line num="58" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
       <line num="61" type="stmt" count="0"/>
       <line num="62" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="67" type="stmt" count="1"/>
-      <line num="12" type="stmt" count="1"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="65" type="stmt" count="0"/>
+      <line num="70" type="stmt" count="0"/>
+      <line num="73" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Services/EntityServices/PhotoService.php">
-      <metrics loc="130" ncloc="110" classes="1" methods="15" coveredmethods="13" statements="30" coveredstatements="27" elements="45" coveredelements="40" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="136" ncloc="116" classes="1" methods="16" coveredmethods="13" statements="31" coveredstatements="27" elements="47" coveredelements="40" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Services\EntityServices" name="PhotoService">
-        <metrics methods="15" coveredmethods="13" statements="30" coveredstatements="27" conditionals="0" coveredconditionals="0" elements="45" coveredelements="40"/>
+        <metrics methods="16" coveredmethods="13" statements="31" coveredstatements="27" conditionals="0" coveredconditionals="0" elements="47" coveredelements="40"/>
       </class>
       <line num="36" type="stmt" count="0"/>
-      <line num="127" type="stmt" count="0"/>
-      <line num="128" type="stmt" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="133" type="stmt" count="0"/>
+      <line num="134" type="stmt" count="0"/>
       <line num="18" type="stmt" count="1"/>
       <line num="26" type="stmt" count="1"/>
       <line num="31" type="stmt" count="1"/>
-      <line num="44" type="stmt" count="1"/>
-      <line num="49" type="stmt" count="1"/>
-      <line num="54" type="stmt" count="1"/>
+      <line num="50" type="stmt" count="1"/>
       <line num="55" type="stmt" count="1"/>
-      <line num="56" type="stmt" count="1"/>
-      <line num="57" type="stmt" count="1"/>
       <line num="60" type="stmt" count="1"/>
-      <line num="65" type="stmt" count="1"/>
-      <line num="70" type="stmt" count="1"/>
-      <line num="75" type="stmt" count="1"/>
-      <line num="83" type="stmt" count="1"/>
-      <line num="91" type="stmt" count="1"/>
-      <line num="92" type="stmt" count="1"/>
-      <line num="93" type="stmt" count="1"/>
-      <line num="96" type="stmt" count="1"/>
-      <line num="104" type="stmt" count="1"/>
-      <line num="114" type="stmt" count="1"/>
-      <line num="115" type="stmt" count="1"/>
-      <line num="116" type="stmt" count="1"/>
-      <line num="117" type="stmt" count="1"/>
-      <line num="118" type="stmt" count="1"/>
-      <line num="119" type="stmt" count="1"/>
+      <line num="61" type="stmt" count="1"/>
+      <line num="62" type="stmt" count="1"/>
+      <line num="63" type="stmt" count="1"/>
+      <line num="66" type="stmt" count="1"/>
+      <line num="71" type="stmt" count="1"/>
+      <line num="76" type="stmt" count="1"/>
+      <line num="81" type="stmt" count="1"/>
+      <line num="89" type="stmt" count="1"/>
+      <line num="97" type="stmt" count="1"/>
+      <line num="98" type="stmt" count="1"/>
+      <line num="99" type="stmt" count="1"/>
+      <line num="102" type="stmt" count="1"/>
+      <line num="110" type="stmt" count="1"/>
       <line num="120" type="stmt" count="1"/>
+      <line num="121" type="stmt" count="1"/>
       <line num="122" type="stmt" count="1"/>
+      <line num="123" type="stmt" count="1"/>
+      <line num="124" type="stmt" count="1"/>
+      <line num="125" type="stmt" count="1"/>
+      <line num="126" type="stmt" count="1"/>
+      <line num="128" type="stmt" count="1"/>
       <line num="11" type="stmt" count="1"/>
-      <line num="131" type="stmt" count="1"/>
+      <line num="137" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Services/EntityServices/UserService.php">
-      <metrics loc="12" ncloc="12" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="20" ncloc="20" classes="1" methods="1" coveredmethods="0" statements="4" coveredstatements="0" elements="5" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Services\EntityServices" name="UserService">
-        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
+        <metrics methods="1" coveredmethods="0" statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="5" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Services/EntityServices/ExcludedDownloadLogService.php">
+      <metrics loc="79" ncloc="61" classes="1" methods="5" coveredmethods="0" statements="33" coveredstatements="0" elements="38" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services\EntityServices" name="ExcludedDownloadLogService">
+        <metrics methods="5" coveredmethods="0" statements="33" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="38" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/Services/EntityServices/FundingService.php">
+      <metrics loc="40" ncloc="40" classes="1" methods="3" coveredmethods="0" statements="15" coveredstatements="0" elements="18" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services\EntityServices" name="FundingService">
+        <metrics methods="3" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="18" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/Services/EntityServices/ImageDownloadLogService.php">
-      <metrics loc="31" ncloc="31" classes="1" methods="1" coveredmethods="0" statements="15" coveredstatements="0" elements="16" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="44" ncloc="42" classes="1" methods="2" coveredmethods="0" statements="24" coveredstatements="0" elements="26" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Services\EntityServices" name="ImageDownloadLogService">
-        <metrics methods="1" coveredmethods="0" statements="15" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="16" coveredelements="0"/>
+        <metrics methods="2" coveredmethods="0" statements="24" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="26" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/Services/EntityServices/MaintenanceService.php">
@@ -2001,9 +2494,9 @@
       <line num="19" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Services/EntityServices/BaseEntityService.php">
-      <metrics loc="44" ncloc="37" classes="1" methods="3" coveredmethods="3" statements="3" coveredstatements="3" elements="6" coveredelements="6" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="49" ncloc="42" classes="1" methods="4" coveredmethods="3" statements="4" coveredstatements="3" elements="8" coveredelements="6" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Services\EntityServices" name="BaseEntityService">
-        <metrics methods="3" coveredmethods="3" statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" elements="6" coveredelements="6"/>
+        <metrics methods="4" coveredmethods="3" statements="4" coveredstatements="3" conditionals="0" coveredconditionals="0" elements="8" coveredelements="6"/>
       </class>
       <line num="17" type="stmt" count="1"/>
       <line num="19" type="stmt" count="1"/>
@@ -2011,12 +2504,13 @@
       <line num="27" type="stmt" count="1"/>
       <line num="36" type="stmt" count="1"/>
       <line num="41" type="stmt" count="1"/>
-      <line num="45" type="stmt" count="1"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Services/RepositoryConfiguration.php">
-      <metrics loc="106" ncloc="103" classes="1" methods="17" coveredmethods="17" statements="21" coveredstatements="21" elements="38" coveredelements="38" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="113" ncloc="110" classes="1" methods="18" coveredmethods="18" statements="23" coveredstatements="23" elements="41" coveredelements="41" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Services" name="RepositoryConfiguration">
-        <metrics methods="17" coveredmethods="17" statements="21" coveredstatements="21" conditionals="0" coveredconditionals="0" elements="38" coveredelements="38"/>
+        <metrics methods="18" coveredmethods="18" statements="23" coveredstatements="23" conditionals="0" coveredconditionals="0" elements="41" coveredelements="41"/>
       </class>
       <line num="22" type="stmt" count="1"/>
       <line num="27" type="stmt" count="1"/>
@@ -2027,19 +2521,27 @@
       <line num="43" type="stmt" count="1"/>
       <line num="48" type="stmt" count="1"/>
       <line num="53" type="stmt" count="1"/>
-      <line num="58" type="stmt" count="1"/>
-      <line num="63" type="stmt" count="1"/>
-      <line num="68" type="stmt" count="1"/>
-      <line num="73" type="stmt" count="1"/>
-      <line num="78" type="stmt" count="1"/>
-      <line num="83" type="stmt" count="1"/>
-      <line num="88" type="stmt" count="1"/>
-      <line num="93" type="stmt" count="1"/>
-      <line num="98" type="stmt" count="1"/>
-      <line num="103" type="stmt" count="1"/>
+      <line num="59" type="stmt" count="1"/>
+      <line num="64" type="stmt" count="1"/>
+      <line num="69" type="stmt" count="1"/>
+      <line num="74" type="stmt" count="1"/>
+      <line num="79" type="stmt" count="1"/>
+      <line num="84" type="stmt" count="1"/>
+      <line num="89" type="stmt" count="1"/>
+      <line num="94" type="stmt" count="1"/>
+      <line num="99" type="stmt" count="1"/>
+      <line num="104" type="stmt" count="1"/>
+      <line num="109" type="stmt" count="1"/>
+      <line num="110" type="stmt" count="1"/>
       <line num="16" type="stmt" count="1"/>
       <line num="18" type="stmt" count="1"/>
-      <line num="107" type="stmt" count="1"/>
+      <line num="114" type="stmt" count="1"/>
+    </file>
+    <file name="/srv/App/Services/SpecimenPidCallerService.php">
+      <metrics loc="93" ncloc="85" classes="1" methods="5" coveredmethods="0" statements="52" coveredstatements="0" elements="57" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\Services" name="SpecimenPidCallerService">
+        <metrics methods="5" coveredmethods="0" statements="52" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="57" coveredelements="0"/>
+      </class>
     </file>
     <file name="/srv/App/Services/WebDir.php">
       <metrics loc="17" ncloc="17" classes="1" methods="2" coveredmethods="2" statements="3" coveredstatements="3" elements="5" coveredelements="5" conditionals="0" coveredconditionals="0"/>
@@ -2071,129 +2573,184 @@
       <line num="52" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Facades/CuratorFacade.php">
-      <metrics loc="264" ncloc="232" classes="1" methods="15" coveredmethods="7" statements="118" coveredstatements="89" elements="133" coveredelements="96" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="357" ncloc="331" classes="1" methods="18" coveredmethods="7" statements="173" coveredstatements="92" elements="191" coveredelements="99" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Facades" name="CuratorFacade">
-        <metrics methods="15" coveredmethods="7" statements="118" coveredstatements="89" conditionals="0" coveredconditionals="0" elements="133" coveredelements="96"/>
+        <metrics methods="18" coveredmethods="7" statements="173" coveredstatements="92" conditionals="0" coveredconditionals="0" elements="191" coveredelements="99"/>
       </class>
-      <line num="34" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="89" type="stmt" count="0"/>
-      <line num="90" type="stmt" count="0"/>
-      <line num="91" type="stmt" count="0"/>
-      <line num="92" type="stmt" count="0"/>
-      <line num="115" type="stmt" count="1"/>
-      <line num="116" type="stmt" count="1"/>
-      <line num="117" type="stmt" count="1"/>
-      <line num="118" type="stmt" count="1"/>
-      <line num="123" type="stmt" count="1"/>
-      <line num="124" type="stmt" count="1"/>
-      <line num="125" type="stmt" count="1"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="52" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="76" type="stmt" count="1"/>
+      <line num="77" type="stmt" count="1"/>
+      <line num="106" type="stmt" count="0"/>
+      <line num="107" type="stmt" count="0"/>
+      <line num="108" type="stmt" count="0"/>
+      <line num="109" type="stmt" count="0"/>
+      <line num="132" type="stmt" count="1"/>
       <line num="133" type="stmt" count="1"/>
       <line num="134" type="stmt" count="1"/>
-      <line num="136" type="stmt" count="1"/>
-      <line num="137" type="stmt" count="1"/>
-      <line num="138" type="stmt" count="1"/>
-      <line num="139" type="stmt" count="1"/>
+      <line num="135" type="stmt" count="1"/>
       <line num="140" type="stmt" count="1"/>
       <line num="141" type="stmt" count="1"/>
       <line num="142" type="stmt" count="1"/>
-      <line num="143" type="stmt" count="1"/>
-      <line num="144" type="stmt" count="1"/>
-      <line num="145" type="stmt" count="1"/>
-      <line num="146" type="stmt" count="1"/>
-      <line num="147" type="stmt" count="1"/>
-      <line num="148" type="stmt" count="1"/>
-      <line num="149" type="stmt" count="1"/>
       <line num="150" type="stmt" count="1"/>
       <line num="151" type="stmt" count="1"/>
       <line num="153" type="stmt" count="1"/>
       <line num="154" type="stmt" count="1"/>
+      <line num="155" type="stmt" count="1"/>
       <line num="156" type="stmt" count="1"/>
+      <line num="157" type="stmt" count="1"/>
       <line num="158" type="stmt" count="1"/>
+      <line num="159" type="stmt" count="1"/>
       <line num="160" type="stmt" count="1"/>
-      <line num="168" type="stmt" count="0"/>
-      <line num="169" type="stmt" count="0"/>
-      <line num="170" type="stmt" count="0"/>
-      <line num="171" type="stmt" count="0"/>
-      <line num="172" type="stmt" count="0"/>
-      <line num="176" type="stmt" count="0"/>
+      <line num="161" type="stmt" count="1"/>
+      <line num="162" type="stmt" count="1"/>
+      <line num="163" type="stmt" count="1"/>
+      <line num="164" type="stmt" count="1"/>
+      <line num="165" type="stmt" count="1"/>
+      <line num="166" type="stmt" count="1"/>
+      <line num="167" type="stmt" count="1"/>
+      <line num="168" type="stmt" count="1"/>
+      <line num="170" type="stmt" count="1"/>
+      <line num="171" type="stmt" count="1"/>
+      <line num="173" type="stmt" count="1"/>
+      <line num="175" type="stmt" count="1"/>
+      <line num="177" type="stmt" count="1"/>
+      <line num="185" type="stmt" count="0"/>
       <line num="186" type="stmt" count="0"/>
-      <line num="211" type="stmt" count="0"/>
-      <line num="212" type="stmt" count="0"/>
-      <line num="213" type="stmt" count="0"/>
-      <line num="214" type="stmt" count="0"/>
-      <line num="215" type="stmt" count="0"/>
-      <line num="216" type="stmt" count="0"/>
-      <line num="217" type="stmt" count="0"/>
-      <line num="218" type="stmt" count="0"/>
+      <line num="187" type="stmt" count="0"/>
+      <line num="188" type="stmt" count="0"/>
+      <line num="189" type="stmt" count="0"/>
+      <line num="193" type="stmt" count="0"/>
+      <line num="199" type="stmt" count="0"/>
+      <line num="220" type="stmt" count="0"/>
+      <line num="221" type="stmt" count="0"/>
+      <line num="222" type="stmt" count="0"/>
+      <line num="223" type="stmt" count="0"/>
       <line num="224" type="stmt" count="0"/>
       <line num="225" type="stmt" count="0"/>
+      <line num="226" type="stmt" count="0"/>
       <line num="227" type="stmt" count="0"/>
-      <line num="235" type="stmt" count="0"/>
+      <line num="229" type="stmt" count="0"/>
       <line num="236" type="stmt" count="0"/>
-      <line num="241" type="stmt" count="1"/>
-      <line num="242" type="stmt" count="1"/>
-      <line num="243" type="stmt" count="1"/>
-      <line num="244" type="stmt" count="1"/>
-      <line num="246" type="stmt" count="1"/>
-      <line num="247" type="stmt" count="1"/>
-      <line num="248" type="stmt" count="1"/>
-      <line num="249" type="stmt" count="1"/>
-      <line num="250" type="stmt" count="1"/>
+      <line num="237" type="stmt" count="0"/>
+      <line num="239" type="stmt" count="0"/>
+      <line num="247" type="stmt" count="0"/>
+      <line num="248" type="stmt" count="0"/>
+      <line num="252" type="stmt" count="0"/>
       <line num="254" type="stmt" count="0"/>
+      <line num="255" type="stmt" count="0"/>
+      <line num="256" type="stmt" count="0"/>
+      <line num="257" type="stmt" count="0"/>
+      <line num="258" type="stmt" count="0"/>
       <line num="259" type="stmt" count="0"/>
+      <line num="260" type="stmt" count="0"/>
       <line num="261" type="stmt" count="0"/>
-      <line num="185" type="stmt" count="1"/>
-      <line num="190" type="stmt" count="1"/>
-      <line num="192" type="stmt" count="1"/>
-      <line num="193" type="stmt" count="1"/>
-      <line num="194" type="stmt" count="1"/>
-      <line num="195" type="stmt" count="1"/>
-      <line num="196" type="stmt" count="1"/>
-      <line num="197" type="stmt" count="1"/>
+      <line num="262" type="stmt" count="0"/>
+      <line num="264" type="stmt" count="0"/>
+      <line num="266" type="stmt" count="0"/>
+      <line num="267" type="stmt" count="0"/>
+      <line num="268" type="stmt" count="0"/>
+      <line num="270" type="stmt" count="0"/>
+      <line num="274" type="stmt" count="0"/>
+      <line num="275" type="stmt" count="0"/>
+      <line num="276" type="stmt" count="0"/>
+      <line num="277" type="stmt" count="0"/>
+      <line num="279" type="stmt" count="0"/>
+      <line num="282" type="stmt" count="0"/>
+      <line num="287" type="stmt" count="0"/>
+      <line num="288" type="stmt" count="0"/>
+      <line num="292" type="stmt" count="0"/>
+      <line num="294" type="stmt" count="0"/>
+      <line num="295" type="stmt" count="0"/>
+      <line num="296" type="stmt" count="0"/>
+      <line num="297" type="stmt" count="0"/>
+      <line num="298" type="stmt" count="0"/>
+      <line num="299" type="stmt" count="0"/>
+      <line num="300" type="stmt" count="0"/>
+      <line num="301" type="stmt" count="0"/>
+      <line num="302" type="stmt" count="0"/>
+      <line num="304" type="stmt" count="0"/>
+      <line num="306" type="stmt" count="0"/>
+      <line num="307" type="stmt" count="0"/>
+      <line num="308" type="stmt" count="0"/>
+      <line num="310" type="stmt" count="0"/>
+      <line num="314" type="stmt" count="0"/>
+      <line num="315" type="stmt" count="0"/>
+      <line num="316" type="stmt" count="0"/>
+      <line num="317" type="stmt" count="0"/>
+      <line num="319" type="stmt" count="0"/>
+      <line num="322" type="stmt" count="0"/>
+      <line num="328" type="stmt" count="0"/>
+      <line num="329" type="stmt" count="0"/>
+      <line num="334" type="stmt" count="1"/>
+      <line num="335" type="stmt" count="1"/>
+      <line num="336" type="stmt" count="1"/>
+      <line num="337" type="stmt" count="1"/>
+      <line num="339" type="stmt" count="1"/>
+      <line num="340" type="stmt" count="1"/>
+      <line num="341" type="stmt" count="1"/>
+      <line num="342" type="stmt" count="1"/>
+      <line num="343" type="stmt" count="1"/>
+      <line num="347" type="stmt" count="0"/>
+      <line num="352" type="stmt" count="0"/>
+      <line num="354" type="stmt" count="0"/>
       <line num="198" type="stmt" count="1"/>
-      <line num="199" type="stmt" count="1"/>
-      <line num="200" type="stmt" count="1"/>
-      <line num="202" type="stmt" count="1"/>
       <line num="203" type="stmt" count="1"/>
-      <line num="204" type="stmt" count="1"/>
       <line num="205" type="stmt" count="1"/>
       <line num="206" type="stmt" count="1"/>
-      <line num="221" type="stmt" count="1"/>
-      <line num="222" type="stmt" count="1"/>
-      <line num="223" type="stmt" count="1"/>
-      <line num="230" type="stmt" count="1"/>
-      <line num="52" type="stmt" count="1"/>
-      <line num="53" type="stmt" count="1"/>
-      <line num="55" type="stmt" count="1"/>
-      <line num="56" type="stmt" count="1"/>
-      <line num="57" type="stmt" count="1"/>
-      <line num="58" type="stmt" count="1"/>
-      <line num="59" type="stmt" count="1"/>
-      <line num="60" type="stmt" count="1"/>
-      <line num="61" type="stmt" count="1"/>
-      <line num="62" type="stmt" count="1"/>
+      <line num="207" type="stmt" count="1"/>
+      <line num="208" type="stmt" count="1"/>
+      <line num="209" type="stmt" count="1"/>
+      <line num="210" type="stmt" count="1"/>
+      <line num="211" type="stmt" count="1"/>
+      <line num="212" type="stmt" count="1"/>
+      <line num="213" type="stmt" count="1"/>
+      <line num="215" type="stmt" count="1"/>
+      <line num="216" type="stmt" count="1"/>
+      <line num="217" type="stmt" count="1"/>
+      <line num="218" type="stmt" count="1"/>
+      <line num="219" type="stmt" count="1"/>
+      <line num="233" type="stmt" count="1"/>
+      <line num="234" type="stmt" count="1"/>
+      <line num="235" type="stmt" count="1"/>
+      <line num="242" type="stmt" count="1"/>
       <line num="65" type="stmt" count="1"/>
-      <line num="67" type="stmt" count="1"/>
+      <line num="66" type="stmt" count="1"/>
+      <line num="68" type="stmt" count="1"/>
+      <line num="69" type="stmt" count="1"/>
+      <line num="70" type="stmt" count="1"/>
+      <line num="71" type="stmt" count="1"/>
+      <line num="72" type="stmt" count="1"/>
+      <line num="73" type="stmt" count="1"/>
+      <line num="74" type="stmt" count="1"/>
       <line num="75" type="stmt" count="1"/>
-      <line num="83" type="stmt" count="1"/>
+      <line num="79" type="stmt" count="1"/>
+      <line num="82" type="stmt" count="1"/>
       <line num="84" type="stmt" count="1"/>
-      <line num="85" type="stmt" count="1"/>
-      <line num="86" type="stmt" count="1"/>
-      <line num="87" type="stmt" count="1"/>
-      <line num="95" type="stmt" count="1"/>
-      <line num="98" type="stmt" count="1"/>
+      <line num="92" type="stmt" count="1"/>
+      <line num="100" type="stmt" count="1"/>
+      <line num="101" type="stmt" count="1"/>
+      <line num="102" type="stmt" count="1"/>
       <line num="103" type="stmt" count="1"/>
       <line num="104" type="stmt" count="1"/>
-      <line num="105" type="stmt" count="1"/>
-      <line num="106" type="stmt" count="1"/>
-      <line num="107" type="stmt" count="1"/>
-      <line num="108" type="stmt" count="1"/>
-      <line num="109" type="stmt" count="1"/>
-      <line num="110" type="stmt" count="1"/>
-      <line num="25" type="stmt" count="1"/>
+      <line num="112" type="stmt" count="1"/>
+      <line num="115" type="stmt" count="1"/>
+      <line num="120" type="stmt" count="1"/>
+      <line num="121" type="stmt" count="1"/>
+      <line num="122" type="stmt" count="1"/>
+      <line num="123" type="stmt" count="1"/>
+      <line num="124" type="stmt" count="1"/>
+      <line num="125" type="stmt" count="1"/>
+      <line num="126" type="stmt" count="1"/>
+      <line num="127" type="stmt" count="1"/>
       <line num="27" type="stmt" count="1"/>
-      <line num="265" type="stmt" count="1"/>
+      <line num="29" type="stmt" count="1"/>
+      <line num="358" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/Controls/Image/DetailControl.php">
       <metrics loc="60" ncloc="58" classes="1" methods="4" coveredmethods="0" statements="26" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
