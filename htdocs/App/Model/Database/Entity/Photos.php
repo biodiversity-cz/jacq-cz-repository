@@ -93,6 +93,9 @@ class Photos
     #[OneToMany(targetEntity: SpecimenMetadata::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $specimenMetadata;
 
+    #[Column(name: 'embargo_timeout', type: Types::DATETIME_MUTABLE, nullable: true)]
+    protected ?\DateTime $embargoTimeout = null;
+
     public function __construct()
     {
         $this->databotResults = new ArrayCollection();
@@ -406,6 +409,23 @@ class Photos
             return $baseurl . rawurlencode($this->getExpectedJacqPid());
         }
         return $baseurl . $this->getSpecimenId();
+    }
+
+    public function getEmbargoTimeout(): ?\DateTime
+    {
+        return $this->embargoTimeout;
+    }
+
+    public function setEmbargoTimeout(): Photos
+    {
+        $this->embargoTimeout = new \DateTime('+2 years');
+        return $this;
+    }
+
+    public function dropEmbargoTimeout(): Photos
+    {
+        $this->embargoTimeout = null;
+        return $this;
     }
 
 }

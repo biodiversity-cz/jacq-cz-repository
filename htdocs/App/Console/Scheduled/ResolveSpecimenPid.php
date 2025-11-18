@@ -16,7 +16,7 @@ class ResolveSpecimenPid extends Command
     public const int LIMIT = 4;
 
     /**
-     * Running as a CronJob - process images from curatorBucket to the repository waiting room
+     * Running as a CronJob - process images from curatorBucket to the repository waiting room, cleans expired Embargo
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SpecimenPidCallerService $pidCallerService, ?string $name = null)
     {
@@ -26,11 +26,13 @@ class ResolveSpecimenPid extends Command
     protected function configure(): void
     {
         $this->setName('curator:resolveSpecimenPid');
-        $this->setDescription(sprintf('check if specimen PID exists and updates photo status to SPECIMEN_CONTROL_OK.'));
+        $this->setDescription(sprintf('check if specimen PID exists and updates photo status to SPECIMEN_CONTROL_OK, cleans expired Embargo'));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->expireEmbargo();
+
         $startTime = microtime(true);
         try {
             $this->pidCallerService->callAsync($this->getPhotos(), 3);
@@ -41,6 +43,17 @@ class ResolveSpecimenPid extends Command
         $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
 
         return Command::SUCCESS;
+    }
+
+    protected function expireEmbargo()
+    {
+        $query = $this->entityManager->createQuery(
+            'UPDATE App\Model\Database\Entity\Photos e SET e.status = :newStatus, e.lastEdit = CURRENT_TIMESTAMP(), e.embargoTimeout = NULL  WHERE e.status = :oldStatus AND  e.embargoTimeout < CURRENT_TIMESTAMP()'
+        );
+        $query->setParameter('newStatus', PhotosStatus::SPECIMEN_CONTROL_OK);
+        $query->setParameter('oldStatus', PhotosStatus::EMBARGO);
+
+        $query->execute();
     }
 
 

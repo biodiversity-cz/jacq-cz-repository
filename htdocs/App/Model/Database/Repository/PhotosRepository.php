@@ -51,6 +51,11 @@ class PhotosRepository extends AbstractRepository
         return $this->createQueryBuilder('p')->andWhere('p.status = :publicStatus')->setParameter('publicStatus' , PhotosStatus::PUBLISHED);
     }
 
+    public function getPublishablePhotosDatasource(): QueryBuilder
+    {
+        return $this->createQueryBuilder('p')->andWhere('p.status = :status')->setParameter('status' , PhotosStatus::SPECIMEN_CONTROL_OK);
+    }
+
     /**
      * @return Photos[]
      */

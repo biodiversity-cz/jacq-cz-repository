@@ -36,6 +36,12 @@ class PhotoService extends BaseEntityService
         return $this->repository->getPublishedPhotosDatasource();
     }
 
+    public function getPublishablePhotosDatasource(): QueryBuilder
+    {
+        return $this->repository->getPublishablePhotosDatasource();
+    }
+
+
     /**
      * @return Photos[]
      */

@@ -10,6 +10,7 @@ use App\Model\FileManagement\FileInsideCuratorBucket;
 use App\Model\ImportStages\StageFactory;
 use App\Services\EntityServices\HerbariumService;
 use App\Services\EntityServices\PhotoService;
+use App\Services\Exceptions\ServiceException;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
 use App\Services\SpecimenIdService;
@@ -192,10 +193,6 @@ readonly class CuratorFacade
         return $photos;
     }
 
-    /**
-     * @deprecated
-     * This function requires refactoring in production settings
-     */
     public function deletePhoto(User $user, Photos $entity): CuratorFacade
     {
         if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->getHerbarium()) {
@@ -220,18 +217,17 @@ readonly class CuratorFacade
                 case PhotosStatus::IMAGE_CONTROL_ERROR:
                     $this->s3Service->deleteObject($lockedEntity->getHerbarium()->getBucket(), $lockedEntity->getOriginalFilename());
                     break;
-                /**
-                 * @deprecated
-                 * //TODO delete is not allowed in the final repository
-                 */
                 case PhotosStatus::IMAGE_CONTROL_OK:
-                case PhotosStatus::PUBLISHED:
+                case PhotosStatus::SPECIMEN_CONTROL_OK:
                 case PhotosStatus::EMBARGO:
                 case PhotosStatus::DEVELOP_PROCEED:
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryImageServerBucket(), $lockedEntity->getJp2Filename());
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $lockedEntity->getArchiveFilename());
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $lockedEntity->getDatabotThumbFilename());
                     break;
+                default:
+                    throw new ServiceException('This photo cannot be deleted');
+
             }
 
             $this->entityManager->remove($lockedEntity);
@@ -240,11 +236,92 @@ readonly class CuratorFacade
         } catch (\Throwable $e) {
             $this->entityManager->rollback();
 
-            throw new Exception('Error in photo delete: ' . $e->getMessage());
+            throw new ServiceException('Error in photo delete: ' . $e->getMessage());
         }
 
         return $this;
     }
+
+    public function addEmbargoPhoto(User $user, Photos $entity): CuratorFacade
+    {
+        if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->getHerbarium()) {
+            throw new AuthenticationException('Not allowed to edit photo.');
+        }
+
+        try {
+            $this->entityManager->beginTransaction();
+            /** @var Photos $lockedEntity */
+            $lockedEntity = $this->entityManager
+                ->createQueryBuilder()
+                ->select('p')
+                ->from(Photos::class, 'p')
+                ->where('p.id = :id')
+                ->setParameter('id', $entity->getId())
+                ->getQuery()
+                ->setLockMode(LockMode::PESSIMISTIC_WRITE)
+                ->getSingleResult();
+
+            if (in_array($lockedEntity->getStatus()->getId(), PhotosStatus::EMBARGOABLE)) {
+                $lockedEntity
+                    ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::EMBARGO))
+                    ->setEmbargoTimeout()
+                    ->setLastEditAt();
+            }else{
+                throw new ServiceException('This photo cannot be edited.');
+            }
+
+
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+        } catch (\Throwable $e) {
+            $this->entityManager->rollback();
+
+            throw new ServiceException('Error in photo delete: ' . $e->getMessage());
+        }
+
+        return $this;
+    }
+
+    public function dropEmbargoPhoto(User $user, Photos $entity): CuratorFacade
+    {
+        if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->getHerbarium()) {
+            throw new AuthenticationException('Not allowed to edit photo.');
+        }
+
+        try {
+            $this->entityManager->beginTransaction();
+            /** @var Photos $lockedEntity */
+            $lockedEntity = $this->entityManager
+                ->createQueryBuilder()
+                ->select('p')
+                ->from(Photos::class, 'p')
+                ->where('p.id = :id')
+                ->setParameter('id', $entity->getId())
+                ->getQuery()
+                ->setLockMode(LockMode::PESSIMISTIC_WRITE)
+                ->getSingleResult();
+
+            if ($lockedEntity->getStatus()->getId() == PhotosStatus::EMBARGO) {
+                $lockedEntity
+                    ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK))
+                    ->dropEmbargoTimeout()
+                    ->setLastEditAt();
+            }else{
+                throw new ServiceException('This photo cannot be edited.');
+            }
+
+
+            $this->entityManager->flush();
+            $this->entityManager->commit();
+        } catch (\Throwable $e) {
+            $this->entityManager->rollback();
+
+            throw new ServiceException('Error in photo delete: ' . $e->getMessage());
+        }
+
+        return $this;
+    }
+
 
     public function deleteJustNotimportedFile(User $user, string $filename): CuratorFacade
     {

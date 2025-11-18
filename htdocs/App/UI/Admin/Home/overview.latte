@@ -2,5 +2,8 @@
 <div class="container">
 
     <h2>processed files</h2>
+    {if $publishableCount > 0}
+    {*<p> You have {$publishableCount} publishable photos (<em>specimen control ok</em> status). Publish them all (don't forget at first embargo those that should remain unpublished!).</p>*}
+    {/if}
     {control importedGrid}
 </div>

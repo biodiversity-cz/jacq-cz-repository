@@ -1,4 +1,4 @@
-#	docker exec -it --user www-data app-jacq /bin/bash
+#	docker exec -it --user www app-jacq /bin/bash
 
 code_management:
 	vendor/bin/phpcs --standard=ruleset.xml App # analyze with codesniffer https://github.com/slevomat/coding-standard

@@ -21,24 +21,6 @@ final class ValidImportTest extends IntegrationTestCase
             ->setMultipleBarcodeMultiplier(false);
         $this->em->flush();
         $this->curatorFacade->registerNewFiles($this->provideLoggedCuratorUser(), ['photoType' => 1]);
-//        //         https://phpfashion.com/cs/velestrucne-testovani-presenteru-v-nette
-////        https://github.com/webnazakazku/mango-presenter-tester
-////        $presenterFactory = $this->container->getByType(IPresenterFactory::class);
-////        $presenter = $presenterFactory->createPresenter('Admin:Import');
-////        $presenter->autoCanonicalize = false;
-////        $post = [
-////
-////            'importForm' => [          // jméno komponenty
-////                'photoType' => PhotosStatus::WAITING,
-////                'send' => 'Send',      // jméno submit buttonu
-////            ]
-////        ];
-////
-////        $request = new Request('Admin:Import', 'POST', array('action' => 'default'), $post);
-////
-////        $response = $presenter->run($request);
-
-
         $this->expectAllImported();
     }
 
