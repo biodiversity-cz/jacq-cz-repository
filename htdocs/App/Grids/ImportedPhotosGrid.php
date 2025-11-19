@@ -117,7 +117,7 @@ class ImportedPhotosGrid extends Control
                 }
                 return $el;
             }) ->setFilterSelect($this->curatorFacade->getAllStatuses());
-        $this->grid->addColumnDateTime('lastEditAt', 'processed at')->setRenderer(function (Photos $item){return $item->getLastEditAt()->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
+        $this->grid->addColumnDateTime('lastEditAt', 'processed at (FROM - TO)')->setRenderer(function (Photos $item){return $item->getLastEditAt()->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);

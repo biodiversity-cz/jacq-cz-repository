@@ -62,7 +62,7 @@ class PublishedPhotosGrid extends Control
                 return $el;
             });
 
-        $this->grid->addColumnDateTime('lastEditAt', 'published at')->setRenderer(function (Photos $item){return $item->getLastEditAt()->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
+        $this->grid->addColumnDateTime('lastEditAt', 'published at (FROM - TO)')->setRenderer(function (Photos $item){return $item->getLastEditAt()->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
