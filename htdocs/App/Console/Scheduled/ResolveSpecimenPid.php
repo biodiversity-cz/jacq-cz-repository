@@ -2,6 +2,7 @@
 
 namespace App\Console\Scheduled;
 
+use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Services\SpecimenPidCallerService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,7 +19,7 @@ class ResolveSpecimenPid extends Command
     /**
      * Running as a CronJob - process images from curatorBucket to the repository waiting room, cleans expired Embargo
      */
-    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SpecimenPidCallerService $pidCallerService, ?string $name = null)
+    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SpecimenPidCallerService $pidCallerService, protected readonly CuratorFacade $curatorFacade, ?string $name = null)
     {
         parent::__construct($name);
     }
@@ -31,7 +32,7 @@ class ResolveSpecimenPid extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->expireEmbargo();
+        $this->curatorFacade->expireEmbargo();
 
         $startTime = microtime(true);
         try {
@@ -44,18 +45,6 @@ class ResolveSpecimenPid extends Command
 
         return Command::SUCCESS;
     }
-
-    protected function expireEmbargo()
-    {
-        $query = $this->entityManager->createQuery(
-            'UPDATE App\Model\Database\Entity\Photos e SET e.status = :newStatus, e.lastEdit = CURRENT_TIMESTAMP(), e.embargoTimeout = NULL  WHERE e.status = :oldStatus AND  e.embargoTimeout < CURRENT_TIMESTAMP()'
-        );
-        $query->setParameter('newStatus', PhotosStatus::SPECIMEN_CONTROL_OK);
-        $query->setParameter('oldStatus', PhotosStatus::EMBARGO);
-
-        $query->execute();
-    }
-
 
     protected function getPhotos(): array
     {

@@ -354,4 +354,29 @@ readonly class CuratorFacade
         return $this;
     }
 
+    public function expireEmbargo(): self
+    {
+        $query = $this->entityManager->createQuery(
+            'UPDATE App\Model\Database\Entity\Photos e SET e.status = :newStatus, e.lastEdit = CURRENT_TIMESTAMP(), e.embargoTimeout = NULL  WHERE e.status = :oldStatus AND  e.embargoTimeout < CURRENT_TIMESTAMP()'
+        );
+        $query->setParameter('newStatus', PhotosStatus::SPECIMEN_CONTROL_OK);
+        $query->setParameter('oldStatus', PhotosStatus::EMBARGO);
+
+        $query->execute();
+        return $this;
+    }
+
+    public function markPublishable(User $user): self
+    {
+        $result = $this->photoService->getPublishablePhotosDatasource($user)->getQuery()->getResult();
+        foreach ($result as $photo) {
+            $photo
+                ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::WAITING_FOR_PUBLISHING))
+                ->setLastEditAt();
+        }
+        $this->entityManager->flush();
+        return $this;
+
+    }
+
 }

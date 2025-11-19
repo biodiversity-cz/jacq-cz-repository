@@ -46,14 +46,14 @@ class PhotosRepository extends AbstractRepository
         return $this->createQueryBuilder('p')->andWhere('p.herbarium = :userHerbarium  OR :isAdmin = true')->setParameter('userHerbarium', $user->getIdentity()->getCurrentHerbariumId())->setParameter('isAdmin', $user->isInRole('ROLE_ADMIN'));
     }
 
-    public function getPublishedPhotosDatasource(): QueryBuilder
+    public function getAllPublishedPhotosDatasource(): QueryBuilder
     {
         return $this->createQueryBuilder('p')->andWhere('p.status = :publicStatus')->setParameter('publicStatus' , PhotosStatus::PUBLISHED);
     }
 
-    public function getPublishablePhotosDatasource(): QueryBuilder
+    public function getPublishablePhotosDatasource(User $user): QueryBuilder
     {
-        return $this->createQueryBuilder('p')->andWhere('p.status = :status')->setParameter('status' , PhotosStatus::SPECIMEN_CONTROL_OK);
+        return $this->getDefaultDatasource($user)->andWhere('p.status = :status')->setParameter('status' , PhotosStatus::SPECIMEN_CONTROL_OK);
     }
 
     /**

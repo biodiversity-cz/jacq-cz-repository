@@ -18,7 +18,11 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {if $presenter->isLinkCurrent('Home:overview')}active{/if}"
-                           n:href="Home:overview">Overview</a>
+                           n:href="Home:overview">Work-in-progress files</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {if $presenter->isLinkCurrent('Home:published')}active{/if}"
+                           n:href="Home:published">Published files</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {if $presenter->isLinkCurrent('Report:')}active{/if}"
