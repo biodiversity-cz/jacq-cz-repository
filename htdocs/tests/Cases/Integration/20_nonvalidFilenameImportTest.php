@@ -18,7 +18,7 @@ final class NonValidImportFilenameTest extends IntegrationTestCase
     {
 
         $this->checkBefore();
-//        $this->getUserEntity()->getHerbarium() //tohle nějak nepersistuje, musí se vzít rovnou ta entita
+//        $this->getUserEntity()->herbarium //tohle nějak nepersistuje, musí se vzít rovnou ta entita
         $this->em->getRepository(Herbaria::class)->find($this->provideLoggedCuratorUser()->getIdentity()->getCurrentHerbariumId())
             ->setFallbackFilename(true)
             ->setMultipleBarcodeMultiplier(false);

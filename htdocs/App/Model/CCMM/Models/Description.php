@@ -14,8 +14,8 @@ class Description implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $descriptionText = null;
-    private ?DescriptionType $descriptionType = null;
+    protected(set) ?string $descriptionText = null;
+    protected(set) ?DescriptionType $descriptionType = null;
 
     public function __construct() {
     }

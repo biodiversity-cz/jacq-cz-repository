@@ -1,6 +1,6 @@
 {block content}
 <div class="container">
-    <h2>Files in the <i>{$herbarium->getBucket()}</i> bucket</h2>
+    <h2>Files in the <i>{$herbarium->bucket}</i> bucket</h2>
     <ul class="nav nav-tabs" id="importTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="info-status-tab" data-bs-toggle="tab" data-bs-target="#info-tab-pane"
@@ -224,11 +224,11 @@
                         <tbody>
                         {foreach $orphanedItems as $photo}
                         <tr>
-                            <th>{$photo->getOriginalFilename()}</th>
-                            <td>{$photo->getCreatedAt()->format('j. F Y')}</td>
-                            <td>{$photo->getStatus()->getName()}</td>
+                            <th>{$photo->originalFilename}</th>
+                            <td>{$photo->createdAt->format('j. F Y')}</td>
+                            <td>{$photo->status->name}</td>
                             <td>
-                                {$photo->getError()?->getMessage()}
+                                {$photo->error?->getMessage()}
                             </td>
                         </tr>
                         {/foreach}

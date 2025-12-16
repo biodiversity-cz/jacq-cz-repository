@@ -23,21 +23,21 @@ class ExcludedDownloadLogService extends BaseEntityService
     {
         // Get all excluded IPs
         $excludedIps = $this->getAllExcludedIps();
-        
+
         foreach ($excludedIps as $excludedIp) {
-            $excludedIpValue = $excludedIp->getIp();
-            
+            $excludedIpValue = $excludedIp->ip;
+
             // Exact match
             if ($ip === $excludedIpValue) {
                 return true;
             }
-            
+
             // Wildcard match - check if IP starts with the excluded pattern
             if (str_starts_with($ip, $excludedIpValue)) {
                 return true;
             }
         }
-        
+
         return false;
     }
 

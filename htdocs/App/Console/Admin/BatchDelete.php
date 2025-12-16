@@ -44,7 +44,7 @@ class BatchDelete extends Command
         $photos = $this->getPhotos();
         $output->writeln(count($photos) . ' files will be affected.');
         foreach ($photos as $photo) {
-            $this->user->login(new SimpleIdentity(1, ['curator'], ['name' => 'faker', 'herbarium' => $photo->getHerbarium()->getId()]));
+            $this->user->login(new SimpleIdentity(1, ['curator'], ['name' => 'faker', 'herbarium' => $photo->herbarium->id]));
             $this->curatorFacade->deletePhoto($this->user, $photo);
         }
 

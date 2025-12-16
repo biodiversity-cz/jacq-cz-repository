@@ -14,10 +14,10 @@ class Subject implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private ?Title $title = null;
-    private ?string $classificationCode = null;
-    private ?SubjectScheme $subjectScheme = null;
+    protected(set) ?string $iri = null;
+    protected(set) ?Title $title = null;
+    protected(set) ?string $classificationCode = null;
+    protected(set) ?SubjectScheme $subjectScheme = null;
 
     public function __construct() {
     }

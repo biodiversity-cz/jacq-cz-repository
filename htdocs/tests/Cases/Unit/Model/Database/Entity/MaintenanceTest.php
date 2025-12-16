@@ -15,7 +15,7 @@ test('Maintenance entity getters and setters', function (): void {
 
 // test set/get message
     $maintenance->setMessage('Server will be down');
-    Assert::equal('Server will be down', $maintenance->getMessage());
+    Assert::equal('Server will be down', $maintenance->message);
 
 // test set/get type
     $maintenance->setType('warning');
@@ -29,9 +29,9 @@ test('Maintenance entity getters and setters', function (): void {
 // test set/get expiresAt
     $date = new \DateTimeImmutable('2025-12-31 23:59:59');
     $maintenance->setExpiresAt($date);
-    Assert::equal($date, $maintenance->getExpiresAt());
+    Assert::equal($date, $maintenance->expiresAt);
 
 // test set null expiresAt
     $maintenance->setExpiresAt(null);
-    Assert::null($maintenance->getExpiresAt());
+    Assert::null($maintenance->expiresAt);
 });

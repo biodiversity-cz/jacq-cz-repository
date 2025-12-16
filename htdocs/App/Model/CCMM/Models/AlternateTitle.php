@@ -14,8 +14,8 @@ class AlternateTitle implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private Title $title;
-    private ?AlternateTitleType $alternateTitleType = null;
+    protected(set) Title $title;
+    protected(set) ?AlternateTitleType $alternateTitleType = null;
 
     public function __construct() {
     }

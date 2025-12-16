@@ -25,48 +25,47 @@ class Herbaria
 
     #[ManyToOne(targetEntity: ExternalDatabase::class)]
     #[JoinColumn(name: 'external_database_id', referencedColumnName: 'id', nullable: false)]
-    protected ExternalDatabase $externalDatabase;
+    protected(set) ExternalDatabase $externalDatabase;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'Acronym of herbarium according to Index Herbariorum'])]
-    protected string $acronym;
+    protected(set) string $acronym;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'S3 bucket where are stored new images before imported to the repository'])]
-    protected string $bucket;
+    protected(set) string $bucket;
 
     #[Column(unique: false, nullable: false, options: ['comment' => 'RegEx for barcode on the specimen'])]
-    protected string $regexBarcode;
+    protected(set) string $regexBarcode;
 
     #[Column(unique: false, nullable: false, options: ['comment' => 'RegEx for image filenames'])]
-    protected string $regexFilename;
-
+    protected(set) string $regexFilename;
     #[Column(unique: false, nullable: false, options: ['comment' => 'Allow use filename when barcode is not present in the image', 'default' => false])]
-    protected bool $fallbackFilename = false;
+    protected(set) bool $fallbackFilename = false;
 
     #[Column(unique: false, nullable: false, options: ['comment' => 'When multiple valid barcodes are present, multiply image to all these IDs', 'default' => false])]
-    protected bool $multipleBarcodeMultiplier = false;
+    protected(set) bool $multipleBarcodeMultiplier = false;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'logo URL'])]
-    protected ?string $logo = null;
+    protected(set) ?string $logo = null;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'full name of the herbarium'])]
-    protected ?string $fullname = null;
+    protected(set) ?string $fullname = null;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'address of the institution/herbarium'])]
-    protected ?string $address = null;
+    protected(set) ?string $address = null;
 
     #[OneToMany(targetEntity: Photos::class, mappedBy: 'herbarium')]
-    protected Collection $photos;
+    protected(set) Collection $photos;
 
     #[OneToMany(targetEntity: UserHerbariumRole::class, mappedBy: 'herbarium')]
-    protected Collection $userHerbariumRoles;
+    protected(set) Collection $userHerbariumRoles;
 
     #[OneToMany(targetEntity: Contact::class, mappedBy: 'herbarium')]
     #[OrderBy(['surname' => 'ASC'])]
-    protected Collection $contacts;
+    protected(set) Collection $contacts;
 
     #[ManyToOne(targetEntity: License::class)]
     #[JoinColumn(name: 'license_id', referencedColumnName: 'id', nullable: false)]
-    protected License $license;
+    protected(set) License $license;
 
     public function __construct()
     {
@@ -75,20 +74,10 @@ class Herbaria
         $this->contacts = new ArrayCollection();
     }
 
-    public function getExternalDatabase(): ExternalDatabase
-    {
-        return $this->externalDatabase;
-    }
-
     public function setExternalDatabase(ExternalDatabase $externalDatabase): Herbaria
     {
         $this->externalDatabase = $externalDatabase;
         return $this;
-    }
-
-    public function getAcronym(): string
-    {
-        return $this->acronym;
     }
 
     public function setAcronym(string $acronym): Herbaria
@@ -98,26 +87,11 @@ class Herbaria
         return $this;
     }
 
-    public function getBucket(): string
-    {
-        return $this->bucket;
-    }
-
-    public function getLogo(): ?string
-    {
-        return $this->logo;
-    }
-
     public function setLogo(string $logo): Herbaria
     {
         $this->logo = $logo;
 
         return $this;
-    }
-
-    public function getFullname(): ?string
-    {
-        return $this->fullname;
     }
 
     public function setFullname(string $fullname): Herbaria
@@ -127,16 +101,6 @@ class Herbaria
         return $this;
     }
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function getUserHerbariumRoles(): Collection
-    {
-        return $this->userHerbariumRoles;
-    }
-
     public function setAddress(string $address): Herbaria
     {
         $this->address = $address;
@@ -144,26 +108,12 @@ class Herbaria
         return $this;
     }
 
-    public function getContacts(): Collection
-    {
-        return $this->contacts;
-    }
-
-    public function getRegexBarcode(): string
-    {
-        return $this->regexBarcode;
-    }
 
     public function setRegexBarcode(string $regexBarcode): Herbaria
     {
         $this->regexBarcode = $regexBarcode;
 
         return $this;
-    }
-
-    public function getRegexFilename(): string
-    {
-        return $this->regexFilename;
     }
 
     public function setRegexFilename(string $regexFilename): Herbaria
@@ -176,11 +126,6 @@ class Herbaria
     public function usesFilenameFallback(): bool
     {
         return $this->fallbackFilename;
-    }
-
-    public function hasMultipleBarcodeMultiplier(): bool
-    {
-        return $this->multipleBarcodeMultiplier;
     }
 
     public function setMultipleBarcodeMultiplier(bool $multipleBarcodeMultiplier): Herbaria
@@ -217,22 +162,10 @@ class Herbaria
         return $this;
     }
 
-    public function getPhotos(): Collection
-    {
-        return $this->photos;
-    }
-
-    public function getLicense(): License
-    {
-        return $this->license;
-    }
-
     public function setLicense(License $license): Herbaria
     {
         $this->license = $license;
         return $this;
     }
-
-
 
 }

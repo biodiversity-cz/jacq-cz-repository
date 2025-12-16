@@ -14,26 +14,26 @@ test('User entity with TId, TCreatedAt and TLastEditAt traits', function (): voi
 
     // Setters/getters základních scalar hodnot
     $user->setUsername('johndoe');
-    Assert::same('johndoe', $user->getUsername());
+    Assert::same('johndoe', $user->username);
 
     $user->setPassword('secret');
-    Assert::same('secret', $user->getPassword());
+    Assert::same('secret', $user->password);
 
     $user->setEmail('john@example.com');
-    Assert::same('john@example.com', $user->getEmail());
+    Assert::same('john@example.com', $user->email);
 
     $user->setName('John');
-    Assert::same('John', $user->getName());
+    Assert::same('John', $user->name);
 
     $user->setSurname('Doe');
-    Assert::same('Doe', $user->getSurname());
+    Assert::same('Doe', $user->surname);
 
     $user->setComment('Test comment');
-    Assert::same('Test comment', $user->getComment());
+    Assert::same('Test comment', $user->comment);
 
-    Assert::true($user->isActive());
+    Assert::true($user->active);
     $user->setActive(false);
-    Assert::false($user->isActive());
+    Assert::false($user->active);
 
     Assert::same('John Doe', $user->getFullname());
 
@@ -41,7 +41,7 @@ test('User entity with TId, TCreatedAt and TLastEditAt traits', function (): voi
     $herbarium = new Herbaria();
 
     $user->setLastVisitedHerbarium($herbarium);
-    Assert::same($herbarium, $user->getLastVisitedHerbarium());
+    Assert::same($herbarium, $user->lastVisitedHerbarium);
 
 
 
@@ -49,15 +49,15 @@ test('User entity with TId, TCreatedAt and TLastEditAt traits', function (): voi
     $refId = new \ReflectionProperty($user, 'id');
     $refId->setAccessible(true);
     $refId->setValue($user, 42);
-    Assert::same(42, $user->getId());
+    Assert::same(42, $user->id);
 
     $clone = clone $user;
     Assert::null($refId->getValue($clone));
-    Assert::exception(fn() => $clone->getId(), \TypeError::class);
+    Assert::exception(fn() => $clone->id, \TypeError::class);
 
     // --- Test TCreatedAt trait ---
     $user->setCreatedAt();
-    $createdAt = $user->getCreatedAt();
+    $createdAt = $user->createdAt;
     Assert::type(\DateTimeImmutable::class, $createdAt);
     Assert::true($createdAt->getTimestamp() <= time());
 
@@ -67,7 +67,7 @@ test('User entity with TId, TCreatedAt and TLastEditAt traits', function (): voi
 
     // Nastavíme last edit (simulace PreUpdate)
     $user->setLastEditAt();
-    $lastEditAt = $user->getLastEditAt();
+    $lastEditAt = $user->lastEdit;
     Assert::type(\DateTime::class, $lastEditAt);
     Assert::true($lastEditAt->getTimestamp() <= time());
 });

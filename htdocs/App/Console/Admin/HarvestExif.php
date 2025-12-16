@@ -42,7 +42,7 @@ class HarvestExif extends Command
         $output->write("\n Job started...");
         try {
             foreach ($this->getListOfPhotos() as $photo) {
-                $output->write("\n photoId: " . $photo->getId() . "\n");
+                $output->write("\n photoId: " . $photo->id . "\n");
                 $this->proceedFile($photo);
             }
         } catch (\Throwable $exception) {

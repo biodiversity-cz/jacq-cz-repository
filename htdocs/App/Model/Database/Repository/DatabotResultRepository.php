@@ -29,7 +29,7 @@ final class DatabotResultRepository extends AbstractRepository
                  LATERAL jsonb_array_elements(dr.result_data) AS elem,
                  target
             WHERE databot_id = :databot_id AND elem->>'name' = :metric";
-        return (int) round(100 * $this->getEntityManager()->getConnection()->executeQuery($sql, ['databot_id'=>$databotId, 'metric' => $metricName, 'photoId'=>$photo->getId()])->fetchOne());
+        return (int) round(100 * $this->getEntityManager()->getConnection()->executeQuery($sql, ['databot_id'=>$databotId, 'metric' => $metricName, 'photoId'=>$photo->id])->fetchOne());
     }
 
     public function findLatestByPhotoAndDatabotName(Photos $photo, string $databotName): ?DatabotResult

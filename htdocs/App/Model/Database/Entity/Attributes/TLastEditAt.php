@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\Database\Entity\Attributes;
 
@@ -11,12 +11,7 @@ trait TLastEditAt
 {
 
     #[Column(name: 'lastedit_timestamp', type: Types::DATETIME_MUTABLE, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    protected ?DateTime $lastEdit = null;
-
-    public function getLastEditAt(): DateTime
-    {
-        return $this->lastEdit;
-    }
+    protected(set) ?DateTime $lastEdit = null;
 
     #[PreUpdate]
     public function setLastEditAt(): mixed

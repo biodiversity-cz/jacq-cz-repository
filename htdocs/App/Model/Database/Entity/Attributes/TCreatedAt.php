@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\Database\Entity\Attributes;
 
@@ -10,12 +10,7 @@ trait TCreatedAt
 {
 
     #[Column(type: Types::DATETIME_IMMUTABLE, nullable: false, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    protected DateTimeImmutable $createdAt;
-
-    public function getCreatedAt(): DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
+    protected(set) DateTimeImmutable $createdAt;
 
     public function setCreatedAt(): mixed
     {

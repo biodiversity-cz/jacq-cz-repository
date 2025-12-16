@@ -15,8 +15,8 @@ abstract class IriLabelsBase implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private array $labels = [];
+    protected(set) ?string $iri = null;
+    protected(set) array $labels = [];
 
     abstract public static function elementName(): string;
     public function getIri(): ?string

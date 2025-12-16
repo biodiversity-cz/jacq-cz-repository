@@ -20,7 +20,7 @@ class BarcodeStage extends BaseStage implements StageInterface
             /**
              * skip detection when manually inserted id
              */
-            if ($this->item->getSpecimenId() === null) {
+            if ($this->item->specimenId === null) {
                 $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
                 $this->createContrastedImage($imagick);
                 $this->detectCodes();
@@ -79,12 +79,12 @@ class BarcodeStage extends BaseStage implements StageInterface
 
     protected function noBarcodeDetected(): void
     {
-        if (!$this->item->getHerbarium()->usesFilenameFallback()) {
+        if (!$this->item->herbarium->usesFilenameFallback()) {
             throw new BarcodeStageException('No barcode detected');
         }
 
         $parts = [];
-        if (!preg_match($this->item->getHerbarium()->getRegexFilename(), $this->item->getOriginalFilename(), $parts)) {
+        if (!preg_match($this->item->herbarium->regexFilename, $this->item->originalFilename, $parts)) {
             throw new BarcodeStageException('No barcode detected & invalid filename');
         }
 
@@ -96,15 +96,15 @@ class BarcodeStage extends BaseStage implements StageInterface
         $validCodes = [];
         foreach ($this->barcodes as $code) {
             $parts = [];
-            if (preg_match($this->item->getHerbarium()->getRegexBarcode(), $code, $parts)) {
-                if ($this->item->getHerbarium()->getAcronym() === strtoupper($parts['herbarium']) && $parts['specimenId'] !== '') {
+            if (preg_match($this->item->herbarium->regexBarcode, $code, $parts)) {
+                if ($this->item->herbarium->acronym === strtoupper($parts['herbarium']) && $parts['specimenId'] !== '') {
                     $validCodes[] = $parts['specimenId'];
                 }
             }
         }
 
         if (empty($validCodes)) {
-            $this->item->getError()->setBarcodes(implode($this->barcodes));
+            $this->item->error->setBarcodes(implode($this->barcodes));
             throw new BarcodeStageException('Invalid or missing barcode');
         }
         if (count($validCodes) === 1) {
@@ -112,11 +112,11 @@ class BarcodeStage extends BaseStage implements StageInterface
             return;
         }
         //multiple valid barcodes
-        if ($this->item->getHerbarium()->hasMultipleBarcodeMultiplier()) {
+        if ($this->item->herbarium->multipleBarcodeMultiplier) {
             $this->item->setSpecimenId(array_shift($validCodes));
             $this->item->addMultiplier()->setBarcodes($validCodes);
         } else {
-            $this->item->getError()->setBarcodes(implode($this->barcodes));
+            $this->item->error->setBarcodes(implode($this->barcodes));
             throw new BarcodeStageException('Multiple valid barcodes detected');
         }
     }

@@ -18,11 +18,11 @@ class Location implements XmlSerializable
      * @param RelatedObject[] $relatedObjects
      */
     public function __construct(
-        public ?BoundingBox $boundingBox = null,
-        public ?string $name = null,
-        public ?Geometry $geometry = null,
-        public array $relatedObjects = [],
-        public ?RelationType $relationType = null
+        protected(set) ?BoundingBox $boundingBox = null,
+        protected(set) ?string $name = null,
+        protected(set) ?Geometry $geometry = null,
+        protected(set) array $relatedObjects = [],
+        protected(set) ?RelationType $relationType = null
     ) {
     }
 
@@ -37,8 +37,8 @@ class Location implements XmlSerializable
         $this->appendChildIfNotNull($element, $this->getGeometry());
         $this->appendChildIfNotNull($element, $this->getRelationType(), 'relation_type');
 
-        if ($this->getName() !== null) {
-            $nameElement = $this->createElement($document, 'name', $this->getName());
+        if ($this->name !== null) {
+            $nameElement = $this->createElement($document, 'name', $this->name);
             $element->appendChild($nameElement);
         }
 

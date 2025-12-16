@@ -58,7 +58,7 @@
         <div class="container-fluid">
             <div class="col-sm-12 col-md-6 offset-md-3 mt-1">
                 <div n:foreach="$flashes as $flash" class="alert py-1 alert-{$flash->type}" role="alert">{$flash->message}</div>
-                <div n:foreach="$maintenances as $maintenance" class="alert py-1 alert-{$maintenance->getType()}" role="alert">{$maintenance->getType()|upper}: {$maintenance->getMessage()}</div>
+                <div n:foreach="$maintenances as $maintenance" class="alert py-1 alert-{$maintenance->type}" role="alert">{$maintenance->type|upper}: {$maintenance->getMessage()}</div>
             </div>
         </div>
         <div class="container">

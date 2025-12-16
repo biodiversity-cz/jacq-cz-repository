@@ -1,7 +1,7 @@
 {block content}
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Herbarium {$herbarium->getAcronym()} {$herbarium->getFullname()}</h2>
+        <h2>Herbarium {$herbarium->acronym} {$herbarium->getFullname()}</h2>
 
         {if count($availableHerbaria) > 1}
         <div class="dropdown">
@@ -10,7 +10,7 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="herbariumSwitcher">
                 {foreach $availableHerbaria as $availableHerbarium}
-                <li><a class="dropdown-item {if $availableHerbarium->getId() === $herbarium->getId()}active{/if}" href="{link switchHerbarium!, herbariumId => $availableHerbarium->getId()}">{$availableHerbarium->getAcronym()} {if $availableHerbarium->getFullname()}- {$availableHerbarium->getFullname()}{/if}</a></li>
+                <li><a class="dropdown-item {if $availableHerbarium->id === $herbarium->id}active{/if}" href="{link switchHerbarium!, herbariumId => $availableHerbarium->id}">{$availableHerbarium->acronym} {if $availableHerbarium->getFullname()}- {$availableHerbarium->getFullname()}{/if}</a></li>
                 {/foreach}
             </ul>
         </div>
@@ -76,7 +76,7 @@
             </div>
         </div>
         {/if}
-        {if $herbarium->hasMultipleBarcodeMultiplier()}
+        {if $herbarium->multipleBarcodeMultiplier}
         <hr>
         <div class="alert alert-secondary" role="alert">
             Multiple barcode Multiplier is ON <span class="badge bg-danger">not recommended</span>
@@ -101,7 +101,7 @@
                     <td>
                         {$role->getUser()->getFullname()}
                     </td>
-                    <td>{$role->getRole()->getName()}</td>
+                    <td>{$role->getRole()->name}</td>
                 </tr>
                 {/foreach}
 
@@ -134,7 +134,7 @@
                     </td>
                     <td>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="multiplierSwitch" data-target="{link :setSettings 'multiplierSwitch'}" {if $herbarium->hasMultipleBarcodeMultiplier()}checked{/if} {if !$user->isInRole('curator')}disabled{/if}>
+                            <input class="form-check-input" type="checkbox" role="switch" id="multiplierSwitch" data-target="{link :setSettings 'multiplierSwitch'}" {if $herbarium->multipleBarcodeMultiplier}checked{/if} {if !$user->isInRole('curator')}disabled{/if}>
                         </div>
                     </td>
                 </tr>

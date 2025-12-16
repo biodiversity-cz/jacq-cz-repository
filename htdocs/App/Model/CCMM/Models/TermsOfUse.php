@@ -14,10 +14,10 @@ class TermsOfUse implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?AccessRights $accessRights = null;
-    private ?License $license = null;
-    private ?string $description = null;
-    private ?ContactPoint $contactPoint = null;
+    protected(set) ?AccessRights $accessRights = null;
+    protected(set) ?License $license = null;
+    protected(set) ?string $description = null;
+    protected(set) ?ContactPoint $contactPoint = null;
 
     public function __construct() {
     }
@@ -69,11 +69,11 @@ class TermsOfUse implements XmlSerializable
         $element = $this->createElement($document, $elementName ?? 'terms_of_use');
 
         $this->appendChildIfNotNull($element, $this->getAccessRights(), 'access_rights');
-        $this->appendChildIfNotNull($element, $this->getLicense());
+        $this->appendChildIfNotNull($element, $this->license);
         $this->appendChildIfNotNull($element, $this->getContactPoint());
 
-        if ($this->getDescription() !== null) {
-            $descElement = $this->createElement($document, 'description', $this->getDescription());
+        if ($this->description !== null) {
+            $descElement = $this->createElement($document, 'description', $this->description);
             $descElement->setAttribute('xml:lang', 'cs');
             $element->appendChild($descElement);
         }

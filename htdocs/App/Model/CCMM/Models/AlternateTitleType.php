@@ -18,8 +18,8 @@ class AlternateTitleType implements XmlSerializable
      * @param Title[] $labels
      */
     public function __construct(
-        public ?string $iri = null,
-        public array $labels = []
+        protected(set) ?string $iri = null,
+        protected(set) array $labels = []
     ) {
     }
 
@@ -30,12 +30,12 @@ class AlternateTitleType implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'alternate_title_type');
 
-        if ($this->getIri() !== null) {
-            $iriElement = $this->createElement($document, 'iri', $this->getIri());
+        if ($this->iri !== null) {
+            $iriElement = $this->createElement($document, 'iri', $this->iri);
             $element->appendChild($iriElement);
         }
 
-        foreach ($this->getLabels() as $label) {
+        foreach ($this->labels as $label) {
             $labelElement = $label->toXml($document, 'label');
             $element->appendChild($labelElement);
         }

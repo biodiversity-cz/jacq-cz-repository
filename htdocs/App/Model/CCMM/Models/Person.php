@@ -38,8 +38,8 @@ class Person implements XmlSerializable
         $this->appendChildIfNotNull($element, $this->getContactPoint());
         $this->appendChildIfNotNull($element, $this->getAffiliation());
 
-        if ($this->getName() !== null) {
-            $nameElement = $this->createElement($document, 'name', $this->getName());
+        if ($this->name !== null) {
+            $nameElement = $this->createElement($document, 'name', $this->name);
             $element->appendChild($nameElement);
         }
 

@@ -25,8 +25,8 @@ test('Specimen getters and setters work', function (): void {
     $specimen->setHerbarium($herbarium);
     $specimen->setNumericPartOfId(123);
 
-    Assert::same($herbarium, $specimen->getHerbarium());
-    Assert::same(123, $specimen->getNumericPartOfId());
+    Assert::same($herbarium, $specimen->herbarium);
+    Assert::same(123, $specimen->numericPartOfId);
 });
 
 test('Specimen creates standardized ID correctly', function (): void {

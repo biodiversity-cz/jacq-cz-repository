@@ -14,17 +14,17 @@ test('PhotosType entity getters and setters', function (): void {
 
 // test set/get name
     $photosType->setName('Specimen');
-    Assert::equal('Specimen', $photosType->getName());
+    Assert::equal('Specimen', $photosType->name);
 
 // test set/get description
     $photosType->setDescription('Photo of preserved specimen');
-    Assert::equal('Photo of preserved specimen', $photosType->getDescription());
+    Assert::equal('Photo of preserved specimen', $photosType->description);
 
 // test set/get color
     $photosType->setColor('primary');
-    Assert::equal('primary', $photosType->getColor());
+    Assert::equal('primary', $photosType->color);
 
 // změna barvy
     $photosType->setColor('secondary');
-    Assert::equal('secondary', $photosType->getColor());
+    Assert::equal('secondary', $photosType->color);
 });

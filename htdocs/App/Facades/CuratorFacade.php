@@ -49,7 +49,7 @@ readonly class CuratorFacade
         $fundings = $this->entityManager->getRepository(Funding::class)->findAllAvailableActive($user);
         $pairs = [];
         foreach ($fundings as $entity) {
-            $pairs[$entity->getId()] = $entity->getName();
+            $pairs[$entity->id] = $entity->name;
         }
 
         return $pairs;
@@ -99,14 +99,14 @@ readonly class CuratorFacade
     {
         $files = [];
         $unprocessedPhotos = $this->photoService->findUnprocessedPhotos($user);
-        foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium($user)->getBucket()) as $filename) {
+        foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium($user)->bucket) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {
                 $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], false, false, null, null);
             } else {
                 $entity = $unprocessedPhotos[$filename['Key']];
-                $alreadyWaiting = $entity->getStatus()->getId() === PhotosStatus::WAITING;
-                $hasControlError = $entity->getStatus()->getId() === PhotosStatus::IMAGE_CONTROL_ERROR;
-                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->getId(), $entity->getError()?->getMessage());
+                $alreadyWaiting = $entity->status->id === PhotosStatus::WAITING;
+                $hasControlError = $entity->status->id === PhotosStatus::IMAGE_CONTROL_ERROR;
+                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->id, $entity->error?->message);
             }
 
             $files[] = $file;
@@ -148,22 +148,22 @@ readonly class CuratorFacade
     public function multiplyPhotos(Photos $originalPhoto): array
     {
         $newItems = [];
-        foreach ($originalPhoto->getMultiplier()->getBarcodes() as $barcode) {
+        foreach ($originalPhoto->multiplier->barcodes as $barcode) {
 
             $copy = new Photos();
             $copy->addImportError();
-            $copy->setOriginalFilename($originalPhoto->getOriginalFilename())
-                ->setOriginalFileAt($originalPhoto->getOriginalFileAt())
-                ->setHerbarium($originalPhoto->getHerbarium())
+            $copy->setOriginalFilename($originalPhoto->originalFilename)
+                ->setOriginalFileAt($originalPhoto->originalFileTimestamp)
+                ->setHerbarium($originalPhoto->herbarium)
                 ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_ERROR))
                 ->setSpecimenId($barcode)
-                ->setWidth($originalPhoto->getWidth())
-                ->setHeight($originalPhoto->getHeight())
-                ->setArchiveFileSize($originalPhoto->getArchiveFileSize())
-                ->setJp2FileSize($originalPhoto->getJp2FileSize())
-                ->setExif($originalPhoto->getExif())
-                ->setIdentify($originalPhoto->getIdentify())
-                ->setType($originalPhoto->getType())
+                ->setWidth($originalPhoto->width)
+                ->setHeight($originalPhoto->height)
+                ->setArchiveFileSize($originalPhoto->archiveFileSize)
+                ->setJp2FileSize($originalPhoto->JP2FileSize)
+                ->setExif($originalPhoto->exif)
+                ->setIdentify($originalPhoto->identify)
+                ->setType($originalPhoto->type)
                 ->setCreatedAt()
                 ->setLastEditAt();
 
@@ -185,7 +185,7 @@ readonly class CuratorFacade
         $photos = [];
         $dbItems = $this->entityManager->getRepository(Photos::class)->getOrphanable($user);
         foreach ($dbItems as $photo) {
-            if (!$this->s3Service->objectExists($this->herbariumService->getCurrentUserHerbarium($user)->getBucket(), $photo->getOriginalFilename())) {
+            if (!$this->s3Service->objectExists($this->herbariumService->getCurrentUserHerbarium($user)->bucket, $photo->originalFilename)) {
                 $photos[] = $photo;
             }
         }
@@ -195,7 +195,7 @@ readonly class CuratorFacade
 
     public function deletePhoto(User $user, Photos $entity): CuratorFacade
     {
-        if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->getHerbarium()) {
+        if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->herbarium) {
             throw new AuthenticationException('Not allowed to delete photo.');
         }
 
@@ -207,22 +207,22 @@ readonly class CuratorFacade
                 ->select('p')
                 ->from(Photos::class, 'p')
                 ->where('p.id = :id')
-                ->setParameter('id', $entity->getId())
+                ->setParameter('id', $entity->id)
                 ->getQuery()
                 ->setLockMode(LockMode::PESSIMISTIC_WRITE)
                 ->getSingleResult();
 
-            switch ($lockedEntity->getStatus()->getId()) {
+            switch ($lockedEntity->status->id) {
                 case PhotosStatus::WAITING:
                 case PhotosStatus::IMAGE_CONTROL_ERROR:
-                    $this->s3Service->deleteObject($lockedEntity->getHerbarium()->getBucket(), $lockedEntity->getOriginalFilename());
+                    $this->s3Service->deleteObject($lockedEntity->herbarium->bucket, $lockedEntity->originalFilename);
                     break;
                 case PhotosStatus::IMAGE_CONTROL_OK:
                 case PhotosStatus::SPECIMEN_CONTROL_OK:
                 case PhotosStatus::EMBARGO:
                 case PhotosStatus::DEVELOP_PROCEED:
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryImageServerBucket(), $lockedEntity->getJp2Filename());
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $lockedEntity->getArchiveFilename());
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryImageServerBucket(), $lockedEntity->jp2Filename);
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $lockedEntity->archiveFilename);
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $lockedEntity->getDatabotThumbFilename());
                     break;
                 default:
@@ -244,7 +244,7 @@ readonly class CuratorFacade
 
     public function addEmbargoPhoto(User $user, Photos $entity): CuratorFacade
     {
-        if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->getHerbarium()) {
+        if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->herbarium) {
             throw new AuthenticationException('Not allowed to edit photo.');
         }
 
@@ -256,12 +256,12 @@ readonly class CuratorFacade
                 ->select('p')
                 ->from(Photos::class, 'p')
                 ->where('p.id = :id')
-                ->setParameter('id', $entity->getId())
+                ->setParameter('id', $entity->id)
                 ->getQuery()
                 ->setLockMode(LockMode::PESSIMISTIC_WRITE)
                 ->getSingleResult();
 
-            if (in_array($lockedEntity->getStatus()->getId(), PhotosStatus::EMBARGOABLE)) {
+            if (in_array($lockedEntity->status->id, PhotosStatus::EMBARGOABLE)) {
                 $lockedEntity
                     ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::EMBARGO))
                     ->setEmbargoTimeout()
@@ -284,7 +284,7 @@ readonly class CuratorFacade
 
     public function dropEmbargoPhoto(User $user, Photos $entity): CuratorFacade
     {
-        if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->getHerbarium()) {
+        if ($this->herbariumService->getCurrentUserHerbarium($user) !== $entity->herbarium) {
             throw new AuthenticationException('Not allowed to edit photo.');
         }
 
@@ -296,12 +296,12 @@ readonly class CuratorFacade
                 ->select('p')
                 ->from(Photos::class, 'p')
                 ->where('p.id = :id')
-                ->setParameter('id', $entity->getId())
+                ->setParameter('id', $entity->id)
                 ->getQuery()
                 ->setLockMode(LockMode::PESSIMISTIC_WRITE)
                 ->getSingleResult();
 
-            if ($lockedEntity->getStatus()->getId() == PhotosStatus::EMBARGO) {
+            if ($lockedEntity->status->id == PhotosStatus::EMBARGO) {
                 $lockedEntity
                     ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK))
                     ->dropEmbargoTimeout()
@@ -325,15 +325,15 @@ readonly class CuratorFacade
 
     public function deleteJustNotimportedFile(User $user, string $filename): CuratorFacade
     {
-        $this->s3Service->deleteObject($this->herbariumService->getCurrentUserHerbarium($user)->getBucket(), $filename);
+        $this->s3Service->deleteObject($this->herbariumService->getCurrentUserHerbarium($user)->bucket, $filename);
         return $this;
     }
 
     public function reimportPhoto(User $user, Photos $photo, ?string $manualSpecimenId = null): CuratorFacade
     {
-        if ($this->herbariumService->getCurrentUserHerbarium($user) === $photo->getHerbarium()) {
-            if ($photo->getError() !== null) {
-                $this->entityManager->remove($photo->getError());
+        if ($this->herbariumService->getCurrentUserHerbarium($user) === $photo->herbarium) {
+            if ($photo->error !== null) {
+                $this->entityManager->remove($photo->error);
                 $photo->removeImportError();
                 $photo
                     ->setLastEditAt()
@@ -349,7 +349,7 @@ readonly class CuratorFacade
 
     public function getArchiveFile(Photos $photo, string $destination): CuratorFacade
     {
-        $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename(), $destination);
+        $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->archiveFilename, $destination);
 
         return $this;
     }

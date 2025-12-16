@@ -22,14 +22,10 @@ class License extends \App\Model\Database\Entity\License implements \Doctrine\OR
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'acronym' => [parent::class, 'acronym', null, 8],
-        "\0".'*'."\0".'default' => [parent::class, 'default', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'link' => [parent::class, 'link', null, 8],
-        'acronym' => [parent::class, 'acronym', null, 8],
-        'default' => [parent::class, 'default', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'link' => [parent::class, 'link', null, 8],
+        'acronym' => [parent::class, 'acronym', null, 8196],
+        'default' => [parent::class, 'default', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'link' => [parent::class, 'link', null, 8196],
     ];
 
     public function __isInitialized(): bool

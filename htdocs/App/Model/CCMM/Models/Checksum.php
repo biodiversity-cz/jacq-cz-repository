@@ -14,8 +14,8 @@ class Checksum implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $checksumValue = null;
-    private ?string $algorithm = null;
+    protected(set) ?string $checksumValue = null;
+    protected(set) ?string $algorithm = null;
 
     public function __construct() {
     }

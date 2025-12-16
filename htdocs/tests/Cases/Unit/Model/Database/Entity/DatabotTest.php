@@ -22,38 +22,38 @@ test('Databot entity getters, setters and traits', function (): void {
     $refId->setValue($databot, 42);
     $refCreatedAt->setValue($databot, new \DateTimeImmutable('2025-01-01T00:00:00+00:00'));
 
-    Assert::same(42, $databot->getId());
-    Assert::equal(new \DateTimeImmutable('2025-01-01T00:00:00+00:00'), $databot->getCreatedAt());
+    Assert::same(42, $databot->id);
+    Assert::equal(new \DateTimeImmutable('2025-01-01T00:00:00+00:00'), $databot->createdAt);
 
     // Test name
     $databot->setName('BotName');
-    Assert::same('BotName', $databot->getName());
+    Assert::same('BotName', $databot->name);
 
     // Test description
     $databot->setDescription('Some description');
-    Assert::same('Some description', $databot->getDescription());
+    Assert::same('Some description', $databot->description);
 
     // Test version
     $databot->setVersion(5);
-    Assert::same(5, $databot->getVersion());
+    Assert::same(5, $databot->version);
 
     // Test enabled
     $databot->setEnabled(false);
-    Assert::false($databot->isEnabled());
+    Assert::false($databot->enabled);
 
     $databot->setEnabled(true);
-    Assert::true($databot->isEnabled());
+    Assert::true($databot->enabled);
 
     // Test lastRun
     $dt = new \DateTimeImmutable('2024-12-31 12:00:00');
     $databot->setLastRun($dt);
-    Assert::equal($dt, $databot->getLastRun());
+    Assert::equal($dt, $databot->lastRun);
 
     $databot->setLastRun(null);
-    Assert::null($databot->getLastRun());
+    Assert::null($databot->lastRun);
 
     $role = DatabotRole::VALIDATOR;
     $databot->setRole($role);
-    Assert::same($role, $databot->getRole());
+    Assert::same($role, $databot->role);
 });
 

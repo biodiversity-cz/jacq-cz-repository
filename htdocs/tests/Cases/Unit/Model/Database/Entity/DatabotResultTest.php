@@ -23,38 +23,38 @@ test('DatabotResult entity getters and setters', function (): void {
     $refId->setValue($result, 123);
     $refCreatedAt->setValue($result, new \DateTimeImmutable('2025-08-06T10:00:00+00:00'));
 
-    Assert::same(123, $result->getId());
-    Assert::equal(new \DateTimeImmutable('2025-08-06T10:00:00+00:00'), $result->getCreatedAt());
+    Assert::same(123, $result->id);
+    Assert::equal(new \DateTimeImmutable('2025-08-06T10:00:00+00:00'), $result->createdAt);
 
     // Nastavení a kontrola Databot
     $databot = new Databot();
     $result->setDatabot($databot);
-    Assert::same($databot, $result->getDatabot());
+    Assert::same($databot, $result->databot);
 
     // Nastavení a kontrola Photos
     $photo = new Photos();
     $result->setPhoto($photo);
-    Assert::same($photo, $result->getPhoto());
+    Assert::same($photo, $result->photo);
 
     // Nastavení a kontrola statusu
     $result->setStatus(DatabotResultStatus::OK);
-    Assert::same(DatabotResultStatus::OK, $result->getStatus());
+    Assert::same(DatabotResultStatus::OK, $result->status);
 
     $result->setStatus(DatabotResultStatus::ERROR);
-    Assert::same(DatabotResultStatus::ERROR, $result->getStatus());
+    Assert::same(DatabotResultStatus::ERROR, $result->status);
 
     // Nastavení a kontrola zprávy
     $result->setMessage('Test message');
-    Assert::same('Test message', $result->getMessage());
+    Assert::same('Test message', $result->message);
 
     $result->setMessage(null);
-    Assert::null($result->getMessage());
+    Assert::null($result->message);
 
     // Nastavení a kontrola resultData
     $data = ['key' => 'value', 'number' => 42];
     $result->setResultData($data);
-    Assert::same($data, $result->getResultData());
+    Assert::same($data, $result->resultData);
 
     $result->setResultData(null);
-    Assert::null($result->getResultData());
+    Assert::null($result->resultData);
 });

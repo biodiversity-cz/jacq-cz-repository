@@ -261,10 +261,10 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
         $identifier = $this->recordProvider->generateIdentifier($photo, self::REPOSITORY_DOMAIN);
         $writer->writeElement('identifier', $identifier);
-        $writer->writeElement('datestamp', $photo->getLastEditAt()->format('Y-m-d\TH:i:s\Z'));
+        $writer->writeElement('datestamp', $photo->lastEdit->format('Y-m-d\TH:i:s\Z'));
 
         // Set specs
-        $writer->writeElement('setSpec', $photo->getHerbarium()->getAcronym());
+        $writer->writeElement('setSpec', $photo->herbarium->acronym);
 
         $writer->endElement(); // header
 

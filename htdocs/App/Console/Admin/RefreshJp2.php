@@ -59,7 +59,7 @@ class RefreshJp2 extends Command
     {
         $startTime = microtime(true);
         foreach ($this->getListOfPhotos() as $photo) {
-            $output->write("\n photoId: " . $photo->getId() . "\n");
+            $output->write("\n photoId: " . $photo->id . "\n");
             $this->curatorService->getArchiveFile($photo, $this->tempFile());
 
             $imagick = $this->imageService->createImagick($this->tempFile());

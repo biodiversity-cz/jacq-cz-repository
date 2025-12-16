@@ -56,17 +56,17 @@ class PublishedPhotosGrid extends Control
         $this->grid->addColumnNumber('id', 'ID')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Import:photo', ['id' => $item->getId()]);
-                $el->addHtml('<a href="' . $url . '">' . $item->getId() . '</a>');
+                $url = $this->presenter->link('Import:photo', ['id' => $item->id]);
+                $el->addHtml('<a href="' . $url . '">' . $item->id . '</a>');
 
                 return $el;
             });
 
-        $this->grid->addColumnDateTime('lastEditAt', 'published at (FROM - TO)')->setRenderer(function (Photos $item){return $item->getLastEditAt()->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
+        $this->grid->addColumnDateTime('lastEditAt', 'published at (FROM - TO)')->setRenderer(function (Photos $item){return $item->lastEdit->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Import:specimen', ['specimenNumericPartOfId' => $item->getSpecimenId()]);
+                $url = $this->presenter->link('Import:specimen', ['specimenNumericPartOfId' => $item->specimenId]);
                 $el->addHtml('<a href="' . $url . '">' . $item->getFullSpecimenId() . '</a>');
 
                 return $el;
@@ -77,7 +77,7 @@ class PublishedPhotosGrid extends Control
         $this->grid->addColumnText('type', 'type')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el('i');
-                $el->addHtml($item->getType()->getName());
+                $el->addHtml($item->type->name);
 
                 return $el;
             })
@@ -139,14 +139,14 @@ class PublishedPhotosGrid extends Control
             foreach ($data as $photo) {
                 /** @var Photos $photo */
                 $row = [
-                    $photo->getId(),
-                    $photo->getLastEditAt()->format('Y-m-d H:i:s'),
+                    $photo->id,
+                    $photo->lastEdit->format('Y-m-d H:i:s'),
                     $photo->getFullSpecimenId(),
-                    $photo->getOriginalFilename(),
-                    $photo->getType()->getName(),
-                    $photo->getWidth(),
-                    $photo->getHeight(),
-                    $photo->getArchiveFilesize()
+                    $photo->originalFilename,
+                    $photo->type->name,
+                    $photo->width,
+                    $photo->height,
+                    $photo->archiveFileSize
                 ];
                 $writer->writeSheetRow('Export', $row);
             }

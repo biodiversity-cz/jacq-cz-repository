@@ -22,18 +22,12 @@ class ImportError extends \App\Model\Database\Entity\ImportError implements \Doc
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'barcodes' => [parent::class, 'barcodes', null, 8],
-        "\0".'*'."\0".'duplicateTo' => [parent::class, 'duplicateTo', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'message' => [parent::class, 'message', null, 8],
-        "\0".'*'."\0".'photo' => [parent::class, 'photo', null, 8],
-        "\0".'*'."\0".'thumbnail' => [parent::class, 'thumbnail', null, 8],
-        'barcodes' => [parent::class, 'barcodes', null, 8],
-        'duplicateTo' => [parent::class, 'duplicateTo', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'message' => [parent::class, 'message', null, 8],
-        'photo' => [parent::class, 'photo', null, 8],
-        'thumbnail' => [parent::class, 'thumbnail', null, 8],
+        'barcodes' => [parent::class, 'barcodes', null, 8196],
+        'duplicateTo' => [parent::class, 'duplicateTo', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'message' => [parent::class, 'message', null, 8196],
+        'photo' => [parent::class, 'photo', null, 8196],
+        'thumbnail' => [parent::class, 'thumbnail', null, 8196],
     ];
 
     public function __isInitialized(): bool

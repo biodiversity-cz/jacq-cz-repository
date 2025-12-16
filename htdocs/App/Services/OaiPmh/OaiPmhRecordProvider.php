@@ -95,7 +95,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
         $sets = [];
 
         foreach ($herbaria as $herbarium) {
-            $sets[$herbarium->getAcronym()] = $herbarium->getFullname() ?? $herbarium->getAcronym();
+            $sets[$herbarium->acronym] = $herbarium->getFullname() ?? $herbarium->acronym;
         }
 
         return $sets;
@@ -192,6 +192,6 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
      */
     public function generateIdentifier(Photos $photo, string $domain): string
     {
-        return sprintf('oai:%s:photo-%d', $domain, $photo->getId());
+        return sprintf('oai:%s:photo-%d', $domain, $photo->id);
     }
 }

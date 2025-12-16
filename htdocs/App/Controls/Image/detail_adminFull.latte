@@ -1,41 +1,41 @@
 <div class="col-4">
     <img
-        src="{plink Import:databotThumbImage $photo->getId()}"
+        src="{plink Import:databotThumbImage $photo->id}"
         class="img-fluid rounded-start" style="height: 90vh; object-fit: cover;">
 </div>
 <div class="col-4">
-    <h5>ID {$photo->getId()}, belongs to the specimen <span class="fs-6"><a
-        href="{plink Import:specimen $photo->getSpecimenId()}">{$photo->getFullSpecimenId()}</a></span></h5>
-    <p>W×H: {$photo->getWidth()}×{$photo->getHeight()}</p>
-    <p>Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
-    <p>Status: <span class="badge bg-{$photo->getStatus()->getColor()}">{$photo->getStatus()->getName()}</span>
+    <h5>ID {$photo->id}, belongs to the specimen <span class="fs-6"><a
+        href="{plink Import:specimen $photo->specimenId}">{$photo->getFullSpecimenId()}</a></span></h5>
+    <p>W×H: {$photo->width}×{$photo->height}</p>
+    <p>Filesize: {$photo->archiveFileSize|bytes:2}</p>
+    <p>Status: <span class="badge bg-{$photo->status->color}">{$photo->status->name}</span>
     </p>
     {*<p>Quality metric: {$metric}*}
     </p>
     <p>Type: <span
-        class="badge bg-{$photo->getType()->getColor()}">{$photo->getType()->getName()}</span></p>
-    {if $photo->getFunding() !== null}
+        class="badge bg-{$photo->type->color}">{$photo->type->name}</span></p>
+    {if $photo->funding !== null}
     <p>Funding: <span
-        class="fst-italic">{$photo->getFunding()?->getFullname()}</span></p>
+        class="fst-italic">{$photo->funding?->fullname}</span></p>
     {/if}
     <p><small class="text-muted">File created at
-        {$photo->getCreatedAt()|localDate}</small></p>
-    {if $photo->getStatus()->getId() === \App\Model\Database\Entity\PhotosStatus::CONTROL_ERROR}
+        {$photo->createdAt|localDate}</small></p>
+    {if $photo->status->id === \App\Model\Database\Entity\PhotosStatus::IMAGE_CONTROL_ERROR}
     <hr>
-    <b>import error:</b> {$photo->getError()->getMessage()} </br>
-    {if $photo->getError()->getDuplicateTo()}
-    <b>duplicate to:</b> ID {$photo->getError()->getDuplicateTo()->getId()}, that is  {$photo->getError()->getDuplicateTo()->getJp2Filename()} </br>
-    go to the errors' <a href="{plink :revise $photo->getId()}">resolve</a> page
+    <b>import error:</b> {$photo->error->getMessage()} </br>
+    {if $photo->error->getDuplicateTo()}
+    <b>duplicate to:</b> ID {$photo->error->getDuplicateTo()->id}, that is  {$photo->error->getDuplicateTo()->jp2Filename} </br>
+    go to the errors' <a href="{plink :revise $photo->id}">resolve</a> page
     {/if}
     {else}
-        <p class="card-text"><h5>Archive Master (original TIF file)</h5> filename: {$photo->getArchiveFilename()} <br>
-            <a href="{plink Import:masterImage $photo->getId()}">download</a>
+        <p class="card-text"><h5>Archive Master (original TIF file)</h5> filename: {$photo->archiveFilename} <br>
+            <a href="{plink Import:masterImage $photo->id}">download</a>
         </p>
-    <p class="card-text"><h5>JP2 Master (quality as Master but much lower filesize) </h5> filename: {$photo->getArchiveFilename()} <br>
-    <a href="{plink Import:jp2Image $photo->getId()}">download</a>
+    <p class="card-text"><h5>JP2 Master (quality as Master but much lower filesize) </h5> filename: {$photo->archiveFilename} <br>
+    <a href="{plink Import:jp2Image $photo->id}">download</a>
     </p>
-    <p class="card-text"><h5>DataBot thumb (1280px)</h5> filename: {$photo->getArchiveFilename()} <br>
-    <a href="{plink Import:databotThumbImage $photo->getId()}">download</a>
+    <p class="card-text"><h5>DataBot thumb (1280px)</h5> filename: {$photo->archiveFilename} <br>
+    <a href="{plink Import:databotThumbImage $photo->id}">download</a>
     </p>
     {/if}
     <hr>

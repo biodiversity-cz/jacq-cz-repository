@@ -29,7 +29,7 @@ class CleanCuratorBucketStage extends BaseStage implements StageInterface
     protected function deleteTifFromCuratorBucket(): void
     {
         try {
-            $this->s3Service->deleteObject($this->item->getHerbarium()->getBucket(), $this->item->getOriginalFilename());
+            $this->s3Service->deleteObject($this->item->herbarium->bucket, $this->item->originalFilename);
         } catch (\Throwable $exception) {
             throw new CleanupStageException('deleting tif from curatorBucket error (' . $exception->getMessage() . ')');
         }

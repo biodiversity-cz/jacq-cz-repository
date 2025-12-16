@@ -12,7 +12,7 @@ class FundingService extends BaseEntityService
 
     public function update(User $user, Funding $funding): Funding
     {
-        if ($user->getIdentity()->getCurrentHerbariumId() !== $funding->getHerbarium()->getId() || $user->isInRole('ROLE_ADMIN')) {
+        if ($user->getIdentity()->getCurrentHerbariumId() !== $funding->herbarium->id || $user->isInRole('ROLE_ADMIN')) {
             throw new AuthenticationException();
         }
         $this->entityManager->persist($funding);
@@ -29,7 +29,7 @@ class FundingService extends BaseEntityService
 
     public function delete(User $user, Funding $funding): self
     {
-        if ($user->getIdentity()->getCurrentHerbariumId() !== $funding->getHerbarium()->getId() || $user->isInRole('ROLE_ADMIN')) {
+        if ($user->getIdentity()->getCurrentHerbariumId() !== $funding->herbarium->id || $user->isInRole('ROLE_ADMIN')) {
             throw new AuthenticationException();
         }
         $this->entityManager->remove($funding);

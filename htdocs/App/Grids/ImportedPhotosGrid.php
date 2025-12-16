@@ -101,27 +101,27 @@ class ImportedPhotosGrid extends Control
         $this->grid->addColumnNumber('id', 'ID')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Import:photo', ['id' => $item->getId()]);
-                $el->addHtml('<a href="' . $url . '">' . $item->getId() . '</a>');
+                $url = $this->presenter->link('Import:photo', ['id' => $item->id]);
+                $el->addHtml('<a href="' . $url . '">' . $item->id . '</a>');
 
                 return $el;
             });
         $this->grid->addColumnText('status', 'status')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el('i');
-                $el->addHtml($item->getStatus()->getName());
-                if($item->getStatus()->getId() === PhotosStatus::EMBARGO){
+                $el->addHtml($item->status->name);
+                if($item->status->id === PhotosStatus::EMBARGO){
                     $elInt = Html::el('span');
-                    $elInt->addHtml(' (expires '.$item->getEmbargoTimeout()->format('d.m.Y') . ')');
+                    $elInt->addHtml(' (expires '.$item->embargoTimeout->format('d.m.Y') . ')');
                     $el->addHtml($elInt);
                 }
                 return $el;
             }) ->setFilterSelect($this->curatorFacade->getAllStatuses());
-        $this->grid->addColumnDateTime('lastEditAt', 'processed at (FROM - TO)')->setRenderer(function (Photos $item){return $item->getLastEditAt()->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
+        $this->grid->addColumnDateTime('lastEditAt', 'processed at (FROM - TO)')->setRenderer(function (Photos $item){return $item->lastEdit->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Import:specimen', ['specimenNumericPartOfId' => $item->getSpecimenId()]);
+                $url = $this->presenter->link('Import:specimen', ['specimenNumericPartOfId' => $item->specimenId]);
                 $el->addHtml('<a href="' . $url . '">' . $item->getFullSpecimenId() . '</a>');
 
                 return $el;
@@ -132,7 +132,7 @@ class ImportedPhotosGrid extends Control
         $this->grid->addColumnText('type', 'type')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el('i');
-                $el->addHtml($item->getType()->getName());
+                $el->addHtml($item->type->name);
 
                 return $el;
             })
@@ -154,7 +154,7 @@ class ImportedPhotosGrid extends Control
                 new StringConfirmation('Do you really want to delete photo %s? This won\'t be allowed in production mode!', 'archiveFilename') // Second parameter is optional
             )
             ->setRenderCondition(function (Photos $item) {
-                return in_array($item->getStatus()->getId(), PhotosStatus::DELETEABLE);
+                return in_array($item->status->id, PhotosStatus::DELETEABLE);
             });
 
         $this->grid->addAction('embargo', '', 'addEmbargo!')
@@ -165,7 +165,7 @@ class ImportedPhotosGrid extends Control
                 new StringConfirmation('Do you really want to embargo photo %s? If already in embargo, the expiration interval will be restarted.', 'archiveFilename')
             )
             ->setRenderCondition(function (Photos $item) {
-                return in_array($item->getStatus()->getId(), PhotosStatus::EMBARGOABLE);
+                return in_array($item->status->id, PhotosStatus::EMBARGOABLE);
             });
 
         $this->grid->addAction('dropEmbargo', '', 'dropEmbargo!')
@@ -176,7 +176,7 @@ class ImportedPhotosGrid extends Control
                 new StringConfirmation('Do you really want to drop the embargo from photo %s?', 'archiveFilename')
             )
             ->setRenderCondition(function (Photos $item) {
-                return $item->getStatus()->getId() === PhotosStatus::EMBARGO;
+                return $item->status->id === PhotosStatus::EMBARGO;
             });
 
         $this->grid->addExportCsvFiltered('Csv export (filtered)', 'curator_imported.csv')
@@ -227,14 +227,14 @@ class ImportedPhotosGrid extends Control
             foreach ($data as $photo) {
                 /** @var Photos $photo */
                 $row = [
-                    $photo->getId(),
-                    $photo->getLastEditAt()->format('Y-m-d H:i:s'),
+                    $photo->id,
+                    $photo->lastEdit->format('Y-m-d H:i:s'),
                     $photo->getFullSpecimenId(),
-                    $photo->getOriginalFilename(),
-                    $photo->getType()->getName(),
-                    $photo->getWidth(),
-                    $photo->getHeight(),
-                    $photo->getArchiveFilesize()
+                    $photo->originalFilename,
+                    $photo->type->name,
+                    $photo->width,
+                    $photo->height,
+                    $photo->archiveFileSize
                 ];
                 $writer->writeSheetRow('Export', $row);
             }

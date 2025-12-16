@@ -17,31 +17,31 @@ test('PhotosError entity basic getters/setters and TId trait', function (): void
 
     // Test set/get photo
     $photosError->setPhoto($photoMock);
-    Assert::same($photoMock, $photosError->getPhoto());
+    Assert::same($photoMock, $photosError->photo);
 
     // Test set/get duplicateTo
     $photosError->setDuplicateTo($duplicateMock);
-    Assert::same($duplicateMock, $photosError->getDuplicateTo());
+    Assert::same($duplicateMock, $photosError->duplicateTo);
 
     $photosError->setDuplicateTo(null);
-    Assert::null($photosError->getDuplicateTo());
+    Assert::null($photosError->duplicateTo);
 
     // Test set/get message
     $photosError->setMessage('Test error message');
-    Assert::same('Test error message', $photosError->getMessage());
+    Assert::same('Test error message', $photosError->message);
 
     // Test set/get barcodes
     $photosError->setBarcodes('barcode123');
-    Assert::same('barcode123', $photosError->getBarcodes());
+    Assert::same('barcode123', $photosError->barcodes);
 
     $photosError->setBarcodes(null);
-    Assert::null($photosError->getBarcodes());
+    Assert::null($photosError->barcodes);
 
     // Test set/get thumbnail (mixed, tak může být cokoliv)
     $photosError->setThumbnail('binarydata');
-    Assert::same('binarydata', $photosError->getThumbnail());
+    Assert::same('binarydata', $photosError->thumbnail);
 
     $photosError->setThumbnail(null);
-    Assert::null($photosError->getThumbnail());
+    Assert::null($photosError->thumbnail);
 
 });

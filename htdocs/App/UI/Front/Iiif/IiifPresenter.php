@@ -28,7 +28,7 @@ final class IiifPresenter extends UnsecuredPresenter
 
         // Log the download request
         $this->imageDownloadLogService->logDownload(
-            $this->photoService->getPublicPhotosOfSpecimen($specimen)[0]->getId(),
+            $this->photoService->getPublicPhotosOfSpecimen($specimen)[0]->id,
             'iiif_manifest',
             $this->getHttpRequest()->getRemoteAddress(),
             $this->getHttpRequest()->getHeader('User-Agent'),

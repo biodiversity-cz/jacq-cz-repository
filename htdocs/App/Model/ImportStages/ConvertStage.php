@@ -20,7 +20,7 @@ class ConvertStage extends BaseStage implements StageInterface
             unset($imagick);
             $payload->setJp2FileSize(filesize($this->getIiifTempPath()));
         } catch (\Throwable $exception) {
-            throw new ConvertStageException('unable convert to JP2 (' . $exception->getMessage() . '): ' . $payload->getId());
+            throw new ConvertStageException('unable convert to JP2 (' . $exception->getMessage() . '): ' . $payload->id);
         }
 
         return $payload;

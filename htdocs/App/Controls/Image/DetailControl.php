@@ -29,7 +29,7 @@ class DetailControl extends Control
     {
         $template = $this->template;
         $template->photo = $this->photo;
-        $template->coreInfo = ['EXIF'=>$this->photo->getExif(), 'Identify' => $this->photo->getIdentify()];
+        $template->coreInfo = ['EXIF'=>$this->photo->exif, 'Identify' => $this->photo->identify];
         $template->databots = [];//$this->databotsService->databotResultsToArray($this->photo);
 //        $template->metric = $this->databotsService->getQualityEvaluation($this->photo);
         if ($forPublic) {

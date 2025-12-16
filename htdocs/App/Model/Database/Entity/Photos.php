@@ -32,79 +32,74 @@ class Photos
     use TOriginalFileAt;
 
     #[Column(unique: true, nullable: true, options: ['comment' => 'Filename of Archive Master TIF file'])]
-    protected ?string $archiveFilename = null;
+    protected(set) ?string $archiveFilename = null;
 
     #[Column(nullable: true, options: ['comment' => 'Filename that was provided during curator upload, could make sense or completely missing semantic content'])]
-    protected string $originalFilename;
+    protected(set) string $originalFilename;
 
     #[Column(name: 'jp2filename', unique: true, nullable: true, options: ['comment' => 'Filename of JP2 file'])]
-    protected ?string $jp2Filename = null;
+    protected(set) ?string $jp2Filename = null;
 
     #[Column(name: 'databot_thumb_filename', unique: true, nullable: true, options: ['comment' => 'Filename of PNG file devoted for Databots'])]
-    protected ?string $databotThumbFilename = null;
+    protected(set) ?string $databotThumbFilename = null;
 
     #[ManyToOne(targetEntity: Herbaria::class, inversedBy: 'photos')]
     #[JoinColumn(name: 'herbarium_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Herbarium storing and managing the specimen data'])]
-    protected Herbaria $herbarium;
+    protected(set) Herbaria $herbarium;
 
     #[ManyToOne(targetEntity: PhotosStatus::class)]
     #[JoinColumn(name: 'status_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Status of the photo'])]
-    protected PhotosStatus $status;
+    protected(set) PhotosStatus $status;
 
     #[Column(type: Types::STRING, nullable: true, options: ['comment' => 'Herbarium internal unique id of specimen in form without herbarium acronym'])]
-    protected ?string $specimenId = null;
+    protected(set) ?string $specimenId = null;
 
     #[Column(type: Types::INTEGER, nullable: true, options: ['comment' => 'Width of image with pixels'])]
-    protected ?int $width = null;
+    protected(set) ?int $width = null;
 
     #[Column(type: Types::INTEGER, nullable: true, options: ['comment' => 'Height of image in pixels'])]
-    protected ?int $height = null;
+    protected(set) ?int $height = null;
 
     #[Column(type: Types::BIGINT, nullable: true, options: ['comment' => 'Filesize of Archive Master TIFF file in bytes'])]
-    protected ?int $archiveFileSize = null;
+    protected(set) ?int $archiveFileSize = null;
 
     #[Column(name: 'jp2file_size', type: Types::BIGINT, nullable: true, options: ['comment' => 'Filesize of converted JP2 file in bytes'])]
-    protected ?int $JP2FileSize = null;
+    protected(set) ?int $JP2FileSize = null;
 
     /** @var ?mixed[] */
     #[Column(type: Types::JSON, nullable: true, options: ['jsonb' => true, 'comment' => 'raw EXIF data extracted from Archive Master file'])]
-    protected ?array $exif = null;
+    protected(set) ?array $exif = null;
 
     /** @var ?mixed[] */
     #[Column(type: Types::JSON, nullable: true, options: ['jsonb' => true, 'comment' => 'Imagick -verbose identify metadata output from the Archive Master file'])]
-    protected ?array $identify = null;
+    protected(set) ?array $identify = null;
 
     #[ManyToOne(targetEntity: PhotosType::class)]
     #[JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Type of the photo', 'default' => 1])]
-    protected PhotosType $type;
+    protected(set) PhotosType $type;
     #[ManyToOne(targetEntity: Funding::class)]
     #[JoinColumn(name: 'funding_id', referencedColumnName: 'id', nullable: true, options: ['comment' => 'Funding'])]
-    protected ?Funding $funding = null;
+    protected(set) ?Funding $funding = null;
     #[Column(type: Types::TEXT, length: 1000, unique: true, nullable: true, options: ['comment' => 'Persistent ID of photo'])]
-    protected ?string $pid = null;
+    protected(set) ?string $pid = null;
     #[Column(type: Types::TEXT, length: 1000, unique: false, nullable: true, options: ['comment' => 'Persistent ID of external specimen entity to which this photo belongs'])]
-    protected ?string $specimenPid = null;
+    protected(set) ?string $specimenPid = null;
     #[OneToOne(targetEntity: ImportError::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
-    private ?ImportError $error = null;
+    protected(set) ?ImportError $error = null;
     #[OneToOne(targetEntity: ImportMultiplier::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
-    private ?ImportMultiplier $multiplier = null;
+    protected(set) ?ImportMultiplier $multiplier = null;
     #[OneToMany(targetEntity: DatabotResult::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $databotResults;
+    protected(set) Collection $databotResults;
     #[OneToMany(targetEntity: SpecimenMetadata::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $specimenMetadata;
+    protected(set) Collection $specimenMetadata;
 
     #[Column(name: 'embargo_timeout', type: Types::DATETIME_MUTABLE, nullable: true)]
-    protected ?\DateTime $embargoTimeout = null;
+    protected(set) ?\DateTime $embargoTimeout = null;
 
     public function __construct()
     {
         $this->databotResults = new ArrayCollection();
         $this->specimenMetadata = new ArrayCollection();
-    }
-
-    public function getArchiveFilename(): ?string
-    {
-        return $this->archiveFilename;
     }
 
     public function setArchiveFilename(string $archiveFilename): Photos
@@ -114,21 +109,11 @@ class Photos
         return $this;
     }
 
-    public function getJp2Filename(): ?string
-    {
-        return $this->jp2Filename;
-    }
-
     public function setJp2Filename(string $jp2Filename): Photos
     {
         $this->jp2Filename = $jp2Filename;
 
         return $this;
-    }
-
-    public function getWidth(): ?int
-    {
-        return $this->width;
     }
 
     public function setWidth(?int $width): Photos
@@ -138,11 +123,6 @@ class Photos
         return $this;
     }
 
-    public function getHeight(): ?int
-    {
-        return $this->height;
-    }
-
     public function setHeight(?int $height): Photos
     {
         $this->height = $height;
@@ -150,21 +130,11 @@ class Photos
         return $this;
     }
 
-    public function getArchiveFileSize(): ?int
-    {
-        return $this->archiveFileSize;
-    }
-
     public function setArchiveFileSize(?int $archiveFileSize): Photos
     {
         $this->archiveFileSize = $archiveFileSize;
 
         return $this;
-    }
-
-    public function getJp2FileSize(): ?int
-    {
-        return $this->JP2FileSize;
     }
 
     public function setJp2FileSize(?int $JP2FileSize): Photos
@@ -176,24 +146,13 @@ class Photos
 
     public function getFullSpecimenId(): string
     {
-        return strtoupper($this->getHerbarium()->getAcronym()) . '_' . sprintf('%06d', $this->getSpecimenId());
+        return strtoupper($this->herbarium->acronym) . '_' . sprintf('%06d', $this->specimenId);
     }
-
-    public function getHerbarium(): Herbaria
-    {
-        return $this->herbarium;
-    }
-
     public function setHerbarium(Herbaria $herbarium): Photos
     {
         $this->herbarium = $herbarium;
 
         return $this;
-    }
-
-    public function getSpecimenId(): ?string
-    {
-        return $this->specimenId;
     }
 
     public function setSpecimenId(?string $specimenId): Photos
@@ -205,12 +164,7 @@ class Photos
 
     public function getExpectedJacqPid(): string
     {
-        return 'https://' . strtolower($this->getHerbarium()->getAcronym()) . '.jacq.org/' . strtoupper($this->getHerbarium()->getAcronym()) . $this->getSpecimenId();
-    }
-
-    public function getStatus(): PhotosStatus
-    {
-        return $this->status;
+        return 'https://' . strtolower($this->herbarium->acronym) . '.jacq.org/' . strtoupper($this->herbarium->acronym) . $this->specimenId;
     }
 
     public function setStatus(PhotosStatus $status): Photos
@@ -220,24 +174,11 @@ class Photos
         return $this;
     }
 
-    public function getOriginalFilename(): ?string
-    {
-        return $this->originalFilename;
-    }
-
     public function setOriginalFilename(string $originalFilename): Photos
     {
         $this->originalFilename = $originalFilename;
 
         return $this;
-    }
-
-    /**
-     * @return ?mixed[]
-     */
-    public function getExif(): ?array
-    {
-        return $this->exif;
     }
 
     /**
@@ -249,15 +190,6 @@ class Photos
 
         return $this;
     }
-
-    /**
-     * @return ?mixed[]
-     */
-    public function getIdentify(): ?array
-    {
-        return $this->identify;
-    }
-
     /**
      * @param ?mixed[] $identify
      */
@@ -266,11 +198,6 @@ class Photos
         $this->identify = $identify;
 
         return $this;
-    }
-
-    public function getError(): ?ImportError
-    {
-        return $this->error;
     }
 
     public function addImportError(): ImportError
@@ -290,11 +217,6 @@ class Photos
         }
     }
 
-    public function getMultiplier(): ?ImportMultiplier
-    {
-        return $this->multiplier;
-    }
-
     public function addMultiplier(): ImportMultiplier
     {
         if ($this->multiplier === null) {
@@ -312,32 +234,16 @@ class Photos
         return $this;
     }
 
-    public function getType(): PhotosType
-    {
-        return $this->type;
-    }
-
     public function setType(PhotosType $type): Photos
     {
         $this->type = $type;
 
         return $this;
     }
-
-    public function getDatabotResults(): Collection
-    {
-        return $this->databotResults;
-    }
-
     public function setDatabotResults(Collection $databotResults): Photos
     {
         $this->databotResults = $databotResults;
         return $this;
-    }
-
-    public function getDatabotThumbFilename(): ?string
-    {
-        return $this->databotThumbFilename;
     }
 
     public function setDatabotThumbFilename(?string $databotThumbFilename): Photos
@@ -348,7 +254,7 @@ class Photos
 
     public function isPublic(): bool
     {
-        return in_array($this->status->getId(), [PhotosStatus::PUBLISHED], true);
+        return in_array($this->status->id, [PhotosStatus::PUBLISHED], true);
     }
 
     public function getLatestSpecimenMetadata(): ?SpecimenMetadata
@@ -365,20 +271,10 @@ class Photos
         return $this->specimenMetadata->matching($criteria);
     }
 
-    public function getFunding(): ?Funding
-    {
-        return $this->funding;
-    }
-
     public function setFunding(?Funding $funding): Photos
     {
         $this->funding = $funding;
         return $this;
-    }
-
-    public function getPid(): ?string
-    {
-        return $this->pid;
     }
 
     public function setPid(string $pid): Photos
@@ -389,12 +285,6 @@ class Photos
         $this->pid = $pid;
         return $this;
     }
-
-    public function getSpecimenPid(): ?string
-    {
-        return $this->specimenPid;
-    }
-
     public function setSpecimenPid(?string $specimenPid): Photos
     {
         $this->specimenPid = $specimenPid;
@@ -403,17 +293,12 @@ class Photos
 
     public function getSpecimenPidApiEndpoint(): string
     {
-        $externalDatabase = $this->getHerbarium()->getExternalDatabase();
-        $baseurl = $externalDatabase->getUrl();
-        if ($externalDatabase->getId() === ExternalDatabase::JACQ) {
+        $externalDatabase = $this->herbarium->externalDatabase;
+        $baseurl = $externalDatabase->url;
+        if ($externalDatabase->id === ExternalDatabase::JACQ) {
             return $baseurl . rawurlencode($this->getExpectedJacqPid());
         }
-        return $baseurl . $this->getSpecimenId();
-    }
-
-    public function getEmbargoTimeout(): ?\DateTime
-    {
-        return $this->embargoTimeout;
+        return $baseurl . $this->specimenId;
     }
 
     public function setEmbargoTimeout(): Photos

@@ -14,8 +14,8 @@ class QualifiedRelation implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?Role $role = null;
-    private ?XmlSerializable $relation = null;
+    protected(set) ?Role $role = null;
+    protected(set) ?XmlSerializable $relation = null;
 
     public function __construct() {
     }

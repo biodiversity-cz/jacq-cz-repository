@@ -22,14 +22,10 @@ class Maintenance extends \App\Model\Database\Entity\Maintenance implements \Doc
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'expiresAt' => [parent::class, 'expiresAt', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'message' => [parent::class, 'message', null, 8],
-        "\0".'*'."\0".'type' => [parent::class, 'type', null, 8],
-        'expiresAt' => [parent::class, 'expiresAt', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'message' => [parent::class, 'message', null, 8],
-        'type' => [parent::class, 'type', null, 8],
+        'expiresAt' => [parent::class, 'expiresAt', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'message' => [parent::class, 'message', null, 8196],
+        'type' => [parent::class, 'type', null, 8196],
     ];
 
     public function __isInitialized(): bool

@@ -76,7 +76,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $documentation
             ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-thumb');
         $dataService
-            ->setIri($this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->getId()]))
+            ->setIri($this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->id]))
             ->addTitle('1280px thumbnail',Language::EN)
             ->addDescription('Serves image as thumbnail suitable for AI processing with longer side equal to 1280px',Language::EN)
             ->setDocumentation($documentation);
@@ -91,7 +91,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $documentation
             ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-jp2');
         $dataService
-            ->setIri($this->linkGenerator->link('Front:Repository:Jp2Image', [$photo->getId()]))
+            ->setIri($this->linkGenerator->link('Front:Repository:Jp2Image', [$photo->id]))
             ->addTitle('JPEG 2000',Language::EN)
             ->addDescription('Serves full size image in JPEG 2000 format.',Language::EN)
             ->setDocumentation($documentation);
@@ -114,14 +114,14 @@ final class CcmmFormat implements MetadataFormatInterface
             ->addLabel('TIFF')
             ->addLabel('TIFF', Language::EN)
             ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
-        $downloadUrl = new DownloadUrl()->setIri($this->linkGenerator->link('Front:Repository:ArchiveImage', [$photo->getId()]))->addLabel('original data', Language::EN);
+        $downloadUrl = new DownloadUrl()->setIri($this->linkGenerator->link('Front:Repository:ArchiveImage', [$photo->id]))->addLabel('original data', Language::EN);
         $documentation = new Documentation();
         $documentation
             ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-master-file');
         $dataDownload
             ->setDownloadUrl($downloadUrl)
             ->setFormat($format)
-            ->setByteSize($photo->getArchiveFileSize())
+            ->setByteSize($photo->archiveFileSize)
 //            ->setChecksum($checksum)
             ->setMediaType($mediaType)
             ->addTitle('original data',Language::EN);
@@ -135,12 +135,12 @@ final class CcmmFormat implements MetadataFormatInterface
 
     private function addFunding(Photos $photo): ?string
     {
-        $funding = $photo->getFunding();
+        $funding = $photo->funding;
         if(empty($funding))
         {
             return null;
         }
 
-        return $funding->getCcmmFormat();
+        return $funding->ccmmFormat;
     }
 }

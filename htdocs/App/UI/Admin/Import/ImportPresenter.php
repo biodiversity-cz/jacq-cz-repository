@@ -68,7 +68,7 @@ final class ImportPresenter extends SecuredPresenter
 
     public function actionThumbnail(int $id): void
     {
-        $thumb = $this->photoService->getPhotoWithError($this->user, $id)?->getError()->getThumbnail();
+        $thumb = $this->photoService->getPhotoWithError($this->user, $id)?->error->thumbnail;
         if ($thumb !== null) {
             $this->sendResponse(new CallbackResponse(function ($request, $response) use ($thumb): void {
                 $response->setContentType('image');
@@ -132,7 +132,7 @@ final class ImportPresenter extends SecuredPresenter
                 $this->error('Photo not found');
             }
 
-            $name = $photo->getOriginalFilename();
+            $name = $photo->originalFilename;
             $this->curatorFacade->deletePhoto($this->user, $photo);
             $this->flashMessage('Photo ' . $name . ' deleted.', 'success');
         } catch (\Throwable $exception) {
@@ -164,7 +164,7 @@ final class ImportPresenter extends SecuredPresenter
 
             $this->curatorFacade->reimportPhoto($this->user, $this->photoService->getPhotoReference((int)$values['photoId']), (string)$values['specimen']);
 
-            $fullID = $this->herbarium->getAcronym() . '-' . $values['specimen'];
+            $fullID = $this->herbarium->acronym . '-' . $values['specimen'];
             $this->flashMessage('File successfully marked to be re-processed with ID ' . $fullID, 'success');
         } catch (\Throwable $exception) {
             $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
@@ -180,7 +180,7 @@ final class ImportPresenter extends SecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $photo->getDatabotThumbFilename());
+        $this->sendFile($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $photo->databotThumbFilename);
 
     }
 
@@ -191,7 +191,7 @@ final class ImportPresenter extends SecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename());
+        $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->archiveFilename);
 
     }
 
@@ -202,7 +202,7 @@ final class ImportPresenter extends SecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryImageServerBucket(), $photo->getJp2Filename());
+        $this->sendFile($this->repositoryConfiguration->getRepositoryImageServerBucket(), $photo->jp2Filename);
 
     }
 
@@ -276,7 +276,7 @@ final class ImportPresenter extends SecuredPresenter
         $form->addInteger('specimen', 'ID:')
             ->setRequired('Please insert only number.')
             ->addRule($form::Integer, 'It must be integer');
-        $form->addHidden('photoId', $this->photo->getId());
+        $form->addHidden('photoId', $this->photo->id);
         $form->addSubmit('submit', 'Import with this ID');
         $form->onSuccess[] = [$this, 'specimenIdFormSucceeded'];
 

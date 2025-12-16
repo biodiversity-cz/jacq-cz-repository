@@ -22,18 +22,12 @@ class Contact extends \App\Model\Database\Entity\Contact implements \Doctrine\OR
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'description' => [parent::class, 'description', null, 8],
-        "\0".'*'."\0".'email' => [parent::class, 'email', null, 8],
-        "\0".'*'."\0".'herbarium' => [parent::class, 'herbarium', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'name' => [parent::class, 'name', null, 8],
-        "\0".'*'."\0".'surname' => [parent::class, 'surname', null, 8],
-        'description' => [parent::class, 'description', null, 8],
-        'email' => [parent::class, 'email', null, 8],
-        'herbarium' => [parent::class, 'herbarium', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'name' => [parent::class, 'name', null, 8],
-        'surname' => [parent::class, 'surname', null, 8],
+        'description' => [parent::class, 'description', null, 8196],
+        'email' => [parent::class, 'email', null, 8196],
+        'herbarium' => [parent::class, 'herbarium', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'name' => [parent::class, 'name', null, 8196],
+        'surname' => [parent::class, 'surname', null, 8196],
     ];
 
     public function __isInitialized(): bool

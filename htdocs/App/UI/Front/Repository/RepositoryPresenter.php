@@ -42,7 +42,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->getArchiveFilename(), $id, 'archive');
+        $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->archiveFilename, $id, 'archive');
     }
 
     public function actionJp2Image(int $id): void
@@ -52,7 +52,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryImageServerBucket(), $photo->getJp2Filename(), $id, 'jp2');
+        $this->sendFile($this->repositoryConfiguration->getRepositoryImageServerBucket(), $photo->jp2Filename, $id, 'jp2');
     }
 
     public function actionDatabotThumbImage(int $id): void
@@ -62,7 +62,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $photo->getDatabotThumbFilename(), $id, 'databot_thumb');
+        $this->sendFile($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $photo->databotThumbFilename, $id, 'databot_thumb');
     }
 
     protected function sendFile(string $bucket, string $filename, int $photoId, string $imageType)

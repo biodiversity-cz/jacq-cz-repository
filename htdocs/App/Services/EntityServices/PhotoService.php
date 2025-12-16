@@ -95,7 +95,7 @@ class PhotoService extends BaseEntityService
     {
         $unprocessedPhotos = [];
         foreach ($this->repository->findUnprocessedPhotos($user) as $photo) {
-            $unprocessedPhotos[$photo->getOriginalFilename()] = $photo;
+            $unprocessedPhotos[$photo->originalFilename] = $photo;
         }
 
         return $unprocessedPhotos;
@@ -106,7 +106,7 @@ class PhotoService extends BaseEntityService
      */
     public function findPotentialDuplicates(Photos $photo): array
     {
-        return $this->repository->findBy(['herbarium' => $photo->getHerbarium(), 'specimenId' => $photo->getSpecimenId(), 'archiveFileSize' => $photo->getArchiveFileSize(), 'status' => PhotosStatus::PASSED]);
+        return $this->repository->findBy(['herbarium' => $photo->herbarium, 'specimenId' => $photo->specimenId, 'archiveFileSize' => $photo->archiveFileSize, 'status' => PhotosStatus::PASSED]);
     }
 
     /**

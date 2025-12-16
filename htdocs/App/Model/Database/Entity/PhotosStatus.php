@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -23,38 +23,24 @@ class PhotosStatus
     public const int SPECIMEN_CONTROL_OK = 6;
     public const int WAITING_FOR_PUBLISHING = 7;
     public const int DEVELOP_PROCEED = 100;
-    public const array PASSED = [self::IMAGE_CONTROL_OK,  self::SPECIMEN_CONTROL_OK, self::WAITING_FOR_PUBLISHING, self::EMBARGO];
+    public const array PASSED = [self::IMAGE_CONTROL_OK, self::SPECIMEN_CONTROL_OK, self::WAITING_FOR_PUBLISHING, self::EMBARGO];
     public const array PASSED_PUBLIC = [self::IMAGE_CONTROL_OK, self::SPECIMEN_CONTROL_OK, self::PUBLISHED];
     public const array DELETEABLE = [self::IMAGE_CONTROL_ERROR, self::IMAGE_CONTROL_OK, self::SPECIMEN_CONTROL_OK, self::EMBARGO];
     public const array EMBARGOABLE = [self::SPECIMEN_CONTROL_OK, self::EMBARGO];
 
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'name of the status'])]
-    protected string $name;
+    protected(set) string $name;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'short description'])]
-    protected string $description;
+    protected(set) string $description;
 
     #[Column(nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
-    protected string $color;
+    protected(set) string $color;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'how to order statuses when presented, not necessary the only succession that exists'])]
-    protected int $succession;
+    protected(set) int $succession;
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function getColor(): string
-    {
-        return $this->color;
-    }
 
     public function setColor(string $color): PhotosStatus
     {
@@ -73,11 +59,6 @@ class PhotosStatus
     {
         $this->description = $description;
         return $this;
-    }
-
-    public function getSuccession(): int
-    {
-        return $this->succession;
     }
 
     public function setSuccession(int $succession): PhotosStatus

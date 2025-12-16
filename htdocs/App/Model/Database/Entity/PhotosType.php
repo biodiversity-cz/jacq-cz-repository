@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -16,28 +16,13 @@ class PhotosType
     use TId;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'name of the type'])]
-    protected string $name;
+    protected(set) string $name;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'short description'])]
-    protected string $description;
+    protected(set) string $description;
 
     #[Column(nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
-    protected string $color;
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function getColor(): string
-    {
-        return $this->color;
-    }
+    protected(set) string $color;
 
     public function setColor(string $color): PhotosType
     {
@@ -57,7 +42,5 @@ class PhotosType
         $this->description = $description;
         return $this;
     }
-
-
 
 }

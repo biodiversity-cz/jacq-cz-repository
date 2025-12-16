@@ -1,7 +1,7 @@
 {block content}
 <h2>Main contact</h2>
 <address class="mb-5">
-    Herbarium {$mainContact->getAcronym()}, {$mainContact->getFullname()}  {$mainContact->getAddress()}
+    Herbarium {$mainContact->acronym}, {$mainContact->getFullname()}  {$mainContact->getAddress()}
 </address>
 
 <h3>Participating herbaria</h3>
@@ -9,8 +9,8 @@
 {foreach $herbaria as $herbarium}
 <div class="row mt-4">
     <div class="col-md-2">
-        <h4>Herbarium {$herbarium->getAcronym()}</h4>
-{if $herbarium->getLogo()!==null}<img src="{$herbarium->getLogo()}" class="img-fluid">{/if}
+        <h4>Herbarium {$herbarium->acronym}</h4>
+{if $herbarium->logo!==null}<img src="{$herbarium->logo}" class="img-fluid">{/if}
 
         <address><b>{$herbarium->getFullname()}</b> <br>
             {$herbarium->getAddress()}</address>
@@ -28,8 +28,8 @@
             {foreach $herbarium->getContacts() as $contact}
             <tr>
                 <td class="w-30">{$contact->getFullname()}</td>
-                <td class="w-40">{$contact->getDescription()}</td>
-                <td class="w-30">{$contact->getEmail()|email}</td>
+                <td class="w-40">{$contact->description}</td>
+                <td class="w-30">{$contact->email|email}</td>
             </tr>
             {/foreach}
             </tbody>

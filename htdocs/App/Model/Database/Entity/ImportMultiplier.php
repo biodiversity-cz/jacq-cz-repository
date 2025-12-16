@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity()]
+#[Entity]
 #[Table(name: 'import_multiplier', options: ['comment' => 'Holds remaining valid IDs of mixed specimens (with multiple barcodes) to be cloned during the import process'])]
 // phpcs:disable SlevomatCodingStandard.Classes.SuperfluousErrorNaming.SuperfluousSuffix
 class ImportMultiplier
@@ -22,27 +22,16 @@ class ImportMultiplier
 
     #[OneToOne(targetEntity: Photos::class)]
     #[JoinColumn(name: 'photo_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE', options: ['comment' => 'photo to which this multiplier belongs'])]
-    protected Photos $photo;
+    protected(set) Photos $photo;
 
     #[Column(type: "json")]
-    private array $barcodes = [];
-
-
-    public function getPhoto(): Photos
-    {
-        return $this->photo;
-    }
+    protected(set) array $barcodes = [];
 
     public function setPhoto(Photos $photo): ImportMultiplier
     {
         $this->photo = $photo;
 
         return $this;
-    }
-
-    public function getBarcodes(): array
-    {
-        return $this->barcodes;
     }
 
     public function setBarcodes(array $barcodes): self

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity()]
+#[Entity]
 #[Table(name: 'contact', schema: 'front', options: ['comment' => 'People from herbaria, not necessary connected to repository users'])]
 class Contact
 {
@@ -17,36 +17,26 @@ class Contact
     use TId;
 
     #[Column(nullable: false)]
-    protected string $name;
+    protected(set) string $name;
 
     #[Column(nullable: false)]
-    protected string $surname;
+    protected(set) string $surname;
 
-    #[Column()]
-    protected string $description;
+    #[Column]
+    protected(set) string $description;
 
-    #[Column()]
-    protected string $email;
+    #[Column]
+    protected(set) string $email;
 
     #[ManyToOne(targetEntity: Herbaria::class, inversedBy: 'contacts')]
     #[JoinColumn(name: 'herbarium_id', referencedColumnName: 'id', nullable: false)]
-    protected Herbaria $herbarium;
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
+    protected(set) Herbaria $herbarium;
 
     public function setName(string $name): Contact
     {
         $this->name = $name;
 
         return $this;
-    }
-
-    public function getSurname(): string
-    {
-        return $this->surname;
     }
 
     public function setSurname(string $surname): Contact
@@ -56,11 +46,6 @@ class Contact
         return $this;
     }
 
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
     public function setDescription(string $description): Contact
     {
         $this->description = $description;
@@ -68,21 +53,11 @@ class Contact
         return $this;
     }
 
-    public function getEmail(): string
-    {
-        return $this->email;
-    }
-
     public function setEmail(string $email): Contact
     {
         $this->email = $email;
 
         return $this;
-    }
-
-    public function getHerbarium(): Herbaria
-    {
-        return $this->herbarium;
     }
 
     public function setHerbarium(Herbaria $herbarium): Contact

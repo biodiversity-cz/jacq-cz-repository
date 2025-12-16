@@ -15,20 +15,20 @@ class Identity extends SimpleIdentity
     public function __construct(User $userEntity)
     {
 
-        $this->herbariums = $userEntity->getHerbaria()->map(fn($h) => $h->getId())->toArray();
+        $this->herbariums = $userEntity->getHerbaria()->map(fn($h) => $h->id)->toArray();
 
-        $currentHerbariumId = $userEntity->getLastVisitedHerbarium()?->getId();
-        $currentHerbariumAcronym = $userEntity->getLastVisitedHerbarium()?->getAcronym();
+        $currentHerbariumId = $userEntity->lastVisitedHerbarium?->id;
+        $currentHerbariumAcronym = $userEntity->lastVisitedHerbarium?->acronym;
 
         if ($currentHerbariumId !== null && in_array($currentHerbariumId, $this->herbariums)) {
             $this->currentHerbariumId = $currentHerbariumId;
             $this->currentHerbariumAcronym = $currentHerbariumAcronym;
         }
         // Set the user ID as the identity ID
-        parent::__construct($userEntity->getId(), $this->getUserRoles($userEntity), [
+        parent::__construct($userEntity->id, $this->getUserRoles($userEntity), [
             'name' => $userEntity->getFullname(),
-            'email' => $userEntity->getEmail(),
-            'username' => $userEntity->getUsername()
+            'email' => $userEntity->email,
+            'username' => $userEntity->username
         ]);
     }
 
@@ -41,11 +41,11 @@ class Identity extends SimpleIdentity
         $roles = [];
 
         // If there's a current herbarium, get the role for that herbarium
-        $currentHerbarium = $userEntity->getLastVisitedHerbarium();
+        $currentHerbarium = $userEntity->lastVisitedHerbarium;
         if ($currentHerbarium) {
             $role = $userEntity->getRoleInHerbarium($currentHerbarium);
             if ($role) {
-                $roles[] = $role->getName();
+                $roles[] = $role->name;
             }
         }
 
@@ -69,7 +69,7 @@ class Identity extends SimpleIdentity
 
     public function isEligibleForHerbarium(Herbaria $herbarium): bool
     {
-        return in_array($herbarium->getId(), $this->herbariums, true);
+        return in_array($herbarium->id, $this->herbariums, true);
     }
 
 

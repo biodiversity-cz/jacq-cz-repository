@@ -24,44 +24,34 @@ class Funding
     use TLastEditAt;
 
     #[Column(type: Types::STRING, unique: false, nullable: false)]
-    protected string $name;
+    protected(set) string $name;
 
     #[Column(type: Types::STRING, unique: false, nullable: true)]
-    protected ?string $code;
+    protected(set) ?string $code;
 
     #[Column(type: Types::STRING, unique: false, nullable: true)]
-    protected ?string $funder;
+    protected(set) ?string $funder;
 
     #[Column(type: Types::TEXT, unique: false, nullable: true)]
-    protected ?string $description = null;
+    protected(set) ?string $description = null;
 
     #[Column(type: Types::TEXT, unique: false, nullable: true)]
-    protected ?string $note = null;
+    protected(set) ?string $note = null;
 
     #[ManyToOne(targetEntity: Herbaria::class)]
     #[JoinColumn(name: 'herbarium_id', referencedColumnName: 'id', nullable: true)]
-    protected ?Herbaria $herbarium = null;
+    protected(set) ?Herbaria $herbarium = null;
 
     #[Column(type: Types::BOOLEAN, unique: false, nullable: false, options: ['default' => true])]
-    protected bool $active = true;
+    protected(set) bool $active = true;
 
     #[Column(name:'ccmm_format', type: Types::TEXT, nullable: true, options: ['comment' => 'Structured XML data for OAI-PMH CCMM export'])]
-    protected ?string $ccmmFormat = null;
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
+    protected(set) ?string $ccmmFormat = null;
 
     public function setName(string $name): Funding
     {
         $this->name = $name;
         return $this;
-    }
-
-    public function getCode(): ?string
-    {
-        return $this->code;
     }
 
     public function setCode(?string $code): Funding
@@ -70,20 +60,10 @@ class Funding
         return $this;
     }
 
-    public function getFunder(): ?string
-    {
-        return $this->funder;
-    }
-
     public function setFunder(?string $funder): Funding
     {
         $this->funder = $funder;
         return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
     }
 
     public function setDescription(?string $description): Funding
@@ -92,20 +72,10 @@ class Funding
         return $this;
     }
 
-    public function getNote(): ?string
-    {
-        return $this->note;
-    }
-
     public function setNote(?string $note): Funding
     {
         $this->note = $note;
         return $this;
-    }
-
-    public function getHerbarium(): ?Herbaria
-    {
-        return $this->herbarium;
     }
 
     public function setHerbarium(?Herbaria $herbarium): Funding
@@ -114,20 +84,10 @@ class Funding
         return $this;
     }
 
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
     public function setActive(bool $active): Funding
     {
         $this->active = $active;
         return $this;
-    }
-
-    public function getCcmmFormat(): ?string
-    {
-        return $this->ccmmFormat;
     }
 
     public function setCcmmFormat(?string $ccmmFormat): Funding
@@ -138,9 +98,7 @@ class Funding
 
     public function getFullname():string
     {
-        return $this->getName() . ' (' . $this->getCode() . ')';
+        return $this->name . ' (' . $this->code . ')';
     }
-
-
 
 }

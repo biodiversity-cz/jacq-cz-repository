@@ -21,60 +21,50 @@ class CetafSid
     use TCreatedAt;
     use TLastEditAt;
 
-    #[Column(type: "string",  unique: true)]
-    private string $stableUri;
+    #[Column(unique: true)]
+    protected(set) string $stableUri;
 
-     #[Column(type: "string",nullable: true)]
-    private ?string $scientificNameCurrent = null;
+    #[Column(nullable: true)]
+    protected(set) ?string $scientificNameCurrent = null;
 
-     #[Column(type: "string", nullable: true)]
-    private ?string $family = null;
+    #[Column(nullable: true)]
+    protected(set) ?string $family = null;
 
-     #[Column(type: "string",  nullable: true)]
-    private ?string $scientificNameOriginal = null;
+    #[Column(nullable: true)]
+    protected(set) ?string $scientificNameOriginal = null;
 
-     #[Column(type: "string", nullable: true)]
-    private ?string $collectorNumber = null;
+    #[Column(nullable: true)]
+    protected(set) ?string $collectorNumber = null;
 
-     #[Column(type: "string",  nullable: true)]
-    private ?string $collectorName = null;
+    #[Column(nullable: true)]
+    protected(set) ?string $collectorName = null;
 
-     #[Column(type: "string",  nullable: true)]
-    private ?string $webscaledImageLink = null;
+    #[Column(nullable: true)]
+    protected(set) ?string $webscaledImageLink = null;
 
-     #[Column(type: "decimal", precision: 10, scale: 7, nullable: true)]
-    private ?string $latitude = null;
+    #[Column(type: "decimal", precision: 10, scale: 7, nullable: true)]
+    protected(set) ?string $latitude = null;
 
-     #[Column(type: "decimal", precision: 10, scale: 7, nullable: true)]
-    private ?string $longitude = null;
+    #[Column(type: "decimal", precision: 10, scale: 7, nullable: true)]
+    protected(set) ?string $longitude = null;
 
-     #[Column(type: "string", length: 10, nullable: true)]
-    private ?string $isoCountry = null;
+    #[Column(length: 10, nullable: true)]
+    protected(set) ?string $isoCountry = null;
 
-     #[Column(type: "string", nullable: true)]
-    private ?string $collectionDate = null;
+    #[Column(nullable: true)]
+    protected(set) ?string $collectionDate = null;
 
-     #[Column(type: "string",  nullable: true)]
-    private ?string $sourceLink = null;
+    #[Column(nullable: true)]
+    protected(set) ?string $sourceLink = null;
 
     #[ManyToOne(targetEntity: Herbaria::class)]
     #[JoinColumn(name: 'herbarium', referencedColumnName: 'id', unique: false, nullable: false, options: ['comment' => 'source institution'])]
-    protected Herbaria $herbarium;
-
-    public function getStableUri(): string
-    {
-        return $this->stableUri;
-    }
+    protected(set) Herbaria $herbarium;
 
     public function setStableUri(string $stableUri): CetafSid
     {
         $this->stableUri = $stableUri;
         return $this;
-    }
-
-    public function getScientificNameCurrent(): ?string
-    {
-        return $this->scientificNameCurrent;
     }
 
     public function setScientificNameCurrent(?string $scientificNameCurrent): CetafSid
@@ -83,20 +73,10 @@ class CetafSid
         return $this;
     }
 
-    public function getFamily(): ?string
-    {
-        return $this->family;
-    }
-
     public function setFamily(?string $family): CetafSid
     {
         $this->family = $family;
         return $this;
-    }
-
-    public function getScientificNameOriginal(): ?string
-    {
-        return $this->scientificNameOriginal;
     }
 
     public function setScientificNameOriginal(?string $scientificNameOriginal): CetafSid
@@ -104,21 +84,10 @@ class CetafSid
         $this->scientificNameOriginal = $scientificNameOriginal;
         return $this;
     }
-
-    public function getCollectorNumber(): ?string
-    {
-        return $this->collectorNumber;
-    }
-
     public function setCollectorNumber(?string $collectorNumber): CetafSid
     {
         $this->collectorNumber = $collectorNumber;
         return $this;
-    }
-
-    public function getCollectorName(): ?string
-    {
-        return $this->collectorName;
     }
 
     public function setCollectorName(?string $collectorName): CetafSid
@@ -127,31 +96,17 @@ class CetafSid
         return $this;
     }
 
-    public function getWebscaledImageLink(): ?string
-    {
-        return $this->webscaledImageLink;
-    }
-
     public function setWebscaledImageLink(?string $webscaledImageLink): CetafSid
     {
         $this->webscaledImageLink = $webscaledImageLink;
         return $this;
     }
 
-    public function getLatitude(): ?string
-    {
-        return $this->latitude;
-    }
 
     public function setLatitude(?string $latitude): CetafSid
     {
         $this->latitude = $latitude;
         return $this;
-    }
-
-    public function getLongitude(): ?string
-    {
-        return $this->longitude;
     }
 
     public function setLongitude(?string $longitude): CetafSid
@@ -160,20 +115,10 @@ class CetafSid
         return $this;
     }
 
-    public function getIsoCountry(): ?string
-    {
-        return $this->isoCountry;
-    }
-
     public function setIsoCountry(?string $isoCountry): CetafSid
     {
         $this->isoCountry = $isoCountry;
         return $this;
-    }
-
-    public function getCollectionDate(): ?string
-    {
-        return $this->collectionDate;
     }
 
     public function setCollectionDate(?string $collectionDate): CetafSid
@@ -182,20 +127,10 @@ class CetafSid
         return $this;
     }
 
-    public function getSourceLink(): ?string
-    {
-        return $this->sourceLink;
-    }
-
     public function setSourceLink(?string $sourceLink): CetafSid
     {
         $this->sourceLink = $sourceLink;
         return $this;
-    }
-
-    public function getHerbarium(): Herbaria
-    {
-        return $this->herbarium;
     }
 
     public function setHerbarium(Herbaria $herbarium): CetafSid
@@ -203,7 +138,6 @@ class CetafSid
         $this->herbarium = $herbarium;
         return $this;
     }
-
 
 
     /**
@@ -218,7 +152,7 @@ class CetafSid
         $xml[] = "  <rdf:Description rdf:about=\"{$uri}\">";
         $xml[] = "    <dcterms:title>" . htmlspecialchars($this->scientificNameCurrent, ENT_XML1) . "</dcterms:title>";
         $xml[] = "    <dcterms:type>" . htmlspecialchars('PreservedSpecimen', ENT_XML1) . "</dcterms:type>";
-        $xml[] = "    <dcterms:publisher>" . htmlspecialchars($this->herbarium->getAddress(), ENT_XML1) . "</dcterms:publisher>";
+        $xml[] = "    <dcterms:publisher>" . htmlspecialchars($this->herbarium->address, ENT_XML1) . "</dcterms:publisher>";
 
 //        // sameAs for HTTP variant if exists
 //        if ($this->httpAlternateUri) {

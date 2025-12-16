@@ -14,8 +14,8 @@ class AccessService implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private ?EndpointUrl $endpointUrl = null;
+    protected(set) ?string $iri = null;
+    protected(set) ?EndpointUrl $endpointUrl = null;
 
     public function __construct() {
     }

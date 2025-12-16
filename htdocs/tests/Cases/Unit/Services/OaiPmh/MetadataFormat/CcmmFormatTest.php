@@ -12,6 +12,7 @@ use Nette\Application\LinkGenerator;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once 'photoMocks.php';
 
 test('CcmmFormat: getMetadataPrefix returns ccmm', function (): void {
     $container = Bootstrap::boot()->createContainer();
@@ -44,54 +45,6 @@ test('CcmmFormat: getFormatName returns descriptive name', function (): void {
 
     Assert::same('Czech Core Metadata Model', $format->getFormatName());
 });
-
-
-function createCcmmPhotoMock(): Photos
-{
-    $photo = Mockery::mock(Photos::class);
-    $photo->shouldReceive('getId')->andReturn(123);
-    $photo->shouldReceive('getSpecimenId')->andReturn('789');
-    $photo->shouldReceive('getFullSpecimenId')->andReturn('TEST_000789');
-    $photo->shouldReceive('getWidth')->andReturn(2400);
-    $photo->shouldReceive('getHeight')->andReturn(1800);
-    $photo->shouldReceive('getOriginalFilename')->andReturn('original.tif');
-
-    $createdAt = new \DateTimeImmutable('2023-05-10 08:00:00');
-    $lastEdit = new \DateTime('2023-05-11 10:00:00');
-    $photo->shouldReceive('getCreatedAt')->andReturn($createdAt);
-    $photo->shouldReceive('getLastEditAt')->andReturn($lastEdit);
-
-    $herbarium = Mockery::mock(Herbaria::class);
-    $herbarium->shouldReceive('getAcronym')->andReturn('TEST');
-    $herbarium->shouldReceive('getFullname')->andReturn('Test Herbarium');
-
-    $photo->shouldReceive('getHerbarium')->andReturn($herbarium);
-
-    return $photo;
-}
-
-function createMinimalCcmmPhotoMock(): Photos
-{
-    $photo = Mockery::mock(Photos::class);
-    $photo->shouldReceive('getId')->andReturn(999);
-    $photo->shouldReceive('getSpecimenId')->andReturn('999');
-    $photo->shouldReceive('getFullSpecimenId')->andReturn('MIN_000999');
-    $photo->shouldReceive('getWidth')->andReturn(null);
-    $photo->shouldReceive('getHeight')->andReturn(null);
-    $photo->shouldReceive('getOriginalFilename')->andReturn(null);
-
-    $createdAt = new \DateTimeImmutable('2023-01-01 00:00:00');
-    $photo->shouldReceive('getCreatedAt')->andReturn($createdAt);
-    $photo->shouldReceive('getLastEditAt')->andReturn($createdAt);
-
-    $herbarium = Mockery::mock(Herbaria::class);
-    $herbarium->shouldReceive('getAcronym')->andReturn('MIN');
-    $herbarium->shouldReceive('getFullname')->andReturn(null);
-
-    $photo->shouldReceive('getHerbarium')->andReturn($herbarium);
-
-    return $photo;
-}
 
 register_shutdown_function(function (): void {
     Mockery::close();

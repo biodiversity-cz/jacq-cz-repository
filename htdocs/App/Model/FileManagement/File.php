@@ -10,7 +10,7 @@ readonly class File
 /** @deprecated
  * used only during migration
  */
-    public function __construct(public readonly string $name, public readonly Result $info, public readonly bool $alreadyWaiting)
+    public function __construct(protected(set) string $name, protected(set) Result $info, protected(set) bool $alreadyWaiting)
     {
     }
 

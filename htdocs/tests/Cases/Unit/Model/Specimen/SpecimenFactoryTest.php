@@ -44,8 +44,8 @@ test('SpecimenFactory::create builds specimen from full id', function (): void {
     $specimen = $factory->create('PR-000123');
 
     Assert::type(Specimen::class, $specimen);
-    Assert::same($herbarium, $specimen->getHerbarium());
-    Assert::same(123, $specimen->getNumericPartOfId());
+    Assert::same($herbarium, $specimen->herbarium);
+    Assert::same(123, $specimen->numericPartOfId);
 });
 
 test('SpecimenFactory::createFromNumeric builds specimen for current user herbarium', function (): void {
@@ -63,6 +63,6 @@ test('SpecimenFactory::createFromNumeric builds specimen for current user herbar
     $specimen = $factory->createFromNumeric($user, 999);
 
     Assert::type(Specimen::class, $specimen);
-    Assert::same($herbarium, $specimen->getHerbarium());
-    Assert::same(999, $specimen->getNumericPartOfId());
+    Assert::same($herbarium, $specimen->herbarium);
+    Assert::same(999, $specimen->numericPartOfId);
 });

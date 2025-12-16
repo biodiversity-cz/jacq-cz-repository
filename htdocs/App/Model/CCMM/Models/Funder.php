@@ -14,7 +14,7 @@ class Funder implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private Organization $organization;
+    protected(set) Organization $organization;
 
     public function __construct() {
     }

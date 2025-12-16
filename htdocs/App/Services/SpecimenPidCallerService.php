@@ -60,7 +60,7 @@ final class SpecimenPidCallerService
 
     private function chooseHandler(Photos $entity): callable
     {
-        if ($entity->getHerbarium()->getExternalDatabase()->getId() === ExternalDatabase::JACQ){
+        if ($entity->herbarium->externalDatabase->id === ExternalDatabase::JACQ){
             return [$this, 'jacqHandler'];
         }
         return  [$this, 'defaultHandler'];

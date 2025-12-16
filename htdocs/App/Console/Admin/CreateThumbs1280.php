@@ -63,7 +63,7 @@ class CreateThumbs1280 extends Command
                 continue;
 
             try {
-                $output->writeln("Processing photoId: {$photo->getId()}");
+                $output->writeln("Processing photoId: {$photo->id}");
                 $this->curatorService->getArchiveFile($photo, $this->tempFile());
                 $imagick = $this->imageService->createImagick($this->tempFile());
                 $imagick = $this->imageService->preparePngThumb($imagick, 1280);
@@ -73,8 +73,8 @@ class CreateThumbs1280 extends Command
                 $this->s3Service->putPngIfNotExists($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->createS3DatabotThumbName($photo), $this->tempFile2());
                 unlink($this->tempFile2());
             } catch (\ImagickException $e) {
-                $output->writeln("Error with ID {$photo->getId()} -->  ".$e->getMessage());
-                $output->writeln("Check the original file manually via: rclone copy repository_jacq:archive/{$photo->getArchiveFilename()} . --progress");
+                $output->writeln("Error with ID {$photo->id} -->  ".$e->getMessage());
+                $output->writeln("Check the original file manually via: rclone copy repository_jacq:archive/{$photo->archiveFilename} . --progress");
             } finally {
                 unlink($this->tempFile());
                 unlink($this->tempFile2());

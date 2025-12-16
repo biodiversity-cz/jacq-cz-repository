@@ -22,26 +22,16 @@ class SpecimenMetadata extends \App\Model\Database\Entity\SpecimenMetadata imple
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'createdAt' => [parent::class, 'createdAt', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".parent::class."\0".'collection' => [parent::class, 'collection', null, 16],
-        "\0".parent::class."\0".'country' => [parent::class, 'country', null, 16],
-        "\0".parent::class."\0".'family' => [parent::class, 'family', null, 16],
-        "\0".parent::class."\0".'lat' => [parent::class, 'lat', null, 16],
-        "\0".parent::class."\0".'lon' => [parent::class, 'lon', null, 16],
-        "\0".parent::class."\0".'photo' => [parent::class, 'photo', null, 16],
-        "\0".parent::class."\0".'pid' => [parent::class, 'pid', null, 16],
-        "\0".parent::class."\0".'taxon' => [parent::class, 'taxon', null, 16],
-        'collection' => [parent::class, 'collection', null, 16],
-        'country' => [parent::class, 'country', null, 16],
-        'createdAt' => [parent::class, 'createdAt', null, 8],
-        'family' => [parent::class, 'family', null, 16],
-        'id' => [parent::class, 'id', null, 8],
-        'lat' => [parent::class, 'lat', null, 16],
-        'lon' => [parent::class, 'lon', null, 16],
-        'photo' => [parent::class, 'photo', null, 16],
-        'pid' => [parent::class, 'pid', null, 16],
-        'taxon' => [parent::class, 'taxon', null, 16],
+        'collection' => [parent::class, 'collection', null, 8196],
+        'country' => [parent::class, 'country', null, 8196],
+        'createdAt' => [parent::class, 'createdAt', null, 8196],
+        'family' => [parent::class, 'family', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'lat' => [parent::class, 'lat', null, 8196],
+        'lon' => [parent::class, 'lon', null, 8196],
+        'photo' => [parent::class, 'photo', null, 8196],
+        'pid' => [parent::class, 'pid', null, 8196],
+        'taxon' => [parent::class, 'taxon', null, 8196],
     ];
 
     public function __isInitialized(): bool

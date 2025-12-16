@@ -49,6 +49,6 @@ abstract class BaseStage implements StageInterface
 
     protected function getOriginalFileExtension(Photos $photo): string
     {
-        return pathinfo($photo->getOriginalFilename(), PATHINFO_EXTENSION);
+        return pathinfo($photo->originalFilename, PATHINFO_EXTENSION);
     }
 }

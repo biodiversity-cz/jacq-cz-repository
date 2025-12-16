@@ -104,14 +104,14 @@ final readonly class FundingForm
     protected function presetDefaultValues(Form $form, Funding $funding): Form
     {
         $defaults = [
-            "id" => $funding->getId(),
-            'name' => $funding->getName(),
-            'description' => $funding->getDescription(),
-            'code' => $funding->getCode(),
-            'funder' => $funding->getFunder(),
-            'note' => $funding->getNote(),
-            'ccmm_format' => $funding->getCcmmFormat(),
-            'active' => $funding->isActive()
+            "id" => $funding->id,
+            'name' => $funding->name,
+            'description' => $funding->description,
+            'code' => $funding->code,
+            'funder' => $funding->funder,
+            'note' => $funding->note,
+            'ccmm_format' => $funding->ccmmFormat,
+            'active' => $funding->active
         ];
         return $form->setDefaults($defaults);
     }

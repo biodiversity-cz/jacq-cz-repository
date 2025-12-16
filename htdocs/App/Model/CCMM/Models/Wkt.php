@@ -14,8 +14,8 @@ class Wkt implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $wktText = null;
-    private ?string $srsName = null;
+    protected(set) ?string $wktText = null;
+    protected(set) ?string $srsName = null;
 
     public function __construct() {
     }

@@ -22,12 +22,9 @@ class ExcludedDownloadLog extends \App\Model\Database\Entity\ExcludedDownloadLog
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'description' => [parent::class, 'description', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'ip' => [parent::class, 'ip', null, 8],
-        'description' => [parent::class, 'description', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'ip' => [parent::class, 'ip', null, 8],
+        'description' => [parent::class, 'description', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'ip' => [parent::class, 'ip', null, 8196],
     ];
 
     public function __isInitialized(): bool
