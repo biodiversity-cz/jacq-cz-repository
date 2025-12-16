@@ -15,6 +15,7 @@ use App\Services\TempDir;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\Application\LinkGenerator;
 use Tester\Assert;
+use Tests\Toolkit\PhotoTestFactory;
 
 require_once __DIR__ . '/../../../../bootstrap.php';
 
@@ -48,9 +49,7 @@ class TestStage extends BaseStage {
 }
 
 test('BaseStage temp paths are correct', function(): void {
-    $photo = \Mockery::mock(Photos::class);
-    $photo->shouldReceive('getId')->andReturn(42);
-    $photo->shouldReceive('getOriginalFilename')->andReturn('image.tiff');
+    $photo = PhotoTestFactory::minimal();
 
     $tempDir = \Mockery::mock(TempDir::class);
     $tempDir->shouldReceive('getPath')->andReturnUsing(fn($filename) => '/tmp/' . $filename);
@@ -65,6 +64,6 @@ test('BaseStage temp paths are correct', function(): void {
     Assert::same('/tmp/databot.png', $stage->callGetDatabotThumbTempPath());
     Assert::same('/tmp/zbar.png', $stage->callGetZbarThumbTempPath());
     Assert::same('/tmp/iiif.jp2', $stage->callGetIiifTempPath());
-    Assert::same('/tmp/archive.tiff', $stage->callGetMasterTempPath());
-    Assert::same('/tmp/duplicate.tiff', $stage->callGetDuplicateTempPath($photo));
+    Assert::same('/tmp/archive.tif', $stage->callGetMasterTempPath());
+    Assert::same('/tmp/duplicate.tif', $stage->callGetDuplicateTempPath($photo));
 });

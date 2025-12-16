@@ -21,14 +21,12 @@ test('Photos entity getters and setters', function (): void {
 
     // Reflection pro chráněné vlastnosti z traitů TId a TCreatedAt, TLastEditAt, TOriginalFileAt
     $refId = new \ReflectionProperty($photos, 'id');
-    $refId->setAccessible(true);
-    $refCreatedAt = new \ReflectionProperty($photos, 'createdAt');
-    $refCreatedAt->setAccessible(true);
-    $refLastEdit = new \ReflectionProperty($photos, 'lastEdit');
-    $refLastEdit->setAccessible(true);
-    $refOriginalFileAt = new \ReflectionProperty($photos, 'originalFileTimestamp');
-    $refOriginalFileAt->setAccessible(true);
 
+    $refCreatedAt = new \ReflectionProperty($photos, 'createdAt');
+
+    $refLastEdit = new \ReflectionProperty($photos, 'lastEdit');
+
+    $refOriginalFileAt = new \ReflectionProperty($photos, 'originalFileTimestamp');
 
     $refId->setValue($photos, 42);
     $refCreatedAt->setValue($photos, new \DateTimeImmutable('2025-08-06 12:00:00'));
@@ -103,7 +101,7 @@ test('Photos entity getters and setters', function (): void {
     // Test specimenId a getFullSpecimenId, getExpectedJacqPid (nutno mít nastavené herbarium s akronymem)
     $herbariumReflection = new \ReflectionClass(Herbaria::class);
     $acronymProp = $herbariumReflection->getProperty('acronym');
-    $acronymProp->setAccessible(true);
+
     $acronymProp->setValue($herbarium, 'ABC');
 
     $photos->setSpecimenId('000123');

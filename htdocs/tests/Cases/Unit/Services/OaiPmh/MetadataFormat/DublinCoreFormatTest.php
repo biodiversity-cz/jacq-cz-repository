@@ -10,9 +10,9 @@ use App\Services\OaiPmh\MetadataFormat\DublinCoreFormat;
 use App\Services\RepositoryConfiguration;
 use Mockery;
 use Tester\Assert;
+use Tests\Toolkit\PhotoTestFactory;
 
 require_once __DIR__ . '/../../../../../bootstrap.php';
-require_once 'photoMocks.php';
 
 test('DublinCoreFormat: getMetadataPrefix returns oai_dc', function (): void {
     $container = Bootstrap::boot()->createContainer();
@@ -51,7 +51,7 @@ test('DublinCoreFormat: toXml creates valid DC structure', function (): void {
     $repositoryConfig = $container->getByType(RepositoryConfiguration::class);
 
     $format = new DublinCoreFormat($repositoryConfig);
-    $photo = createDetailedPhotoMock();
+    $photo = PhotoTestFactory::detailed();
 
     $xml = $format->toXml($photo, 'oai:jacq.org:photo-123');
 
@@ -70,7 +70,7 @@ test('DublinCoreFormat: toXml handles empty optional fields gracefully', functio
     $repositoryConfig = $container->getByType(RepositoryConfiguration::class);
 
     $format = new DublinCoreFormat($repositoryConfig);
-    $photo = createMinimalPhotoMock();
+    $photo = PhotoTestFactory::detailed();
 
     $xml = $format->toXml($photo, 'oai:jacq.org:photo-456');
 

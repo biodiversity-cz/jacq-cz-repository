@@ -11,26 +11,19 @@ use App\Model\Specimen\Specimen;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Nette\Application\LinkGenerator;
 use Tester\Assert;
+use Tests\Toolkit\HerbariumTestFactory;
+use Tests\Toolkit\PhotoTestFactory;
+use Tests\Toolkit\SpecimenTestFactory;
 
 require_once __DIR__ . '/../../../../bootstrap.php';
 
 
 test('ManifestFactory creates manifest with thumbnail and sequence', function (): void {
-    $photo = \Mockery::mock(Photos::class);
-    $photo->shouldReceive('getJp2Filename')->andReturn('image.jp2');
-    $photo->shouldReceive('getId')->andReturn(123);
-    $photo->shouldReceive('getWidth')->andReturn(800);
-    $photo->shouldReceive('getHeight')->andReturn(600);
-
-    $specimen = \Mockery::mock(Specimen::class);
-    $herbarium = \Mockery::mock(Herbaria::class);
-    $license = \Mockery::mock(License::class);
-    $license->shouldReceive('getLink')->andReturn('http://license');
-    $herbarium->shouldReceive('getLogo')->andReturn('http://logo.png');
-    $herbarium->shouldReceive('getLicense')->andReturn($license);
-    $specimen->shouldReceive('getHerbarium')->andReturn($herbarium);
+    $photo = PhotoTestFactory::detailed();
+    $specimen = SpecimenTestFactory::minimal();
 
     $photoService = \Mockery::mock(PhotoService::class);
     $photoService->shouldReceive('getPublicPhotosOfSpecimen')->with($specimen)->andReturn([$photo]);
@@ -40,7 +33,7 @@ test('ManifestFactory creates manifest with thumbnail and sequence', function ()
 
     $linkGenerator = $container->getByType(LinkGenerator::class);
 
-    $repo = \Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+    $repo = \Mockery::mock(EntityRepository::class);
 
     $em = \Mockery::mock(EntityManagerInterface::class);
     $em->shouldReceive('getRepository')
@@ -61,26 +54,14 @@ test('ManifestFactory creates manifest with thumbnail and sequence', function ()
 
     $canvas = $sequence->getCanvases()[0];
 
-    Assert::equal('image.jp2', $canvas->getLabels()[0]);
-    Assert::equal(800, $canvas->getWidth());
-    Assert::equal(600, $canvas->getHeight());
+    Assert::equal('test.jp2', $canvas->getLabels()[0]);
+    Assert::equal(3000, $canvas->getWidth());
+    Assert::equal(2000, $canvas->getHeight());
 });
 
 test('ManifestFactory omits logo when herbarium has no logo', function (): void {
-    $photo = \Mockery::mock(Photos::class);
-    $photo->shouldReceive('getJp2Filename')->andReturn('image.jp2');
-    $photo->shouldReceive('getId')->andReturn(123);
-    $photo->shouldReceive('getWidth')->andReturn(800);
-    $photo->shouldReceive('getHeight')->andReturn(600);
-
-    $herbarium = \Mockery::mock(Herbaria::class);
-    $license = \Mockery::mock(License::class);
-    $license->shouldReceive('getLink')->andReturn('http://license');
-    $herbarium->shouldReceive('getLicense')->andReturn($license);
-    $herbarium->shouldReceive('getLogo')->andReturn(null);
-
-    $specimen = \Mockery::mock(Specimen::class);
-    $specimen->shouldReceive('getHerbarium')->andReturn($herbarium);
+    $photo = PhotoTestFactory::detailed();
+    $specimen = SpecimenTestFactory::minimal();
 
     $photoService = \Mockery::mock(PhotoService::class);
     $photoService->shouldReceive('getPublicPhotosOfSpecimen')->with($specimen)->andReturn([$photo]);
@@ -89,7 +70,7 @@ test('ManifestFactory omits logo when herbarium has no logo', function (): void 
     $repoConfig = $container->getByType(RepositoryConfiguration::class);
     $linkGenerator = $container->getByType(LinkGenerator::class);
 
-    $repo = \Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+    $repo = \Mockery::mock(EntityRepository::class);
     $em = \Mockery::mock(EntityManagerInterface::class);
     $em->shouldReceive('getRepository')
         ->with(Photos::class)
@@ -104,11 +85,10 @@ test('ManifestFactory omits logo when herbarium has no logo', function (): void 
 });
 
 test('ManifestFactory::getFirstImage returns null when there are no public photos', function (): void {
-    // Specimen, pro který nic není
-    $specimen = \Mockery::mock(\App\Model\Specimen\Specimen::class);
+    $specimen = SpecimenTestFactory::minimal();
 
     // PhotoService vrátí prázdné pole
-    $photoService = \Mockery::mock(\App\Services\EntityServices\PhotoService::class);
+    $photoService = \Mockery::mock(PhotoService::class);
     $photoService->shouldReceive('getPublicPhotosOfSpecimen')
         ->with($specimen)
         ->andReturn([]);
@@ -119,7 +99,7 @@ test('ManifestFactory::getFirstImage returns null when there are no public photo
     $linkGenerator = $container->getByType(\Nette\Application\LinkGenerator::class);
 
     // EntityManager musí vrátit EntityRepository (typový hint v konstruktoru)
-    $repo = \Mockery::mock(\Doctrine\ORM\EntityRepository::class);
+    $repo = \Mockery::mock(EntityRepository::class);
     $em = \Mockery::mock(\Doctrine\ORM\EntityManagerInterface::class);
     $em->shouldReceive('getRepository')
         ->with(\App\Model\Database\Entity\Photos::class)
@@ -129,12 +109,12 @@ test('ManifestFactory::getFirstImage returns null when there are no public photo
 
     // Nastavíme chráněnou property $specimen, protože getFirstImage() ji používá
     $rp = new \ReflectionProperty(\App\Model\IIIF\ManifestFactory::class, 'specimen');
-    $rp->setAccessible(true);
+
     $rp->setValue($factory, $specimen);
 
     // Zavoláme protected metodu getFirstImage() přes Reflection
     $rm = new \ReflectionMethod(\App\Model\IIIF\ManifestFactory::class, 'getFirstImage');
-    $rm->setAccessible(true);
+
     $result = $rm->invoke($factory);
 
     \Tester\Assert::null($result);

@@ -14,9 +14,9 @@ test('Databot entity getters, setters and traits', function (): void {
 
     // Traits TId + TCreatedAt přes reflection
     $refId = new \ReflectionProperty($databot, 'id');
-    $refId->setAccessible(true);
+
     $refCreatedAt = new \ReflectionProperty($databot, 'createdAt');
-    $refCreatedAt->setAccessible(true);
+
 
     // nastavíme id, createdAt (předpoklad)
     $refId->setValue($databot, 42);

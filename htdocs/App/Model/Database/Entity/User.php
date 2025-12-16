@@ -61,6 +61,9 @@ class User
     #[Column(type: Types::TEXT, length: 60000, nullable: true, options: ['comment' => 'additional information about user'])]
     protected(set) ?string $comment;
 
+    /**
+     * @var UserHerbariumRole[]
+     */
     #[OneToMany(targetEntity: UserHerbariumRole::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     protected(set) Collection $userHerbariumRoles;
 
@@ -173,7 +176,7 @@ class User
     {
         foreach ($this->userHerbariumRoles as $userHerbariumRole) {
             if ($userHerbariumRole->herbarium->id === $herbarium->id) {
-                return $userHerbariumRole->getRole();
+                return $userHerbariumRole->role;
             }
         }
 

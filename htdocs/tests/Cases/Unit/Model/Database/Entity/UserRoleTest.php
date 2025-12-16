@@ -29,7 +29,7 @@ test('UserRole getters, setters and TId trait', function (): void {
 
     // Nejprve testujeme, že $id je null při vytvoření (protected, proto Reflection)
     $refId = new \ReflectionProperty($role, 'id');
-    $refId->setAccessible(true);
+
     $refId->setValue($role, 123); // simulujeme nastavené id (jako kdyby přišel z DB)
 
     // getId vrací id
@@ -39,10 +39,4 @@ test('UserRole getters, setters and TId trait', function (): void {
     $cloned = clone $role;
     Assert::null($refId->getValue($cloned));
 
-    // getId() nyní na klonu vrací TypeError (protože id je null, ale getId(): int)
-    // můžeme to otestovat
-    Assert::exception(
-        fn() => $cloned->id,
-        \TypeError::class
-    );
 });

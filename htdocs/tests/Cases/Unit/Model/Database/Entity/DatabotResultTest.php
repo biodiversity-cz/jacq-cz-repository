@@ -16,9 +16,7 @@ test('DatabotResult entity getters and setters', function (): void {
 
     // Reflection pro protected vlastnosti z traitů
     $refId = new \ReflectionProperty($result, 'id');
-    $refId->setAccessible(true);
     $refCreatedAt = new \ReflectionProperty($result, 'createdAt');
-    $refCreatedAt->setAccessible(true);
 
     $refId->setValue($result, 123);
     $refCreatedAt->setValue($result, new \DateTimeImmutable('2025-08-06T10:00:00+00:00'));

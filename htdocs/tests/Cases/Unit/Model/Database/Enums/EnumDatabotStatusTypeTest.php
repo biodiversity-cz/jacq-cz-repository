@@ -18,7 +18,7 @@ test('EnumDatabotStatusType converts values to/from PHP and DB', function (): vo
 
     $platform = \Mockery::mock(AbstractPlatform::class);
 
-    Assert::same('databots.enum_databot_result_status', $type->name);
+    Assert::same('databots.enum_databot_result_status', $type->getName());
     Assert::true($type->requiresSQLCommentHint($platform));
     Assert::same('databots.enum_databot_result_status', $type->getSQLDeclaration([], $platform));
 

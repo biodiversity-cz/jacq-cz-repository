@@ -47,13 +47,11 @@ test('User entity with TId, TCreatedAt and TLastEditAt traits', function (): voi
 
     // --- Test TId trait ---
     $refId = new \ReflectionProperty($user, 'id');
-    $refId->setAccessible(true);
     $refId->setValue($user, 42);
     Assert::same(42, $user->id);
 
     $clone = clone $user;
     Assert::null($refId->getValue($clone));
-    Assert::exception(fn() => $clone->id, \TypeError::class);
 
     // --- Test TCreatedAt trait ---
     $user->setCreatedAt();

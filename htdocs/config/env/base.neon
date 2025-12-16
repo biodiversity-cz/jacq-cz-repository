@@ -41,6 +41,7 @@ application:
 
 di:
 	debugger: true
+	lazy: true
 
 aws:
 	region: eu-west-1

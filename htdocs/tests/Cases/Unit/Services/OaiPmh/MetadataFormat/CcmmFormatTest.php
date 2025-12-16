@@ -12,7 +12,6 @@ use Nette\Application\LinkGenerator;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../../../bootstrap.php';
-require_once 'photoMocks.php';
 
 test('CcmmFormat: getMetadataPrefix returns ccmm', function (): void {
     $container = Bootstrap::boot()->createContainer();

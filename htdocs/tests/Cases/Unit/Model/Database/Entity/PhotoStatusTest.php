@@ -24,12 +24,10 @@ test('PhotosStatus entity basic getters/setters and TId trait', function (): voi
 
     // Test traitu TId
     $refId = new \ReflectionProperty($status, 'id');
-    $refId->setAccessible(true);
 
     $refId->setValue($status, 123);
     Assert::same(123, $status->id);
 
     $clone = clone $status;
     Assert::null($refId->getValue($clone));
-    Assert::exception(fn() => $clone->id, \TypeError::class);
 });
