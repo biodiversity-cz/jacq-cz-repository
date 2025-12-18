@@ -18,14 +18,14 @@ class FixtureCetafSid extends FixtureBase
      */
     public function load(ObjectManager $manager): void
     {
-        $db = new CetafSid()
-            ->setStableUri('"http://localhost/cetaf/sid/1"')
-            ->setHerbarium($manager->getRepository(Herbaria::class)->findOneBy(['acronym' => 'TEST']))
-            ->setCreatedAt()
-            ->setLastEditAt();
-
-        $manager->persist($db);
-        $manager->flush();
+//        $db = new CetafSid()
+//            ->setStableUri('"http://localhost/cetaf/sid/1"')
+//            ->setHerbarium($manager->getRepository(Herbaria::class)->findOneBy(['acronym' => 'TEST']))
+//            ->setCreatedAt()
+//            ->setLastEditAt();
+//
+//        $manager->persist($db);
+//        $manager->flush();
     }
 
 
