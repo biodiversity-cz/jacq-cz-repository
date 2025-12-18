@@ -39,6 +39,7 @@
 
     "contributte/console": "^0",
     "contributte/console-extra": "^0",
+    "contributte/forms-bootstrap": "^0.8",
     "guzzlehttp/guzzle": "^7",
     "league/pipeline": "^1",
     "ublaboo/aws-sdk-nette-extension": "dev-master",
@@ -67,7 +68,7 @@
 	"minimum-stability": "stable",
 	"config": {
     "platform": {
-      "php": "8.5",
+      "php": "8.4",
       "ext-imagick": "3",
       "ext-intl": "3",
       "ext-exif": "3",

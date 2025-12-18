@@ -20,7 +20,7 @@ final class FormFactory
 
     private function create(): BaseForm
     {
-//        BootstrapForm::switchBootstrapVersion(BootstrapVersion::V5);
+        BootstrapForm::switchBootstrapVersion(BootstrapVersion::V5);
 
         return new BaseForm();
     }

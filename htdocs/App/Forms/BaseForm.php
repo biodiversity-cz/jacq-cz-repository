@@ -3,10 +3,9 @@
 namespace App\Forms;
 
 use Contributte\FormsBootstrap\BootstrapForm;
-use Nette\Application\UI\Form;
 use Nette\Forms\Controls\TextInput;
 
-class BaseForm extends Form
+class BaseForm extends BootstrapForm
 {
 
     public function addNumeric(string $name, ?string $label = null): TextInput

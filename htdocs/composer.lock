@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d91d994437d621045660bf9baed1dbd8",
+    "content-hash": "69eebfafc3bde37c2a60f4e9138690ad",
     "packages": [
         {
             "name": "68publishers/asset",
@@ -201,16 +201,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.367.3",
+            "version": "3.368.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d8e6e0691a38223523c38ca9c452ebcd084c7151"
+                "reference": "f7916ea27b5214fa1b4b6ecfa0c3f549b388a70c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d8e6e0691a38223523c38ca9c452ebcd084c7151",
-                "reference": "d8e6e0691a38223523c38ca9c452ebcd084c7151",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f7916ea27b5214fa1b4b6ecfa0c3f549b388a70c",
+                "reference": "f7916ea27b5214fa1b4b6ecfa0c3f549b388a70c",
                 "shasum": ""
             },
             "require": {
@@ -292,9 +292,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.367.3"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.368.1"
             },
-            "time": "2025-12-15T19:05:56+00:00"
+            "time": "2025-12-17T19:06:44+00:00"
         },
         {
             "name": "contributte/console",
@@ -447,6 +447,78 @@
                 }
             ],
             "time": "2024-01-04T12:17:40+00:00"
+        },
+        {
+            "name": "contributte/forms-bootstrap",
+            "version": "v0.8.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contributte/forms-bootstrap.git",
+                "reference": "b21d0cdfc34f729329ca91a8bfdbfa052d531bb1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contributte/forms-bootstrap/zipball/b21d0cdfc34f729329ca91a8bfdbfa052d531bb1",
+                "reference": "b21d0cdfc34f729329ca91a8bfdbfa052d531bb1",
+                "shasum": ""
+            },
+            "require": {
+                "nette/application": "^3.0",
+                "nette/forms": "3.2.7",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "contributte/qa": "^v0.3",
+                "phpstan/phpstan": "^1.10",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-nette": "^1.0",
+                "phpstan/phpstan-strict-rules": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.9.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Contributte\\FormsBootstrap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dalibor Korpar",
+                    "email": "dalibor.korpar@gmail.com"
+                }
+            ],
+            "description": "Nette extension for Bootstrap forms",
+            "homepage": "https://github.com/contributte/forms-bootstrap",
+            "keywords": [
+                "Forms",
+                "bootstrap",
+                "library",
+                "nette"
+            ],
+            "support": {
+                "issues": "https://github.com/contributte/forms-bootstrap/issues",
+                "source": "https://github.com/contributte/forms-bootstrap/tree/v0.8.6"
+            },
+            "funding": [
+                {
+                    "url": "https://contributte.org/partners.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/f3l1x",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-07-28T10:37:29+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -2406,23 +2478,23 @@
         },
         {
             "name": "nette/forms",
-            "version": "v3.2.8",
+            "version": "v3.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/forms.git",
-                "reference": "3bbf691ea0eb50d9594c2109d9252f267092b91f"
+                "reference": "cedc41fe0eff7568f8875d6e4347e95bc4f0cf7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/forms/zipball/3bbf691ea0eb50d9594c2109d9252f267092b91f",
-                "reference": "3bbf691ea0eb50d9594c2109d9252f267092b91f",
+                "url": "https://api.github.com/repos/nette/forms/zipball/cedc41fe0eff7568f8875d6e4347e95bc4f0cf7a",
+                "reference": "cedc41fe0eff7568f8875d6e4347e95bc4f0cf7a",
                 "shasum": ""
             },
             "require": {
                 "nette/component-model": "^3.1",
                 "nette/http": "^3.3",
                 "nette/utils": "^4.0.4",
-                "php": "8.1 - 8.5"
+                "php": "8.1 - 8.4"
             },
             "conflict": {
                 "latte/latte": ">=3.0.0 <3.0.12 || >=3.2"
@@ -2480,9 +2552,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/forms/issues",
-                "source": "https://github.com/nette/forms/tree/v3.2.8"
+                "source": "https://github.com/nette/forms/tree/v3.2.7"
             },
-            "time": "2025-11-22T19:36:34+00:00"
+            "time": "2025-07-17T22:54:05+00:00"
         },
         {
             "name": "nette/http",
@@ -6488,7 +6560,7 @@
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.5",
+        "php": "8.4",
         "ext-imagick": "3",
         "ext-intl": "3",
         "ext-exif": "3",
