@@ -31,11 +31,11 @@ final class CetafSidTest extends IntegrationTestCase
         $session =  $this->container->getByType(Session::class);
         $managementService = new CetafSidManagementService($this->provideLoggedCuratorUser(), $session, $this->em, $service);
         $managementService->import($values);
-        Assert::count(3, $service->findAll(), 'imported CETAF sids');
+        Assert::count(4, $service->findAll(), 'imported CETAF sids');
 
         $this->runCommand(['command' => 'curator:resolveSpecimenPid', '--no-interaction' => true,], 'sid resolve broken');
 
-        Assert::count(3, $servicePhotos->findBy(['status'=>PhotosStatus::SPECIMEN_CONTROL_OK]), 'imported CETAF sids');
+        Assert::count(4, $servicePhotos->findBy(['status'=>PhotosStatus::SPECIMEN_CONTROL_OK]), 'imported CETAF sids');
 
     }
 
