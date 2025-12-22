@@ -65,10 +65,17 @@ class CetafSid
     protected(set) ?string $family = null;
     /**
      * CETAFSID:scientificNameOriginal
-     * dwc:previousIdentifications according to https://istc.cetaf.org/CETAF_Specimen_Preview_Profile_(CSPP), but IMHO dwc:verbatimIdentification more proper
+     * dwc:previousIdentifications
+     */
+    #[Column(nullable: true)]
+    protected(set) ?string $previousIdentifications = null;
+
+    /**
+     * dwc:verbatimIdentification
      */
     #[Column(nullable: true)]
     protected(set) ?string $verbatimIdentification = null;
+
     /**
      * CETAFSID:collectorNumber
      * dwc:fieldNumber
@@ -175,6 +182,12 @@ class CetafSid
     public function setVerbatimIdentification(?string $verbatimIdentification): CetafSid
     {
         $this->verbatimIdentification = $verbatimIdentification;
+        return $this;
+    }
+
+    public function setPreviousIdentifications(?string $previousIdentifications): CetafSid
+    {
+        $this->previousIdentifications = $previousIdentifications;
         return $this;
     }
 
