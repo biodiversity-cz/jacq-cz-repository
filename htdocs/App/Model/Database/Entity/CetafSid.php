@@ -35,7 +35,7 @@ class CetafSid
     #[Column(options: ['comment' => 'specimens identificator that allows match the repository photos'])]
     protected(set) string $barcode;
 
-    #[Column(unique: true, nullable: true, options: ['comment' => 'URI assigned via ark.biodiversity.cz'])]
+    #[Column(unique: true, nullable: true, options: ['comment' => 'stable URI assigned to the specimen'])]
     protected(set) ?string $stableUri;
 
     /**

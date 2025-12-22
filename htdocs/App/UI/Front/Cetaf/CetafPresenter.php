@@ -5,20 +5,21 @@ namespace App\UI\Front\Cetaf;
 use App\Services\EntityServices\CetaSidService;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\Responses\RedirectResponse;
+use Nette\Application\Responses\TextResponse;
 
 final class CetafPresenter extends UnsecuredPresenter
 {
 
     /** @inject */ public CetaSidService $cetafSidRepository;
 
-    public function actionSid(?int $id): void
+    public function actionSid(?string $id): void
     {
         if (empty($id)) {
             $this->redirect(':default');
         }
 
         $incomingUri = $this->getHttpRequest()->getUrl()->getAbsoluteUrl();
-        $specimen = $this->cetafSidRepository->findOneBy(['stableUri' => $incomingUri]);
+        $specimen = $this->cetafSidRepository->findOneBy(['barcode' => $id]);
 
         if ($specimen === null) {
             $this->error('Specimen not found');
@@ -30,13 +31,13 @@ final class CetafPresenter extends UnsecuredPresenter
         if (str_contains($acceptHeader, 'application/rdf+xml'))// || str_contains($acceptHeader, 'text/turtle') || str_contains($acceptHeader, 'application/ld+json'))
         {
             $this->sendResponse(new RedirectResponse(
-                $this->link(':data', ['id' => $id]),
+                $this->link(':data', ['id' => $specimen->id]),
                 303
             ));
         }
 
         $this->sendResponse(new RedirectResponse(
-            $this->link(':object', ['id' => $id]),
+            $this->link(':object', ['id' => $specimen->id]),
             303
         ));
     }
@@ -45,6 +46,8 @@ final class CetafPresenter extends UnsecuredPresenter
     {
         $spec = $this->cetafSidRepository->find($id);
         if (!$spec) {
+//            $this->getHttpResponse()->setCode(404);
+//            $this->sendResponse(new TextResponse('Specimen not found'));
             $this->error('Specimen not found', 404);
         }
         $this->template->specimen = $spec;

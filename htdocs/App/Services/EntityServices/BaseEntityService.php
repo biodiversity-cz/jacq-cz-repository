@@ -41,6 +41,11 @@ abstract class BaseEntityService
         return $this->repository->find($id);
     }
 
+    public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset =null): array
+    {
+        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
     public function getRepository()
     {
         return $this->repository;

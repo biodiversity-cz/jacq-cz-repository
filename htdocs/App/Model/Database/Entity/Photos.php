@@ -298,7 +298,11 @@ class Photos
         if ($externalDatabase->id === ExternalDatabase::JACQ) {
             return $baseurl . rawurlencode($this->getExpectedJacqPid());
         }
-        return $baseurl . $this->specimenId;
+        if ($externalDatabase->id === ExternalDatabase::INTERNAL) {
+            return $baseurl . strtoupper($this->herbarium->acronym) . '_' . $this->specimenId;
+        }
+
+        return $baseurl . $this->getFullSpecimenId();
     }
 
     public function setEmbargoTimeout(): Photos

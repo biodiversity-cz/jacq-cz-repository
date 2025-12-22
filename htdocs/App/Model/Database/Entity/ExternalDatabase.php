@@ -15,6 +15,8 @@ class ExternalDatabase
     use TId;
 
     public const int JACQ = 1;
+    public const int INTERNAL = 2;
+
     #[Column(type: Types::STRING, unique: true, nullable: false)]
     protected(set) string $name;
 

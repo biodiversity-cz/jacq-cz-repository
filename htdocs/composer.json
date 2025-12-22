@@ -18,6 +18,7 @@
     "ext-zip": "*",
     "ext-dom": "*",
     "ext-xmlwriter": "*",
+    "ext-gd": "*",
 
 		"nette/application": "^3",
 		"nette/bootstrap": "^3",
@@ -45,7 +46,7 @@
     "ublaboo/aws-sdk-nette-extension": "dev-master",
     "ublaboo/datagrid": "^v7",
     "yale-web-technologies/iiif-manifest-generator": "dev-develop",
-
+    "phpoffice/phpspreadsheet": "^5",
     "68publishers/asset": "^3",
     "68publishers/webpack-encore-bundle": "^3",
     "mk-j/php_xlsxwriter": "^0",
@@ -72,7 +73,8 @@
       "ext-imagick": "3",
       "ext-intl": "3",
       "ext-exif": "3",
-      "ext-zip": "3"
+      "ext-zip": "3",
+      "ext-gd": "3"
     },
 		"allow-plugins": {
 			"symfony/thanks": true,

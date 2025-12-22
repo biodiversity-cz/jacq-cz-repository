@@ -16,12 +16,10 @@ abstract class FixtureBase implements FixtureInterface, OrderedFixtureInterface,
 {
 
     protected Container $container;
-    protected LinkGenerator $linkGenerator;
 
     public function setContainer(Container $container): void
     {
         $this->container = $container;
-        $this->linkGenerator = $container->getByType(LinkGenerator::class);
     }
 
 }

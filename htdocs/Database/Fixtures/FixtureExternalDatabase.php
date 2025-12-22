@@ -26,7 +26,7 @@ class FixtureExternalDatabase extends FixtureBase
 
         $dbInternal = new ExternalDatabase()
             ->setName('biodiversity.cz')
-            ->setUrl($this->linkGenerator->link('Front:Cetaf:sid'))
+            ->setUrl('http://nginx:8080/cetaf/sid/')
             ->setElement('specimenID')
             ->setDescription('internal resolver');
         $manager->persist($dbInternal);

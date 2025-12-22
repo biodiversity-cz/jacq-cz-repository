@@ -69,7 +69,8 @@ final class SpecimenPidCallerService
     private function defaultHandler(Photos $entity, $response): void
     {
         $status = $response?->getStatusCode();
-        if ($status === 200 && $response) {
+        if (($status === 200 || $status === 303) && $response) {
+
             $entity->setSpecimenPid($entity->getSpecimenPidApiEndpoint());
             $entity->setStatus($this->em->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK));
             $entity->setLastEditAt();
