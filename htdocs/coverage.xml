@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<coverage generated="1766391263">
-  <project timestamp="1766391263">
-    <metrics packages="0" files="196" loc="13584" ncloc="12466" classes="185" methods="976" coveredmethods="289" statements="4820" coveredstatements="1034" elements="5796" coveredelements="1323" conditionals="0" coveredconditionals="0"/>
+<coverage generated="1766392668">
+  <project timestamp="1766392668">
+    <metrics packages="0" files="197" loc="13599" ncloc="12480" classes="186" methods="976" coveredmethods="289" statements="4809" coveredstatements="1034" elements="5785" coveredelements="1323" conditionals="0" coveredconditionals="0"/>
     <file name="/srv/App/Core/RouterFactory.php">
       <metrics loc="40" ncloc="40" classes="1" methods="3" coveredmethods="3" statements="10" coveredstatements="10" elements="13" coveredelements="13" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\Core" name="RouterFactory">
@@ -1689,10 +1689,39 @@
       </class>
     </file>
     <file name="/srv/App/UI/Front/Cetaf/CetafPresenter.php">
-      <metrics loc="63" ncloc="60" classes="1" methods="3" coveredmethods="0" statements="38" coveredstatements="0" elements="41" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <metrics loc="63" ncloc="60" classes="1" methods="3" coveredmethods="0" statements="27" coveredstatements="0" elements="30" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\UI\Front\Cetaf" name="CetafPresenter">
-        <metrics methods="3" coveredmethods="0" statements="38" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="41" coveredelements="0"/>
+        <metrics methods="3" coveredmethods="0" statements="27" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="30" coveredelements="0"/>
       </class>
+      <line num="16" type="stmt" count="0"/>
+      <line num="17" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="30" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="33" type="stmt" count="0"/>
+      <line num="34" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
+      <line num="39" type="stmt" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="47" type="stmt" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="61" type="stmt" count="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="9" type="stmt" count="1"/>
+      <line num="64" type="stmt" count="1"/>
     </file>
     <file name="/srv/App/UI/Front/Home/HomePresenter.php">
       <metrics loc="24" ncloc="23" classes="1" methods="2" coveredmethods="0" statements="3" coveredstatements="0" elements="5" coveredelements="0" conditionals="0" coveredconditionals="0"/>
@@ -1822,6 +1851,12 @@
       <metrics loc="71" ncloc="67" classes="1" methods="4" coveredmethods="0" statements="33" coveredstatements="0" elements="37" coveredelements="0" conditionals="0" coveredconditionals="0"/>
       <class namespace="App\UI\Admin\Herbarium" name="HerbariumPresenter">
         <metrics methods="4" coveredmethods="0" statements="33" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="37" coveredelements="0"/>
+      </class>
+    </file>
+    <file name="/srv/App/UI/Admin/Cetaf/CetafPresenter.php">
+      <metrics loc="15" ncloc="14" classes="1" methods="0" coveredmethods="0" statements="0" coveredstatements="0" elements="0" coveredelements="0" conditionals="0" coveredconditionals="0"/>
+      <class namespace="App\UI\Admin\Cetaf" name="CetafPresenter">
+        <metrics methods="0" coveredmethods="0" statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" elements="0" coveredelements="0"/>
       </class>
     </file>
     <file name="/srv/App/UI/Admin/Home/HomePresenter.php">

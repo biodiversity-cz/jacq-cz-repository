@@ -20,7 +20,7 @@ class FixtureHerbaria extends FixtureBase
     public function load(ObjectManager $manager): void
     {
         $license = $manager->getRepository(License::class)->findOneBy(['default' => true]);
-        $externalDb = $manager->getRepository(ExternalDatabase::class)->find(1);
+        $externalDb = $manager->getRepository(ExternalDatabase::class)->find(2);
         $herbariumTest = new Herbaria()
             ->setAcronym('TEST')
             ->setBucket('herbarium-test')

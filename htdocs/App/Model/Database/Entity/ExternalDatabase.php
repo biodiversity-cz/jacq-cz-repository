@@ -21,7 +21,7 @@ class ExternalDatabase
     #[Column(type: Types::STRING, unique: true, nullable: false)]
     protected(set) string $url;
 
-    #[Column(type: Types::STRING, unique: true, nullable: false)]
+    #[Column(type: Types::STRING, nullable: false)]
     protected(set) string $element;
 
     #[Column(type: Types::TEXT, nullable: true)]
