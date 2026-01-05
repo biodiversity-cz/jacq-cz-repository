@@ -1,7 +1,6 @@
 import 'bootstrap';
 import '@fortawesome/fontawesome-free/js/all'
 import './scss/index.scss';
-import '@contributte/datagrid/assets/datagrid'
 import regexValidation from "./js/settings";
 import importForm from "./js/import";
 import joinLinks from "./js/specimen";
@@ -9,8 +8,8 @@ import {initCopyButtons} from "./js/copyButton";
 import mirador from "./js/mirador";
 import setSettings from "./js/herbarium";
 
-import '@contributte/datagrid/assets/datagrid.css';
-import '@contributte/datagrid/assets/datagrid-spinners.css';
+import '@contributte/datagrid/dist/datagrid-full.css';
+import '@contributte/datagrid/dist/datagrid-full.js';
 import drawBoxplot from "./js/stats";
 
 document.addEventListener("DOMContentLoaded", function (event) {

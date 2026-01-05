@@ -31,7 +31,7 @@ final class SignPresenter extends UnsecuredPresenter
             if ($provider) {
                 // Get user entity
                 $userRepository = $this->entityManager->getRepository(User::class);
-                $userEntity = $userRepository->find($identity->getId());
+                $userEntity = $userRepository->find($identity->id);
 
                 if ($userEntity) {
                     // Get provider config

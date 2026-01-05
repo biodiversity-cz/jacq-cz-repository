@@ -91,17 +91,17 @@ final readonly class RepositoryConfiguration
 
     public function createS3Jp2Name(Photos $photo): string
     {
-        return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.jp2';
+        return $photo->getFullSpecimenId() . '_' . $photo->id . '.jp2';
     }
 
     public function createS3DatabotThumbName(Photos $photo): string
     {
-        return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.png';
+        return $photo->getFullSpecimenId() . '_' . $photo->id . '.png';
     }
 
     public function createS3TifName(Photos $photo): string
     {
-        return $photo->getFullSpecimenId() . '_' . $photo->getId() . '.tif';
+        return $photo->getFullSpecimenId() . '_' . $photo->id . '.tif';
     }
 
     protected function getEncodedIiifId(string $name): string

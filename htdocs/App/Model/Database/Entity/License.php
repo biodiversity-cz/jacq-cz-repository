@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity()]
+#[Entity]
 #[Table(name: 'license', options: ['comment' => 'Licenses available in the repository'])]
 class License
 {
@@ -16,23 +16,13 @@ class License
     use TId;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'acronym'])]
-    protected string $acronym;
+    protected(set) string $acronym;
 
     #[Column(type: Types::TEXT, unique: true, nullable: false, options: ['comment' => 'link to full text'])]
-    protected string $link;
+    protected(set) string $link;
 
     #[Column(name: 'is_default', type: 'boolean', nullable: false, options: ['default' => false])]
-    protected bool $default = false;
-
-    public function getAcronym(): string
-    {
-        return $this->acronym;
-    }
-
-    public function getLink(): string
-    {
-        return $this->link;
-    }
+    protected(set) bool $default = false;
 
     public function setAcronym(string $acronym): License
     {
@@ -45,19 +35,9 @@ class License
         $this->link = $link;
         return $this;
     }
-
-    public function isDefault(): bool
-    {
-        return $this->default;
-    }
-
     public function setDefault(bool $default): License
     {
         $this->default = $default;
         return $this;
     }
-
-
-
-
 }

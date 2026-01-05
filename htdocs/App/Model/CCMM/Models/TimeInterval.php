@@ -14,9 +14,9 @@ class TimeInterval implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?TimeInstant $beginningTimeInstant = null;
-    private ?TimeInstant $endTimeInstant = null;
-    private ?DateType $dateType = null;
+    protected(set) ?TimeInstant $beginningTimeInstant = null;
+    protected(set) ?TimeInstant $endTimeInstant = null;
+    protected(set) ?DateType $dateType = null;
 
     public function __construct() {
     }

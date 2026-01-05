@@ -14,8 +14,8 @@ class BoundingBox implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $lowerCorner = null;
-    private ?string $upperCorner = null;
+    protected(set) ?string $lowerCorner = null;
+    protected(set) ?string $upperCorner = null;
 
     public function __construct() {
     }

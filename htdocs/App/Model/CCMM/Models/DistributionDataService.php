@@ -15,12 +15,12 @@ class DistributionDataService implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private array $titles = [];
-    private ?AccessService $accessService = null;
-    private ?Specification $specification = null;
-    private ?Documentation $documentation = null;
-    private array $descriptions = [];
+    protected(set) ?string $iri = null;
+    protected(set) array $titles = [];
+    protected(set) ?AccessService $accessService = null;
+    protected(set) ?Specification $specification = null;
+    protected(set) ?Documentation $documentation = null;
+    protected(set) array $descriptions = [];
 
     public function __construct() {
     }

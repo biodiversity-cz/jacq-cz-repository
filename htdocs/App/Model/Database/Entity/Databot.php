@@ -23,41 +23,30 @@ class Databot
     use TCreatedAt;
 
     #[Column(nullable: false, options: ['comment' => 'Short name of Databot'])]
-    protected string $name;
+    protected(set) string $name;
 
     #[Column(type: Types::TEXT, length: 60000, unique: false, nullable: false)]
-    protected string $description;
+    protected(set) string $description;
 
     #[Column(nullable: false)]
-    protected int $version;
+    protected(set) int $version;
 
     #[Column(type: 'boolean', nullable: false, options: ['default' => true])]
-    protected bool $enabled = true;
+    protected(set) bool $enabled = true;
 
     #[Column(type: 'datetime', nullable: true)]
-    protected ?\DateTimeInterface $lastRun = null;
+    protected(set) ?\DateTimeInterface $lastRun = null;
 
     #[Column(
-        type: 'string',
         nullable: false,
         enumType: DatabotRole::class,
         options: ['default' => DatabotRole::VALIDATOR])]
-    protected DatabotRole $role = DatabotRole::VALIDATOR;
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
+    protected(set) DatabotRole $role = DatabotRole::VALIDATOR;
 
     public function setName(string $name): Databot
     {
         $this->name = $name;
         return $this;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
     }
 
     public function setDescription(string $description): Databot
@@ -66,20 +55,10 @@ class Databot
         return $this;
     }
 
-    public function getVersion(): int
-    {
-        return $this->version;
-    }
-
     public function setVersion(int $version): Databot
     {
         $this->version = $version;
         return $this;
-    }
-
-    public function isEnabled(): bool
-    {
-        return $this->enabled;
     }
 
     public function setEnabled(bool $enabled): Databot
@@ -88,20 +67,10 @@ class Databot
         return $this;
     }
 
-    public function getLastRun(): ?\DateTimeInterface
-    {
-        return $this->lastRun;
-    }
-
     public function setLastRun(?\DateTimeInterface $lastRun): Databot
     {
         $this->lastRun = $lastRun;
         return $this;
-    }
-
-    public function getRole(): DatabotRole
-    {
-        return $this->role;
     }
 
     public function setRole(DatabotRole $role): Databot

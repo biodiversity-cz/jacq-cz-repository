@@ -22,14 +22,10 @@ class UserHerbariumRole extends \App\Model\Database\Entity\UserHerbariumRole imp
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'herbarium' => [parent::class, 'herbarium', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'role' => [parent::class, 'role', null, 8],
-        "\0".'*'."\0".'user' => [parent::class, 'user', null, 8],
-        'herbarium' => [parent::class, 'herbarium', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'role' => [parent::class, 'role', null, 8],
-        'user' => [parent::class, 'user', null, 8],
+        'herbarium' => [parent::class, 'herbarium', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'role' => [parent::class, 'role', null, 8196],
+        'user' => [parent::class, 'user', null, 8196],
     ];
 
     public function __isInitialized(): bool

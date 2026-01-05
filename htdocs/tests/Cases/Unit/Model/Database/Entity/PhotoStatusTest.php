@@ -12,24 +12,22 @@ test('PhotosStatus entity basic getters/setters and TId trait', function (): voi
 
     // Nastavení a získání jména
     $status->setName('waiting');
-    Assert::same('waiting', $status->getName());
+    Assert::same('waiting', $status->name);
 
     // Nastavení a získání popisu
     $status->setDescription('Waiting for processing');
-    Assert::same('Waiting for processing', $status->getDescription());
+    Assert::same('Waiting for processing', $status->description);
 
     // Nastavení a získání barvy
     $status->setColor('primary');
-    Assert::same('primary', $status->getColor());
+    Assert::same('primary', $status->color);
 
     // Test traitu TId
     $refId = new \ReflectionProperty($status, 'id');
-    $refId->setAccessible(true);
 
     $refId->setValue($status, 123);
-    Assert::same(123, $status->getId());
+    Assert::same(123, $status->id);
 
     $clone = clone $status;
     Assert::null($refId->getValue($clone));
-    Assert::exception(fn() => $clone->getId(), \TypeError::class);
 });

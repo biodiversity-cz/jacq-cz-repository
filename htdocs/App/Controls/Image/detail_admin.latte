@@ -2,22 +2,22 @@
     <div class="card">
         <div class="row g-0">
             <div class="col-md-4">
-                {if $photo->getStatus()->getId() === 3 || $photo->getStatus()->getId() === 4}
+                {if $photo->status->id === 3 || $photo->status->id === 4}
                 <img
-                    src="{plink Import:databotThumbImage $photo->getId()}"
+                    src="{plink Import:databotThumbImage $photo->id}"
                     width="300px" class="img-fluid rounded-start">
                 {/if}
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">ID {$photo->getId()} <span class="fs-6">(see <a href="{plink Import:photo $photo->getId()}">more info</a>)</span></h5>
-                    <p class="card-text">W×H: {$photo->getWidth()}×{$photo->getHeight()}</p>
-                    <p class="card-text">Filesize: {$photo->getArchiveFileSize()|bytes:2}</p>
-                    <p class="card-text">Status: <span class="badge bg-{$photo->getStatus()->getColor()}">{$photo->getStatus()->getName()}</span> </p>
+                    <h5 class="card-title">ID {$photo->id} <span class="fs-6">(see <a href="{plink Import:photo $photo->id}">more info</a>)</span></h5>
+                    <p class="card-text">W×H: {$photo->width}×{$photo->height}</p>
+                    <p class="card-text">Filesize: {$photo->archiveFileSize|bytes:2}</p>
+                    <p class="card-text">Status: <span class="badge bg-{$photo->status->color}">{$photo->status->name}</span> </p>
 <!--                    TODO error message a výraznější head pro chybné -->
-                    <p class="card-text">Type: <span class="badge bg-{$photo->getType()->getColor()}">{$photo->getType()->getName()}</span> </p>
+                    <p class="card-text">Type: <span class="badge bg-{$photo->type->color}">{$photo->type->name}</span> </p>
                     <p class="card-text"><small class="text-muted">Created at
-                        {$photo->getCreatedAt()|localDate}</small></p>
+                        {$photo->createdAt|localDate}</small></p>
                 </div>
             </div>
         </div>

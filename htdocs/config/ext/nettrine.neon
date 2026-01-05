@@ -2,7 +2,6 @@ extensions:
     nettrine.dbal: Nettrine\DBAL\DI\DbalExtension(%debugMode%)
     nettrine.orm: Nettrine\ORM\DI\OrmExtension
 
-    nettrine.cache: Nettrine\Cache\DI\CacheExtension
     nettrine.migrations: Nettrine\Migrations\DI\MigrationsExtension
     nettrine.fixtures: Nettrine\Fixtures\DI\FixturesExtension
 

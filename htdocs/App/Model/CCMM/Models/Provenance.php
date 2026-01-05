@@ -14,7 +14,7 @@ class Provenance implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $description = null;
+    protected(set) ?string $description = null;
 
     public function __construct() {
     }
@@ -37,8 +37,8 @@ class Provenance implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'provenance');
 
-        if ($this->getDescription() !== null) {
-            $element->textContent = $this->getDescription();
+        if ($this->description !== null) {
+            $element->textContent = $this->description;
         }
 
         return $element;

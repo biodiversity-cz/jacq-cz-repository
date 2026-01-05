@@ -14,8 +14,8 @@ class EndpointUrl implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private ?string $title = null;
+    protected(set) ?string $iri = null;
+    protected(set) ?string $title = null;
 
     public function __construct() {
     }

@@ -48,10 +48,10 @@ class ManifestFactory
             ->setViewingDirection(ViewingDirection::LEFT_TO_RIGHT)
             ->addThumbnail($this->createThumbnail())
             ->addSequence($this->createSequence())
-            ->addAttribution($specimen->getHerbarium()->getLicense()->getLink());
+            ->addAttribution($specimen->herbarium->license->link);
 
-        if ($specimen->getHerbarium()->getLogo() !== null) {
-            $manifest->addLogo((new Logo())->setID($specimen->getHerbarium()->getLogo()));
+        if ($specimen->herbarium->logo !== null) {
+            $manifest->addLogo((new Logo())->setID($specimen->herbarium->logo));
         }
 
         return $manifest;
@@ -62,7 +62,7 @@ class ManifestFactory
         $photo = $this->getFirstImage();
         $thumbnail = new Thumbnail();
         $thumbnail
-            ->setID($this->repositoryConfiguration->getImageServerUrlThumbnail($photo->getJp2Filename()))
+            ->setID($this->repositoryConfiguration->getImageServerUrlThumbnail($photo->jp2Filename))
             ->setService($this->createService($photo));
 
         return $thumbnail;
@@ -72,7 +72,7 @@ class ManifestFactory
     {
         $service = new Service();
         $service
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->getJp2Filename()))
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename))
             ->setProfile('http://iiif.io/api/image/2/level2.json');
 
         return $service;
@@ -116,12 +116,12 @@ class ManifestFactory
     {
         $canvas = new Canvas();
         $metadata = new Metadata();
-        $metadata->addLabelValue('Archive Master file (TIFF)', "<a href='" . $this->linkGenerator->link('Front:Repository:archiveImage', [$photo->getId()]) . "'>download original</a>");
+        $metadata->addLabelValue('Archive Master file (TIFF)', "<a href='" . $this->linkGenerator->link('Front:Repository:archiveImage', [$photo->id]) . "'>download original</a>");
         $canvas
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->getJp2Filename()) . '#canvas')
-            ->addLabel($photo->getJp2Filename())
-            ->setWidth($photo->getWidth())
-            ->setHeight($photo->getHeight())
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename) . '#canvas')
+            ->addLabel($photo->jp2Filename)
+            ->setWidth($photo->width)
+            ->setHeight($photo->height)
             ->setMetadata($metadata)
             ->addImage($this->createAnnotation($photo));
 
@@ -132,17 +132,17 @@ class ManifestFactory
     {
         $content = new Content();
         $content
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->getJp2Filename()))
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename))
             ->setType(DCType::IMAGE)
             ->setFormat('image/jp2')
-            ->setWidth($photo->getWidth())
-            ->setHeight($photo->getHeight())
+            ->setWidth($photo->width)
+            ->setHeight($photo->height)
             ->addService($this->createService($photo));
 
         $annotation = new Annotation();
         $annotation
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->getJp2Filename()) . '#image')
-            ->setOn($this->repositoryConfiguration->getImageServerInfoUrl($photo->getJp2Filename()) . '#canvas')
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename) . '#image')
+            ->setOn($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename) . '#canvas')
             ->setContent($content);
 
         return $annotation;

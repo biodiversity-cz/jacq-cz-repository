@@ -30,8 +30,8 @@ final class ReportPresenter extends SecuredPresenter
         }
 
         $contentType = 'text/html; charset=UTF-8';
-        if (isset($http_response_header)) {
-            foreach ($http_response_header as $header) {
+        if (http_get_last_response_headers() !== null) {
+            foreach (http_get_last_response_headers() as $header) {
                 if (stripos($header, 'Content-Type:') === 0) {
                     $contentType = trim(substr($header, strlen('Content-Type:')));
                     break;

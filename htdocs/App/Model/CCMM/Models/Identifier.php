@@ -14,9 +14,9 @@ class Identifier implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private ?string $value = null;
-    private ?IdentifierScheme $scheme = null;
+    protected(set) ?string $iri = null;
+    protected(set) ?string $value = null;
+    protected(set) ?IdentifierScheme $scheme = null;
 
     public function __construct() {
     }

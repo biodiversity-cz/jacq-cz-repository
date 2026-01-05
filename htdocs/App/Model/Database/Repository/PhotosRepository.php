@@ -46,9 +46,14 @@ class PhotosRepository extends AbstractRepository
         return $this->createQueryBuilder('p')->andWhere('p.herbarium = :userHerbarium  OR :isAdmin = true')->setParameter('userHerbarium', $user->getIdentity()->getCurrentHerbariumId())->setParameter('isAdmin', $user->isInRole('ROLE_ADMIN'));
     }
 
-    public function getPublishedPhotosDatasource(): QueryBuilder
+    public function getAllPublishedPhotosDatasource(): QueryBuilder
     {
         return $this->createQueryBuilder('p')->andWhere('p.status = :publicStatus')->setParameter('publicStatus' , PhotosStatus::PUBLISHED);
+    }
+
+    public function getPublishablePhotosDatasource(User $user): QueryBuilder
+    {
+        return $this->getDefaultDatasource($user)->andWhere('p.status = :status')->setParameter('status' , PhotosStatus::SPECIMEN_CONTROL_OK);
     }
 
     /**
@@ -56,7 +61,7 @@ class PhotosRepository extends AbstractRepository
      */
     public function getPublicPhotosOfSpecimen(Specimen $specimen): array
     {
-        return $this->findBy(['specimenId' => $specimen->getNumericPartOfId(), 'herbarium' => $specimen->getHerbarium(), 'status' => PhotosStatus::PASSED_PUBLIC]);
+        return $this->findBy(['specimenId' => $specimen->numericPartOfId, 'herbarium' => $specimen->herbarium, 'status' => PhotosStatus::PASSED_PUBLIC]);
     }
 
     public function getPublicPhoto(int $id): ?Photos
@@ -93,7 +98,7 @@ class PhotosRepository extends AbstractRepository
      */
     public function getAllPhotosOfSpecimen(User $user, Specimen $specimen): array
     {
-        $qb = $this->getDefaultDatasource($user)->andWhere('p.specimenId = :specimenId')->setParameter('specimenId', $specimen->getNumericPartOfId());
+        $qb = $this->getDefaultDatasource($user)->andWhere('p.specimenId = :specimenId')->setParameter('specimenId', $specimen->numericPartOfId);
 
         return $qb->getQuery()->getResult();
     }

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity()]
+#[Entity]
 #[Table(name: 'import_error', options: ['comment' => 'Errors that occur during the import'])]
 // phpcs:disable SlevomatCodingStandard.Classes.SuperfluousErrorNaming.SuperfluousSuffix
 class ImportError
@@ -22,36 +22,27 @@ class ImportError
 
     #[OneToOne(targetEntity: Photos::class)]
     #[JoinColumn(name: 'photo_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE', options: ['comment' => 'photo to which this error belongs'])]
-    protected Photos $photo;
+    protected(set) Photos $photo;
 
     #[ManyToOne(targetEntity: Photos::class)]
     #[JoinColumn(name: 'duplicate_id', referencedColumnName: 'id', unique: false, nullable: true, options: ['comment' => 'already imported photo to which is this probably duplicity'])]
-    protected ?Photos $duplicateTo;
+    protected(set) ?Photos $duplicateTo;
 
     #[Column(type: Types::BLOB, nullable: true, options: ['comment' => 'Thumbnail during import phase'])]
-    protected mixed $thumbnail;
+    protected(set) mixed $thumbnail;
 
     #[Column(type: Types::TEXT, length: 60000, unique: false, nullable: false, options: ['comment' => 'description fo the error'])]
-    protected string $message = '';
+    protected(set) string $message = '';
 
     #[Column(type: Types::TEXT, length: 60000, unique: false, nullable: true, options: ['comment' => 'barcode detected in the image'])]
-    protected ?string $barcodes;
+    protected(set) ?string $barcodes;
 
-    public function getPhoto(): Photos
-    {
-        return $this->photo;
-    }
 
     public function setPhoto(Photos $photo): ImportError
     {
         $this->photo = $photo;
 
         return $this;
-    }
-
-    public function getDuplicateTo(): ?Photos
-    {
-        return $this->duplicateTo;
     }
 
     public function setDuplicateTo(?Photos $duplicateTo): ImportError
@@ -61,10 +52,6 @@ class ImportError
         return $this;
     }
 
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
 
     public function setMessage(string $message): ImportError
     {
@@ -73,21 +60,11 @@ class ImportError
         return $this;
     }
 
-    public function getBarcodes(): ?string
-    {
-        return $this->barcodes;
-    }
-
     public function setBarcodes(?string $barcodes): ImportError
     {
         $this->barcodes = $barcodes;
 
         return $this;
-    }
-
-    public function getThumbnail(): mixed
-    {
-        return $this->thumbnail;
     }
 
     public function setThumbnail(mixed $thumbnail): ImportError

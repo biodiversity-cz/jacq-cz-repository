@@ -9,6 +9,7 @@ use App\Services\RepositoryConfiguration;
 use App\Services\TempDir;
 use Mockery;
 use Tester\Assert;
+use Tests\Toolkit\PhotoTestFactory;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
@@ -54,28 +55,28 @@ test('RepositoryConfiguration - basic config directives', function (): void {
 test('RepositoryConfiguration::createS3Jp2Name returns correct filename', function (): void {
 
     $service = createClassMock();
-    $photo = createPhotoMock();
+    $photo = PhotoTestFactory::minimal();
     $filename = $service->createS3Jp2Name($photo);
 
-    Assert::same('TEST_00005_54.jp2', $filename);
+    Assert::same('TEST_000005_1.jp2', $filename);
 });
 
 test('RepositoryConfiguration::createS3DatabotThumbName returns correct filename', function (): void {
 
     $service = createClassMock();
-    $photo = createPhotoMock();
+    $photo = PhotoTestFactory::minimal();
     $filename = $service->createS3DatabotThumbName($photo);
 
-    Assert::same('TEST_00005_54.png', $filename);
+    Assert::same('TEST_000005_1.png', $filename);
 });
 
 test('RepositoryConfiguration::createS3TifName returns correct filename', function (): void {
 
     $service = createClassMock();
-    $photo = createPhotoMock();
+    $photo = PhotoTestFactory::minimal();
     $filename = $service->createS3TifName($photo);
 
-    Assert::same('TEST_00005_54.tif', $filename);
+    Assert::same('TEST_000005_1.tif', $filename);
 });
 
 test('RepositoryConfiguration throws exception for missing key', function (): void {
@@ -89,14 +90,6 @@ test('RepositoryConfiguration throws exception for missing key', function (): vo
         'Archive bucket not set.'
     );
 });
-
-function createPhotoMock(string $specimenId = 'TEST_00005', int $photoId = 54): Photos
-{
-    $photo = Mockery::mock(Photos::class);
-    $photo->shouldReceive('getFullSpecimenId')->andReturn($specimenId);
-    $photo->shouldReceive('getId')->andReturn($photoId);
-    return $photo;
-}
 
 function createClassMock(): RepositoryConfiguration
 {

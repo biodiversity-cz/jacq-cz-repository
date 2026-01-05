@@ -16,23 +16,23 @@ test('Contact entity getters, setters and traits', function (): void {
 
 // test set/get name
     $contact->setName('Jan');
-    Assert::equal('Jan', $contact->getName());
+    Assert::equal('Jan', $contact->name);
 
 // test set/get surname
     $contact->setSurname('Novák');
-    Assert::equal('Novák', $contact->getSurname());
+    Assert::equal('Novák', $contact->surname);
 
 // test set/get description
     $contact->setDescription('Curator');
-    Assert::equal('Curator', $contact->getDescription());
+    Assert::equal('Curator', $contact->description);
 
 // test set/get email
     $contact->setEmail('jan.novak@example.com');
-    Assert::equal('jan.novak@example.com', $contact->getEmail());
+    Assert::equal('jan.novak@example.com', $contact->email);
 
 // test set/get herbarium
     $contact->setHerbarium($herbarium);
-    Assert::same($herbarium, $contact->getHerbarium());
+    Assert::same($herbarium, $contact->herbarium);
 
 // test getFullname
     Assert::equal('Jan Novák', $contact->getFullname());

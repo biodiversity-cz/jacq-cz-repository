@@ -14,8 +14,8 @@ class TimeReference implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?TimeInstant $timeInstant = null;
-    private ?TimeInterval $timeInterval = null;
+    protected(set) ?TimeInstant $timeInstant = null;
+    protected(set) ?TimeInterval $timeInterval = null;
 
     public function __construct() {
     }

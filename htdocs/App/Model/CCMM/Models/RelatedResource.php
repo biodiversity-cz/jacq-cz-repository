@@ -14,11 +14,11 @@ class RelatedResource implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private ?string $title = null;
-    private ?string $resourceUrl = null;
-    private ?ResourceType $resourceType = null;
-    private ?ResourceRelationType $resourceRelationType = null;
+    protected(set) ?string $iri = null;
+    protected(set) ?string $title = null;
+    protected(set) ?string $resourceUrl = null;
+    protected(set) ?ResourceType $resourceType = null;
+    protected(set) ?ResourceRelationType $resourceRelationType = null;
 
     public function __construct() {
     }

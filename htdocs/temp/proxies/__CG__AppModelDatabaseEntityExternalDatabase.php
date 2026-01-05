@@ -22,16 +22,11 @@ class ExternalDatabase extends \App\Model\Database\Entity\ExternalDatabase imple
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'description' => [parent::class, 'description', null, 8],
-        "\0".'*'."\0".'element' => [parent::class, 'element', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'name' => [parent::class, 'name', null, 8],
-        "\0".'*'."\0".'url' => [parent::class, 'url', null, 8],
-        'description' => [parent::class, 'description', null, 8],
-        'element' => [parent::class, 'element', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'name' => [parent::class, 'name', null, 8],
-        'url' => [parent::class, 'url', null, 8],
+        'description' => [parent::class, 'description', null, 8196],
+        'element' => [parent::class, 'element', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'name' => [parent::class, 'name', null, 8196],
+        'url' => [parent::class, 'url', null, 8196],
     ];
 
     public function __isInitialized(): bool

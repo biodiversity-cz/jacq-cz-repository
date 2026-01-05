@@ -56,8 +56,8 @@ final class DublinCoreFormat implements MetadataFormatInterface
             'Herbarium specimen ' . $item->getFullSpecimenId());
 
         // dc:creator - Herbarium name
-        if ($item->getHerbarium()->getFullname()) {
-            $this->addElement($doc, $dc, 'dc:creator', $item->getHerbarium()->getFullname());
+        if ($item->herbarium->fullname) {
+            $this->addElement($doc, $dc, 'dc:creator', $item->herbarium->fullname);
         }
 
         // dc:subject - Type and general classification
@@ -69,34 +69,34 @@ final class DublinCoreFormat implements MetadataFormatInterface
         $description = sprintf(
             'Digital image of herbarium specimen %s from %s. ',
             $item->getFullSpecimenId(),
-            $item->getHerbarium()->getAcronym()
+            $item->herbarium->acronym
         );
 
-        if ($item->getWidth() && $item->getHeight()) {
+        if ($item->width && $item->height) {
             $description .= sprintf('Image dimensions: %dx%d pixels. ',
-                $item->getWidth(), $item->getHeight());
+                $item->width, $item->height);
         }
 
-        if ($item->getOriginalFilename()) {
-            $description .= sprintf('Original filename: %s. ', $item->getOriginalFilename());
+        if ($item->originalFilename) {
+            $description .= sprintf('Original filename: %s. ', $item->originalFilename);
         }
 
         $this->addElement($doc, $dc, 'dc:description', trim($description));
 
         // dc:publisher - Herbarium as publisher
-        $publisher = $item->getHerbarium()->getFullname() ?? $item->getHerbarium()->getAcronym();
+        $publisher = $item->herbarium->fullname ?? $item->herbarium->acronym;
         $this->addElement($doc, $dc, 'dc:publisher', $publisher);
 
         // dc:contributor - Same as publisher for now
         $this->addElement($doc, $dc, 'dc:contributor', $publisher);
 
         // dc:date - Creation and modification dates
-        if ($item->getCreatedAt()) {
-            $this->addElement($doc, $dc, 'dc:date', $item->getCreatedAt()->format('Y-m-d'));
+        if ($item->createdAt) {
+            $this->addElement($doc, $dc, 'dc:date', $item->createdAt->format('Y-m-d'));
         }
 
-        if ($item->getLastEditAt() && $item->getLastEditAt() != $item->getCreatedAt()) {
-            $this->addElement($doc, $dc, 'dc:date', $item->getLastEditAt()->format('Y-m-d'));
+        if ($item->lastEdit && $item->lastEdit != $item->createdAt) {
+            $this->addElement($doc, $dc, 'dc:date', $item->lastEdit->format('Y-m-d'));
         }
 
         // dc:type - Resource type
@@ -105,7 +105,7 @@ final class DublinCoreFormat implements MetadataFormatInterface
 
         // dc:format - MIME types and file formats
         $this->addElement($doc, $dc, 'dc:format', 'image/tiff'); // Archive format
-        if ($item->getJp2Filename()) {
+        if ($item->jp2Filename) {
             $this->addElement($doc, $dc, 'dc:format', 'image/jp2'); // JP2 format
         }
 
@@ -115,29 +115,29 @@ final class DublinCoreFormat implements MetadataFormatInterface
         $this->addElement($doc, $dc, 'dc:identifier', $item->getFullSpecimenId());
 
         // dc:source - Archive filename if available
-        if ($item->getArchiveFilename()) {
-            $this->addElement($doc, $dc, 'dc:source', $item->getArchiveFilename());
+        if ($item->archiveFilename) {
+            $this->addElement($doc, $dc, 'dc:source', $item->archiveFilename);
         }
 
         // dc:language - Default to Latin for botanical specimens
         $this->addElement($doc, $dc, 'dc:language', 'lat');
 
         // dc:relation - IIIF manifest and image server URLs
-        if ($item->getJp2Filename()) {
-            $iiifUrl = $this->repositoryConfig->getImageServerInfoUrl($item->getJp2Filename());
+        if ($item->jp2Filename) {
+            $iiifUrl = $this->repositoryConfig->getImageServerInfoUrl($item->jp2Filename);
             $this->addElement($doc, $dc, 'dc:relation', $iiifUrl);
 
-            $thumbnailUrl = $this->repositoryConfig->getImageServerUrlThumbnail($item->getJp2Filename());
+            $thumbnailUrl = $this->repositoryConfig->getImageServerUrlThumbnail($item->jp2Filename);
             $this->addElement($doc, $dc, 'dc:relation', $thumbnailUrl);
         }
 
         // dc:coverage - Geographic coverage from herbarium
-        if ($item->getHerbarium()->getAddress()) {
-            $this->addElement($doc, $dc, 'dc:coverage', $item->getHerbarium()->getAddress());
+        if ($item->herbarium->address) {
+            $this->addElement($doc, $dc, 'dc:coverage', $item->herbarium->address);
         }
 
         // dc:rights - License information
-        $license = $item->getHerbarium()->getLicense();
+        $license = $item->herbarium->license;
         if ($license) {
             // Assuming License entity has appropriate methods - adjust as needed
             $this->addElement($doc, $dc, 'dc:rights', 'Licensed content');

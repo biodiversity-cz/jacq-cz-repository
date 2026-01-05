@@ -14,7 +14,7 @@ class OriginalRepository implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
+    protected(set) ?string $iri = null;
 
     public function __construct() {
     }

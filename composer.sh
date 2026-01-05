@@ -9,5 +9,7 @@ if [ $# -eq 0 ]; then
 
 docker run --rm --interactive --tty \
   --volume $PWD/htdocs:/app \
+  --volume $HOME/.composer:/tmp \
+   -e COMPOSER_HOME=/tmp \
    -u $(id -u ${USER}):$(id -g ${USER}) \
   composer:2 composer $COMMAND

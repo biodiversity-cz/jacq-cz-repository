@@ -34,7 +34,7 @@ abstract class SecuredPresenter extends BasePresenter
         $identity = $this->user->getIdentity();
 
 
-        $this->userEntity = $this->userService->find($identity->getId());
+        $this->userEntity = $this->userService->find($identity->id);
         if ($identity->getCurrentHerbariumId() !== null) {
             $this->herbarium = $this->herbariumService->find($identity->getCurrentHerbariumId());
             $this->template->herbarium = $this->herbarium;

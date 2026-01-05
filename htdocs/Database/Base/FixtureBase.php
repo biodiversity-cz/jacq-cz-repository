@@ -6,6 +6,8 @@ namespace Database\Base;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Nette\Application\LinkGenerator;
 use Nette\DI\Container;
 use Nettrine\Fixtures\Fixture\ContainerAwareInterface;
 

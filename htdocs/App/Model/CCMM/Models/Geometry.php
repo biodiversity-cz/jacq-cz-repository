@@ -14,8 +14,8 @@ class Geometry implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $gml = null;
-    private ?Wkt $wkt = null;
+    protected(set) ?string $gml = null;
+    protected(set) ?Wkt $wkt = null;
 
     public function __construct() {
     }

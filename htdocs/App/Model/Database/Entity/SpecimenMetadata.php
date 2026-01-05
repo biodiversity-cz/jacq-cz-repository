@@ -20,44 +20,34 @@ class SpecimenMetadata
     use TCreatedAt;
 
     #[Column(nullable: true)]
-    private ?string $pid = null;
+    protected(set) ?string $pid = null;
 
     #[Column(nullable: true)]
-    private ?string $family = null;
+    protected(set) ?string $family = null;
 
     #[Column(nullable: true)]
-    private ?string $taxon = null;
+    protected(set) ?string $taxon = null;
 
     #[Column(nullable: true)]
-    private ?string $country = null;
+    protected(set) ?string $country = null;
 
     #[Column(nullable: true)]
-    private ?float $lat = null;
+    protected(set) ?float $lat = null;
 
     #[Column( nullable: true)]
-    private ?float $lon = null;
+    protected(set) ?float $lon = null;
 
     #[Column(nullable: true)]
-    private ?string $collection = null;
+    protected(set) ?string $collection = null;
 
     #[ManyToOne(targetEntity: Photos::class, inversedBy: 'specimenMetadata')]
     #[JoinColumn(name: 'photo_id', referencedColumnName: 'id', nullable: true)]
-    private ?Photos $photo = null;
-
-    public function getPid(): ?string
-    {
-        return $this->pid;
-    }
+    protected(set) ?Photos $photo = null;
 
     public function setPid(?string $pid): SpecimenMetadata
     {
         $this->pid = $pid;
         return $this;
-    }
-
-    public function getFamily(): ?string
-    {
-        return $this->family;
     }
 
     public function setFamily(?string $family): SpecimenMetadata
@@ -66,20 +56,10 @@ class SpecimenMetadata
         return $this;
     }
 
-    public function getTaxon(): ?string
-    {
-        return $this->taxon;
-    }
-
     public function setTaxon(?string $taxon): SpecimenMetadata
     {
         $this->taxon = $taxon;
         return $this;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->country;
     }
 
     public function setCountry(?string $country): SpecimenMetadata
@@ -88,20 +68,10 @@ class SpecimenMetadata
         return $this;
     }
 
-    public function getLat(): ?string
-    {
-        return $this->lat;
-    }
-
     public function setLat(?string $lat): SpecimenMetadata
     {
         $this->lat = $lat;
         return $this;
-    }
-
-    public function getLon(): ?string
-    {
-        return $this->lon;
     }
 
     public function setLon(?string $lon): SpecimenMetadata
@@ -110,20 +80,10 @@ class SpecimenMetadata
         return $this;
     }
 
-    public function getCollection(): ?string
-    {
-        return $this->collection;
-    }
-
     public function setCollection(?string $collection): SpecimenMetadata
     {
         $this->collection = $collection;
         return $this;
-    }
-
-    public function getPhoto(): ?Photos
-    {
-        return $this->photo;
     }
 
     public function setPhoto(?Photos $photo): SpecimenMetadata

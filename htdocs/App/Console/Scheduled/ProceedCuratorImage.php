@@ -50,7 +50,7 @@ class ProceedCuratorImage extends Command
                 continue;
             }
             //multiply when needed
-            if ($photoProcessed->getHerbarium()->hasMultipleBarcodeMultiplier() && !empty($photoProcessed->getMultiplier()?->getBarcodes())) {
+            if ($photoProcessed->herbarium->multipleBarcodeMultiplier && !empty($photoProcessed->multiplier?->barcodes)) {
                 try {
                     $this->proceedMultiplier($output, $photoProcessed);
                 } catch (ImportStageException $e) {
@@ -83,16 +83,16 @@ class ProceedCuratorImage extends Command
         }
 
         try {
-            $output->write("\n filename: s3://" . $photo->getHerbarium()->getBucket() . '/' . $photo->getOriginalFilename() . "\n");
+            $output->write("\n filename: s3://" . $photo->herbarium->bucket . '/' . $photo->originalFilename . "\n");
             $photo = $this->prepareImportMessagesStorage($photo);
 
             $this->curatorFacade->importNewFilesPipeline()->process($photo);
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_OK));
-            $this->entityManager->remove($photo->getError());
+            $this->entityManager->remove($photo->error);
             $photo->removeImportError();
         } catch (ImportStageException $e) {
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_ERROR));
-            $photo->getError()->setMessage($e->getMessage());
+            $photo->error->setMessage($e->getMessage());
             $output->write("\n ERROR: " . $e->getMessage() . "\n");
             //mainPhoto did not succeeded,
             $this->entityManager->flush();
@@ -147,10 +147,10 @@ class ProceedCuratorImage extends Command
 
         foreach ($newItems as $newItem) {
             try {
-                $output->write("\n multiply from ID " . $mainPhoto->getId() . " into ID " . $newItem->getId() . "\n");
+                $output->write("\n multiply from ID " . $mainPhoto->id . " into ID " . $newItem->id . "\n");
                 $this->curatorFacade->importMultiplierPipeline()->process($newItem);
                 $newItem->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_OK));
-                $this->entityManager->remove($newItem->getError());
+                $this->entityManager->remove($newItem->error);
                 $newItem->removeImportError();
             } catch (DuplicityStageException $e) {
                 $this->entityManager->remove($newItem);

@@ -16,18 +16,14 @@ class Maintenance
     use TId;
 
     #[Column(nullable: false)]
-    protected string $message = '';
+    protected(set) string $message = '';
 
     #[Column(nullable: false, options: ['default' => 'info','comment' => 'success | info | warning | danger = Bootstrap contextual classes'])]
-    protected string $type = 'info';
+    protected(set) string $type = 'info';
 
     #[Column(type: 'datetime_immutable', nullable: true, options: ['comment' => 'The message will be hidden when expired'])]
-    protected ?\DateTimeImmutable $expiresAt = null;
+    protected(set) ?\DateTimeImmutable $expiresAt = null;
 
-    public function getMessage(): string
-    {
-        return $this->message;
-    }
 
     public function setMessage(string $message): Maintenance
     {
@@ -44,11 +40,6 @@ class Maintenance
     {
         $this->type = $type;
         return $this;
-    }
-
-    public function getExpiresAt(): ?\DateTimeImmutable
-    {
-        return $this->expiresAt;
     }
 
     public function setExpiresAt(?\DateTimeImmutable $expiresAt): Maintenance

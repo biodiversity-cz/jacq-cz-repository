@@ -22,20 +22,13 @@ class DatabotResult extends \App\Model\Database\Entity\DatabotResult implements 
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'createdAt' => [parent::class, 'createdAt', null, 8],
-        "\0".'*'."\0".'databot' => [parent::class, 'databot', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'message' => [parent::class, 'message', null, 8],
-        "\0".'*'."\0".'photo' => [parent::class, 'photo', null, 8],
-        "\0".'*'."\0".'resultData' => [parent::class, 'resultData', null, 8],
-        "\0".'*'."\0".'status' => [parent::class, 'status', null, 8],
-        'createdAt' => [parent::class, 'createdAt', null, 8],
-        'databot' => [parent::class, 'databot', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'message' => [parent::class, 'message', null, 8],
-        'photo' => [parent::class, 'photo', null, 8],
-        'resultData' => [parent::class, 'resultData', null, 8],
-        'status' => [parent::class, 'status', null, 8],
+        'createdAt' => [parent::class, 'createdAt', null, 8196],
+        'databot' => [parent::class, 'databot', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'message' => [parent::class, 'message', null, 8196],
+        'photo' => [parent::class, 'photo', null, 8196],
+        'resultData' => [parent::class, 'resultData', null, 8196],
+        'status' => [parent::class, 'status', null, 8196],
     ];
 
     public function __isInitialized(): bool

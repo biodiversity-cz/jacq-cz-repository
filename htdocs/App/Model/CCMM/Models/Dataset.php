@@ -14,31 +14,31 @@ class Dataset implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private ?MetadataIdentification $metadataIdentification = null;
-    private array $identifiers = [];
-    private ?string $version = null;
-    private ?string $title = null;
-    private array $alternateTitles = [];
-    private array $qualifiedRelations = [];
-    private ?int $publicationYear = null;
-    private array $timeReferences = [];
-    private ?ResourceType $resourceType = null;
-    private ?string $primaryLanguage = null;
-    private array $otherLanguages = [];
-    private ?TermsOfUse $termsOfUse = null;
-    private array $subjects = [];
-    private array $descriptions = [];
-    private array $locations = [];
-    private array $fundingReferences = [];
+    protected(set) ?string $iri = null;
+    protected(set) ?MetadataIdentification $metadataIdentification = null;
+    protected(set) array $identifiers = [];
+    protected(set) ?string $version = null;
+    protected(set) ?string $title = null;
+    protected(set) array $alternateTitles = [];
+    protected(set) array $qualifiedRelations = [];
+    protected(set) ?int $publicationYear = null;
+    protected(set) array $timeReferences = [];
+    protected(set) ?ResourceType $resourceType = null;
+    protected(set) ?string $primaryLanguage = null;
+    protected(set) array $otherLanguages = [];
+    protected(set) ?TermsOfUse $termsOfUse = null;
+    protected(set) array $subjects = [];
+    protected(set) array $descriptions = [];
+    protected(set) array $locations = [];
+    protected(set) array $fundingReferences = [];
     /**
      * the Funding structure is overcomplicated for herbaria purposes, allow storing XL fragment to create OAI-PMH in case of Funding
      */
-    private ?string $fundingReferencesRaw = null;
-    private array $relatedResources = [];
-    private array $distributions = [];
-    private ?ValidationResult $validationResult = null;
-    private ?Provenance $provenance = null;
+    protected(set) ?string $fundingReferencesRaw = null;
+    protected(set) array $relatedResources = [];
+    protected(set) array $distributions = [];
+    protected(set) ?ValidationResult $validationResult = null;
+    protected(set) ?Provenance $provenance = null;
 
     public function __construct() {
     }
@@ -323,8 +323,8 @@ class Dataset implements XmlSerializable
             $element->appendChild($identifierElement);
         }
 
-        if ($this->getVersion() !== null) {
-            $versionElement = $this->createElement($document, 'version', $this->getVersion());
+        if ($this->version !== null) {
+            $versionElement = $this->createElement($document, 'version', $this->version);
             $element->appendChild($versionElement);
         }
 

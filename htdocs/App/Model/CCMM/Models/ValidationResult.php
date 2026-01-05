@@ -14,7 +14,7 @@ class ValidationResult implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $result = null;
+    protected(set) ?string $result = null;
 
     public function __construct() {
     }

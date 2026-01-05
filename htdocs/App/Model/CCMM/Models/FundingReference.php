@@ -14,11 +14,11 @@ class FundingReference implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private ?string $localIdentifier = null;
-    private ?string $awardTitle = null;
-    private ?string $fundingProgram = null;
-    private ?Funder $funder = null;
+    protected(set) ?string $iri = null;
+    protected(set) ?string $localIdentifier = null;
+    protected(set) ?string $awardTitle = null;
+    protected(set) ?string $fundingProgram = null;
+    protected(set) ?Funder $funder = null;
 
     public function getIri(): ?string {
         return $this->iri;

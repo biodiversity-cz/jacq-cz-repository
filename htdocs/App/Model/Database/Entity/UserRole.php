@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity()]
+#[Entity]
 #[Table(name: 'usersrole', options: ['comment' => 'List of available roles for users'])]
 class UserRole
 {
@@ -19,20 +19,10 @@ class UserRole
     public const int USER = 3;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'name of the role'])]
-    protected string $name;
+    protected(set) string $name;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'short description'])]
-    protected string $description;
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
+    protected(set) string $description;
 
     public function setName(string $name): UserRole
     {
@@ -45,6 +35,5 @@ class UserRole
         $this->description = $description;
         return $this;
     }
-
 
 }

@@ -1,4 +1,4 @@
-#	docker exec -it --user www-data app-jacq /bin/bash
+#	docker exec -it --user www app-jacq /bin/bash
 
 code_management:
 	vendor/bin/phpcs --standard=ruleset.xml App # analyze with codesniffer https://github.com/slevomat/coding-standard
@@ -8,13 +8,13 @@ code_management:
 
 tests: #Integration tests have to be run in a single thread
 	clear && vendor/bin/tester -s -c /usr/local/etc/php/php.ini \
- 		-d "extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" \
+ 		-d "extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage"  -d "extension=zip" \
  		--colors 1 -j 1 tests
 	clear && vendor/bin/tester -s -c /usr/local/etc/php/php.ini -d \
-		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" \
+		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" -d "extension=zip" \
 		--colors 1 -j 1 tests --coverage tests/coverage.html --coverage-src App  # HTML report
 	clear && vendor/bin/tester -s -c /usr/local/etc/php/php.ini -d \
-		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" \
+		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" -d "extension=zip" \
 		--colors 1 -j 1 tests --coverage coverage.xml --coverage-src App # Clover XML report
 
 build:

@@ -14,9 +14,9 @@ class ContactPoint implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $email = null;
-    private ?string $phone = null;
-    private ?Address $address = null;
+    protected(set) ?string $email = null;
+    protected(set) ?string $phone = null;
+    protected(set) ?Address $address = null;
 
     public function __construct() {
     }
@@ -58,8 +58,8 @@ class ContactPoint implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'contact_point');
 
-        if ($this->getEmail() !== null) {
-            $emailElement = $this->createElement($document, 'email', $this->getEmail());
+        if ($this->email !== null) {
+            $emailElement = $this->createElement($document, 'email', $this->email);
             $element->appendChild($emailElement);
         }
 

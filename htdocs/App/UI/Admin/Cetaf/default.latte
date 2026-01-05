@@ -1,0 +1,21 @@
+{block content}
+
+<div class="container">
+    <h2>CETAF SID management</h2>
+    <div class="row">
+        <div class="col-md-6">
+            {control validationForm}
+        </div>
+        <div class="col-md-6">
+            <p>Please prepare an Excel file with specimens data using our <a href="https://tools.biodiversity.cz">tools</a>
+                and upload here to validate the file content. Data are processed until first completely empty row.</p>
+            <p><b>Validation covers:</b></p>
+            <ul>
+                <li>names and order of columns.</li>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        {control publishedGrid}
+    </div>
+</div>

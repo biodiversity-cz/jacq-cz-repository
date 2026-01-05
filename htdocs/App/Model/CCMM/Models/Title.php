@@ -14,8 +14,8 @@ class Title implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private string $title;
-    private ?string $language = null;
+    protected(set) string $title;
+    protected(set) ?string $language = null;
 
     public function __construct() {
     }

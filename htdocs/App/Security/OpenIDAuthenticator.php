@@ -57,7 +57,7 @@ final class OpenIDAuthenticator
         // Generate OpenID logout URL if supported by provider
         $logoutUrl = null;
 
-        switch ($user->getOpenidProvider()) {
+        switch ($user->openidProvider) {
             case 'keycloak':
                 // Keycloak supports RP-initiated logout
                 $logoutUrl = rtrim($config['baseUrl'], '/') . '/realms/' . $config['realm'] .

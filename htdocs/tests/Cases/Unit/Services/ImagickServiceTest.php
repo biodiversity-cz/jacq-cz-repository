@@ -259,7 +259,7 @@ test('ImagickService::sanitizeUtf8 cleans invalid UTF8', function (): void {
     $service = new ImagickService();
 
     $method = new \ReflectionMethod(ImagickService::class, 'sanitizeUtf8');
-    $method->setAccessible(true);
+
 
     $clean = $method->invoke($service, "valid\xFFtext");
 

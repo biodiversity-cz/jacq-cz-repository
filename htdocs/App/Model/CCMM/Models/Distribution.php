@@ -14,8 +14,8 @@ class Distribution implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?DistributionDataService $distributionDataService = null;
-    private ?DistributionDownloadableFile $distributionDownloadableFile = null;
+    protected(set) ?DistributionDataService $distributionDataService = null;
+    protected(set) ?DistributionDownloadableFile $distributionDownloadableFile = null;
 
     public function __construct() {
     }

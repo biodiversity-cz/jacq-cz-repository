@@ -1,0 +1,18 @@
+{block #content}
+<div class="container">
+    <h2>CETAF SID management</h2>
+    <div class="row">
+        <h1>Validation results:</h1>
+        <p>The first value is a number of row in excel file. Invalid content of the cell is quoted between single
+            quotes, e.g.
+            in case of space-prefixed December you will see ' 12'.</p>
+        <p><a n:href=":default">Back to validation form</a></p>
+        {foreach $errors as $row=>$error}
+        <p>{$row}: {foreach $error as $value}<span class="badge rounded-pill bg-danger">{$value["column"]}</span> -
+            <code>'{$value["value"]}'</code>{sep}
+            || {/sep}{/foreach}</p>
+        {/foreach}
+    </div>
+</div>
+
+{/block}

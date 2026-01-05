@@ -18,6 +18,7 @@
     "ext-zip": "*",
     "ext-dom": "*",
     "ext-xmlwriter": "*",
+    "ext-gd": "*",
 
 		"nette/application": "^3",
 		"nette/bootstrap": "^3",
@@ -31,21 +32,21 @@
     "nette/utils": "^4",
     "nettrine/orm": "^0",
     "nettrine/dbal": "^0",
-    "nettrine/cache": "^0",
     "nettrine/fixtures": "^0.8",
     "nettrine/migrations": "^0",
+    "symfony/var-exporter": "^v7",
     "latte/latte": "^3",
     "tracy/tracy": "^2",
 
     "contributte/console": "^0",
     "contributte/console-extra": "^0",
-    "contributte/forms-bootstrap": "^0",
+    "contributte/forms-bootstrap": "^0.8",
     "guzzlehttp/guzzle": "^7",
     "league/pipeline": "^1",
     "ublaboo/aws-sdk-nette-extension": "dev-master",
     "ublaboo/datagrid": "^v7",
     "yale-web-technologies/iiif-manifest-generator": "dev-develop",
-
+    "phpoffice/phpspreadsheet": "^5",
     "68publishers/asset": "^3",
     "68publishers/webpack-encore-bundle": "^3",
     "mk-j/php_xlsxwriter": "^0",
@@ -72,7 +73,8 @@
       "ext-imagick": "3",
       "ext-intl": "3",
       "ext-exif": "3",
-      "ext-zip": "3"
+      "ext-zip": "3",
+      "ext-gd": "3"
     },
 		"allow-plugins": {
 			"symfony/thanks": true,

@@ -22,12 +22,9 @@ class ImportMultiplier extends \App\Model\Database\Entity\ImportMultiplier imple
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'photo' => [parent::class, 'photo', null, 8],
-        "\0".parent::class."\0".'barcodes' => [parent::class, 'barcodes', null, 16],
-        'barcodes' => [parent::class, 'barcodes', null, 16],
-        'id' => [parent::class, 'id', null, 8],
-        'photo' => [parent::class, 'photo', null, 8],
+        'barcodes' => [parent::class, 'barcodes', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'photo' => [parent::class, 'photo', null, 8196],
     ];
 
     public function __isInitialized(): bool

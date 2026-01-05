@@ -20,25 +20,25 @@ class DatabotResult
 
     #[ORM\ManyToOne(targetEntity: Databot::class)]
     #[ORM\JoinColumn(name: 'databot_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    protected Databot $databot;
+    protected(set) Databot $databot;
 
     #[ORM\ManyToOne(targetEntity: Photos::class, inversedBy: 'databotResults')]
     #[ORM\JoinColumn(name: 'photo_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
-    protected Photos $photo;
+    protected(set) Photos $photo;
 
     #[ORM\Column(
         type: 'string',
         nullable: false,
         enumType: DatabotResultStatus::class,
         options: ['comment' => 'Result status: ok, error, warning...', 'default' => DatabotResultStatus::OK])]
-    protected DatabotResultStatus $status = DatabotResultStatus::OK;
+    protected(set) DatabotResultStatus $status = DatabotResultStatus::OK;
 
     #[ORM\Column(type: Types::TEXT, nullable: true, options: ['comment' => 'Optional log or error description'])]
-    protected ?string $message = null;
+    protected(set) ?string $message = null;
 
     /** @var ?mixed[] */
     #[ORM\Column(type: Types::JSON, nullable: true, options: ['jsonb' => true, 'comment' => 'Structured result data, e.g. metrics, checks'])]
-    protected ?array $resultData = null;
+    protected(set) ?array $resultData = null;
 
     public function getDatabot(): Databot
     {
@@ -51,20 +51,10 @@ class DatabotResult
         return $this;
     }
 
-    public function getPhoto(): Photos
-    {
-        return $this->photo;
-    }
-
     public function setPhoto(Photos $photo): DatabotResult
     {
         $this->photo = $photo;
         return $this;
-    }
-
-    public function getStatus(): DatabotResultStatus
-    {
-        return $this->status;
     }
 
     public function setStatus(DatabotResultStatus $status): DatabotResult
@@ -73,20 +63,10 @@ class DatabotResult
         return $this;
     }
 
-    public function getMessage(): ?string
-    {
-        return $this->message;
-    }
-
     public function setMessage(?string $message): DatabotResult
     {
         $this->message = $message;
         return $this;
-    }
-
-    public function getResultData(): ?array
-    {
-        return $this->resultData;
     }
 
     public function setResultData(?array $resultData): DatabotResult
@@ -94,6 +74,5 @@ class DatabotResult
         $this->resultData = $resultData;
         return $this;
     }
-
 
 }

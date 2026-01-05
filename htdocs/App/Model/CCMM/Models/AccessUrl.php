@@ -14,8 +14,8 @@ class AccessUrl implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private ?string $label = null;
+    protected(set) ?string $iri = null;
+    protected(set) ?string $label = null;
 
     public function __construct() {
     }

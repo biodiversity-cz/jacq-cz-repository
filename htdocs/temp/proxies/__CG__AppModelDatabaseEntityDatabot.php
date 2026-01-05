@@ -22,22 +22,14 @@ class Databot extends \App\Model\Database\Entity\Databot implements \Doctrine\OR
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'createdAt' => [parent::class, 'createdAt', null, 8],
-        "\0".'*'."\0".'description' => [parent::class, 'description', null, 8],
-        "\0".'*'."\0".'enabled' => [parent::class, 'enabled', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'lastRun' => [parent::class, 'lastRun', null, 8],
-        "\0".'*'."\0".'name' => [parent::class, 'name', null, 8],
-        "\0".'*'."\0".'role' => [parent::class, 'role', null, 8],
-        "\0".'*'."\0".'version' => [parent::class, 'version', null, 8],
-        'createdAt' => [parent::class, 'createdAt', null, 8],
-        'description' => [parent::class, 'description', null, 8],
-        'enabled' => [parent::class, 'enabled', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'lastRun' => [parent::class, 'lastRun', null, 8],
-        'name' => [parent::class, 'name', null, 8],
-        'role' => [parent::class, 'role', null, 8],
-        'version' => [parent::class, 'version', null, 8],
+        'createdAt' => [parent::class, 'createdAt', null, 8196],
+        'description' => [parent::class, 'description', null, 8196],
+        'enabled' => [parent::class, 'enabled', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'lastRun' => [parent::class, 'lastRun', null, 8196],
+        'name' => [parent::class, 'name', null, 8196],
+        'role' => [parent::class, 'role', null, 8196],
+        'version' => [parent::class, 'version', null, 8196],
     ];
 
     public function __isInitialized(): bool

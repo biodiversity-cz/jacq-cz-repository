@@ -14,7 +14,7 @@ class Address implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $fullAddress = null;
+    protected(set) ?string $fullAddress = null;
 
     public function __construct() {
     }

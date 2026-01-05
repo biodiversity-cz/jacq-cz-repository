@@ -15,7 +15,7 @@ class FileInsideCuratorBucket
 
     protected bool $isEligibleForImport = false;
 
-    public function __construct(public readonly string $name, public readonly int $size, public readonly DateTimeResult $timestamp, public readonly bool $alreadyWaiting, public readonly bool $hasControlError, public readonly ?int $rowId, public readonly ?string $controlMsg)
+    public function __construct(protected(set) readonly string $name, protected(set) readonly int $size, protected(set) readonly DateTimeResult $timestamp, protected(set) readonly bool $alreadyWaiting, protected(set) readonly bool $hasControlError, protected(set) readonly ?int $rowId, protected(set) readonly ?string $controlMsg)
     {
         $this->isEligibleForImport = $this->isSizeOk() && $this->isTypeOk() && !$this->isAlreadyWaiting() && !$this->hasControlError();
     }

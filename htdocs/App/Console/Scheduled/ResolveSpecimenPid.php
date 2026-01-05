@@ -2,6 +2,7 @@
 
 namespace App\Console\Scheduled;
 
+use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Services\SpecimenPidCallerService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,9 +17,9 @@ class ResolveSpecimenPid extends Command
     public const int LIMIT = 4;
 
     /**
-     * Running as a CronJob - process images from curatorBucket to the repository waiting room
+     * Running as a CronJob - process images from curatorBucket to the repository waiting room, cleans expired Embargo
      */
-    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SpecimenPidCallerService $pidCallerService, ?string $name = null)
+    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SpecimenPidCallerService $pidCallerService, protected readonly CuratorFacade $curatorFacade, ?string $name = null)
     {
         parent::__construct($name);
     }
@@ -26,11 +27,13 @@ class ResolveSpecimenPid extends Command
     protected function configure(): void
     {
         $this->setName('curator:resolveSpecimenPid');
-        $this->setDescription(sprintf('check if specimen PID exists and updates photo status to SPECIMEN_CONTROL_OK.'));
+        $this->setDescription(sprintf('check if specimen PID exists and updates photo status to SPECIMEN_CONTROL_OK, cleans expired Embargo'));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->curatorFacade->expireEmbargo();
+
         $startTime = microtime(true);
         try {
             $this->pidCallerService->callAsync($this->getPhotos(), 3);
@@ -42,7 +45,6 @@ class ResolveSpecimenPid extends Command
 
         return Command::SUCCESS;
     }
-
 
     protected function getPhotos(): array
     {

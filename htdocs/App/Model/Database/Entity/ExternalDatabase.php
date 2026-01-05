@@ -15,22 +15,19 @@ class ExternalDatabase
     use TId;
 
     public const int JACQ = 1;
-    #[Column(type: Types::STRING, unique: true, nullable: false)]
-    protected string $name;
+    public const int INTERNAL = 2;
 
     #[Column(type: Types::STRING, unique: true, nullable: false)]
-    protected string $url;
+    protected(set) string $name;
 
     #[Column(type: Types::STRING, unique: true, nullable: false)]
-    protected string $element;
+    protected(set) string $url;
+
+    #[Column(type: Types::STRING, nullable: false)]
+    protected(set) string $element;
 
     #[Column(type: Types::TEXT, nullable: true)]
-    protected ?string $description = null;
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
+    protected(set) ?string $description = null;
 
     public function setName(string $name): ExternalDatabase
     {
@@ -38,33 +35,16 @@ class ExternalDatabase
         return $this;
     }
 
-    public function getUrl(): string
-    {
-        return $this->url;
-    }
-
     public function setUrl(string $url): ExternalDatabase
     {
         $this->url = $url;
         return $this;
     }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
     public function setDescription(?string $description): ExternalDatabase
     {
         $this->description = $description;
         return $this;
     }
-
-    public function getElement(): string
-    {
-        return $this->element;
-    }
-
     public function setElement(string $element): ExternalDatabase
     {
         $this->element = $element;

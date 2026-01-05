@@ -22,8 +22,8 @@ class DownloadStage extends BaseStage implements StageInterface
         $this->item = $payload;
 
         try {
-            $this->s3Service->getObject($this->item->getHerbarium()->getBucket(), $this->item->getOriginalFilename(), $this->getMasterTempPath());
-            $this->item->setOriginalFileAt($this->s3Service->getObjectOriginalTimestamp($this->item->getHerbarium()->getBucket(), $this->item->getOriginalFilename()));
+            $this->s3Service->getObject($this->item->herbarium->bucket, $this->item->originalFilename, $this->getMasterTempPath());
+            $this->item->setOriginalFileAt($this->s3Service->getObjectOriginalTimestamp($this->item->herbarium->bucket, $this->item->originalFilename));
 
         } catch (\Throwable $exception) {
             throw new DownloadStageException('download original file error (' . $exception->getMessage() . ')');

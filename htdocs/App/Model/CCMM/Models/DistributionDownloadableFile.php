@@ -15,15 +15,15 @@ class DistributionDownloadableFile implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $iri = null;
-    private array $titles = [];
-    private ?AccessUrl $accessUrl = null;
-    private ?DownloadUrl $downloadUrl = null;
-    private ?ConformsToSchema $conformsToSchema = null;
-    private ?Format $format = null;
-    private ?MediaType $mediaType = null;
-    private ?int $byteSize = null;
-    private ?Checksum $checksum = null;
+    protected(set) ?string $iri = null;
+    protected(set) array $titles = [];
+    protected(set) ?AccessUrl $accessUrl = null;
+    protected(set) ?DownloadUrl $downloadUrl = null;
+    protected(set) ?ConformsToSchema $conformsToSchema = null;
+    protected(set) ?Format $format = null;
+    protected(set) ?MediaType $mediaType = null;
+    protected(set) ?int $byteSize = null;
+    protected(set) ?Checksum $checksum = null;
 
     public function __construct() {
     }

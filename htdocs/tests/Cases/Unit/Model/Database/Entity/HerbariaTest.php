@@ -16,19 +16,19 @@ test('Herbaria entity getters and setters', function (): void {
 
 // test set/get acronym
     $herbaria->setAcronym('ABC');
-    Assert::equal('ABC', $herbaria->getAcronym());
+    Assert::equal('ABC', $herbaria->acronym);
 
 // test set/get bucket
     $herbaria->setBucket('my-bucket');
-    Assert::equal('my-bucket', $herbaria->getBucket());
+    Assert::equal('my-bucket', $herbaria->bucket);
 
 // test set/get regexBarcode
     $herbaria->setRegexBarcode('/barcode-regex/');
-    Assert::equal('/barcode-regex/', $herbaria->getRegexBarcode());
+    Assert::equal('/barcode-regex/', $herbaria->regexBarcode);
 
 // test set/get regexFilename
     $herbaria->setRegexFilename('/filename-regex/');
-    Assert::equal('/filename-regex/', $herbaria->getRegexFilename());
+    Assert::equal('/filename-regex/', $herbaria->regexFilename);
 
 // test set/get fallbackFilename
     $herbaria->setFallbackFilename(true);
@@ -38,15 +38,15 @@ test('Herbaria entity getters and setters', function (): void {
 
 // test set/get logo
     $herbaria->setLogo('https://example.com/logo.png');
-    Assert::equal('https://example.com/logo.png', $herbaria->getLogo());
+    Assert::equal('https://example.com/logo.png', $herbaria->logo);
 
 // test set/get fullname
     $herbaria->setFullname('Herbarium Example');
-    Assert::equal('Herbarium Example', $herbaria->getFullname());
+    Assert::equal('Herbarium Example', $herbaria->fullname);
 
 // test set/get address
     $herbaria->setAddress('123 Green Street');
-    Assert::equal('123 Green Street', $herbaria->getAddress());
+    Assert::equal('123 Green Street', $herbaria->address);
 
 });
 
@@ -63,12 +63,12 @@ test('Herbaria entity AddAndRemoveContact', function (): void {
 
     // přidání
     $herbarium->addContact($contact);
-    Assert::count(1, $herbarium->getContacts());
-    Assert::same($contact, $herbarium->getContacts()->first());
+    Assert::count(1, $herbarium->contacts);
+    Assert::same($contact, $herbarium->contacts->first());
 
     // odebrání
     $herbarium->removeContact($contact);
-    Assert::count(0, $herbarium->getContacts());
+    Assert::count(0, $herbarium->contacts);
 });
 
 

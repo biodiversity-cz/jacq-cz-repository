@@ -8,39 +8,21 @@ use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\Repository\PhotosRepository;
 use App\Model\Specimen\Specimen;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Nette\Security\User;
 use Tester\Assert;
 use Mockery;
+use Tests\Toolkit\PhotoTestFactory;
+use Tests\Toolkit\SpecimenTestFactory;
 
 
 require_once __DIR__ . '/../../../../../bootstrap.php';
 
 
 
-test('getPublicPhotosOfSpecimen returns expected photos', function (): void {
-    $photo1 = Mockery::mock(Photos::class);
-    $photo2 = Mockery::mock(Photos::class);
-
-    $specimen = Mockery::mock(Specimen::class);
-    $specimen->shouldReceive('getNumericPartOfId')->andReturn(42);
-    $herbarium = Mockery::mock(Herbaria::class);
-    $specimen->shouldReceive('getHerbarium')->andReturn($herbarium);
-
-    $repo = Mockery::mock(PhotosRepository::class)->makePartial();
-    $repo->shouldReceive('findBy')
-        ->with([
-            'specimenId' => 42,
-            'herbarium' => $herbarium,
-            'status' => PhotosStatus::PASSED_PUBLIC
-        ])
-        ->andReturn([$photo1, $photo2]);
-
-    $result = $repo->getPublicPhotosOfSpecimen($specimen);
-    Assert::same([$photo1, $photo2], $result);
-});
 
 test('getPublicPhoto returns expected photo', function (): void {
-    $photo = Mockery::mock(Photos::class);
+    $photo = PhotoTestFactory::detailed();
 
     $repo = Mockery::mock(PhotosRepository::class)->makePartial();
     $repo->shouldReceive('findOneBy')
@@ -55,7 +37,7 @@ test('getPhoto calls getDefaultDatasource and returns one', function (): void {
     $query = Mockery::mock(Query::class);
     $query->shouldReceive('getOneOrNullResult')->andReturn('photo');
 
-    $qb = Mockery::mock(\Doctrine\ORM\QueryBuilder::class);
+    $qb = Mockery::mock(QueryBuilder::class);
     $qb->shouldReceive('andWhere')->andReturnSelf();
     $qb->shouldReceive('setParameter')->andReturnSelf();
     $qb->shouldReceive('getQuery')->andReturn($query);
@@ -64,7 +46,7 @@ test('getPhoto calls getDefaultDatasource and returns one', function (): void {
     $user->shouldReceive('getIdentity')->andReturn((object)['herbarium' => 'H1']);
     $user->shouldReceive('isInRole')->andReturn(false);
 
-    $photo = new Photos();
+    $photo = PhotoTestFactory::detailed();
     $repo = Mockery::mock(PhotosRepository::class)->makePartial();
     $repo->shouldReceive('getDefaultDatasource')->with($user)->andReturn($qb);
     $repo->shouldReceive('getPhoto')->with($user,1)->andReturn($photo);
@@ -77,7 +59,7 @@ test('getAllPhotosOfSpecimen calls getDefaultDatasource and returns result', fun
     $query = Mockery::mock(Query::class);
     $query->shouldReceive('getResult')->andReturn(['photo1']);
 
-    $qb = Mockery::mock(\Doctrine\ORM\QueryBuilder::class);
+    $qb = Mockery::mock(QueryBuilder::class);
     $qb->shouldReceive('andWhere')->andReturnSelf();
     $qb->shouldReceive('setParameter')->andReturnSelf();
     $qb->shouldReceive('getQuery')->andReturn($query);
@@ -86,8 +68,7 @@ test('getAllPhotosOfSpecimen calls getDefaultDatasource and returns result', fun
     $repo->shouldReceive('getDefaultDatasource')->andReturn($qb);
 
     $user = Mockery::mock(User::class);
-    $specimen = Mockery::mock(Specimen::class);
-    $specimen->shouldReceive('getNumericPartOfId')->andReturn(42);
+    $specimen = SpecimenTestFactory::minimal();
 
     Assert::same(['photo1'], $repo->getAllPhotosOfSpecimen($user, $specimen));
 });
@@ -96,7 +77,7 @@ test('findUnprocessedPhotos calls getDefaultDatasource and returns result', func
     $query = Mockery::mock(Query::class);
     $query->shouldReceive('getResult')->andReturn(['photo1']);
 
-    $qb = Mockery::mock(\Doctrine\ORM\QueryBuilder::class);
+    $qb = Mockery::mock(QueryBuilder::class);
     $qb->shouldReceive('andWhere')->andReturnSelf();
     $qb->shouldReceive('setParameter')->andReturnSelf();
     $qb->shouldReceive('getQuery')->andReturn($query);

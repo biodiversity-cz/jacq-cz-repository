@@ -20,7 +20,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
 
     public function getTotalRecordsCount(): int
     {
-        $qb = $this->photoService->getPublishedPhotosDatasource()
+        $qb = $this->photoService->getAllPublishedPhotosDatasource()
             ->select('COUNT(p.id)');
 
         return (int) $qb->getQuery()->getSingleScalarResult();
@@ -33,7 +33,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
         int $offset = 0,
         int $limit = 100
     ): \Iterator {
-        $qb = $this->photoService->getPublishedPhotosDatasource();
+        $qb = $this->photoService->getAllPublishedPhotosDatasource();
 
         // Add joins for related data needed for metadata
         $qb->leftJoin('p.herbarium', 'h')
@@ -79,7 +79,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
             return null;
         }
 
-        $qb = $this->photoService->getPublishedPhotosDatasource();
+        $qb = $this->photoService->getAllPublishedPhotosDatasource();
         $qb->leftJoin('p.herbarium', 'h')
            ->leftJoin('h.license', 'l')
            ->addSelect('h', 'l')
@@ -95,7 +95,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
         $sets = [];
 
         foreach ($herbaria as $herbarium) {
-            $sets[$herbarium->getAcronym()] = $herbarium->getFullname() ?? $herbarium->getAcronym();
+            $sets[$herbarium->acronym] = $herbarium->getFullname() ?? $herbarium->acronym;
         }
 
         return $sets;
@@ -103,7 +103,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
 
     public function getEarliestDatestamp(): ?\DateTimeInterface
     {
-        $qb = $this->photoService->getPublishedPhotosDatasource();
+        $qb = $this->photoService->getAllPublishedPhotosDatasource();
         $qb->select('MIN(p.lastEdit)');
 
         $result = $qb->getQuery()->getSingleScalarResult();
@@ -118,7 +118,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
             return false;
         }
 
-        $qb = $this->photoService->getPublishedPhotosDatasource();
+        $qb = $this->photoService->getAllPublishedPhotosDatasource();
         $qb->select('COUNT(p.id)')
            ->andWhere('p.id = :id')
            ->setParameter('id', $photoId);
@@ -192,6 +192,6 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
      */
     public function generateIdentifier(Photos $photo, string $domain): string
     {
-        return sprintf('oai:%s:photo-%d', $domain, $photo->getId());
+        return sprintf('oai:%s:photo-%d', $domain, $photo->id);
     }
 }

@@ -10,6 +10,7 @@ use App\Services\OaiPmh\MetadataFormat\DublinCoreFormat;
 use App\Services\RepositoryConfiguration;
 use Mockery;
 use Tester\Assert;
+use Tests\Toolkit\PhotoTestFactory;
 
 require_once __DIR__ . '/../../../../../bootstrap.php';
 
@@ -50,7 +51,7 @@ test('DublinCoreFormat: toXml creates valid DC structure', function (): void {
     $repositoryConfig = $container->getByType(RepositoryConfiguration::class);
 
     $format = new DublinCoreFormat($repositoryConfig);
-    $photo = createDetailedPhotoMock();
+    $photo = PhotoTestFactory::detailed();
 
     $xml = $format->toXml($photo, 'oai:jacq.org:photo-123');
 
@@ -69,7 +70,7 @@ test('DublinCoreFormat: toXml handles empty optional fields gracefully', functio
     $repositoryConfig = $container->getByType(RepositoryConfiguration::class);
 
     $format = new DublinCoreFormat($repositoryConfig);
-    $photo = createMinimalPhotoMock();
+    $photo = PhotoTestFactory::detailed();
 
     $xml = $format->toXml($photo, 'oai:jacq.org:photo-456');
 
@@ -77,69 +78,6 @@ test('DublinCoreFormat: toXml handles empty optional fields gracefully', functio
     // Should not throw any exceptions
     Assert::true($xml->hasChildNodes());
 });
-
-function createDetailedPhotoMock(): Photos
-{
-    $photo = Mockery::mock(Photos::class);
-    $photo->shouldReceive('getId')->andReturn(789);
-    $photo->shouldReceive('getSpecimenId')->andReturn('123');
-    $photo->shouldReceive('getFullSpecimenId')->andReturn('PRC_000123');
-    $photo->shouldReceive('getWidth')->andReturn(3000);
-    $photo->shouldReceive('getHeight')->andReturn(2000);
-    $photo->shouldReceive('getOriginalFilename')->andReturn('specimen_123.tif');
-    $photo->shouldReceive('getArchiveFilename')->andReturn('PRC_000123_789.tif');
-    $photo->shouldReceive('getJp2Filename')->andReturn('test.jp2');
-    $photo->shouldReceive('getExpectedJacqPid')->andReturn('https://prc.jacq.org/PRC123');
-
-    $createdAt = new \DateTimeImmutable('2023-01-15 10:30:00');
-    $lastEdit = new \DateTime('2023-01-16 14:20:00');
-    $photo->shouldReceive('getCreatedAt')->andReturn($createdAt);
-    $photo->shouldReceive('getLastEditAt')->andReturn($lastEdit);
-
-    $license = Mockery::mock(License::class);
-
-    $herbarium = Mockery::mock(Herbaria::class);
-    $herbarium->shouldReceive('getAcronym')->andReturn('PRC');
-    $herbarium->shouldReceive('getFullname')->andReturn('Herbarium of Prague University');
-    $herbarium->shouldReceive('getAddress')->andReturn('Prague, Czech Republic');
-    $herbarium->shouldReceive('getLicense')->andReturn($license);
-
-    $photo->shouldReceive('getHerbarium')->andReturn($herbarium);
-
-    return $photo;
-}
-
-function createMinimalPhotoMock(): object
-{
-    $photo = Mockery::mock(Photos::class);
-    $photo->shouldReceive('getId')->andReturn(456);
-    $photo->shouldReceive('getSpecimenId')->andReturn('456');
-    $photo->shouldReceive('getFullSpecimenId')->andReturn('MIN_000456');
-    $photo->shouldReceive('getWidth')->andReturn(null);
-    $photo->shouldReceive('getHeight')->andReturn(null);
-    $photo->shouldReceive('getOriginalFilename')->andReturn(null);
-    $photo->shouldReceive('getArchiveFilename')->andReturn(null);
-    $photo->shouldReceive('getJp2Filename')->andReturn(null);
-    $photo->shouldReceive('getExpectedJacqPid')->andReturn('https://min.jacq.org/MIN456');
-
-    $createdAt = new \DateTimeImmutable('2023-01-01 00:00:00');
-    $lastEdit = new \DateTime('2023-01-16 14:20:00');
-
-    $photo->shouldReceive('getCreatedAt')->andReturn($createdAt);
-    $photo->shouldReceive('getLastEditAt')->andReturn($lastEdit);
-
-    $license = Mockery::mock(License::class);
-
-    $herbarium = Mockery::mock(Herbaria::class);
-    $herbarium->shouldReceive('getAcronym')->andReturn('MIN');
-    $herbarium->shouldReceive('getFullname')->andReturn(null);
-    $herbarium->shouldReceive('getAddress')->andReturn(null);
-    $herbarium->shouldReceive('getLicense')->andReturn($license);
-
-    $photo->shouldReceive('getHerbarium')->andReturn($herbarium);
-
-    return $photo;
-}
 
 register_shutdown_function(function (): void {
     Mockery::close();

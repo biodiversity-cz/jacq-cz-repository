@@ -22,20 +22,13 @@ class ImageDownloadLog extends \App\Model\Database\Entity\ImageDownloadLog imple
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".'*'."\0".'createdAt' => [parent::class, 'createdAt', null, 8],
-        "\0".'*'."\0".'id' => [parent::class, 'id', null, 8],
-        "\0".'*'."\0".'imageType' => [parent::class, 'imageType', null, 8],
-        "\0".'*'."\0".'ipAddress' => [parent::class, 'ipAddress', null, 8],
-        "\0".'*'."\0".'photoId' => [parent::class, 'photoId', null, 8],
-        "\0".'*'."\0".'referrer' => [parent::class, 'referrer', null, 8],
-        "\0".'*'."\0".'userAgent' => [parent::class, 'userAgent', null, 8],
-        'createdAt' => [parent::class, 'createdAt', null, 8],
-        'id' => [parent::class, 'id', null, 8],
-        'imageType' => [parent::class, 'imageType', null, 8],
-        'ipAddress' => [parent::class, 'ipAddress', null, 8],
-        'photoId' => [parent::class, 'photoId', null, 8],
-        'referrer' => [parent::class, 'referrer', null, 8],
-        'userAgent' => [parent::class, 'userAgent', null, 8],
+        'createdAt' => [parent::class, 'createdAt', null, 8196],
+        'id' => [parent::class, 'id', null, 8196],
+        'imageType' => [parent::class, 'imageType', null, 8196],
+        'ipAddress' => [parent::class, 'ipAddress', null, 8196],
+        'photoId' => [parent::class, 'photoId', null, 8196],
+        'referrer' => [parent::class, 'referrer', null, 8196],
+        'userAgent' => [parent::class, 'userAgent', null, 8196],
     ];
 
     public function __isInitialized(): bool

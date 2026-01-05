@@ -14,9 +14,9 @@ class TimeInstant implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    private ?string $dateTime = null;
-    private ?string $date = null;
-    private ?DateType $dateType = null;
+    protected(set) ?string $dateTime = null;
+    protected(set) ?string $date = null;
+    protected(set) ?DateType $dateType = null;
 
     public function __construct() {
     }
