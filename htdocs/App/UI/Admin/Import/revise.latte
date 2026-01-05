@@ -4,9 +4,9 @@
 
     <div class="row">
         <div class="col-md-3">
-            <p><b>error:</b> {$photo->error->getMessage()}</p>
+            <p><b>error:</b> {$photo->error->message}</p>
             {if $photo->error->getBarcodes()!== null}
-            <p><b>detected barcode (s):</b> {$photo->error->getBarcodes()}</p>
+            <p><b>detected barcode (s):</b> {$photo->error->barcodes}</p>
             {/if}
             <p>Please decide what to do with this image: </p>
 
