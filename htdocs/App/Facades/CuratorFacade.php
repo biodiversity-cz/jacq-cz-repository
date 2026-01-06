@@ -65,13 +65,14 @@ readonly class CuratorFacade
         foreach ($this->getEligibleCuratorBucketFiles($user) as $file) {
             $entity = new Photos();
             $entity
-                ->setCreatedAt()
-                ->setLastEditAt()
                 ->setOriginalFilename($file->name)
                 ->setStatus($this->photoService->getWaitingStatus())
                 ->setHerbarium($this->herbariumService->getCurrentUserHerbarium($user))
                 ->setArchiveFileSize($file->size)
-                ->setType($this->entityManager->getReference(PhotosType::class, $formData['photoType']));
+                ->setBucketSuffix($this->repositoryConfiguration->getRecentlyUsedBucketSuffix())
+                ->setType($this->entityManager->getReference(PhotosType::class, $formData['photoType']))
+                ->setCreatedAt()
+                ->setLastEditAt();
             if (!empty($formData['funding'])) {
                 $funding = $this->entityManager->getRepository(Funding::class)->findAssignable($formData['funding'], $user);
                 $entity->setFunding($funding);
@@ -164,6 +165,7 @@ readonly class CuratorFacade
                 ->setExif($originalPhoto->exif)
                 ->setIdentify($originalPhoto->identify)
                 ->setType($originalPhoto->type)
+                ->setBucketSuffix($originalPhoto->bucketSuffix)
                 ->setCreatedAt()
                 ->setLastEditAt();
 
@@ -221,9 +223,9 @@ readonly class CuratorFacade
                 case PhotosStatus::SPECIMEN_CONTROL_OK:
                 case PhotosStatus::EMBARGO:
                 case PhotosStatus::DEVELOP_PROCEED:
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryImageServerBucket(), $lockedEntity->jp2Filename);
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $lockedEntity->archiveFilename);
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $lockedEntity->getDatabotThumbFilename());
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getImageServerBucket($lockedEntity), $lockedEntity->jp2Filename);
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getArchiveBucket($lockedEntity), $lockedEntity->archiveFilename);
+                    $this->s3Service->deleteObject($this->repositoryConfiguration->getDatabotThumbsBucket($lockedEntity), $lockedEntity->databotThumbFilename);
                     break;
                 default:
                     throw new ServiceException('This photo cannot be deleted');
@@ -349,7 +351,7 @@ readonly class CuratorFacade
 
     public function getArchiveFile(Photos $photo, string $destination): CuratorFacade
     {
-        $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->archiveFilename, $destination);
+        $this->s3Service->getObject($this->repositoryConfiguration->getArchiveBucket($photo), $photo->archiveFilename, $destination);
 
         return $this;
     }

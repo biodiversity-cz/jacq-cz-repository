@@ -26,7 +26,7 @@ class DuplicityStage extends BaseStage implements StageInterface
         if (count($duplicities) > 0) {
             $imagickNewFile = $this->imagickService->createImagick($this->getMasterTempPath());
             foreach ($duplicities as $duplicate) {
-                $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $duplicate->archiveFilename, $this->getDuplicateTempPath($duplicate));
+                $this->s3Service->getObject($this->repositoryConfiguration->getArchiveBucket($duplicate), $duplicate->archiveFilename, $this->getDuplicateTempPath($duplicate));
 
                 $imagickFromDuplicateCandidate = $this->imagickService->createImagick($this->getDuplicateTempPath($duplicate));
                 if ($imagickNewFile->getImageSignature() === $imagickFromDuplicateCandidate->getImageSignature()) {

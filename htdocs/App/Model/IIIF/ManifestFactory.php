@@ -62,7 +62,7 @@ class ManifestFactory
         $photo = $this->getFirstImage();
         $thumbnail = new Thumbnail();
         $thumbnail
-            ->setID($this->repositoryConfiguration->getImageServerUrlThumbnail($photo->jp2Filename))
+            ->setID($this->repositoryConfiguration->getImageServerUrlThumbnail($photo))
             ->setService($this->createService($photo));
 
         return $thumbnail;
@@ -72,7 +72,7 @@ class ManifestFactory
     {
         $service = new Service();
         $service
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename))
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo))
             ->setProfile('http://iiif.io/api/image/2/level2.json');
 
         return $service;
@@ -118,7 +118,7 @@ class ManifestFactory
         $metadata = new Metadata();
         $metadata->addLabelValue('Archive Master file (TIFF)', "<a href='" . $this->linkGenerator->link('Front:Repository:archiveImage', [$photo->id]) . "'>download original</a>");
         $canvas
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename) . '#canvas')
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo) . '#canvas')
             ->addLabel($photo->jp2Filename)
             ->setWidth($photo->width)
             ->setHeight($photo->height)
@@ -132,7 +132,7 @@ class ManifestFactory
     {
         $content = new Content();
         $content
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename))
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo))
             ->setType(DCType::IMAGE)
             ->setFormat('image/jp2')
             ->setWidth($photo->width)
@@ -141,8 +141,8 @@ class ManifestFactory
 
         $annotation = new Annotation();
         $annotation
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename) . '#image')
-            ->setOn($this->repositoryConfiguration->getImageServerInfoUrl($photo->jp2Filename) . '#canvas')
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo) . '#image')
+            ->setOn($this->repositoryConfiguration->getImageServerInfoUrl($photo) . '#canvas')
             ->setContent($content);
 
         return $annotation;

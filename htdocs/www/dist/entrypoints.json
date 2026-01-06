@@ -3,11 +3,11 @@
     "app": {
       "js": [
         "/dist/runtime.d7d98415.js",
-        "/dist/599.89563d2a.js",
-        "/dist/app.09b68956.js"
+        "/dist/506.201e530e.js",
+        "/dist/app.bc231bcf.js"
       ],
       "css": [
-        "/dist/599.b3fd27e1.css",
+        "/dist/506.7770001a.css",
         "/dist/app.ef0e1d6f.css"
       ]
     }

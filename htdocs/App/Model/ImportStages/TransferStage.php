@@ -32,7 +32,7 @@ class TransferStage extends BaseStage implements StageInterface
     {
         try {
             $this->s3Service->putJp2IfNotExists(
-                $this->repositoryConfiguration->getRepositoryImageServerBucket(),
+                $this->repositoryConfiguration->getImageServerBucket($this->item),
                 $this->repositoryConfiguration->createS3Jp2Name($this->item),
                 $this->getIiifTempPath());
             $this->item->setJP2Filename($this->repositoryConfiguration->createS3Jp2Name($this->item));
@@ -45,7 +45,7 @@ class TransferStage extends BaseStage implements StageInterface
     {
         try {
             $this->s3Service->putTiffIfNotExists(
-                $this->repositoryConfiguration->getRepositoryArchiveBucket(),
+                $this->repositoryConfiguration->getArchiveBucket($this->item),
                 $this->repositoryConfiguration->createS3TifName($this->item),
                 $this->getMasterTempPath());
             $this->item->setArchiveFilename($this->repositoryConfiguration->createS3TifName($this->item));
@@ -58,7 +58,7 @@ class TransferStage extends BaseStage implements StageInterface
     {
         try {
             $this->s3Service->putPngIfNotExists(
-                $this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(),
+                $this->repositoryConfiguration->getDatabotThumbsBucket($this->item),
                 $this->repositoryConfiguration->createS3DatabotThumbName($this->item),
                 $this->getDatabotThumbTempPath());
             $this->item->setDatabotThumbFilename($this->repositoryConfiguration->createS3DatabotThumbName($this->item));

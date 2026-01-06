@@ -59,7 +59,7 @@ class CreateThumbs1280 extends Command
     {
         $startTime = microtime(true);
         foreach ($this->getListOfPhotos() as $photo) {
-            if ($this->s3Service->objectExists($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->createS3DatabotThumbName($photo)))
+            if ($this->s3Service->objectExists($this->repositoryConfiguration->getDatabotThumbsBucket($photo), $this->repositoryConfiguration->createS3DatabotThumbName($photo)))
                 continue;
 
             try {
@@ -70,7 +70,7 @@ class CreateThumbs1280 extends Command
                 $imagick->writeImage($this->tempFile2());
                 $imagick->clear();
                 unlink($this->tempFile());
-                $this->s3Service->putPngIfNotExists($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->createS3DatabotThumbName($photo), $this->tempFile2());
+                $this->s3Service->putPngIfNotExists($this->repositoryConfiguration->getDatabotThumbsBucket($photo), $this->repositoryConfiguration->createS3DatabotThumbName($photo), $this->tempFile2());
                 unlink($this->tempFile2());
             } catch (\ImagickException $e) {
                 $output->writeln("Error with ID {$photo->id} -->  ".$e->getMessage());

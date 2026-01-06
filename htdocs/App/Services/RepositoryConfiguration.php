@@ -17,10 +17,26 @@ final readonly class RepositoryConfiguration
     {
     }
 
-    public function getRepositoryArchiveBucket(): string
+    public function getRecentlyUsedBucketSuffix(): string
     {
-        return $this->getKey('archiveBucket', 'Archive bucket not set.');
+        return $this->getKey('recentBucketSuffix');
     }
+
+    public function getArchiveBucket(Photos $photo): string
+    {
+        return $this->getRepositoryArchiveBucketPrefix() . $photo->bucketSuffix;
+    }
+
+    public function getRepositoryArchiveBucketPrefix(): string
+    {
+        return $this->getKey('archiveBucketPrefix', 'Archive bucket prefix not set.');
+    }
+
+    public function getRecentlyUsedArchiveBucket(): string
+    {
+        return $this->getRepositoryArchiveBucketPrefix() . $this->getRecentlyUsedBucketSuffix();
+    }
+
 
     protected function getKey(string $key, string $msg = ''): mixed
     {
@@ -33,24 +49,45 @@ final readonly class RepositoryConfiguration
         return $this->config[$key];
     }
 
-    public function getRepositoryImageServerBucket(): string
+    public function getImageServerBucket(Photos $photo): string
     {
-        return $this->getKey('jp2Bucket', 'Image server bucket not set.');
+        return $this->getRepositoryImageServerBucketPrefix() . $photo->bucketSuffix;
     }
 
-    public function getRepositoryDatabotThumbsBucket(): string
+    public function getRepositoryImageServerBucketPrefix(): string
     {
-        return $this->getKey('thumbBucket', 'Thumbs bucket not set.');
+        return $this->getKey('jp2BucketPrefix', 'Image server bucket prefix not set.');
     }
+
+    public function getRecentlyUsedImageServerBucket(): string
+    {
+        return $this->getRepositoryImageServerBucketPrefix() . $this->getRecentlyUsedBucketSuffix();
+    }
+
+    public function getDatabotThumbsBucket(Photos $photo): string
+    {
+        return $this->getRepositoryDatabotThumbsBucketPrefix() . $photo->bucketSuffix;
+    }
+
+    public function getRepositoryDatabotThumbsBucketPrefix(): string
+    {
+        return $this->getKey('thumbBucketPrefix', 'Thumbs bucket prefix not set.');
+    }
+
+    public function getRecentlyUsedDatabotThumbsBucket(): string
+    {
+        return $this->getRepositoryDatabotThumbsBucketPrefix() . $this->getRecentlyUsedBucketSuffix();
+    }
+
 
     public function getJp2Quality(): int
     {
         return $this->getKey('jp2Quality', 'Compression for image server files not set.');
     }
 
-    public function getImageServerInfoUrl(string $jp2ObjectName): string
+    public function getImageServerInfoUrl(Photos $photo): string
     {
-        return $this->getImageServerBaseUrl() .$this->getEncodedIiifId($jp2ObjectName);
+        return $this->getImageServerBaseUrl() . $this->getEncodedIiifId($photo);
 
     }
 
@@ -79,9 +116,9 @@ final readonly class RepositoryConfiguration
         return $this->getKey('previewQuality');
     }
 
-    public function getImageServerUrlThumbnail(string $jp2ObjectName): string
+    public function getImageServerUrlThumbnail(Photos $photo): string
     {
-        return $this->getImageServerBaseUrl() . $this->getEncodedIiifId($jp2ObjectName) . '/full/' . $this->getThumbnailSize() . ',/0/default.jpg';
+        return $this->getImageServerBaseUrl() . $this->getEncodedIiifId($photo) . '/full/' . $this->getThumbnailSize() . ',/0/default.jpg';
     }
 
     public function getThumbnailSize(): int
@@ -104,9 +141,9 @@ final readonly class RepositoryConfiguration
         return $photo->getFullSpecimenId() . '_' . $photo->id . '.tif';
     }
 
-    protected function getEncodedIiifId(string $name): string
+    protected function getEncodedIiifId(Photos $photo): string
     {
-        $objectId = 's3://' . $this->getRepositoryImageServerBucket() . '/' . $name;
+        $objectId = 's3://' . $this->getImageServerBucket($photo) . '/' . $photo->jp2Filename;
         return rawurlencode($objectId);
 
     }

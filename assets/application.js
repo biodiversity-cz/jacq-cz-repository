@@ -5,9 +5,7 @@ import regexValidation from "./js/settings";
 import importForm from "./js/import";
 import joinLinks from "./js/specimen";
 import {initCopyButtons} from "./js/copyButton";
-import mirador from "./js/mirador";
 import setSettings from "./js/herbarium";
-
 import '@contributte/datagrid/dist/datagrid-full.css';
 import '@contributte/datagrid/dist/datagrid-full.js';
 import drawBoxplot from "./js/stats";

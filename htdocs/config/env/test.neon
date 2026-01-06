@@ -9,9 +9,11 @@ parameters:
         user: jacq_test
         password: jacq_test
     storage:
-        archiveBucket: test-archive
-        jp2Bucket: test-iiif
-        thumbBucket: test-thumbs1280
+        archiveBucketPrefix: test-archive
+        jp2BucketPrefix: test-iiif
+        thumbBucketPrefix: test-thumbs1280
+        recentBucketSuffix: "-01"
+        imageServerBaseUrl: http://localhost:8080/iiif/
     databot:
         basePath: http://databot:5000
 

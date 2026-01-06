@@ -16,24 +16,22 @@ require_once __DIR__ . '/../../../bootstrap.php';
 test('RepositoryConfiguration - basic config directives', function (): void {
     $service = createClassMock();
 
-    Assert::type('string', $service->getRepositoryArchiveBucket());
-    Assert::notEqual('', $service->getRepositoryArchiveBucket());
+    Assert::type('string', $service->getArchiveBucket(PhotoTestFactory::minimal()));
+    Assert::notEqual('', $service->getArchiveBucket(PhotoTestFactory::minimal()));
 
-    Assert::type('string', $service->getRepositoryImageServerBucket());
-    Assert::notEqual('', $service->getRepositoryImageServerBucket());
+    Assert::type('string', $service->getImageServerBucket(PhotoTestFactory::minimal()));
+    Assert::notEqual('', $service->getImageServerBucket(PhotoTestFactory::minimal()));
 
-    Assert::type('string', $service->getRepositoryDatabotThumbsBucket());
-    Assert::notEqual('', $service->getRepositoryDatabotThumbsBucket());
+    Assert::type('string', $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
+    Assert::notEqual('', $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
 
-    Assert::notEqual( $service->getRepositoryArchiveBucket(), $service->getRepositoryDatabotThumbsBucket());
-    Assert::notEqual( $service->getRepositoryArchiveBucket(), $service->getRepositoryImageServerBucket());
-    Assert::notEqual( $service->getRepositoryImageServerBucket(), $service->getRepositoryDatabotThumbsBucket());
+    Assert::notEqual( $service->getArchiveBucket(PhotoTestFactory::minimal()), $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
+    Assert::notEqual( $service->getArchiveBucket(PhotoTestFactory::minimal()), $service->getImageServerBucket(PhotoTestFactory::minimal()));
+    Assert::notEqual( $service->getImageServerBucket(PhotoTestFactory::minimal()), $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
 
-    Assert::type('string', $service->getImageServerInfoUrl('test'));
-    Assert::notEqual('', $service->getImageServerInfoUrl(''));
+    Assert::type('string', $service->getImageServerInfoUrl(PhotoTestFactory::minimal()));
 
-    Assert::type('string', $service->getImageServerUrlThumbnail('test'));
-    Assert::notEqual('', $service->getImageServerUrlThumbnail(''));
+    Assert::type('string', $service->getImageServerUrlThumbnail(PhotoTestFactory::minimal()));
 
     Assert::type('int', $service->getJp2Quality());
     Assert::true($service->getJp2Quality() >= 0 && $service->getJp2Quality() <= 100);
@@ -85,9 +83,9 @@ test('RepositoryConfiguration throws exception for missing key', function (): vo
     $service = new RepositoryConfiguration($config, $tempDir);
 
     Assert::exception(
-        fn() => $service->getRepositoryArchiveBucket(),
+        fn() => $service->getRecentlyUsedArchiveBucket(),
         ConfigurationException::class,
-        'Archive bucket not set.'
+        'Archive bucket prefix not set.'
     );
 });
 
