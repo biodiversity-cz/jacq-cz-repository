@@ -73,8 +73,8 @@ class RefreshJp2 extends Command
             $this->entityManager->flush();
             unlink($this->tempFile());
 
-            $this->s3Service->deleteObject($this->repositoryConfiguration->getRepositoryImageServerBucket(), $this->repositoryConfiguration->createS3Jp2Name($photo));
-            $this->s3Service->putJp2IfNotExists($this->repositoryConfiguration->getRepositoryImageServerBucket(), $this->repositoryConfiguration->createS3Jp2Name($photo), $this->tempFile2());
+            $this->s3Service->deleteObject($this->repositoryConfiguration->getImageServerBucket($photo), $this->repositoryConfiguration->createS3Jp2Name($photo));
+            $this->s3Service->putJp2IfNotExists($this->repositoryConfiguration->getImageServerBucket($photo), $this->repositoryConfiguration->createS3Jp2Name($photo), $this->tempFile2());
             unlink($this->tempFile2());
         }
 

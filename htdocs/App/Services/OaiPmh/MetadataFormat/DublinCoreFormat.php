@@ -124,10 +124,10 @@ final class DublinCoreFormat implements MetadataFormatInterface
 
         // dc:relation - IIIF manifest and image server URLs
         if ($item->jp2Filename) {
-            $iiifUrl = $this->repositoryConfig->getImageServerInfoUrl($item->jp2Filename);
+            $iiifUrl = $this->repositoryConfig->getImageServerInfoUrl($item);
             $this->addElement($doc, $dc, 'dc:relation', $iiifUrl);
 
-            $thumbnailUrl = $this->repositoryConfig->getImageServerUrlThumbnail($item->jp2Filename);
+            $thumbnailUrl = $this->repositoryConfig->getImageServerUrlThumbnail($item);
             $this->addElement($doc, $dc, 'dc:relation', $thumbnailUrl);
         }
 

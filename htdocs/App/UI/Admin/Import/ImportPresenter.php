@@ -180,7 +180,7 @@ final class ImportPresenter extends SecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $photo->databotThumbFilename);
+        $this->sendFile($this->repositoryConfiguration->getDatabotThumbsBucket($photo), $photo->databotThumbFilename);
 
     }
 
@@ -191,7 +191,7 @@ final class ImportPresenter extends SecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->archiveFilename);
+        $this->sendFile($this->repositoryConfiguration->getArchiveBucket($photo), $photo->archiveFilename);
 
     }
 
@@ -202,7 +202,7 @@ final class ImportPresenter extends SecuredPresenter
             $this->error('The requested photo does not exists.');
         }
 
-        $this->sendFile($this->repositoryConfiguration->getRepositoryImageServerBucket(), $photo->jp2Filename);
+        $this->sendFile($this->repositoryConfiguration->getImageServerBucket($photo), $photo->jp2Filename);
 
     }
 

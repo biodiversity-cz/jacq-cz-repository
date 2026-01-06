@@ -10,6 +10,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @deprecated broken
+ * based on premisipon of exact buckets, we have prefix-suffix concept now
+ */
 class BucketParity extends Command
 {
 
@@ -48,7 +52,7 @@ class BucketParity extends Command
      */
     public function getArchiveFilesS3(): array
     {
-        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getRepositoryArchiveBucket());
+        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getArchiveBucket());
     }
 
     /**
@@ -56,7 +60,7 @@ class BucketParity extends Command
      */
     public function getJp2FilesS3(): array
     {
-        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getRepositoryImageServerBucket());
+        return $this->s3Service->listObjectsNamesOnly($this->repositoryConfiguration->getImageServerBucket());
     }
 
     protected function configure(): void

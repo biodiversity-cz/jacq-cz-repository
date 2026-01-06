@@ -47,7 +47,13 @@ final class PrepareServicesTest extends IntegrationTestCase
         //s3 refresh
         try {
 
-            $buckets = [self::BUCKET, $this->repositoryConfiguration->getRepositoryArchiveBucket(), $this->repositoryConfiguration->getRepositoryDatabotThumbsBucket(), $this->repositoryConfiguration->getRepositoryImageServerBucket()];
+            $buckets = [self::BUCKET,
+                $this->repositoryConfiguration->getRepositoryArchiveBucketPrefix().'-01',
+                $this->repositoryConfiguration->getRecentlyUsedArchiveBucket(),
+                $this->repositoryConfiguration->getRepositoryDatabotThumbsBucketPrefix().'-01',
+                $this->repositoryConfiguration->getRecentlyUsedDatabotThumbsBucket(),
+                $this->repositoryConfiguration->getRepositoryImageServerBucketPrefix().'-01',
+                $this->repositoryConfiguration->getRecentlyUsedImageServerBucket(),];
             foreach ($buckets as $bucket) {
                 if ($this->s3Service->doesBucketExist($bucket)) {
                     $objects = $this->s3Service->listObjectsNamesOnly($bucket);

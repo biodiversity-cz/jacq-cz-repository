@@ -51,7 +51,7 @@ class BatchDownload extends Command
         $photos = $this->getPhotos();
         $output->writeln(count($photos) . ' files will be downloaded.');
         foreach ($photos as $photo) {
-            $this->s3Service->getObject($this->repositoryConfiguration->getRepositoryArchiveBucket(), $photo->archiveFilename, $this->tempDir->getPath('downloaded') . DIRECTORY_SEPARATOR . $photo->archiveFilename);
+            $this->s3Service->getObject($this->repositoryConfiguration->getArchiveBucket($photo), $photo->archiveFilename, $this->tempDir->getPath('downloaded') . DIRECTORY_SEPARATOR . $photo->archiveFilename);
         }
 
         $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
