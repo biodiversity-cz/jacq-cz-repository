@@ -22,6 +22,21 @@ final readonly class RepositoryConfiguration
         return $this->getKey('archiveBucket', 'Archive bucket not set.');
     }
 
+    public function getArchiveBucketPrefix(): string
+    {
+        return $this->getKey('archiveBucketPrefix', 'Archive bucket not set.');
+    }
+
+    public function getRecentArchiveBucket(): string
+    {
+        return $this->getArchiveBucketPrefix().$this->getRecentBucketSuffix();
+    }
+
+    public function getRecentBucketSuffix(): string
+    {
+        return $this->getKey('recentBucketSuffix');
+    }
+
     protected function getKey(string $key, string $msg = ''): mixed
     {
         if (!isset($this->config[$key])) {

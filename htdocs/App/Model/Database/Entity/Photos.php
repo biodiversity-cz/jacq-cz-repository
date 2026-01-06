@@ -43,6 +43,9 @@ class Photos
     #[Column(name: 'databot_thumb_filename', unique: true, nullable: true, options: ['comment' => 'Filename of PNG file devoted for Databots'])]
     protected(set) ?string $databotThumbFilename = null;
 
+    #[Column(options: ['comment' => 'Suffix determining bucket set where the related files are stored'])]
+    protected(set) string $bucketSuffix;
+
     #[ManyToOne(targetEntity: Herbaria::class, inversedBy: 'photos')]
     #[JoinColumn(name: 'herbarium_id', referencedColumnName: 'id', nullable: false, options: ['comment' => 'Herbarium storing and managing the specimen data'])]
     protected(set) Herbaria $herbarium;
@@ -249,6 +252,12 @@ class Photos
     public function setDatabotThumbFilename(?string $databotThumbFilename): Photos
     {
         $this->databotThumbFilename = $databotThumbFilename;
+        return $this;
+    }
+
+    public function setBucketSuffix(string $bucketSuffix): Photos
+    {
+        $this->bucketSuffix = $bucketSuffix;
         return $this;
     }
 

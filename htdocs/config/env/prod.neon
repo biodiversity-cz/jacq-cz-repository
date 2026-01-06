@@ -7,9 +7,10 @@ parameters:
         host: jacq-pgsql-cluster-rw
         password: %env.DB_PASSWORD%
     storage:
-        archiveBucket: archive
-        jp2Bucket: iiif
-        thumbBucket: thumbs1280
+        archiveBucketPrefix: archive
+        jp2BucketPrefix: iiif
+        thumbBucketPrefix: thumbs1280
+        recentBucketSuffix: "-01"
         imageServerBaseUrl: https://rais-iiif.dyn.cloud.e-infra.cz/iiif/
     databot:
         basePath: http://127.0.0.1:5000

@@ -21,6 +21,7 @@ final class PhotoTestFactory
         self::set($photo, 'originalFilename', 'specimen_123.tif');
         self::set($photo, 'archiveFilename', null);
         self::set($photo, 'jp2Filename', null);
+        self::set($photo, 'bucketSuffix', '-01');
 
         self::set($photo, 'createdAt', new \DateTimeImmutable('2023-01-01 00:00:00'));
         self::set($photo, 'lastEdit', new \DateTime('2023-01-16 14:20:00'));
@@ -44,6 +45,7 @@ final class PhotoTestFactory
         self::set($photo, 'originalFilename', 'specimen_123.tif');
         self::set($photo, 'archiveFilename', 'PRC_000123_789.tif');
         self::set($photo, 'jp2Filename', 'test.jp2');
+        self::set($photo, 'bucketSuffix', '-01');
 
         self::set($photo, 'createdAt', new \DateTimeImmutable('2023-01-15 10:30:00'));
         self::set($photo, 'lastEdit', new \DateTime('2023-01-16 14:20:00'));

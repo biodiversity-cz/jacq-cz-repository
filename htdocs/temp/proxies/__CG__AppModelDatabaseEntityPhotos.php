@@ -25,6 +25,7 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
         'JP2FileSize' => [parent::class, 'JP2FileSize', null, 8196],
         'archiveFileSize' => [parent::class, 'archiveFileSize', null, 8196],
         'archiveFilename' => [parent::class, 'archiveFilename', null, 8196],
+        'bucketSuffix' => [parent::class, 'bucketSuffix', null, 8196],
         'createdAt' => [parent::class, 'createdAt', null, 8196],
         'databotResults' => [parent::class, 'databotResults', null, 8196],
         'databotThumbFilename' => [parent::class, 'databotThumbFilename', null, 8196],
