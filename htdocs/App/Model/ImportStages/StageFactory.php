@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -21,7 +21,7 @@ readonly class StageFactory
 
     public function createDownloadStage(): DownloadStage
     {
-        return new DownloadStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService,$this->s3Service);
+        return new DownloadStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->s3Service);
     }
 
     public function createBarcodeStage(): BarcodeStage
@@ -52,6 +52,11 @@ readonly class StageFactory
     public function createTransferStage(): TransferStage
     {
         return new TransferStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->appConfiguration, $this->s3Service);
+    }
+
+    public function createTransferJp2Stage(): TransferJp2Stage
+    {
+        return new TransferJp2Stage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->appConfiguration, $this->s3Service);
     }
 
     public function createCleanupTempFilesStage(): CleanupTempFilesStage

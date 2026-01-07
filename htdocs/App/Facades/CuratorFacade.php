@@ -125,7 +125,8 @@ readonly class CuratorFacade
             ->pipe($this->stageFactory->createBarcodeStage())
             ->pipe($this->stageFactory->createDuplicityStage())
             ->pipe($this->stageFactory->createConvertStage())
-            ->pipe($this->stageFactory->createTransferStage());
+            ->pipe($this->stageFactory->createTransferStage())
+            ->pipe($this->stageFactory->createTransferJp2Stage());
     }
 
     public function importMultiplierPipeline(): Pipeline
@@ -133,7 +134,17 @@ readonly class CuratorFacade
         return new Pipeline()
             ->pipe($this->stageFactory->createThumbnailStage()) //to generate thumb into ImportError just for case of error..
             ->pipe($this->stageFactory->createDuplicityStage())
-            ->pipe($this->stageFactory->createTransferStage());
+            ->pipe($this->stageFactory->createTransferStage())
+            ->pipe($this->stageFactory->createTransferJp2Stage());
+    }
+
+    public function publishPhotoPipeline(): Pipeline
+    {
+        return new Pipeline()
+            ->pipe($this->stageFactory->createDownloadStage())
+            ->pipe($this->stageFactory->createConvertStage())
+            ->pipe($this->stageFactory->createTransferJp2Stage())
+            ->pipe($this->stageFactory->createCleanupTempFilesStage());
     }
 
     public function importCleanupPipeline(): Pipeline
@@ -268,7 +279,7 @@ readonly class CuratorFacade
                     ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::EMBARGO))
                     ->setEmbargoTimeout()
                     ->setLastEditAt();
-            }else{
+            } else {
                 throw new ServiceException('This photo cannot be edited.');
             }
 
@@ -308,7 +319,7 @@ readonly class CuratorFacade
                     ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK))
                     ->dropEmbargoTimeout()
                     ->setLastEditAt();
-            }else{
+            } else {
                 throw new ServiceException('This photo cannot be edited.');
             }
 
