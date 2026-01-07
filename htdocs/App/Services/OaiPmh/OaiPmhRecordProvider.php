@@ -95,7 +95,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
         $sets = [];
 
         foreach ($herbaria as $herbarium) {
-            $sets[$herbarium->acronym] = $herbarium->getFullname() ?? $herbarium->acronym;
+            $sets[$herbarium->acronym] = $herbarium->fullname ?? $herbarium->acronym;
         }
 
         return $sets;

@@ -1,7 +1,7 @@
 {block content}
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Herbarium {$herbarium->acronym} {$herbarium->getFullname()}</h2>
+        <h2>Herbarium {$herbarium->acronym} {$herbarium->fullname}</h2>
 
         {if count($availableHerbaria) > 1}
         <div class="dropdown">
@@ -10,7 +10,7 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="herbariumSwitcher">
                 {foreach $availableHerbaria as $availableHerbarium}
-                <li><a class="dropdown-item {if $availableHerbarium->id === $herbarium->id}active{/if}" href="{link switchHerbarium!, herbariumId => $availableHerbarium->id}">{$availableHerbarium->acronym} {if $availableHerbarium->getFullname()}- {$availableHerbarium->getFullname()}{/if}</a></li>
+                <li><a class="dropdown-item {if $availableHerbarium->id === $herbarium->id}active{/if}" href="{link switchHerbarium!, herbariumId => $availableHerbarium->id}">{$availableHerbarium->acronym} {if $availableHerbarium->fullname}- {$availableHerbarium->getFullname()}{/if}</a></li>
                 {/foreach}
             </ul>
         </div>
