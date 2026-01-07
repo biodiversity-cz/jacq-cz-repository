@@ -12,6 +12,7 @@ abstract class BaseStage implements StageInterface
 {
 
     protected const string ARCHIVE_MASTER = 'archive';
+    protected const string ARCHIVE_MASTER_SINGLEPAGE = 'archive-singlepage'; /* tif file where only the largest page is extracted */
     protected const string THUMB_FOR_DATABOT = 'databot';
     protected const string JP2_FOR_IIIF = 'iiif';
     protected const string ZBAR = 'zbar';
@@ -40,6 +41,11 @@ abstract class BaseStage implements StageInterface
     protected function getMasterTempPath(): string
     {
         return $this->tempDir->getPath(self::ARCHIVE_MASTER . '.' . $this->getOriginalFileExtension($this->item));
+    }
+
+    protected function getMasterSinglePageTempPath(): string
+    {
+        return $this->tempDir->getPath(self::ARCHIVE_MASTER_SINGLEPAGE . '.tiff');
     }
 
     protected function getDuplicateTempPath(Photos $photo): string

@@ -21,27 +21,13 @@ class TransferStage extends BaseStage implements StageInterface
     public function __invoke(mixed $payload): mixed
     {
         $this->item = $payload;
-        $this->uploadJp2toRepository();
-        $this->uploadTiftoRepository();
+        $this->uploadTifToRepository();
         $this->uploadDatabotThumbToRepository();
 
         return $payload;
     }
 
-    protected function uploadJp2toRepository(): void
-    {
-        try {
-            $this->s3Service->putJp2IfNotExists(
-                $this->repositoryConfiguration->getImageServerBucket($this->item),
-                $this->repositoryConfiguration->createS3Jp2Name($this->item),
-                $this->getIiifTempPath());
-            $this->item->setJP2Filename($this->repositoryConfiguration->createS3Jp2Name($this->item));
-        } catch (\Throwable $exception) {
-            throw new TransferStageException('jp2 upload error (' . $exception->getMessage() . ')');
-        }
-    }
-
-    protected function uploadTiftoRepository(): void
+    protected function uploadTifToRepository(): void
     {
         try {
             $this->s3Service->putTiffIfNotExists(

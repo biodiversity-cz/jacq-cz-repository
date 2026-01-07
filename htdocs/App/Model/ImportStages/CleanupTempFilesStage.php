@@ -18,7 +18,7 @@ class CleanupTempFilesStage extends BaseStage implements StageInterface
     public function __invoke(mixed $payload): mixed
     {
         $this->item = $payload;
-        $files = [$this->getIiifTempPath(), $this->getMasterTempPath(), $this->getDatabotThumbTempPath(), $this->getZbarThumbTempPath()];
+        $files = [$this->getIiifTempPath(), $this->getMasterTempPath(), $this->getDatabotThumbTempPath(), $this->getZbarThumbTempPath(), $this->getMasterSinglePageTempPath()];
 
         foreach ($files as $path) {
             if ($path && file_exists($path)) {
