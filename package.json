@@ -2,7 +2,7 @@
   "title": "JACQ CZ repository",
   "description": "JACQ - Czech integration",
   "keywords": [
-    "jacq"
+    "herbarium image repository"
   ],
   "browserslist": [
     "> 5%"
@@ -12,9 +12,7 @@
     "bootstrap": "^5",
     "@popperjs/core": "^2",
     "@contributte/datagrid": "^7",
-    "jquery": "^3",
     "mirador": "^4",
-    "naja": "^3",
     "plotly.js": "^3"
   },
   "devDependencies": {
@@ -24,8 +22,6 @@
     "postcss-loader": "^8",
     "postcss-preset-env": "^10",
     "sass-loader": "^16",
-    "typescript": "^5",
-    "ts-loader": "^9",
     "@symfony/webpack-encore": "^5",
     "webpack-notifier": "^1"
   },

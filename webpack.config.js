@@ -17,9 +17,6 @@ Encore
     })
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
-    .autoProvideVariables({
-        $: 'jquery',
-        naja: ['naja', 'default'], //https://github.com/naja-js/naja/discussions/203
-    });
+   ;
 
 module.exports = Encore.getWebpackConfig();
