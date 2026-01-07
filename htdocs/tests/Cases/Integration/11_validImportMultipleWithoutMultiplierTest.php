@@ -34,7 +34,7 @@ final class ValidImportMultipleWithoutMultiplierTest extends IntegrationTestCase
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_ERROR]);
         Assert::count(0, $waitingAfterImport, 'images with error');
 
-        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);
+        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(0, $filesInCuratorBucket, 'curator bucket is empty again');
     }
 

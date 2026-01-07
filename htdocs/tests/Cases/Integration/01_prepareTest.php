@@ -47,7 +47,7 @@ final class PrepareServicesTest extends IntegrationTestCase
         //s3 refresh
         try {
 
-            $buckets = [self::BUCKET,
+            $buckets = [self::BUCKET_HERBARIUM,
                 $this->repositoryConfiguration->getRepositoryArchiveBucketPrefix().'-01',
                 $this->repositoryConfiguration->getRecentlyUsedArchiveBucket(),
                 $this->repositoryConfiguration->getRepositoryDatabotThumbsBucketPrefix().'-01',

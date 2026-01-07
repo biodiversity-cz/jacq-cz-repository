@@ -31,12 +31,12 @@ final class ValidImportMultiplierTest extends IntegrationTestCase
 
     protected function checkBefore()
     {
-        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);
+        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(0, $filesInCuratorBucket, 'empty bucket at the beginning');
 
         $this->uploadFiles();
 
-        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);
+        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(2, $filesInCuratorBucket, 'files uploaded by curator in his bucket');
 
         $waiting = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING]);
@@ -60,7 +60,7 @@ final class ValidImportMultiplierTest extends IntegrationTestCase
         $importedAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_OK, 'specimenId' => $this::SPECIMENS]);
         Assert::count(count($this::SPECIMENS), $importedAfterImport, 'exact ids imported');
 
-        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);
+        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(0, $filesInCuratorBucket, 'curator bucket is empty again');
     }
 
