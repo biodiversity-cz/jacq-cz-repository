@@ -24,7 +24,6 @@ class PhotosStatus
     public const int WAITING_FOR_PUBLISHING = 7;
     public const int DEVELOP_PROCEED = 100;
     public const array PASSED = [self::IMAGE_CONTROL_OK, self::SPECIMEN_CONTROL_OK, self::WAITING_FOR_PUBLISHING, self::EMBARGO];
-    public const array PASSED_PUBLIC = [self::IMAGE_CONTROL_OK, self::SPECIMEN_CONTROL_OK, self::PUBLISHED];
     public const array DELETEABLE = [self::IMAGE_CONTROL_ERROR, self::IMAGE_CONTROL_OK, self::SPECIMEN_CONTROL_OK, self::EMBARGO];
     public const array EMBARGOABLE = [self::SPECIMEN_CONTROL_OK, self::EMBARGO];
 
