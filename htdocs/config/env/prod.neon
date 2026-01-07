@@ -10,7 +10,7 @@ parameters:
         archiveBucketPrefix: archive
         jp2BucketPrefix: iiif
         thumbBucketPrefix: thumbs1280
-        recentBucketSuffix: "-01"
+        recentBucketSuffix: ""
         imageServerBaseUrl: https://rais-iiif.dyn.cloud.e-infra.cz/iiif/
     databot:
         basePath: http://127.0.0.1:5000
