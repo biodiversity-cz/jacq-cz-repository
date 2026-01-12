@@ -32,6 +32,7 @@ final class RouterFactory
     protected static function buildFront(RouteList $router): RouteList
     {
         $router[] = $list = new RouteList('Front');
+        $list[] = new Route('ark[/<value .+>]','Ark:default');
         $list[] = new Route('<presenter>/<action>[/<id>]', 'Home:default');
 
         return $router;
