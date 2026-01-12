@@ -5,6 +5,7 @@ namespace App\UI\Admin\Cetaf;
 use App\Forms\BaseForm;
 use App\Forms\ImportCetafForm;
 use App\Grids\CetafSidGrid;
+use App\Grids\CetafSidGridFactory;
 use App\Model\Database\Entity\ExternalDatabase;
 use App\Services\CetafSidManagementService;
 use App\Services\EntityServices\CetaSidService;
@@ -22,7 +23,7 @@ final class CetafPresenter extends SecuredPresenter
     /** @inject */
     public ImportCetafForm $validationForm;
 
-    /** @inject */ public CetafSidGrid $cetafSidGrid;
+    /** @inject */ public CetafSidGridFactory $cetafSidGrid;
 
     public function checkRequirements(\ReflectionClass|\ReflectionMethod $element): void
     {

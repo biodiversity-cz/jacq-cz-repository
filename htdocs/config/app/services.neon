@@ -36,5 +36,4 @@ search:
         - *Factory
         - *Facade
         - *Service
-        - *Grid
         - *Form

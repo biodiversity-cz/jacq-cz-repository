@@ -20,6 +20,7 @@
                     <p class="card-text">Filesize: {$photo->archiveFileSize|bytes:2}</p>
                     <p class="card-text"><small class="text-muted">Imported at
                         {$photo->createdAt|localDate}</small></p>
+                    <p> <a href="{plink Repository:image $photo->id}">Detail of image</a></p>
                 </div>
             </div>
         </div>

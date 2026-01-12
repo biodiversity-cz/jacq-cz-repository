@@ -19,7 +19,7 @@ class FixtureExternalDatabase extends FixtureBase
     {
         $db = new ExternalDatabase()
             ->setName('jacq.org')
-            ->setUrl('https://api.jacq.org/v1/stableIdentifier/resolve/')
+            ->setUrl('https://api.jacq.org/v1/objects/specimens/by-sid/')
             ->setElement('specimenID')
             ->setDescription('default external database');
         $manager->persist($db);

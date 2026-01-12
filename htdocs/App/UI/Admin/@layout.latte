@@ -34,32 +34,25 @@
                            n:href="Cetaf:">CETAF SID</a>
                     </li>
                     {/if}
-<!--                    <li class="nav-item">-->
-<!--                        <a class="nav-link {if $presenter->isLinkCurrent('Funding:')}active{/if}"-->
-<!--                           n:href="Funding:">Funding</a>-->
-<!--                    </li>-->
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link {if $presenter->isLinkCurrent('Funding:')}active{/if}"-->
+                    <!--                           n:href="Funding:">Funding</a>-->
+                    <!--                    </li>-->
                 </ul>
                 <form class="d-flex" action="{link Import:specimen}" method="GET">
-                    <input name="specimenNumericPartOfId" class="form-control me-2" type="search" placeholder="put numeric part of ID"
+                    <input name="specimenNumericPartOfId" class="form-control me-2" type="search"
+                           placeholder="put numeric part of ID"
                            aria-label="Search specimen">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person"></i>{$user->getIdentity()->getCurrentHerbariumAcronym()} {$user->getIdentity()->name}
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li>
-                                <a class="dropdown-item" n:href="Herbarium:">Settings</a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item" n:href=":Front:Sign:out"><i class="bi bi-box-arrow-right"></i>
-                                    Sign out</a>
-                            </li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" n:href="Herbarium:">{$user->getIdentity()->getCurrentHerbariumAcronym()}
+                            Settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" n:href=":Front:Sign:out"><i class="bi bi-box-arrow-right"></i>
+                            Sign out {$user->getIdentity()->name}</a>
                     </li>
                 </ul>
 
@@ -71,8 +64,12 @@
     <div class="container">
         <div class="container-fluid">
             <div class="col-sm-12 col-md-6 offset-md-3 mt-1">
-                <div n:foreach="$flashes as $flash" class="alert py-1 alert-{$flash->type}" role="alert">{$flash->message}</div>
-                <div n:foreach="$maintenances as $maintenance" class="alert py-1 alert-{$maintenance->type}" role="alert">{$maintenance->type|upper}: {$maintenance->message}</div>
+                <div n:foreach="$flashes as $flash" class="alert py-1 alert-{$flash->type}" role="alert">
+                    {$flash->message}
+                </div>
+                <div n:foreach="$maintenances as $maintenance" class="alert py-1 alert-{$maintenance->type}"
+                     role="alert">{$maintenance->type|upper}: {$maintenance->message}
+                </div>
             </div>
         </div>
     </div>

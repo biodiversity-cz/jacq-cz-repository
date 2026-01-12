@@ -6,6 +6,7 @@ use App\Facades\CuratorFacade;
 use App\Grids\ImportedPhotosGrid;
 use App\Grids\ImportedPhotosGridFactory;
 use App\Grids\PublishedPhotosGrid;
+use App\Grids\PublishedPhotosGridFactory;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Repository\PhotosRepository;
 use App\Services\EntityServices\PhotoService;
@@ -18,7 +19,7 @@ final class HomePresenter extends SecuredPresenter
     public CuratorFacade $curatorFacade;
 
     /** @inject */ public ImportedPhotosGridFactory $importedPhotosGridFactory;
-    /** @inject */ public PublishedPhotosGrid $publishedPhotosGrid;
+    /** @inject */ public PublishedPhotosGridFactory $publishedPhotosGrid;
     /** @inject */ public PhotoService $photosRepository;
 
     public ?Photos $photo;

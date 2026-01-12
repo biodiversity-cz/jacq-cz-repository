@@ -60,10 +60,10 @@ final class SpecimenPidCallerService
 
     private function chooseHandler(Photos $entity): callable
     {
-        if ($entity->herbarium->externalDatabase->id === ExternalDatabase::JACQ){
+        if ($entity->herbarium->externalDatabase->id === ExternalDatabase::JACQ) {
             return [$this, 'jacqHandler'];
         }
-        return  [$this, 'defaultHandler'];
+        return [$this, 'defaultHandler'];
     }
 
     private function defaultHandler(Photos $entity, $response): void
@@ -80,15 +80,19 @@ final class SpecimenPidCallerService
     private function jacqHandler(Photos $entity, $response): void
     {
         $status = $response?->getStatusCode();
-        if ($status === 200 && $response) {
-            $body = (string) $response->getBody();
-            $data = json_decode($body, true);
+        try {
+            if ($status === 200 && $response) {
+                $body = (string)$response->getBody();
+                $data = json_decode($body, true);
 
-            if (isset($data['stableIdentifierLatest']['stableIdentifier'])) {
-                $entity->setSpecimenPid($data['stableIdentifierLatest']['stableIdentifier']);
-                $entity->setStatus($this->em->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK));
+                if ($data['jacq']['jacq:accessible'] === true) {
+                    $entity->setSpecimenPid($data['jacq']['jacq:stableIdentifier']);
+                    $entity->setStatus($this->em->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK));
+                }
+                $entity->setLastEditAt();
             }
-            $entity->setLastEditAt();
+        } catch (\Exception $e) {
         }
+
     }
 }
