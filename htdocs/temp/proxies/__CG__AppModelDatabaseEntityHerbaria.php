@@ -26,6 +26,7 @@ class Herbaria extends \App\Model\Database\Entity\Herbaria implements \Doctrine\
         'address' => [parent::class, 'address', null, 8196],
         'bucket' => [parent::class, 'bucket', null, 8196],
         'contacts' => [parent::class, 'contacts', null, 8196],
+        'digitsCount' => [parent::class, 'digitsCount', null, 8196],
         'externalDatabase' => [parent::class, 'externalDatabase', null, 8196],
         'fallbackFilename' => [parent::class, 'fallbackFilename', null, 8196],
         'fullname' => [parent::class, 'fullname', null, 8196],
