@@ -74,4 +74,9 @@ readonly class StageFactory
         return new CleanCuratorBucketStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->s3Service, $this->appConfiguration);
     }
 
+    public function createPidStage(): PidStage
+    {
+        return new PidStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->specimenIdService);
+    }
+
 }

@@ -34,6 +34,7 @@ build:
 data_processing:
 	NETTE_DEBUG=1 bin/console curator:importImage
 	NETTE_DEBUG=1 bin/console curator:resolveSpecimenPid
+	NETTE_DEBUG=1 bin/console curator:publishPhoto
 
 admin:
 	NETTE_DEBUG=1 bin/console admin:downloadArchive
