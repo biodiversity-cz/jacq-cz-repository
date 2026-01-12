@@ -67,6 +67,9 @@ class Herbaria
     #[JoinColumn(name: 'license_id', referencedColumnName: 'id', nullable: false)]
     protected(set) License $license;
 
+    #[Column(type: Types::INTEGER, nullable: false, options: ['default' => 6, 'comment' => 'count of digits in HerbNr stored in JACQ, important for SID prediction and other "standard" representation of the HerbNr'])]
+    protected(set) int $digitsCount = 6;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -167,5 +170,12 @@ class Herbaria
         $this->license = $license;
         return $this;
     }
+
+    public function setDigitsCount(int $digitsCount): Herbaria
+    {
+        $this->digitsCount = $digitsCount;
+        return $this;
+    }
+
 
 }

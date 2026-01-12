@@ -10,7 +10,7 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="herbariumSwitcher">
                 {foreach $availableHerbaria as $availableHerbarium}
-                <li><a class="dropdown-item {if $availableHerbarium->id === $herbarium->id}active{/if}" href="{link switchHerbarium!, herbariumId => $availableHerbarium->id}">{$availableHerbarium->acronym} {if $availableHerbarium->fullname}- {$availableHerbarium->getFullname()}{/if}</a></li>
+                <li><a class="dropdown-item {if $availableHerbarium->id === $herbarium->id}active{/if}" href="{link switchHerbarium!, herbariumId => $availableHerbarium->id}">{$availableHerbarium->acronym} {if $availableHerbarium->fullname}- {$availableHerbarium->fullname}{/if}</a></li>
                 {/foreach}
             </ul>
         </div>
