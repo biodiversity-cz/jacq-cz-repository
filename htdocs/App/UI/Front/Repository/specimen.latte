@@ -2,7 +2,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a n:href="Home:">Repository</a></li>
-        <li class="breadcrumb-item active" aria-current="page">herbarium {$images[0]->herbarium->acronym}</li>
+        <li class="breadcrumb-item active" aria-current="page"><a n:href=":herbarium $images[0]->herbarium->acronym">herbarium {$images[0]->herbarium->acronym}</a></li>
         <li class="breadcrumb-item active" aria-current="page">specimen {$specimen->getStandardizedId()}</li>
     </ol>
 </nav>

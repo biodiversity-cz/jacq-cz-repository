@@ -3,10 +3,15 @@
 namespace App\UI\Front\Repository;
 
 use App\Controls\Image\DetailControlFactory;
+use App\Exceptions\HerbariumIdException;
 use App\Exceptions\ImageIdException;
 use App\Exceptions\SpecimenIdException;
+use App\Grids\FrontPhotosGrid;
+use App\Grids\FrontPhotosGridFactory;
+use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Specimen\SpecimenFactory;
+use App\Services\EntityServices\HerbariumService;
 use App\Services\EntityServices\ImageDownloadLogService;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
@@ -30,10 +35,18 @@ final class RepositoryPresenter extends UnsecuredPresenter
     public PhotoService $photoService;
 
     /** @inject */
+    public HerbariumService $herbariumService;
+
+    /** @inject */
+    public FrontPhotosGridFactory $frontPhotosGridFactory;
+
+    /** @inject */
     public RepositoryConfiguration $repositoryConfiguration;
 
     /** @inject */
     public DetailControlFactory $detailControlFactory;
+
+    protected(set) ?Herbaria $herbarium;
 
     /** @inject */ public ImageDownloadLogService $imageDownloadLogService;
 
@@ -99,37 +112,37 @@ final class RepositoryPresenter extends UnsecuredPresenter
         }
     }
 
-    public function renderSpecimen(?string $sid): void
+    public function renderSpecimen(?string $id): void
     {
         try {
-            if ($sid === null) {
+            if ($id === null) {
                 throw new SpecimenIdException();
             }
 
-            $specimen = $this->specimenFactory->create($sid);
+            $specimen = $this->specimenFactory->create($id);
         } catch (SpecimenIdException $exception) {
             $this->flashMessage($exception->getMessage(), 'error');
             $this->redirect('Home:');
         }
 
         if (!$this->photoService->specimenHasPublicPhotos($specimen)) {
-            $this->error('Specimen ' . $sid . ' not in evidence.');
+            $this->error('Specimen ' . $id . ' not in evidence.');
         }
 
         $this->template->specimen = $specimen;
         $this->template->images = $this->photoService->getPublicPhotosOfSpecimen($specimen);
 
-        $this->template->manifestAbsoluteLink = $this->link('//Iiif:manifest', $sid);
+        $this->template->manifestAbsoluteLink = $this->link('//Iiif:manifest', $id);
     }
 
-    public function renderImage(?int $sid): void
+    public function renderImage(?int $id): void
     {
         try {
-            if ($sid === null) {
+            if ($id === null) {
                 throw new ImageIdException();
             }
             /** @var Photos $photo */
-            $photo = $this->photoService->getPhoto($this->getUser(), $sid);
+            $photo = $this->photoService->getPhoto($this->getUser(), $id);
         } catch (ImageIdException $exception) {
             $this->flashMessage($exception->getMessage(), 'error');
             $this->redirect('Home:');
@@ -139,9 +152,30 @@ final class RepositoryPresenter extends UnsecuredPresenter
 
     }
 
+    public function renderHerbarium(?string $id): void
+    {
+        try {
+            if ($id === null) {
+                throw new HerbariumIdException();
+            }
+            $herbarium = $this->herbariumService->findOneWithAcronym($id);
+            $this->herbarium = $herbarium;
+        } catch (HerbariumIdException $exception) {
+            $this->flashMessage($exception->getMessage(), 'error');
+            $this->redirect('Home:');
+        }
+
+        $this->template->herbarium = $herbarium;
+
+    }
+
     protected function createComponentDetail(): Multiplier
     {
         return new Multiplier(fn($id) => $this->detailControlFactory->create((int)$id));
     }
 
+    public function createComponentPhotosGrid(): FrontPhotosGrid
+    {
+        return $this->frontPhotosGridFactory->create($this->herbarium);
+    }
 }
