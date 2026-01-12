@@ -1,0 +1,17 @@
+{block content}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a n:href="Home:">Repository</a></li>
+        <li class="breadcrumb-item active" aria-current="page">herbarium {$photo->herbarium->acronym}</li>
+        <li class="breadcrumb-item active" aria-current="page"><a n:href=":specimen $photo->getFullSpecimenId()">specimen {$photo->getFullSpecimenId()}</a></li>
+        <li class="breadcrumb-item" aria-current="page">photo {$photo->id}</li>
+    </ol>
+</nav>
+<div class="row">
+    {control 'detail-' . $photo->id}
+</div>
+
+
+
+
+

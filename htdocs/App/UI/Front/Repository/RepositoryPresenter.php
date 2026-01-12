@@ -3,7 +3,9 @@
 namespace App\UI\Front\Repository;
 
 use App\Controls\Image\DetailControlFactory;
+use App\Exceptions\ImageIdException;
 use App\Exceptions\SpecimenIdException;
+use App\Model\Database\Entity\Photos;
 use App\Model\Specimen\SpecimenFactory;
 use App\Services\EntityServices\ImageDownloadLogService;
 use App\Services\EntityServices\PhotoService;
@@ -118,6 +120,23 @@ final class RepositoryPresenter extends UnsecuredPresenter
         $this->template->images = $this->photoService->getPublicPhotosOfSpecimen($specimen);
 
         $this->template->manifestAbsoluteLink = $this->link('//Iiif:manifest', $sid);
+    }
+
+    public function renderImage(?int $sid): void
+    {
+        try {
+            if ($sid === null) {
+                throw new ImageIdException();
+            }
+            /** @var Photos $photo */
+            $photo = $this->photoService->getPhoto($this->getUser(), $sid);
+        } catch (ImageIdException $exception) {
+            $this->flashMessage($exception->getMessage(), 'error');
+            $this->redirect('Home:');
+        }
+
+        $this->template->photo = $photo;
+
     }
 
     protected function createComponentDetail(): Multiplier
