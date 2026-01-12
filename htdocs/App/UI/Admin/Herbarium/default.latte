@@ -21,7 +21,7 @@
 
         <p>Validity of the barcode and its transformation in herbarium specimen ID is compared using a regular
             expression assigned to your herbarium: </p>
-        <code class="text-center fs-3" id="barcodeRegex">{$herbarium->getRegexBarcode()}</code>
+        <code class="text-center fs-3" id="barcodeRegex">{$herbarium->regexBarcode}</code>
         <p class="fw-light">You can understand it easily with the ChatGPT, an online <a href="https://regex101.com/">tool</a>,
             or ask the repository administrator to fit it according your needs.</p>
 
@@ -54,7 +54,7 @@
         <p class="ms-5">If <em>NO barcode is present</em> in the image, the specimen ID identification falls to the
             filename, using a regular expression evaluation again. This could be useful for some situation, but please
             do not overuse it, a preferred state is to include the barcode in the image in the "physical original". </p>
-        <code class="text-center fs-5" id="filenameRegex">{$herbarium->getRegexFilename()}</code>
+        <code class="text-center fs-5" id="filenameRegex">{$herbarium->regexFilename}</code>
         <div class="mb-3 mt-4 row">
             <label for="filenameRegexInput" class="col-sm-2 col-md-1 col-form-label fw-bold">Test it:</label>
             <div class="col-sm-5 col-md-4">
@@ -96,12 +96,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                {foreach $herbarium->getUserHerbariumRoles() as $role}
+                {foreach $herbarium->userHerbariumRoles as $role}
                 <tr>
                     <td>
-                        {$role->getUser()->getFullname()}
+                        {$role->user->getFullname()}
                     </td>
-                    <td>{$role->getRole()->name}</td>
+                    <td>{$role->role->name}</td>
                 </tr>
                 {/foreach}
 
