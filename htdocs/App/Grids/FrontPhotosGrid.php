@@ -37,13 +37,6 @@ class FrontPhotosGrid extends Control
         $template->render();
     }
 
-    public function handleExportAll(): void
-    {
-        $qb = $this->defaultDatasource();
-        $iterableResult = $qb->getQuery()->toIterable();
-
-         $this->exportToXlsx($iterableResult);
-    }
 
     public function createComponentGrid(): Datagrid
     {
@@ -59,7 +52,6 @@ class FrontPhotosGrid extends Control
                 return $el;
             });
 
-        $this->grid->addColumnDateTime('lastEditAt', 'published at (FROM - TO)')->setRenderer(function (Photos $item){return $item->lastEdit->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
@@ -80,26 +72,6 @@ class FrontPhotosGrid extends Control
         $this->grid->addColumnNumber('width', 'width [px]');
         $this->grid->addColumnNumber('height', 'height [px]');
         $this->grid->addColumnNumber('archiveFileSize', 'archiveFileSize [B]');
-//        $this->grid->addColumnNumber('qualityCheck', 'qualityCheck')
-//            ->setRenderer(function (Photos $item) {
-//                return $this->databotsService->getQualityEvaluation($item);
-//            });
-
-
-        $this->grid->addExportCsvFiltered('Csv export (filtered)', 'curator_imported.csv')
-            ->setTitle('Csv export (filtered)')
-            ->setIcon('file-csv');
-
-        $this->grid->addToolbarButton('exportAll', 'Export XLSX (all)')
-            ->setClass('btn btn-xs btn-success')
-            ->setIcon('file-excel')
-            ->setTitle('Export všech záznamů')
-        ;
-        $this->grid->addExportCallback('Export XLSX (filtered)', function ($data): void {
-            $this->exportToXlsx($data);
-        }, true)
-            ->setClass('btn btn-xs btn-info')
-            ->setIcon('file-excel');
 
 
         return $this->grid;
@@ -114,49 +86,5 @@ class FrontPhotosGrid extends Control
             ->setParameter('status', PhotosStatus::PUBLISHED)
             ->orderBy('p.id', 'DESC');
     }
-
-    private function exportToXlsx(iterable $data): void
-    {
-        $filename = tempnam(sys_get_temp_dir(), 'export_') . '.xlsx';
-        $writer = new \XLSXWriter();
-
-        if (!empty($data)) {
-
-            $headers = ['id' => 'integer',
-                'processed at' => 'datetime',
-                'specimen' => 'string',
-                'original filename' => 'string',
-                'type' => 'string',
-                'width' => 'integer',
-                'height' => 'integer',
-                'archive filesize' => 'integer'
-            ];
-            $writer->writeSheetHeader('Export', $headers);
-
-            foreach ($data as $photo) {
-                /** @var Photos $photo */
-                $row = [
-                    $photo->id,
-                    $photo->lastEdit->format('Y-m-d H:i:s'),
-                    $photo->getFullSpecimenId(),
-                    $photo->originalFilename,
-                    $photo->type->name,
-                    $photo->width,
-                    $photo->height,
-                    $photo->archiveFileSize
-                ];
-                $writer->writeSheetRow('Export', $row);
-            }
-        }
-
-        $writer->writeToFile($filename);
-
-        $this->presenter->sendResponse(new FileResponse(
-            $filename,
-            'export.xlsx',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        ));
-    }
-
 
 }
