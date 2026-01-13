@@ -167,7 +167,7 @@ class Photos
 
     public function getExpectedJacqPid(): string
     {
-        return 'https://' . strtolower($this->herbarium->acronym) . '.jacq.org/' . strtoupper($this->herbarium->acronym) . $this->specimenId;
+        return 'https://' . strtolower($this->herbarium->acronym) . '.jacq.org/' . strtoupper($this->herbarium->acronym) . sprintf('%0'.$this->herbarium->digitsCount.'d', $this->specimenId);
     }
 
     public function setStatus(PhotosStatus $status): Photos
