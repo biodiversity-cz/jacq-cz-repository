@@ -107,7 +107,7 @@ test('Photos entity getters and setters', function (): void {
     $photos->setSpecimenId('000123');
     Assert::same('123', $photos->specimenId);
     Assert::same('ABC_000123', $photos->getFullSpecimenId());
-    Assert::same('https://abc.jacq.org/ABC123', $photos->getExpectedJacqPid());
+    Assert::same('https://abc.jacq.org/ABC000123', $photos->getExpectedJacqPid());
 
     // Test původního jména souboru
     $photos->setOriginalFilename('original.jpg');
