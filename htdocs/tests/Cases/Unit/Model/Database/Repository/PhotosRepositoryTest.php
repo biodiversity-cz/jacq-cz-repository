@@ -26,7 +26,7 @@ test('getPublicPhoto returns expected photo', function (): void {
 
     $repo = Mockery::mock(PhotosRepository::class)->makePartial();
     $repo->shouldReceive('findOneBy')
-        ->with(['id' => 123, 'status' => PhotosStatus::PASSED_PUBLIC])
+        ->with(['id' => 123, 'status' => PhotosStatus::PUBLISHED])
         ->andReturn($photo);
 
     Assert::same($photo, $repo->getPublicPhoto(123));

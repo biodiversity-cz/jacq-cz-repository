@@ -24,6 +24,11 @@ readonly class StageFactory
         return new DownloadStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->s3Service);
     }
 
+    public function createDownloadFromMasterStage(): DownloadFromMasterStage
+    {
+        return new DownloadFromMasterStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->s3Service);
+    }
+
     public function createBarcodeStage(): BarcodeStage
     {
         return new BarcodeStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
@@ -67,6 +72,11 @@ readonly class StageFactory
     public function createCleanupCuratorBucketStage(): CleanCuratorBucketStage
     {
         return new CleanCuratorBucketStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->s3Service, $this->appConfiguration);
+    }
+
+    public function createPidStage(): PidStage
+    {
+        return new PidStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->specimenIdService);
     }
 
 }

@@ -32,6 +32,11 @@ final readonly class RepositoryConfiguration
         return $this->getKey('archiveBucketPrefix', 'Archive bucket prefix not set.');
     }
 
+    public function getArkProperties(): array
+    {
+        return $this->getKey('ark', 'Ark properties not set.');
+    }
+
     public function getRecentlyUsedArchiveBucket(): string
     {
         return $this->getRepositoryArchiveBucketPrefix() . $this->getRecentlyUsedBucketSuffix();

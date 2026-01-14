@@ -21,7 +21,7 @@ use Tester\TestCase;
 
 abstract class IntegrationTestCase extends TestCase
 {
-    protected const string BUCKET = 'herbarium-test';
+    protected const string BUCKET_HERBARIUM = 'herbarium-test';
     public const string DIR = '';
     protected EntityManagerInterface $em;
     protected Container $container;
@@ -62,12 +62,12 @@ abstract class IntegrationTestCase extends TestCase
 
     protected function checkBefore()
     {
-        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);
+        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(0, $filesInCuratorBucket, 'empty bucket at the beginning');
 
         $this->uploadFiles();
 
-        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);
+        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(count($this::SPECIMENS), $filesInCuratorBucket, 'files uploaded by curator in his bucket');
 
         $waiting = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING]);
@@ -84,8 +84,8 @@ abstract class IntegrationTestCase extends TestCase
 
         foreach ($tifFiles as $path) {
             $key = basename($path);
-            if (!$this->s3Service->objectExists(self::BUCKET, $key)) {
-                $this->s3Service->putTiffIfNotExists(self::BUCKET, $key, $path);
+            if (!$this->s3Service->objectExists(self::BUCKET_HERBARIUM, $key)) {
+                $this->s3Service->putTiffIfNotExists(self::BUCKET_HERBARIUM, $key, $path);
             }
         }
 
@@ -106,7 +106,7 @@ abstract class IntegrationTestCase extends TestCase
         $importedAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_OK, 'specimenId' => $this::SPECIMENS]);
         Assert::count(count($this::SPECIMENS), $importedAfterImport, 'exact ids imported');
 
-        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);
+        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(0, $filesInCuratorBucket, 'curator bucket is empty again');
     }
 
@@ -126,7 +126,7 @@ abstract class IntegrationTestCase extends TestCase
         $importedAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_OK, 'specimenId' => $this::SPECIMENS]);
         Assert::count(0, $importedAfterImport, 'exact ids imported');
 
-        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET);
+        $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(count($this::SPECIMENS), $filesInCuratorBucket, 'curator bucket contains all the errorneus');
     }
 

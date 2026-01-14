@@ -61,12 +61,12 @@ class PhotosRepository extends AbstractRepository
      */
     public function getPublicPhotosOfSpecimen(Specimen $specimen): array
     {
-        return $this->findBy(['specimenId' => $specimen->numericPartOfId, 'herbarium' => $specimen->herbarium, 'status' => PhotosStatus::PASSED_PUBLIC]);
+        return $this->findBy(['specimenId' => $specimen->numericPartOfId, 'herbarium' => $specimen->herbarium, 'status' => PhotosStatus::PUBLISHED]);
     }
 
     public function getPublicPhoto(int $id): ?Photos
     {
-        return $this->findOneBy(['id' => $id, 'status' => PhotosStatus::PASSED_PUBLIC]);
+        return $this->findOneBy(['id' => $id, 'status' => PhotosStatus::PUBLISHED]);
     }
 
     public function getPhoto(User $user, int $id): ?Photos
