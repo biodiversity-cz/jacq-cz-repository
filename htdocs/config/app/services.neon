@@ -9,6 +9,7 @@ services:
 
     - {factory: App\Console\Scheduled\ProceedCuratorImage, tags: {console.command: curator:importImage}}
     - {factory: App\Console\Scheduled\ResolveSpecimenPid, tags: {console.command: curator:resolveSpecimenPid}}
+    - {factory: App\Console\Scheduled\PublishPhoto, tags: {console.command: curator:publishPhoto}}
     - {factory: App\Console\Admin\Test, tags: {console.command: curator:test}}
     - {factory: App\Console\Admin\BatchDownload, tags: {console.command: admin:downloadArchive}}
     - {factory: App\Console\Admin\BucketParity, tags: {console.command: admin:bucketParity}}

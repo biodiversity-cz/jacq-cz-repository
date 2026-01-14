@@ -14,6 +14,10 @@ parameters:
         previewImageSize: 1800 #px size of preview shown to curator on pipeline error
         databotImageSite: 1280 #px size of images used for all databots operations
         previewQuality: 80 #JPEG compression of preview shown to curator on pipeline error
+        ark:
+            naan: 12661
+            shoulder: nrp1
+            repository: HERB
 
     openid:
         providers:

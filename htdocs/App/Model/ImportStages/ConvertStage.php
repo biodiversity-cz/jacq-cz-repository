@@ -43,7 +43,7 @@ class ConvertStage extends BaseStage implements StageInterface
             '-i', $this->getMasterSinglePageTempPath(),
             '-o', $this->getIiifTempPath(),
             '-t', "1024,1024",
-            '-r', "10",
+            '-r', "40",
             '-n', "7",
         ];
 

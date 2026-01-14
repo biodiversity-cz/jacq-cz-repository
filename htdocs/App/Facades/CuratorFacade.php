@@ -124,9 +124,7 @@ readonly class CuratorFacade
             ->pipe($this->stageFactory->createMetadataStage())
             ->pipe($this->stageFactory->createBarcodeStage())
             ->pipe($this->stageFactory->createDuplicityStage())
-            ->pipe($this->stageFactory->createConvertStage())
-            ->pipe($this->stageFactory->createTransferStage())
-            ->pipe($this->stageFactory->createTransferJp2Stage());
+            ->pipe($this->stageFactory->createTransferStage());
     }
 
     public function importMultiplierPipeline(): Pipeline
@@ -134,16 +132,16 @@ readonly class CuratorFacade
         return new Pipeline()
             ->pipe($this->stageFactory->createThumbnailStage()) //to generate thumb into ImportError just for case of error..
             ->pipe($this->stageFactory->createDuplicityStage())
-            ->pipe($this->stageFactory->createTransferStage())
-            ->pipe($this->stageFactory->createTransferJp2Stage());
+            ->pipe($this->stageFactory->createTransferStage());
     }
 
     public function publishPhotoPipeline(): Pipeline
     {
         return new Pipeline()
-            ->pipe($this->stageFactory->createDownloadStage())
+            ->pipe($this->stageFactory->createDownloadFromMasterStage())
             ->pipe($this->stageFactory->createConvertStage())
             ->pipe($this->stageFactory->createTransferJp2Stage())
+            ->pipe($this->stageFactory->createPidStage())
             ->pipe($this->stageFactory->createCleanupTempFilesStage());
     }
 
