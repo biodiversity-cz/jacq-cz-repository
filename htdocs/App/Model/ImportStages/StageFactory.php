@@ -79,4 +79,9 @@ readonly class StageFactory
         return new PidStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->specimenIdService);
     }
 
+    public function createChecksumStage(): ChecksumStage
+    {
+        return new ChecksumStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
+    }
+
 }
