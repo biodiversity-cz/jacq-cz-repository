@@ -24,6 +24,7 @@ use Nette\Security\User;
 readonly class CuratorFacade
 {
 
+    public const int PUBLISH_COUNT_LIMIT = 5000;
     public function __construct(protected EntityManagerInterface $entityManager, protected S3Service $s3Service, protected StageFactory $stageFactory, protected RepositoryConfiguration $repositoryConfiguration, protected PhotoService $photoService, protected HerbariumService $herbariumService, protected SpecimenIdService $specimenIdService)
     {
     }
@@ -380,7 +381,7 @@ readonly class CuratorFacade
 
     public function markPublishable(User $user): self
     {
-        $result = $this->photoService->getPublishablePhotosDatasource($user)->getQuery()->getResult();
+        $result = $this->photoService->getPublishablePhotosDatasource($user)->setMaxResults(self::PUBLISH_COUNT_LIMIT)->getQuery()->getResult();
         foreach ($result as $photo) {
             $photo
                 ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::WAITING_FOR_PUBLISHING))
