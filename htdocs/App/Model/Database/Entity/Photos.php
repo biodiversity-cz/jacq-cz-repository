@@ -149,7 +149,7 @@ class Photos
 
     public function getFullSpecimenId(): string
     {
-        return strtoupper($this->herbarium->acronym) . '_' . sprintf('%0'.$this->herbarium->digitsCount.'d', $this->specimenId);
+        return strtoupper($this->herbarium->acronym) . '_' . $this->getSpecimenIdFixedWidth();
     }
     public function setHerbarium(Herbaria $herbarium): Photos
     {
@@ -165,9 +165,14 @@ class Photos
         return $this;
     }
 
+    public function getSpecimenIdFixedWidth():string
+    {
+        return sprintf('%0'.$this->herbarium->digitsCount.'d', $this->specimenId);
+    }
+
     public function getExpectedJacqPid(): string
     {
-        return 'https://' . strtolower($this->herbarium->acronym) . '.jacq.org/' . strtoupper($this->herbarium->acronym) . sprintf('%0'.$this->herbarium->digitsCount.'d', $this->specimenId);
+        return 'https://' . strtolower($this->herbarium->acronym) . '.jacq.org/' . strtoupper($this->herbarium->acronym) . $this->getSpecimenIdFixedWidth();
     }
 
     public function setStatus(PhotosStatus $status): Photos

@@ -58,7 +58,7 @@ class SpecimenIdService
             $settings['shoulder'].
             $settings['repository']. "/" .
             $photo->herbarium->acronym . "/" .
-            $photo->getFullSpecimenId() . "/".
+            $photo->getSpecimenIdFixedWidth() . "/".
             $photo->id;
         return $ark;
     }
