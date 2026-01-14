@@ -99,6 +99,9 @@ class Photos
     #[Column(name: 'embargo_timeout', type: Types::DATETIME_MUTABLE, nullable: true)]
     protected(set) ?\DateTime $embargoTimeout = null;
 
+    #[Column(nullable: true, options: ['comment' => 'MD5 hash of master archive file'])]
+    protected(set) ?string $archiveFileChecksum = null;
+
     public function __construct()
     {
         $this->databotResults = new ArrayCollection();
@@ -328,6 +331,12 @@ class Photos
     public function dropEmbargoTimeout(): Photos
     {
         $this->embargoTimeout = null;
+        return $this;
+    }
+
+    public function setArchiveFileChecksum(?string $archiveFileChecksum): Photos
+    {
+        $this->archiveFileChecksum = $archiveFileChecksum;
         return $this;
     }
 

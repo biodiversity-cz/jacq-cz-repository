@@ -142,6 +142,7 @@ readonly class CuratorFacade
             ->pipe($this->stageFactory->createConvertStage())
             ->pipe($this->stageFactory->createTransferJp2Stage())
             ->pipe($this->stageFactory->createPidStage())
+            ->pipe($this->stageFactory->createChecksumStage())
             ->pipe($this->stageFactory->createCleanupTempFilesStage());
     }
 
