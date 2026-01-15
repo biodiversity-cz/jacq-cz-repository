@@ -41,7 +41,6 @@ class CetafSid extends \App\Model\Database\Entity\CetafSid implements \Doctrine\
         'previousIdentifications' => [parent::class, 'previousIdentifications', null, 8196],
         'recordedBy' => [parent::class, 'recordedBy', null, 8196],
         'scientificName' => [parent::class, 'scientificName', null, 8196],
-        'stableUri' => [parent::class, 'stableUri', null, 8196],
         'verbatimElevation' => [parent::class, 'verbatimElevation', null, 8196],
     ];
 
