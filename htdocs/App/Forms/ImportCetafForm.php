@@ -3,7 +3,7 @@
 namespace App\Forms;
 
 use App\Exceptions\ImportValuesException;
-use App\Services\CetafSidManagementService;
+use App\Services\CetafSidImportService;
 use Nette\Application\AbortException;
 use Nette\Application\LinkGenerator;
 use Nette\Application\UI\Form;
@@ -14,7 +14,7 @@ class ImportCetafForm
     public const int VALIDATION = 0;
     public const int IMPORT = 1;
 
-    public function __construct(protected readonly FormFactory $factory, protected readonly CetafSidManagementService $service, protected readonly LinkGenerator $linkGenerator)
+    public function __construct(protected readonly FormFactory $factory, protected readonly CetafSidImportService $service, protected readonly LinkGenerator $linkGenerator)
     {
     }
 
@@ -39,7 +39,7 @@ class ImportCetafForm
     {
         try {
             $this->service->import($values);
-            $form->getPresenter()->flashMessage("Specimens were successfully imported");
+            $form->getPresenter()->flashMessage("Specimens were successfully imported/updated");
             $form->getPresenter()->redirect('Cetaf:');
         } catch (ImportValuesException  $e) {
             $form->getPresenter()->flashMessage($e->getMessage());

@@ -55,7 +55,7 @@ class CetafSidGrid extends Control
         $this->grid->setDataSource($this->defaultDatasource($this->user))->setDefaultSort(['id' => 'DESC'])->setRememberState(false);
 
 
-        $this->grid->addColumnNumber('id', 'ID')
+        $this->grid->addColumnNumber('id', 'repoID')
             ->setRenderer(function (CetafSid $item) {
                 $el = Html::el(null);
                 $url = $this->presenter->link(':Front:Cetaf:object', ['id' => $item->id]);
@@ -63,10 +63,19 @@ class CetafSidGrid extends Control
 
                 return $el;
             });
+        $this->grid->addColumnText('externalIdFromInstitution', 'technicalID');
         $this->grid->addColumnText('barcode', 'Barcode');
-        $this->grid->addColumnText('externalIdFromInstitution', 'External ID');
         $this->grid->addColumnNumber('decimalLatitude', 'Latitude')->setFormat(6);
         $this->grid->addColumnNumber('decimalLongitude', 'Longitude')->setFormat(6);
+        $this->grid->addColumnText('recordedBy', 'recordedBy');
+        $this->grid->addColumnText('occurrenceRemarks', 'remarks');
+        $this->grid->addColumnText('eventDate', 'eventDate');
+        $this->grid->addColumnText('locality', 'locality');
+        $this->grid->addColumnText('verbatimElevation', 'elevation');
+        $this->grid->addColumnText('previousIdentifications', 'previousIdentifications');
+        $this->grid->addColumnText('identifiedBy', 'identifiedBy');
+        $this->grid->addColumnText('dateIdentified', 'dateIdentified');
+        $this->grid->addColumnText('scientificName', 'scientificName');
 
         $this->grid->addColumnDateTime('lastEditAt', 'lastEdit at (FROM - TO)')->setRenderer(function (CetafSid $item){return $item->lastEdit->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
 

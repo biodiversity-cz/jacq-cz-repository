@@ -5,7 +5,7 @@ namespace Tests\Cases\Integration;
 
 use App\Forms\BaseForm;
 use App\Model\Database\Entity\PhotosStatus;
-use App\Services\CetafSidManagementService;
+use App\Services\CetafSidImportService;
 use App\Services\EntityServices\CetafSidService;
 use App\Services\EntityServices\PhotoService;
 use Nette\Http\FileUpload;
@@ -29,7 +29,7 @@ final class CetafSidTest extends IntegrationTestCase
         $service =  $this->container->getByType(CetafSidService::class);
         $servicePhotos =  $this->container->getByType(PhotoService::class);
         $session =  $this->container->getByType(Session::class);
-        $managementService = new CetafSidManagementService($this->provideLoggedCuratorUser(), $session, $this->em, $service);
+        $managementService = new CetafSidImportService($this->provideLoggedCuratorUser(), $session, $this->em, $service);
         $managementService->import($values);
         Assert::count(4, $service->findAll(), 'imported CETAF sids');
 

@@ -1,4 +1,44 @@
 {block content}
-<h2>Specimen XY</h2>
+<h2>Specimen {$specimen->barcode}</h2>
+<dl class="row">
 
-<p>Not ready yet..</p>
+    <dt class="col-sm-4">Institution</dt>
+     <dd class="col-sm-8">{$specimen->herbarium->acronym} {$specimen->herbarium->fullname}</dd>
+
+    <dt class="col-sm-4">Technical ID (persistent and unique in the institution)</dt>
+     <dd class="col-sm-8">{$specimen->externalIdFromInstitution}</dd>
+
+    <dt class="col-sm-4">Botanical ID (specimen barcode)</dt>
+     <dd class="col-sm-8">{$specimen->barcode}</dd>
+
+    <dt class="col-sm-4">dwc:scientificName</dt>
+     <dd class="col-sm-8">{$specimen->scientificName}</dd>
+    <dt class="col-sm-4">dwc:identifiedBy</dt>
+     <dd class="col-sm-8">{$specimen->identifiedBy}</dd>
+    <dt class="col-sm-4">dwc:dateIdentified</dt>
+     <dd class="col-sm-8">{$specimen->dateIdentified}</dd>
+    <dt class="col-sm-4">dwc:family</dt>
+     <dd class="col-sm-8">{$specimen->family}</dd>
+    <dt class="col-sm-4">dwc:previousIdentifications</dt>
+     <dd class="col-sm-8">{$specimen->previousIdentifications}</dd>
+    <dt class="col-sm-4">dwc:fieldNumber</dt>
+     <dd class="col-sm-8">{$specimen->fieldNumber}</dd>
+    <dt class="col-sm-4">dwc:locality</dt>
+     <dd class="col-sm-8">{$specimen->locality}</dd>
+    <dt class="col-sm-4">dwc:verbatimElevation</dt>
+     <dd class="col-sm-8">{$specimen->verbatimElevation}</dd>
+
+    <dt class="col-sm-4">CETAFSID:occurrenceRemarks</dt>
+     <dd class="col-sm-8">{$specimen->occurrenceRemarks}</dd>
+    <dt class="col-sm-4">dwc:recordedBy</dt>
+     <dd class="col-sm-8">{$specimen->recordedBy}</dd>
+    <dt class="col-sm-4">dwc:decimalLatitude</dt>
+     <dd class="col-sm-8">{$specimen->decimalLatitude}</dd>
+    <dt class="col-sm-4">dwc:decimalLongitude</dt>
+     <dd class="col-sm-8">{$specimen->decimalLongitude}</dd>
+    <dt class="col-sm-4">dwc:countryCode</dt>
+     <dd class="col-sm-8">{$specimen->countryCode}</dd>
+    <dt class="col-sm-4">dwc:created</dt>
+     <dd class="col-sm-8">{$specimen->eventDate}</dd>
+
+</dl>

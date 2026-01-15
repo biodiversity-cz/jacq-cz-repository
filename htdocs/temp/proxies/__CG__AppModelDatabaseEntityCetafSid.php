@@ -43,7 +43,6 @@ class CetafSid extends \App\Model\Database\Entity\CetafSid implements \Doctrine\
         'scientificName' => [parent::class, 'scientificName', null, 8196],
         'stableUri' => [parent::class, 'stableUri', null, 8196],
         'verbatimElevation' => [parent::class, 'verbatimElevation', null, 8196],
-        'verbatimIdentification' => [parent::class, 'verbatimIdentification', null, 8196],
     ];
 
     public function __isInitialized(): bool

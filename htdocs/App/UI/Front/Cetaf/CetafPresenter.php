@@ -12,14 +12,9 @@ final class CetafPresenter extends UnsecuredPresenter
 
     /** @inject */ public CetaSidService $cetafSidRepository;
 
-    public function actionSid(?string $id): void
+    public function actionSid(string $id, int $herbariumId): void
     {
-        if (empty($id)) {
-            $this->redirect(':default');
-        }
-
-        $incomingUri = $this->getHttpRequest()->getUrl()->getAbsoluteUrl();
-        $specimen = $this->cetafSidRepository->findOneBy(['barcode' => $id]);
+        $specimen = $this->cetafSidRepository->findOneBy(['barcode' => $id, 'herbarium' => $herbariumId]);
 
         if ($specimen === null) {
             $this->error('Specimen not found');
@@ -46,13 +41,15 @@ final class CetafPresenter extends UnsecuredPresenter
     {
         $spec = $this->cetafSidRepository->find($id);
         if (!$spec) {
-//            $this->getHttpResponse()->setCode(404);
-//            $this->sendResponse(new TextResponse('Specimen not found'));
             $this->error('Specimen not found', 404);
         }
         $this->template->specimen = $spec;
     }
 
+    /**
+     *
+     * curl -H "Accept: application/rdf+xml" http://localhost/cetaf/data/2
+    */
     public function actionData(int $id): void
     {
         $spec = $this->cetafSidRepository->find($id);
@@ -60,7 +57,7 @@ final class CetafPresenter extends UnsecuredPresenter
             $this->error('Specimen not found', 404);
         }
         $this->getHttpResponse()->setHeader('Content-Type', 'application/rdf+xml; charset=utf-8');
-        echo $spec->toRdfXml();
+        echo $spec->toRdfXml($this->link('//this'));
         $this->terminate();
     }
 }

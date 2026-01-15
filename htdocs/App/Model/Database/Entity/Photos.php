@@ -316,7 +316,7 @@ class Photos
             return $baseurl . rawurlencode($this->getExpectedJacqPid());
         }
         if ($externalDatabase->id === ExternalDatabase::INTERNAL) {
-            return $baseurl . strtoupper($this->herbarium->acronym) . '_' . $this->specimenId;
+            return $baseurl . strtoupper($this->herbarium->acronym) . '_' . $this->specimenId . '?herbariumId=' . $this->herbarium->id;
         }
 
         return $baseurl . $this->getFullSpecimenId();
