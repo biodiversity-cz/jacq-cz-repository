@@ -13,7 +13,7 @@ use Nette\Security\User;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class CetafSidManagementService
+class CetafSidImportService
 {
     public const array expectedHeaders = ['id', 'basisOfRecord', 'occurrenceID', 'recordedBy', 'occurrenceRemarks', 'eventDate', 'locality', 'verbatimElevation', 'decimalLatitude', 'decimalLongitude', 'verbatimIdentification', 'identifiedBy', 'dateIdentified', 'scientificName'];
 
@@ -32,7 +32,8 @@ class CetafSidManagementService
         "decimalLongitude" => 9,
         "verbatimIdentification" => 10,
         "identifiedBy" => 11,
-        "dateIdentified" => 12
+        "dateIdentified" => 12,
+        'scientificName' => 13
     ];
 
     public const string SESSION_SECTION = "importCetaf";
@@ -43,7 +44,7 @@ class CetafSidManagementService
 
     protected Herbaria $herbarium;
 
-    public function __construct(protected readonly User $user, protected Session $session, protected readonly EntityManagerInterface $entityManager, protected CetafSidService $cetafSidService)
+    public function __construct(protected readonly User $user, protected Session $session, protected readonly EntityManagerInterface $entityManager, protected CetafSidService $service)
     {
         $this->herbarium = $this->entityManager->getRepository(Herbaria::class)->find($this->user->getIdentity()->getCurrentHerbariumId());
     }
@@ -140,7 +141,14 @@ class CetafSidManagementService
         if (empty($value)) {
             $this->errors[$rowIndex][] = [
                 'column' => self::expectedHeaders[self::colNames['occurrenceID']],
-                'value'  => $value,
+                'value' => $value,
+            ];
+        }
+        $value = $row[self::colNames['id']];
+        if (empty($value)) {
+            $this->errors[$rowIndex][] = [
+                'column' => self::expectedHeaders[self::colNames['id']],
+                'value' => $value,
             ];
         }
 
@@ -148,18 +156,30 @@ class CetafSidManagementService
 
     protected function importRow(array $row): void
     {
-        $sid = new CetafSid();
+        $sid = $this->service->findOneBy(['externalIdFromInstitution' => $row[self::colNames['id']], 'herbarium' => $this->herbarium]);
+
+        if ($sid === null) {
+            $sid = new CetafSid()
+                ->setHerbarium($this->herbarium)
+                ->setExternalIdFromInstitution($row[self::colNames['id']])
+                ->setBarcode($row[self::colNames['occurrenceID']]);
+            $this->entityManager->persist($sid);
+        }
         $sid
-            ->setHerbarium($this->herbarium)
-            ->setExternalIdFromInstitution($row[self::colNames['occurrenceID']])
-            ->setBarcode($row[self::colNames['id']])
-            ->setVerbatimIdentification($row[self::colNames['verbatimIdentification']])
+            ->setScientificName($row[self::colNames['scientificName']])
             ->setDecimalLatitude($row[self::colNames['decimalLatitude']])
             ->setDecimalLongitude($row[self::colNames['decimalLongitude']])
+            ->setRecordedBy($row[self::colNames['recordedBy']])
+            ->setOccurrenceRemarks($row[self::colNames['occurrenceRemarks']])
+            ->setEventDate($row[self::colNames['eventDate']])
+            ->setLocality($row[self::colNames['locality']])
+            ->setVerbatimElevation($row[self::colNames['verbatimElevation']])
+            ->setIdentifiedBy($row[self::colNames['identifiedBy']])
+            ->setDateIdentified($row[self::colNames['dateIdentified']])
+            ->setPreviousIdentifications($row[self::colNames['verbatimIdentification']])
             ->setCreatedAt()
             ->setLastEditAt();
 
-        $this->entityManager->persist($sid);
     }
 
 

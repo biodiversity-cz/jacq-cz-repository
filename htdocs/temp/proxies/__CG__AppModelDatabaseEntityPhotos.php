@@ -23,6 +23,7 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
         'JP2FileSize' => [parent::class, 'JP2FileSize', null, 8196],
+        'archiveFileChecksum' => [parent::class, 'archiveFileChecksum', null, 8196],
         'archiveFileSize' => [parent::class, 'archiveFileSize', null, 8196],
         'archiveFilename' => [parent::class, 'archiveFilename', null, 8196],
         'bucketSuffix' => [parent::class, 'bucketSuffix', null, 8196],

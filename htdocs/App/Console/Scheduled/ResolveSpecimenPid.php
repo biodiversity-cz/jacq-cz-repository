@@ -50,7 +50,7 @@ class ResolveSpecimenPid extends Command
     {
         $rsm = new ResultSetMappingBuilder($this->entityManager);
         $rsm->addRootEntityFromClassMetadata('App\Model\Database\Entity\Photos', 'p');
-        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id = ? ORDER BY lastedit_timestamp ASC FOR UPDATE SKIP LOCKED LIMIT 100 ', $rsm);
+        $query = $this->entityManager->createNativeQuery('SELECT p.* FROM photos p WHERE status_id = ?  AND lastedit_timestamp < NOW() - INTERVAL \'6 hours\' ORDER BY lastedit_timestamp ASC FOR UPDATE SKIP LOCKED LIMIT 100 ', $rsm);
         $query->setParameter(1, PhotosStatus::IMAGE_CONTROL_OK);
 
         return $query->getResult();

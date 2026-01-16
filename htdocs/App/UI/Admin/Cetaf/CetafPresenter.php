@@ -7,7 +7,7 @@ use App\Forms\ImportCetafForm;
 use App\Grids\CetafSidGrid;
 use App\Grids\CetafSidGridFactory;
 use App\Model\Database\Entity\ExternalDatabase;
-use App\Services\CetafSidManagementService;
+use App\Services\CetafSidImportService;
 use App\Services\EntityServices\CetaSidService;
 use App\UI\Base\SecuredPresenter;
 
@@ -18,7 +18,7 @@ final class CetafPresenter extends SecuredPresenter
     public CetaSidService $cetafSidRepository;
 
     /** @inject */
-    public CetafSidManagementService $sidManagementService;
+    public CetafSidImportService $sidManagementService;
 
     /** @inject */
     public ImportCetafForm $validationForm;

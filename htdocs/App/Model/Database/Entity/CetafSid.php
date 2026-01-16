@@ -6,7 +6,7 @@ use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
 use App\Model\Database\Repository\CetafSidRepository;
-use Doctrine\DBAL\Schema\UniqueConstraint;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
@@ -14,13 +14,11 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
 #[Entity(repositoryClass: CetafSidRepository::class)]
-#[Table(name: 'sid', schema: 'cetaf',
-    uniqueConstraints: [
-        new UniqueConstraint(
-            name: "uniq_herbarium_externalid",
-            columns: ["herbarium", "external_id_from_institution"]
-        )
-    ])]
+#[Table(name: 'sid', schema: 'cetaf')]
+#[UniqueConstraint(
+    name: "uniq_herbarium_externalid",
+    columns: ["herbarium", "external_id_from_institution"])
+]
 
 class CetafSid
 {
@@ -34,9 +32,6 @@ class CetafSid
 
     #[Column(options: ['comment' => 'specimens identificator that allows match the repository photos'])]
     protected(set) string $barcode;
-
-    #[Column(unique: true, nullable: true, options: ['comment' => 'stable URI assigned to the specimen'])]
-    protected(set) ?string $stableUri;
 
     /**
      * CETAFSID:scientificNameCurrent
@@ -63,18 +58,13 @@ class CetafSid
      */
     #[Column(nullable: true)]
     protected(set) ?string $family = null;
+
     /**
      * CETAFSID:scientificNameOriginal
      * dwc:previousIdentifications
      */
     #[Column(nullable: true)]
     protected(set) ?string $previousIdentifications = null;
-
-    /**
-     * dwc:verbatimIdentification
-     */
-    #[Column(nullable: true)]
-    protected(set) ?string $verbatimIdentification = null;
 
     /**
      * CETAFSID:collectorNumber
@@ -149,12 +139,6 @@ class CetafSid
         return $this;
     }
 
-    public function setStableUri(?string $stableUri): CetafSid
-    {
-        $this->stableUri = $stableUri;
-        return $this;
-    }
-
     public function setScientificName(?string $scientificName): CetafSid
     {
         $this->scientificName = $scientificName;
@@ -176,12 +160,6 @@ class CetafSid
     public function setFamily(?string $family): CetafSid
     {
         $this->family = $family;
-        return $this;
-    }
-
-    public function setVerbatimIdentification(?string $verbatimIdentification): CetafSid
-    {
-        $this->verbatimIdentification = $verbatimIdentification;
         return $this;
     }
 
@@ -251,61 +229,83 @@ class CetafSid
         return $this;
     }
 
+    private function safeH($value): string
+    {
+        return htmlspecialchars((string)$value, ENT_XML1);
+    }
+
+    private function xmlElement(string $tag, mixed $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null; // element nebude vytvořen
+        }
+        return "    <{$tag}>" . $this->safeH($value) . "</{$tag}>";
+    }
+
+    private function formatDateIso(string|\DateTimeImmutable|null $date): ?string
+    {
+        if ($date === null) {
+            return null;
+        }
+
+        // pokud už je to DateTime, použijeme ho přímo
+        if ($date instanceof \DateTimeImmutable) {
+            return $date->format('Y-m-d');
+        }
+
+        // zkusíme vytvořit DateTime z řetězce
+        try {
+            $dt = new \DateTimeImmutable($date);
+            return $dt->format('Y-m-d');
+        } catch (\Exception $e) {
+            // nelze parsovat, vrátíme null nebo původní string
+            return null;
+        }
+    }
+
+
     /**
      *  RDF/XML according to the CSPP (CETAF Specimen Preview Profile)
      */
-    public function toRdfXml(): string
+    public function toRdfXml(string $uri): string
     {
-        $uri = htmlspecialchars($this->stableUri, ENT_XML1);
         $xml = [];
         $xml[] = '<?xml version="1.0"?>';
         $xml[] = '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dwc="http://rs.tdwg.org/dwc/terms/">';
         $xml[] = "  <rdf:Description rdf:about=\"{$uri}\">";
-        $xml[] = "    <dcterms:title>" . htmlspecialchars($this->scientificName, ENT_XML1) . "</dcterms:title>";
-        $xml[] = "    <dcterms:type>" . htmlspecialchars('PreservedSpecimen', ENT_XML1) . "</dcterms:type>";
-        $xml[] = "    <dcterms:publisher>" . htmlspecialchars($this->herbarium->address, ENT_XML1) . "</dcterms:publisher>";
 
-//        // sameAs for HTTP variant if exists
-//        if ($this->httpAlternateUri) {
-//            $alt = htmlspecialchars($this->httpAlternateUri, ENT_XML1);
-//            $xml[] = "    <owl:sameAs xmlns:owl=\"http://www.w3.org/2002/07/owl#\">{$alt}</owl:sameAs>";
-//        }
+// povinné
+        $xml[] = $this->xmlElement('dcterms:title', $this->scientificName);
+        $xml[] = $this->xmlElement('dcterms:type', 'PreservedSpecimen');
 
-        if ($this->scientificName !== null) {
-            $xml[] = "    <dwc:scientificName>" . htmlspecialchars($this->scientificName, ENT_XML1) . "</dwc:scientificName>";
-        }
-        if ($this->family !== null) {
-            $xml[] = "    <dwc:family>" . htmlspecialchars($this->family, ENT_XML1) . "</dwc:family>";
-        }
-        if ($this->verbatimIdentification !== null) {
-            $xml[] = "    <dwc:originalName>" . htmlspecialchars($this->verbatimIdentification, ENT_XML1) . "</dwc:originalName>";
-        }
-        if ($this->fieldNumber !== null) {
-            $xml[] = "    <dwc:recordNumber>" . htmlspecialchars($this->fieldNumber, ENT_XML1) . "</dwc:recordNumber>";
-        }
-        if ($this->recordedBy !== null) {
-            $xml[] = "    <dcterms:creator>" . htmlspecialchars($this->recordedBy, ENT_XML1) . "</dcterms:creator>";
-        }
+// volitelné
+        $xml[] = $this->xmlElement('dcterms:publisher', $this->herbarium?->address);
+        $xml[] = $this->xmlElement('dwc:scientificName', $this->scientificName);
+        $xml[] = $this->xmlElement('dwc:family', $this->family);
+        $xml[] = $this->xmlElement('dwc:originalName', $this->previousIdentifications);
+        $xml[] = $this->xmlElement('dwc:recordNumber', $this->fieldNumber);
+        $xml[] = $this->xmlElement('dcterms:creator', $this->recordedBy);
 
-            $xml[] = "    <dcterms:hasPart>" . htmlspecialchars('XXX', ENT_XML1) . "</dcterms:hasPart>";
-
+// koordináty
         if ($this->decimalLatitude !== null && $this->decimalLongitude !== null) {
-            $xml[] = "    <dwc:decimalLatitude>" . $this->decimalLatitude . "</dwc:decimalLatitude>";
-            $xml[] = "    <dwc:decimalLongitude>" . $this->decimalLongitude . "</dwc:decimalLongitude>";
+            $xml[] = "    <dwc:decimalLatitude>{$this->decimalLatitude}</dwc:decimalLatitude>";
+            $xml[] = "    <dwc:decimalLongitude>{$this->decimalLongitude}</dwc:decimalLongitude>";
         }
-        if ($this->countryCode !== null) {
-            $xml[] = "    <dwc:countryCode>" . htmlspecialchars($this->countryCode, ENT_XML1) . "</dwc:countryCode>";
-        }
+
+        $xml[] = $this->xmlElement('dwc:countryCode', $this->countryCode);
+
         if ($this->eventDate !== null) {
-            $xml[] = "    <dwc:eventDate>" . htmlspecialchars($this->eventDate, ENT_XML1) . "</dwc:eventDate>";
+            $isoDate = $this->formatDateIso($this->eventDate);
+            if ($isoDate !== null) {
+                $xml[] = $this->xmlElement('dwc:eventDate', $isoDate);
+            }
         }
-
-            $xml[] = "    <dcterms:source>" . htmlspecialchars('XXX', ENT_XML1) . "</dcterms:source>";
-
 
         $xml[] = "  </rdf:Description>";
         $xml[] = "</rdf:RDF>";
 
-        return implode("\n", $xml);
+// odstraníme null řádky
+        return implode("\n", array_filter($xml));
+
     }
 }
