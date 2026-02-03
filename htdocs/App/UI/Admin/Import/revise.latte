@@ -44,7 +44,7 @@
             </form>
 
         </div>
-        {if $photo->error->getDuplicateTo()}
+        {if $photo->error->duplicateTo}
         <div class="col-md-4">
             <h5>NEW image being imported <span class="fs-6">(<a href="{link :thumbnail $photo->id}" target="_blank">full preview</a>)</span></h5>
             <img src="{link :thumbnail $photo->id}" class="img-fluid"  style="height: 90vh; object-fit: cover;">
