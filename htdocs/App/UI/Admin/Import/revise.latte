@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-3">
             <p><b>error:</b> {$photo->error->message}</p>
-            {if $photo->error->getBarcodes()!== null}
+            {if $photo->error->barcodes!== null}
             <p><b>detected barcode (s):</b> {$photo->error->barcodes}</p>
             {/if}
             <p>Please decide what to do with this image: </p>
@@ -51,7 +51,7 @@
         </div>
         <div class="col-md-4">
             <h5>EXISTING image from the repository (thumb)</h5>
-            <img src="{link :databotThumbImage $photo->error->getDuplicateTo()->id}"
+            <img src="{link :databotThumbImage $photo->error->duplicateTo->id}"
                 class="img-fluid rounded-start" style="height: 90vh; object-fit: cover;">
         </div>
         {else}
