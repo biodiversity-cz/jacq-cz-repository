@@ -46,7 +46,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
     /** @inject */
     public DetailControlFactory $detailControlFactory;
 
-    protected(set) ?Herbaria $herbarium;
+    protected(set) ?Herbaria $herbarium = null;
 
     /** @inject */ public ImageDownloadLogService $imageDownloadLogService;
 
@@ -159,6 +159,9 @@ final class RepositoryPresenter extends UnsecuredPresenter
                 throw new HerbariumIdException();
             }
             $herbarium = $this->herbariumService->findOneWithAcronym($id);
+            if ($herbarium === null) {
+                throw new HerbariumIdException();
+            }
             $this->herbarium = $herbarium;
         } catch (HerbariumIdException $exception) {
             $this->flashMessage($exception->getMessage(), 'error');
