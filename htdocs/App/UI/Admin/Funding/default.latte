@@ -26,8 +26,8 @@
                     <tbody>
                         <tr n:foreach="$fundings as $funding">
                             <td>{$funding->name}</td>
-                            <td>{$funding->getCode()}</td>
-                            <td>{$funding->getFunder()}</td>
+                            <td>{$funding->code}</td>
+                            <td>{$funding->funder}</td>
                             <td>
                                 <span class="badge bg-{$funding->isActive() ? 'success' : 'danger'}">
                                     {$funding->isActive() ? 'Yes' : 'No'}
