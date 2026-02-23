@@ -234,7 +234,6 @@ readonly class CuratorFacade
                 case PhotosStatus::SPECIMEN_CONTROL_OK:
                 case PhotosStatus::EMBARGO:
                 case PhotosStatus::DEVELOP_PROCEED:
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getImageServerBucket($lockedEntity), $lockedEntity->jp2Filename);
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getArchiveBucket($lockedEntity), $lockedEntity->archiveFilename);
                     $this->s3Service->deleteObject($this->repositoryConfiguration->getDatabotThumbsBucket($lockedEntity), $lockedEntity->databotThumbFilename);
                     break;
