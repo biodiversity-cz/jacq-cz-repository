@@ -2,8 +2,8 @@
   "entrypoints": {
     "app": {
       "js": [
-        "/dist/runtime.d7d98415.js",
-        "/dist/506.201e530e.js",
+        "/dist/runtime.bdee61c5.js",
+        "/dist/506.dbe6df73.js",
         "/dist/app.bc231bcf.js"
       ],
       "css": [
