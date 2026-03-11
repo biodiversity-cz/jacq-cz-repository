@@ -46,13 +46,21 @@
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" n:href="Herbarium:">{$user->getIdentity()->getCurrentHerbariumAcronym()}
-                            Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" n:href=":Front:Sign:out"><i class="bi bi-box-arrow-right"></i>
-                            Sign out {$user->getIdentity()->name}</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person"></i>{$user->getIdentity()->getCurrentHerbariumAcronym()} {$user->getIdentity()->name}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" n:href="Herbarium:">Settings</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" n:href=":Front:Sign:out"><i class="bi bi-box-arrow-right"></i>
+                                    Sign out</a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
 
