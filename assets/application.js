@@ -9,6 +9,7 @@ import setSettings from "./js/herbarium";
 import '@contributte/datagrid/dist/datagrid-full.css';
 import '@contributte/datagrid/dist/datagrid-full.js';
 import drawBoxplot from "./js/stats";
+ import Dropdown from 'bootstrap/js/dist/dropdown'; //has to be present to keep dropdowns - probably datagrid is breaking it..
 
 document.addEventListener("DOMContentLoaded", function (event) {
 
