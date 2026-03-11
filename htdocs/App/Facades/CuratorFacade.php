@@ -225,30 +225,42 @@ readonly class CuratorFacade
                 ->setLockMode(LockMode::PESSIMISTIC_WRITE)
                 ->getSingleResult();
 
+            // Determine which files need to be deleted based on status
+            $filesToDelete = [];
             switch ($lockedEntity->status->id) {
                 case PhotosStatus::WAITING:
                 case PhotosStatus::IMAGE_CONTROL_ERROR:
-                    $this->s3Service->deleteObject($lockedEntity->herbarium->bucket, $lockedEntity->originalFilename);
+                    $filesToDelete = [
+                        ['bucket' => $lockedEntity->herbarium->bucket, 'key' => $lockedEntity->originalFilename],
+                    ];
                     break;
                 case PhotosStatus::IMAGE_CONTROL_OK:
                 case PhotosStatus::SPECIMEN_CONTROL_OK:
                 case PhotosStatus::EMBARGO:
                 case PhotosStatus::DEVELOP_PROCEED:
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getArchiveBucket($lockedEntity), $lockedEntity->archiveFilename);
-                    $this->s3Service->deleteObject($this->repositoryConfiguration->getDatabotThumbsBucket($lockedEntity), $lockedEntity->databotThumbFilename);
+                    $filesToDelete = [
+                        ['bucket' => $this->repositoryConfiguration->getArchiveBucket($lockedEntity), 'key' => $lockedEntity->archiveFilename],
+                        ['bucket' => $this->repositoryConfiguration->getDatabotThumbsBucket($lockedEntity), 'key' => $lockedEntity->databotThumbFilename],
+                    ];
                     break;
                 default:
                     throw new ServiceException('This photo cannot be deleted');
-
             }
 
+            // First: Remove from database (database is source of truth)
             $this->entityManager->remove($lockedEntity);
             $this->entityManager->flush();
             $this->entityManager->commit();
+
+            // Second: Delete files from S3 (outside transaction)
+            // If this fails, the DB record is already gone and orphaned files can be cleaned up later
+            foreach ($filesToDelete as $file) {
+                $this->s3Service->deleteObject($file['bucket'], $file['key']);
+            }
         } catch (\Throwable $e) {
             $this->entityManager->rollback();
 
-            throw new ServiceException('Error in photo delete: ' . $e->getMessage());
+            throw new ServiceException('Error in photo delete: ' . $e->getMessage(), previous: $e);
         }
 
         return $this;
