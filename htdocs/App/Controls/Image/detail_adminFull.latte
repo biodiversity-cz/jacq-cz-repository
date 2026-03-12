@@ -1,11 +1,11 @@
 <div class="col-4">
     <img
-        src="{plink Import:databotThumbImage $photo->id}"
+        src="{plink Repository:databotThumbImage $photo->id}"
         class="img-fluid rounded-start" style="height: 90vh; object-fit: cover;">
 </div>
 <div class="col-4">
     <h5>ID {$photo->id}, belongs to the specimen <span class="fs-6"><a
-        href="{plink Import:specimen $photo->specimenId}">{$photo->getFullSpecimenId()}</a></span></h5>
+        href="{plink Repository:specimen $photo->specimenId}">{$photo->getFullSpecimenId()}</a></span></h5>
     <p>W×H: {$photo->width}×{$photo->height}</p>
     <p>Filesize: {$photo->archiveFileSize|bytes:2}</p>
     <p>Status: <span class="badge bg-{$photo->status->color}">{$photo->status->name}</span>
@@ -29,13 +29,13 @@
     {/if}
     {else}
         <p class="card-text"><h5>Archive Master (original TIF file)</h5> filename: {$photo->archiveFilename} <br>
-            <a href="{plink Import:masterImage $photo->id}">download</a>
+            <a href="{plink Repository:masterImage $photo->id}">download</a>
         </p>
     <p class="card-text"><h5>JP2 Master (quality as Master but much lower filesize) </h5> filename: {$photo->archiveFilename} <br>
-    <a href="{plink Import:jp2Image $photo->id}">download</a>
+    <a href="{plink Repository:jp2Image $photo->id}">download</a>
     </p>
     <p class="card-text"><h5>DataBot thumb (1280px)</h5> filename: {$photo->archiveFilename} <br>
-    <a href="{plink Import:databotThumbImage $photo->id}">download</a>
+    <a href="{plink Repository:databotThumbImage $photo->id}">download</a>
     </p>
     {/if}
     <hr>

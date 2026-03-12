@@ -4,13 +4,13 @@
             <div class="col-md-4">
                 {if $photo->status->id === 3 || $photo->status->id === 4}
                 <img
-                    src="{plink Import:databotThumbImage $photo->id}"
+                    src="{plink Repository:databotThumbImage $photo->id}"
                     width="300px" class="img-fluid rounded-start">
                 {/if}
             </div>
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">ID {$photo->id} <span class="fs-6">(see <a href="{plink Import:photo $photo->id}">more info</a>)</span></h5>
+                    <h5 class="card-title">ID {$photo->id} <span class="fs-6">(see <a href="{plink Repository:photo $photo->id}">more info</a>)</span></h5>
                     <p class="card-text">W×H: {$photo->width}×{$photo->height}</p>
                     <p class="card-text">Filesize: {$photo->archiveFileSize|bytes:2}</p>
                     <p class="card-text">Status: <span class="badge bg-{$photo->status->color}">{$photo->status->name}</span> </p>

@@ -12,10 +12,12 @@ class ThumbnailStage extends BaseStage implements StageInterface
 
     /**
      * thumbnail stored in db used only during control error phase to provide visualization to curators
+     * we used to make it larger than the databot thumb, but this led to users' misunderstanding of images quality compared
+     * using databotImageSize for now
      */
     protected function createThumbnail(Imagick $imagick): void
     {
-        $imagick = $this->imagickService->resizeImage($imagick, $this->repositoryConfiguration->getPreviewSize());
+        $imagick = $this->imagickService->resizeImage($imagick, $this->repositoryConfiguration->getDatabotImageSize());
         $imagick->setImageFormat('jpg');
         $imagick->setImageCompressionQuality($this->repositoryConfiguration->getPreviewQuality());
         $this->item->error->setThumbnail($imagick->getImagesBlob());

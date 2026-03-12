@@ -17,12 +17,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {if $presenter->isLinkCurrent('Home:overview')}active{/if}"
-                           n:href="Home:overview">Work-in-progress items</a>
+                        <a class="nav-link {if $presenter->isLinkCurrent('Repository:in-progress')}active{/if}"
+                           n:href="Repository:in-progress">Work-in-progress items</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {if $presenter->isLinkCurrent('Home:published')}active{/if}"
-                           n:href="Home:published">Published items</a>
+                        <a class="nav-link {if $presenter->isLinkCurrent('Repository:published')}active{/if}"
+                           n:href="Repository:published">Published items</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {if $presenter->isLinkCurrent('Report:')}active{/if}"
@@ -39,7 +39,7 @@
                     <!--                           n:href="Funding:">Funding</a>-->
                     <!--                    </li>-->
                 </ul>
-                <form class="d-flex" action="{link Import:specimen}" method="GET">
+                <form class="d-flex" action="{link Repository:specimen}" method="GET">
                     <input name="specimenNumericPartOfId" class="form-control me-2" type="search"
                            placeholder="put numeric part of ID"
                            aria-label="Search specimen">
