@@ -116,7 +116,7 @@ class ImportedPhotosGrid extends Control
                     $el->addHtml($elInt);
                 }
                 return $el;
-            }) ->setFilterSelect($this->curatorFacade->getAllStatuses());
+            }) ->setFilterSelect($this->curatorFacade->getPassedStatuses());
         $this->grid->addColumnDateTime('lastEditAt', 'processed at (FROM - TO)')->setRenderer(function (Photos $item){return $item->lastEdit->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
@@ -151,7 +151,7 @@ class ImportedPhotosGrid extends Control
             ->setTitle('Delete')
             ->setClass('btn btn-xs btn-danger')
             ->setConfirmation(
-                new StringConfirmation('Do you really want to delete photo %s? This won\'t be allowed in production mode!', 'archiveFilename') // Second parameter is optional
+                new StringConfirmation('Do you really want to delete photo %s?', 'archiveFilename') // Second parameter is optional
             )
             ->setRenderCondition(function (Photos $item) {
                 return in_array($item->status->id, PhotosStatus::DELETEABLE);

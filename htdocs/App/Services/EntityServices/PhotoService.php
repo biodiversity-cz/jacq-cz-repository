@@ -42,6 +42,22 @@ class PhotoService extends BaseEntityService
     }
 
     /**
+     * Mark all publishable photos as WAITING_FOR_PUBLISHING in a single bulk operation
+     * Reuses the same criteria as getPublishablePhotosDatasource() for consistency
+     * Executes as a single DQL UPDATE query - no entity loading overhead
+     */
+    public function markAllPublishableAsWaitingForPublishing(User $user): int
+    {
+        $qb = $this->getPublishablePhotosDatasource($user);
+        $qb->update(Photos::class, 'p')
+            ->set('p.status', ':newStatus')
+            ->set('p.lastEdit', 'CURRENT_TIMESTAMP()')
+            ->setParameter('newStatus', PhotosStatus::WAITING_FOR_PUBLISHING);
+
+        return $qb->getQuery()->execute();
+    }
+
+    /**
      * @return Photos[]
      */
     public function getAllPhotosOfSpecimen(User $user, Specimen $specimen): array

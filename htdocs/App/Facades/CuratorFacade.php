@@ -24,7 +24,6 @@ use Nette\Security\User;
 readonly class CuratorFacade
 {
 
-    public const int PUBLISH_COUNT_LIMIT = 5000;
     public function __construct(protected EntityManagerInterface $entityManager, protected S3Service $s3Service, protected StageFactory $stageFactory, protected RepositoryConfiguration $repositoryConfiguration, protected PhotoService $photoService, protected HerbariumService $herbariumService, protected SpecimenIdService $specimenIdService)
     {
     }
@@ -35,6 +34,14 @@ readonly class CuratorFacade
     public function getAllStatuses(): array
     {
         return $this->entityManager->getRepository(PhotosStatus::class)->findPairs('id', 'name');
+    }
+
+    /**
+     * @return PhotosStatus[]
+     */
+    public function getPassedStatuses(): array
+    {
+        return $this->entityManager->getRepository(PhotosStatus::class)->findPairs('id', 'name', ['id' => PhotosStatus::PASSED]);
     }
 
     /**
@@ -390,17 +397,15 @@ readonly class CuratorFacade
         return $this;
     }
 
+    /**
+     * Mark all publishable photos (status = SPECIMEN_CONTROL_OK) as WAITING_FOR_PUBLISHING
+     * Uses the same criteria as getPublishablePhotosDatasource() for consistency
+     * Executes as a single bulk UPDATE query - no entity loading overhead
+     */
     public function markPublishable(User $user): self
     {
-        $result = $this->photoService->getPublishablePhotosDatasource($user)->setMaxResults(self::PUBLISH_COUNT_LIMIT)->getQuery()->getResult();
-        foreach ($result as $photo) {
-            $photo
-                ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::WAITING_FOR_PUBLISHING))
-                ->setLastEditAt();
-        }
-        $this->entityManager->flush();
+        $this->photoService->markAllPublishableAsWaitingForPublishing($user);
         return $this;
-
     }
 
 }

@@ -3,7 +3,9 @@
 
     <h2>Work-in-progress items</h2>
     {if $publishableCount > 0}
-    <p> You have {$publishableCount} publishable photos (<em>specimen control ok</em> status). <a n:href=":markPublishable" onclick="return confirm('All photos with status specimen-control-ok will be published - are you sure?');">Publish</a> {\App\Facades\CuratorFacade::PUBLISH_COUNT_LIMIT} of them (don't forget at first embargo those that should remain unpublished!).</p>
+    <p> You have {$publishableCount} publishable photos (with the <em>specimen control ok</em> status). <a n:href=":markPublishable" onclick="return confirm('All photos with status specimen-control-ok will be published – are you sure?');">Publish</a> them all (don't forget at first embargo those that should remain unpublished!).</p>
     {/if}
+
+
     {control importedGrid}
 </div>
