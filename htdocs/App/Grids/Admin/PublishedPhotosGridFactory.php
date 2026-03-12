@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace App\Grids;
+namespace App\Grids\Admin;
 
 interface PublishedPhotosGridFactory
 {

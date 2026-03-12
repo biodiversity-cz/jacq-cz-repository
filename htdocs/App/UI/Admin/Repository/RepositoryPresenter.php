@@ -3,12 +3,14 @@
 namespace App\UI\Admin\Repository;
 
 use App\Controls\Image\DetailControlFactory;
+use App\Controls\Specimen\SpecimenControl;
+use App\Controls\Specimen\SpecimenControlFactory;
 use App\Exceptions\SpecimenIdException;
 use App\Facades\CuratorFacade;
-use App\Grids\ImportedPhotosGrid;
-use App\Grids\ImportedPhotosGridFactory;
-use App\Grids\PublishedPhotosGrid;
-use App\Grids\PublishedPhotosGridFactory;
+use App\Grids\Admin\ImportedPhotosGrid;
+use App\Grids\Admin\ImportedPhotosGridFactory;
+use App\Grids\Admin\PublishedPhotosGrid;
+use App\Grids\Admin\PublishedPhotosGridFactory;
 use App\Model\Database\Entity\Photos;
 use App\Model\Specimen\SpecimenFactory;
 use App\Services\EntityServices\PhotoService;
@@ -23,22 +25,15 @@ use Nette\Http\Response;
 final class RepositoryPresenter extends SecuredPresenter
 {
 
-    /** @inject */
-    public CuratorFacade $curatorFacade;
-
+    /** @inject */ public CuratorFacade $curatorFacade;
     /** @inject */ public ImportedPhotosGridFactory $importedPhotosGridFactory;
     /** @inject */ public PublishedPhotosGridFactory $publishedPhotosGrid;
+    /** @inject */ public SpecimenControlFactory $specimenControlFactory;
     /** @inject */ public PhotoService $photoService;
-    /** @inject */
-    public RepositoryConfiguration $repositoryConfiguration;
-
-    /** @inject */
-    public S3Service $s3Service;
-    /** @inject */
-    public SpecimenFactory $specimenFactory;
-
-    /** @inject */
-    public DetailControlFactory $detailControlFactory;
+    /** @inject */ public RepositoryConfiguration $repositoryConfiguration;
+    /** @inject */ public S3Service $s3Service;
+    /** @inject */ public SpecimenFactory $specimenFactory;
+    /** @inject */ public DetailControlFactory $detailControlFactory;
 
     public ?Photos $photo;
 
@@ -87,14 +82,22 @@ final class RepositoryPresenter extends SecuredPresenter
         }
     }
 
-    public function renderSpecimen(?int $specimenNumericPartOfId): void
+    /**
+     * used for GET form from main menu to make nice URL
+     */
+    public function actionSearch(?string $numeric_part): void
+    {
+        $this->redirect('specimen', ['id'=>$numeric_part]);
+    }
+
+    public function renderSpecimen(?string $id = ''): void
     {
         try {
-            if ($specimenNumericPartOfId === null) {
-                throw new SpecimenIdException();
+            if ($id == null) {
+                throw new SpecimenIdException('Unknown specimen');
             }
 
-            $specimen = $this->specimenFactory->createFromNumeric($this->user, $specimenNumericPartOfId);
+            $specimen = $this->specimenFactory->createFromNumeric($this->user, (int) $id);
             $images = $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
             if (count($images) === 0) {
                 throw new SpecimenIdException('Specimen not in evidence');
@@ -104,19 +107,8 @@ final class RepositoryPresenter extends SecuredPresenter
             $this->redirect('Home:');
         }
 
-        $this->template->specimen = $specimen;
-        $this->template->images = $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
+        $this->template->images = $images;
 
-        $hasPublicImage = false;
-        foreach ($this->template->images as $image) {
-            if ($image->isPublic()) {
-                $hasPublicImage = true;
-            }
-        }
-
-        $this->template->hasPublicImage = $hasPublicImage;
-
-        $this->template->manifestAbsoluteLink = $this->link('//:Front:Iiif:manifest', $specimen->getStandardizedId());
     }
 
     public function renderPhoto(int $id): void
@@ -169,6 +161,11 @@ final class RepositoryPresenter extends SecuredPresenter
     public function createComponentImportedGrid(): ImportedPhotosGrid
     {
         return $this->importedPhotosGridFactory->create();
+    }
+
+    public function createComponentSpecimen(): SpecimenControl
+    {
+        return $this->specimenControlFactory->create();
     }
 
     public function createComponentPublishedGrid(): PublishedPhotosGrid

@@ -1,21 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace App\Grids;
+namespace App\Grids\Admin;
 
-use App\Facades\CuratorFacade;
+use App\Grids\BaseGridFactory;
 use App\Model\Database\Entity\CetafSid;
-use App\Model\Database\Entity\Photos;
-use App\Model\Database\Entity\PhotosStatus;
-use App\Services\DatabotsService;
 use App\Services\EntityServices\CetafSidService;
-use App\Services\EntityServices\PhotoService;
-use App\Services\Exceptions\ServiceException;
-use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 use Contributte\Datagrid\Datagrid;
 use Doctrine\ORM\QueryBuilder;
 use Nette\Application\Responses\FileResponse;
 use Nette\Application\UI\Control;
-use Nette\Neon\Exception;
 use Nette\Security\User;
 use Nette\Utils\Html;
 

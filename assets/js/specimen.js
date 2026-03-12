@@ -1,6 +1,6 @@
 export default async function joinLinks() {
-    // makeJACQLinks();
-    // makeGbifLink();
+    makeJACQLinks();
+    makeGbifLink();
 }
 
 
@@ -80,24 +80,27 @@ async function makeGbifLink() {
         });
 
         if (!response.ok) {
-            console.error("makeJACQLinks: JSON parse error:", error);
+            console.error("GBIFLink: JSON parse error:", error);
             return;
         }
 
         const data = await response.json().catch(err => {
-            console.error("makeJACQLinks: JSON parse error:", err);
+            console.error("GBIFLink: JSON parse error:", err);
             return null;
         });
 
         if (!data) return;
 
         if (Array.isArray(data.results) && data.results.length > 0) {
-            let firstKey = data.results[0].key;            gbifElement.href = `https://gbif.org/occurrence/${firstKey}`;
+            let firstKey = data.results[0].key;
+            gbifElement.href = `https://gbif.org/occurrence/${firstKey}`;
             gbifInfoElement.textContent = `https://gbif.org/occurrence/${firstKey}`;
-          }
+          }else {
+            gbifInfoElement.textContent = `No GBIF record found`;
+        }
 
     } catch (error) {
-        console.error("makeGbifLinks: unexpected error:", error);
+        console.error("GBIFLink: unexpected error:", error);
     }
 
 }

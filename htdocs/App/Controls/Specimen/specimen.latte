@@ -1,0 +1,113 @@
+
+<ul class="list-group">
+    <li class="list-group-item list-group-item-primary disabled" aria-disabled="true">Specimen <b>{$photo->getFullSpecimenId()}</b>
+    </li>
+    <li class="list-group-item list-group-item-primary disabled" aria-disabled="true">
+        {if $maxPhotoStatus->id ===  \App\Model\Database\Entity\PhotosStatus::PUBLISHED  }
+            TBD show specimen ARK
+        {else}
+            This specimen has no public photos yet, therefore it does not have ARK assigned, and is visible only via this admin interface.
+        {/if}
+    </li>
+
+    {if in_array($maxPhotoStatus->id, \App\Model\Database\Entity\PhotosStatus::WITHOUT_CETAF_SPECIMEN) &&
+    $photo->herbarium->externalDatabase->id === \App\Model\Database\Entity\ExternalDatabase::JACQ }
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">Expected JACQ SID</h5>
+                <small class="text-body-secondary"><b id="copyJACQPid">{$photo->getExpectedJacqPid()}</b> <span
+                    class="copyIcon" data-copy-target="#copyJACQPid" title="Copy">
+                <i class="fa-regular fa-copy"></i>
+            </span></small><br>
+                <small class="text-body-secondary">This SID will be <em>probably</em> assigned to the specimen by JACQ in the future.</small>
+            </div>
+            <div>
+                <a href="{$photo->getExpectedJacqPid()}"><span id="JACQPid"
+                                                               data-url="https://api.jacq.org/v1/stableIdentifier/resolve/{$photo->getExpectedJacqPid()}">link</span></a>
+            </div>
+        </li>
+    {/if}
+    {if in_array($maxPhotoStatus->id, \App\Model\Database\Entity\PhotosStatus::WITH_CETAF_SPECIMEN)  }
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-1">CETAF Specimen</h5>
+            <small class="text-body-secondary"><b id="copyCETAFPid">{$photo->specimenPid}</b> <span
+                class="copyIcon" data-copy-target="#copyCETAFPid" title="Copy">
+            <i class="fa-regular fa-copy"></i>
+        </span></small><br>
+            <small class="text-body-secondary">External specimen CETAF SID</small>
+        </div>
+        <div>
+            <a href="{$photo->specimenPid}"><span id="PID"
+                                                           data-url="{$photo->specimenPid}">link</span></a>
+        </div>
+    </li>
+    {if $photo->herbarium->externalDatabase->id === \App\Model\Database\Entity\ExternalDatabase::JACQ }
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-1">JACQ internal db ID</h5>
+            <small class="text-body-secondary"><b id="copyJacqDbId" class="specimenDbId">?</b> <span
+                class="copyIcon" data-copy-target="#specimenDbId" title="Copy">
+            <i class="fa-regular fa-copy"></i>
+        </span></small><br>
+            <small class="text-body-secondary">Represents unique db row ID of the specimen in JACQ</small>
+        </div>
+        <div>
+        </div>
+    </li>
+    {/if}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-1">GBIF</h5>
+            <small class="text-body-secondary"><b id="copyGbif">?</b> <span
+                class="copyIcon" data-copy-target="#copyGbif" title="Copy">
+            <i class="fa-regular fa-copy"></i>
+        </span></small><br>
+            <small class="text-body-secondary">Specimen representation on GBIF</small>
+        </div>
+        <div>
+            <a id="GBIF"
+               data-url="https://api.gbif.org/v1/occurrence/search?occurrenceId={$photo->specimenPid}"
+               href="">link</a>
+        </div>
+    </li>
+
+    {/if}
+    {if $maxPhotoStatus->id ===  \App\Model\Database\Entity\PhotosStatus::PUBLISHED  }
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">IIIF manifest raw</h5>
+                <small class="text-body-secondary"><b id="copyRawManifest">{plink //:Front:Iiif:manifest $specimen->getStandardizedId()}</b> <span
+                    class="copyIcon" data-copy-target="#copyRawManifest" title="Copy">
+                <i class="fa-regular fa-copy"></i>
+            </span></small><br>
+                <small class="text-body-secondary">IIIF manifest based on data stored in the Czech
+                    repository</small>
+            </div>
+            <div>
+                <a href="{plink //:Front:Iiif:manifest $specimen->getStandardizedId()}">link</a>
+            </div>
+        </li>
+        {if $photo->herbarium->externalDatabase->id === \App\Model\Database\Entity\ExternalDatabase::JACQ }
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-1">IIIF manifest JACQ augmented</h5>
+                        <small class="text-body-secondary"><b id="copyAugmentedManifest">https://api.jacq.org/v1/iiif/manifest/<span
+                            class="specimenDbId">?</span></b> <span class="copyIcon"
+                                                                    data-copy-target="#copyAugmentedManifest"
+                                                                    title="Copy">
+                        <i class="fa-regular fa-copy"></i>
+                    </span></small><br>
+                        <small class="text-body-secondary">IIIF manifest augmented with specimen metadata stored in
+                            JACQ.</small>
+                    </div>
+                    <div>
+                        <a id="manifestUrl" data-url="https://api.jacq.org/v1/iiif/manifest/"
+                           href="">link</a>
+                    </div>
+            </li>
+        {/if}
+    {/if}
+
+</ul>
+

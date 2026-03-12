@@ -65,6 +65,11 @@ class PhotoService extends BaseEntityService
         return $this->repository->getAllPhotosOfSpecimen($user, $specimen);
     }
 
+    public function getMaxPhotoStatusOfSpecimen(User $user, Specimen $specimen): PhotosStatus
+    {
+        return $this->repository->getMaxPhotoStatusOfSpecimen($user, $specimen);
+    }
+
     public function getPhotoReference(int $id): Photos
     {
         return $this->entityManager->getReference($this->entityName, $id);
