@@ -1,23 +1,31 @@
 <div class="col">
     <div class="card">
         <div class="row g-0">
-            <div class="col-md-4">
                 {if $photo->status->id === 3 || $photo->status->id === 4}
                 <img
-                    src="{plink Repository:databotThumbImage $photo->id}"
-                    width="300px" class="img-fluid rounded-start">
+                    src="{plink Repository:databotThumbImage $photo->id}"  class="img-fluid rounded-start"
+                      style="object-fit: cover; cursor:pointer;"
+                    data-bs-toggle="modal"
+                    data-bs-target="#imageModal-{$photo->id}"
+                >
                 {/if}
-            </div>
+        </div>
+        <div class="row g-0">
             <div class="col-md-8">
                 <div class="card-body">
-                    <h5 class="card-title">ID {$photo->id} <span class="fs-6">(see <a href="{plink Repository:photo $photo->id}">more info</a>)</span></h5>
-                    <p class="card-text">W×H: {$photo->width}×{$photo->height}</p>
-                    <p class="card-text">Filesize: {$photo->archiveFileSize|bytes:2}</p>
-                    <p class="card-text">Status: <span class="badge bg-{$photo->status->color}">{$photo->status->name}</span> </p>
-<!--                    TODO error message a výraznější head pro chybné -->
-                    <p class="card-text">Type: <span class="badge bg-{$photo->type->color}">{$photo->type->name}</span> </p>
+                    <h5 class="card-title">Photo ID: {$photo->id} <span class="fs-6">(see <a href="{plink Repository:photo $photo->id}">detail</a>)</span></h5>
+                    <p class="card-text"><span class="badge bg-{$photo->status->color}">{$photo->status->name}</span>  <span class="badge bg-{$photo->type->color}">{$photo->type->name}</span> </p>
                     <p class="card-text"><small class="text-muted">Created at
                         {$photo->createdAt|localDate}</small></p>
+                </div>
+                <div class="modal fade" id="imageModal-{$photo->id}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-body text-center p-0">
+                                <img src="{plink Repository:databotThumbImage $photo->id}" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

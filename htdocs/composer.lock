@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "99c6519f414a5289341fa66bbeab5336",
+    "content-hash": "5f70588efe5ae11df7e59c1f81f1bee4",
     "packages": [
         {
             "name": "68publishers/asset",
@@ -201,16 +201,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.372.3",
+            "version": "3.373.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d207d2ca972c9b10674e535dacd4a5d956a80bad"
+                "reference": "d23edc4cf9cd81cb98b5beb9c1fb3737f535b1e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d207d2ca972c9b10674e535dacd4a5d956a80bad",
-                "reference": "d207d2ca972c9b10674e535dacd4a5d956a80bad",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d23edc4cf9cd81cb98b5beb9c1fb3737f535b1e5",
+                "reference": "d23edc4cf9cd81cb98b5beb9c1fb3737f535b1e5",
                 "shasum": ""
             },
             "require": {
@@ -231,12 +231,12 @@
                 "aws/aws-php-sns-message-validator": "~1.0",
                 "behat/behat": "~3.0",
                 "composer/composer": "^2.7.8",
-                "dms/phpunit-arraysubset-asserts": "^0.4.0",
+                "dms/phpunit-arraysubset-asserts": "^v0.5.0",
                 "doctrine/cache": "~1.4",
                 "ext-dom": "*",
                 "ext-openssl": "*",
                 "ext-sockets": "*",
-                "phpunit/phpunit": "^9.6",
+                "phpunit/phpunit": "^10.0",
                 "psr/cache": "^2.0 || ^3.0",
                 "psr/simple-cache": "^2.0 || ^3.0",
                 "sebastian/comparator": "^1.2.3 || ^4.0 || ^5.0",
@@ -292,9 +292,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.372.3"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.373.3"
             },
-            "time": "2026-03-10T18:07:21+00:00"
+            "time": "2026-03-16T18:15:27+00:00"
         },
         {
             "name": "composer/pcre",
@@ -3579,16 +3579,16 @@
         },
         {
             "name": "nettrine/fixtures",
-            "version": "v0.8.0",
+            "version": "v0.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/contributte/doctrine-fixtures.git",
-                "reference": "2867a81e85d7df63eefb4976e621447bfcd84003"
+                "reference": "d03c25ec681070513f99de9fc5967c867c7f4039"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/contributte/doctrine-fixtures/zipball/2867a81e85d7df63eefb4976e621447bfcd84003",
-                "reference": "2867a81e85d7df63eefb4976e621447bfcd84003",
+                "url": "https://api.github.com/repos/contributte/doctrine-fixtures/zipball/d03c25ec681070513f99de9fc5967c867c7f4039",
+                "reference": "d03c25ec681070513f99de9fc5967c867c7f4039",
                 "shasum": ""
             },
             "require": {
@@ -3598,11 +3598,11 @@
                 "php": ">=8.2"
             },
             "require-dev": {
-                "contributte/phpstan": "^0.3.0",
-                "contributte/qa": "^0.4",
+                "contributte/phpstan": "^0.4.0",
+                "contributte/qa": "^0.4.0",
                 "contributte/tester": "^0.3.0",
                 "mockery/mockery": "^1.6.2",
-                "symfony/console": "^7.2.0"
+                "symfony/console": "^7.2.0 || ^8.0.0"
             },
             "type": "library",
             "extra": {
@@ -3638,7 +3638,7 @@
             ],
             "support": {
                 "issues": "https://github.com/contributte/doctrine-fixtures/issues",
-                "source": "https://github.com/contributte/doctrine-fixtures/tree/v0.8.0"
+                "source": "https://github.com/contributte/doctrine-fixtures/tree/v0.9.0"
             },
             "funding": [
                 {
@@ -3650,7 +3650,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-11T17:52:54+00:00"
+            "time": "2026-01-06T12:45:48+00:00"
         },
         {
             "name": "nettrine/migrations",
@@ -6721,11 +6721,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.40",
+            "version": "2.1.41",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
-                "reference": "9b2c7aeb83a75d8680ea5e7c9b7fca88052b766b",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/a2eae8f20856b3afe74bf1f9726ce8c11438e300",
+                "reference": "a2eae8f20856b3afe74bf1f9726ce8c11438e300",
                 "shasum": ""
             },
             "require": {
@@ -6770,7 +6770,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-02-23T15:04:35+00:00"
+            "time": "2026-03-16T18:24:10+00:00"
         },
         {
             "name": "slevomat/coding-standard",

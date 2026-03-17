@@ -35,7 +35,7 @@ final class CetafSidTest extends IntegrationTestCase
 
         $this->runCommand(['command' => 'curator:resolveSpecimenPid', '--no-interaction' => true,], 'sid resolve broken');
 
-        Assert::count(4, $servicePhotos->findBy(['status'=>PhotosStatus::SPECIMEN_CONTROL_OK]), 'imported CETAF sids');
+        Assert::count(4, $servicePhotos->findBy(['status'=>PhotosStatus::SPECIMEN_CONTROL_OK]), 'moved to specimen_control_ok using CETAF sids');
 
     }
 

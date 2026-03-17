@@ -89,37 +89,24 @@ final class LatteExtension extends Extension
         }
     }
 
-    public function dumpArray(?array $data, int $level = 0): string
+    public function dumpArray(?array $data): string
     {
-        if ($data === null) {
-            return '';
-        }
+        return json_encode($this->toTree($data), constant('JSON_UNESCAPED_UNICODE'));
+    }
 
-        static $idCounter = 0;
-        $output = '<ul class="list-unstyled">';
+    public function toTree(array $data): array
+    {
+        $result = [];
 
         foreach ($data as $key => $value) {
-            $uniqueId = 'collapse-' . (++$idCounter);
-
             if (is_array($value)) {
-                $output .= '<li>';
-                $output .= '<button class="btn btn-link p-0 text-decoration-none" data-bs-toggle="collapse" data-bs-target="#' . $uniqueId . '">';
-                $output .= '<i class="fas fa-folder"></i> ' . $key;
-                $output .= '</button>';
-                $output .= '<div class="collapse" id="' . $uniqueId . '">';
-//                $output .= '<div class="collapse ' . ($level === 0 ? 'show' : '') . '" id="' . $uniqueId . '">';
-                $output .= '<ul class="list-unstyled ps-3">';
-                $output .= $this->dumpArray($value, $level + 1);
-                $output .= '</ul>';
-                $output .= '</div>';
-                $output .= '</li>';
+                $result[$key] = $this->toTree($value);
             } else {
-                $output .= '<li> <strong>' . $key . ':</strong> ' . $value . '</li>';
+                $result[$key] = $value;
             }
         }
 
-        $output .= '</ul>';
-        return $output;
+        return $result;
     }
 
     public function ordinalSuffix(int $number): Html

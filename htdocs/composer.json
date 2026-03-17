@@ -32,7 +32,7 @@
     "nette/utils": "^4",
     "nettrine/orm": "^0",
     "nettrine/dbal": "^0",
-    "nettrine/fixtures": "^0.8",
+    "nettrine/fixtures": "^0",
     "nettrine/migrations": "^0",
     "symfony/var-exporter": "^v7",
     "latte/latte": "^3",
@@ -40,7 +40,7 @@
 
     "contributte/console": "^0",
     "contributte/console-extra": "^0",
-    "contributte/forms-bootstrap": "^0.8",
+    "contributte/forms-bootstrap": "^0",
     "guzzlehttp/guzzle": "^7",
     "league/pipeline": "^1",
     "ublaboo/aws-sdk-nette-extension": "dev-master",

@@ -2,8 +2,17 @@
 <div class="container">
     <div class="row">
         <h4>Databot status</h4>
-        <code>
-            {$databotData|dumpArray|noescape}
-        </code>
+        <andypf-json-viewer
+            indent="4"
+            expanded="true"
+            theme="cupertino"
+            show-data-types="false"
+            show-toolbar="true"
+            expand-icon-type="square"
+            show-copy="true"
+            show-size="true"
+        >
+            {$databotData|dumpArray}
+        </andypf-json-viewer>
     </div>
 </div>
