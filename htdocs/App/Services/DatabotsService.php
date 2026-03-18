@@ -78,21 +78,21 @@ class DatabotsService
         }
 
         foreach ($photo->databotResults as $databotRecord) {
-            $identikit = $databotRecord->getDatabot()->name . ' v' . $databotRecord->getDatabot()->version . ' - ' . $databotRecord->createdAt->format('j.n.Y H:i');
-            $databot['name'] = $databotRecord->getDatabot()->name;
-            $databot['version'] = $databotRecord->getDatabot()->version;
+            $identikit = $databotRecord->databot->name . ' v' . $databotRecord->databot->version . ' - ' . $databotRecord->createdAt->format('j.n.Y H:i');
+            $databot['name'] = $databotRecord->databot->name;
+            $databot['version'] = $databotRecord->databot->version;
             $databot['computedAt'] = $databotRecord->createdAt->format('j.n.Y H:i');
-            $databot['description'] = $databotRecord->getDatabot()->description;
+            $databot['description'] = $databotRecord->databot->description;
             if ($databotRecord->status->value == 'ok') {
-                foreach ($databotRecord->getResultData() as $score) {
+                foreach ($databotRecord->resultData as $score) {
                     $databot['data'][$score['name']] = $score['value'];
-                    if ($databotRecord->getDatabot()->name === "no-ref-image-metrics") {
-                        $databot['percentile_all'][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->getDatabot()->id, $score['name'], $photo);
-                        $databot['percentile_' . $photo->herbarium->acronym][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->getDatabot()->id, $score['name'], $photo, false);
+                    if ($databotRecord->databot->name === "no-ref-image-metrics") {
+                        $databot['percentile_all'][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo);
+                        $databot['percentile_' . $photo->herbarium->acronym][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo, false);
                     }
                 }
             } else {
-                $databot['message'] = $databotRecord->getMessage();
+                $databot['message'] = $databotRecord->message;
             }
             $value[$identikit] = $databot;
         }
