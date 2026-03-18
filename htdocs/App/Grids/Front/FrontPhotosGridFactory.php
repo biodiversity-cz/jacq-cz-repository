@@ -2,11 +2,9 @@
 
 namespace App\Grids\Front;
 
-use App\Model\Database\Entity\Herbaria;
-
 interface FrontPhotosGridFactory
 {
 
-    public function create(Herbaria $herbarium): FrontPhotosGrid;
+    public function create(): FrontPhotosGrid;
 
 }

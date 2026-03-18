@@ -152,7 +152,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
 
     }
 
-    public function renderHerbarium(?string $id): void
+    public function actionHerbarium(?string $id): void
     {
         try {
             if ($id === null) {
@@ -167,9 +167,13 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $this->flashMessage($exception->getMessage(), 'error');
             $this->redirect('Home:');
         }
+    }
 
+    public function renderHerbarium(?string $id): void
+    {
+        /** @var Herbaria $herbarium */
+        $herbarium = $this->herbarium;
         $this->template->herbarium = $herbarium;
-
     }
 
     protected function createComponentDetail(): Multiplier
@@ -179,6 +183,6 @@ final class RepositoryPresenter extends UnsecuredPresenter
 
     public function createComponentPhotosGrid(): FrontPhotosGrid
     {
-        return $this->frontPhotosGridFactory->create($this->herbarium);
+        return $this->frontPhotosGridFactory->create();
     }
 }
