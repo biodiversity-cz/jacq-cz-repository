@@ -84,13 +84,18 @@ class DatabotsService
             $databot['computedAt'] = $databotRecord->createdAt->format('j.n.Y H:i');
             $databot['description'] = $databotRecord->databot->description;
             if ($databotRecord->status->value == 'ok') {
-                foreach ($databotRecord->resultData as $score) {
-                    $databot['data'][$score['name']] = $score['value'];
-                    if ($databotRecord->databot->name === "no-ref-image-metrics") {
-                        $databot['percentile_all'][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo);
-                        $databot['percentile_' . $photo->herbarium->acronym][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo, false);
-                    }
-                }
+//                if(is_array($databotRecord->resultData)){
+//                    foreach ($databotRecord->resultData as $score) {
+//                        $databot['data'][$score['name']] = $score['value'];
+//                        if ($databotRecord->databot->name === "no-ref-image-metrics") {
+//                            $databot['percentile_all'][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo);
+//                            $databot['percentile_' . $photo->herbarium->acronym][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo, false);
+//                        }
+//                    }
+//                }else{
+                    $databot['data'] = $databotRecord->resultData;
+//                }
+
             } else {
                 $databot['message'] = $databotRecord->message;
             }
