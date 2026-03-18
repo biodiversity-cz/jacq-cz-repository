@@ -40,11 +40,6 @@ class DatabotResult
     #[ORM\Column(type: Types::JSON, nullable: true, options: ['jsonb' => true, 'comment' => 'Structured result data, e.g. metrics, checks'])]
     protected(set) ?array $resultData = null;
 
-    public function getDatabot(): Databot
-    {
-        return $this->databot;
-    }
-
     public function setDatabot(Databot $databot): DatabotResult
     {
         $this->databot = $databot;

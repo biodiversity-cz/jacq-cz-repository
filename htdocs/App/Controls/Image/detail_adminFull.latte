@@ -15,7 +15,7 @@
         </div>
     </div>
 </div>
-<div class="col-4">
+<div class="col-3">
     <h5>Photo ID: {$photo->id}, belongs to the specimen <span class="fs-6"><a
         href="{plink Repository:specimen $photo->specimenId}">{$photo->getFullSpecimenId()}</a></span></h5>
     {if $photo->status->id == \App\Model\Database\Entity\PhotosStatus::PUBLISHED}
@@ -60,7 +60,7 @@
     {/if}
 
 </div>
-<div class="col-4">
+<div class="col-5">
     <h4>Import analysis</h4>
     <andypf-json-viewer
         indent="4"
