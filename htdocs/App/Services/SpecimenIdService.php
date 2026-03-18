@@ -49,18 +49,30 @@ class SpecimenIdService
         }
     }
 
+    /**
+     * responsible for ARK PID identifier generation.
+     * the PID is stored in db, but the hierarchical nature of ARK requires to be able to resolve individual subpaths --> do not change unless really sure about
+     * template = ark:12661/nrp1HERB/PRC/37/321354321
+     *
+     * synergic with \App\UI\Front\Ark\ArkPresenter
+     */
     public function generateArk(Photos $photo): string
     {
         $settings = $this->repositoryConfiguration->getArkProperties();
-        // ark:12661/nrp1HERB/PRC/PRC_37/321354321
+
         $ark =
             'ark:' . $settings['naan'] . "/" .
             $settings['shoulder'].
             $settings['repository']. "/" .
             $photo->herbarium->acronym . "/" .
-            $photo->getSpecimenIdFixedWidth() . "/".
+            $photo->specimenId . "/".
             $photo->id;
         return $ark;
+    }
+
+    public function getSpecimenPid(Photos $photo): string
+    {
+        return substr($photo->pid, 0, strrpos($photo->pid, '/'));
     }
 
 }

@@ -8,21 +8,22 @@
     "> 5%"
   ],
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^6",
+    "@fortawesome/fontawesome-free": "^7",
     "bootstrap": "^5",
     "@popperjs/core": "^2",
     "@contributte/datagrid": "^7",
     "mirador": "^4",
-    "plotly.js": "^3"
+    "plotly.js": "^3",
+    "@andypf/json-viewer": "^2"
   },
   "devDependencies": {
     "core-js": "^3",
     "mini-css-extract-plugin": "^2",
     "sass": "^1",
     "postcss-loader": "^8",
-    "postcss-preset-env": "^10",
+    "postcss-preset-env": "^11",
     "sass-loader": "^16",
-    "@symfony/webpack-encore": "^5",
+    "@symfony/webpack-encore": "^6",
     "webpack-notifier": "^1"
   },
   "scripts": {

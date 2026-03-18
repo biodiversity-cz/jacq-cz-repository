@@ -8,27 +8,27 @@
                 class="fa fa-info-circle" aria-hidden="true"></i></button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="zero-status-tab" data-bs-toggle="tab" data-bs-target="#first-tab-pane"
-                    type="button" role="tab" aria-controls="first-tab-pane" aria-selected="false" {if $eligible== 0}disabled{/if}>Ready for import {if $eligible > 0}<span
+            <button class="nav-link" id="zero-status-tab" data-bs-toggle="tab" data-bs-target="#info-pane"
+                    type="button" role="tab" aria-controls="info-pane" aria-selected="false" {if $eligible== 0}disabled{/if}>Ready for import {if $eligible > 0}<span
             class="badge rounded-pill status-zero">{$eligible}</span>{/if}</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="waiting-status-tab" data-bs-toggle="tab" data-bs-target="#second-tab-pane"
-                    type="button" role="tab" aria-controls="second-tab-pane" aria-selected="false" {if $waiting== 0}disabled{/if}>Waiting for processing {if $waiting > 0}<span class="badge rounded-pill status-waiting">{$waiting}</span>{/if}</button>
+            <button class="nav-link" id="waiting-status-tab" data-bs-toggle="tab" data-bs-target="#importable-pane"
+                    type="button" role="tab" aria-controls="importable-pane" aria-selected="false" {if $waiting== 0}disabled{/if}>Waiting for processing {if $waiting > 0}<span class="badge rounded-pill status-waiting">{$waiting}</span>{/if}</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="error-status-tab" data-bs-toggle="tab" data-bs-target="#third-tab-pane"
-                    type="button" role="tab" aria-controls="third-tab-pane" aria-selected="false" {if $erroneous== 0}
+            <button class="nav-link" id="error-status-tab" data-bs-toggle="tab" data-bs-target="#importerror-pane"
+                    type="button" role="tab" aria-controls="importerror-pane" aria-selected="false" {if $erroneous== 0}
                     disabled{/if}>Import error {if $erroneous > 0}<span
             class="badge rounded-pill status-error">{$erroneous}</span>{/if}</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="preerror-status-tab" data-bs-toggle="tab" data-bs-target="#fourth-tab-pane"
-                    type="button" role="tab" aria-controls="fourth-tab-pane" aria-selected="false" {if $preliminaryError== 0} disabled{/if}>Pre-control error {if $preliminaryError > 0}<span class="badge rounded-pill status-error">{$preliminaryError}</span>{/if}</button>
+            <button class="nav-link" id="preerror-status-tab" data-bs-toggle="tab" data-bs-target="#basalerror-pane"
+                    type="button" role="tab" aria-controls="basalerror-pane" aria-selected="false" {if $preliminaryError== 0} disabled{/if}>Pre-control error {if $preliminaryError > 0}<span class="badge rounded-pill status-error">{$preliminaryError}</span>{/if}</button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="orphaned-status-tab" data-bs-toggle="tab" data-bs-target="#fifth-tab-pane"
-                    type="button" role="tab" aria-controls="fifth-tab-pane" aria-selected="false" {if count($orphanedItems)== 0} disabled{/if}>Orphaned files {if count($orphanedItems) > 0}<span class="badge rounded-pill status-waiting">{count($orphanedItems)}</span>{/if}</button>
+            <button class="nav-link" id="orphaned-status-tab" data-bs-toggle="tab" data-bs-target="#orphaned-pane"
+                    type="button" role="tab" aria-controls="orphaned-pane" aria-selected="false" {if count($orphanedItems)== 0} disabled{/if}>Orphaned files {if count($orphanedItems) > 0}<span class="badge rounded-pill status-waiting">{count($orphanedItems)}</span>{/if}</button>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -67,7 +67,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="first-tab-pane" role="tabpanel" aria-labelledby="zero-status-tab" tabindex="0">
+        <div class="tab-pane fade" id="info-pane" role="tabpanel" aria-labelledby="zero-status-tab" tabindex="0">
             <div class="row mt-5">
                 <div class="col-sm-12 col-md-2">
                     <h6>Metadata</h6>
@@ -106,7 +106,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="second-tab-pane" role="tabpanel" aria-labelledby="waiting-status-tab" tabindex="0">
+        <div class="tab-pane fade" id="importable-pane" role="tabpanel" aria-labelledby="waiting-status-tab" tabindex="0">
             <div class="row mt-5">
                 <div class="col">
                     <table class="table table-striped table-hover table-sm">
@@ -132,7 +132,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="third-tab-pane" role="tabpanel" aria-labelledby="error-status-tab" tabindex="0">
+        <div class="tab-pane fade" id="importerror-pane" role="tabpanel" aria-labelledby="error-status-tab" tabindex="0">
             <div class="row mt-5">
                 <div class="col-sm-12 col-md-2">
                     <a n:href=":deleteErroneous" id="cleanupButton" class="btn btn-danger" role="button">Delete ALL files
@@ -169,7 +169,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="fourth-tab-pane" role="tabpanel" aria-labelledby="preerror-status-tab" tabindex="0">
+        <div class="tab-pane fade" id="basalerror-pane" role="tabpanel" aria-labelledby="preerror-status-tab" tabindex="0">
             <div class="row mt-5">
                 <div class="col">
                     <table class="table table-striped table-hover table-sm">
@@ -207,7 +207,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="fifth-tab-pane" role="tabpanel" aria-labelledby="orphaned-status-tab" tabindex="0">
+        <div class="tab-pane fade" id="orphaned-pane" role="tabpanel" aria-labelledby="orphaned-status-tab" tabindex="0">
             <div class="row mt-5">
                 <h3>Currently being processed</h3>
                 <p>Files with unfinished status in but without files present in the curator bucket.</p>

@@ -2,7 +2,7 @@
 
 namespace App\UI\Front\Cetaf;
 
-use App\Services\EntityServices\CetaSidService;
+use App\Services\EntityServices\CetafSidService;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\Responses\RedirectResponse;
 use Nette\Application\Responses\TextResponse;
@@ -10,7 +10,7 @@ use Nette\Application\Responses\TextResponse;
 final class CetafPresenter extends UnsecuredPresenter
 {
 
-    /** @inject */ public CetaSidService $cetafSidRepository;
+    /** @inject */ public CetafSidService $cetafSidRepository;
 
     public function actionSid(string $id, int $herbariumId): void
     {

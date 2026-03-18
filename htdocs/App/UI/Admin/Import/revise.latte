@@ -1,20 +1,27 @@
 {block content}
 <div class="container-fluid">
-    <h2>Resolve problems with file <em>{$photo->originalFilename}</em> <span class="fs-5">[task {$photo->id}] or go back to  <a n:href=":default#third-tab-pane">upload results</a></span></h2>
+
 
     <div class="row">
         <div class="col-md-3">
+            <h2>Resolve problems</h2>
+            <p>or back to  <a n:href=":default#importerror-pane">upload results</a></span></p>
+            <hr>
+            <p><b>original filename:</b> {$photo->originalFilename}
+            <p><b>task:</b> {$photo->id}</p>
+
             <p><b>error:</b> {$photo->error->message}</p>
             {if $photo->error->barcodes!== null}
             <p><b>detected barcode (s):</b> {$photo->error->barcodes}</p>
             {/if}
+            <hr class="w-50">
             <p>Please decide what to do with this image: </p>
 
             <p><a n:href=":reimport $photo->id" id="reupload" class="btn btn-primary btn-sm" role="button">Repeat
-                processing</a> - the file is ok and the error reported looks like a temporal error of the repository.</p>
-            <p><a n:href=":delete $photo->id" id="delete" class="btn btn-danger btn-sm" role="button">Delete</a> -
-                delete the file from my bucket and erase the information about its processing.</p>
-            <hr width="70%">
+                processing</a> – the file is ok and the error reported looks like a temporal error of the repository software.</p>
+            <p><a n:href=":delete $photo->id" id="delete" class="btn btn-danger btn-sm" role="button">Delete</a> –
+                delete the file from my bucket and erase the information about it's processing.</p>
+            <hr class="w-50">
             <p>The file could be fine, but the automatic barcode processing failed. If so, enter the numeric part of
                 specimen ID. The image will be reprocessed, skipping the barcode detection. </p>
 
@@ -46,18 +53,50 @@
         </div>
         {if $photo->error->duplicateTo}
         <div class="col-md-4">
-            <h5>NEW image being imported <span class="fs-6">(<a href="{link :thumbnail $photo->id}" target="_blank">full preview</a>)</span></h5>
-            <img src="{link :thumbnail $photo->id}" class="img-fluid"  style="height: 90vh; object-fit: cover;">
+            <h5>the NEW image being imported</h5>
+            <img src="{link :thumbnail $photo->id}" class="img-fluid"  style="height: 90vh; object-fit: cover; cursor:pointer;"
+                 data-bs-toggle="modal"
+                 data-bs-target="#newImageModal">
+            <div class="modal fade" id="newImageModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-body text-center p-0">
+                            <img src="{link :thumbnail $photo->id}" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-4">
-            <h5>EXISTING image from the repository (thumb)</h5>
-            <img src="{link :databotThumbImage $photo->error->duplicateTo->id}"
-                class="img-fluid rounded-start" style="height: 90vh; object-fit: cover;">
+            <h5>already EXISTING image in the repository <small>(<a n:href="Repository:photo $photo->error->duplicateTo->id">detail</a>)</small></h5>
+            <img src="{link Repository:databotThumbImage $photo->error->duplicateTo->id}" class="img-fluid"  style="height: 90vh; object-fit: cover; cursor:pointer;"
+                 data-bs-toggle="modal"
+                 data-bs-target="#existingImageModal">
+            <div class="modal fade" id="existingImageModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-body text-center p-0">
+                            <img src="{link Repository:databotThumbImage $photo->error->duplicateTo->id}" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         {else}
         <div class="col-md-4">
-            <h5>NEW image being imported <span class="fs-6">(<a href="{link :thumbnail $photo->id}" target="_blank">full preview</a>)</span></h5>
-            <img src="{link :thumbnail $photo->id}" class="img-fluid" style="height: 90vh; object-fit: cover;">
+            <h5>NEW image being imported</h5>
+            <img src="{link :thumbnail $photo->id}" class="img-fluid"  style="height: 90vh; object-fit: cover; cursor:pointer;"
+                 data-bs-toggle="modal"
+                 data-bs-target="#imageModal">
+            <div class="modal fade" id="imageModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-body text-center p-0">
+                            <img src="{link :thumbnail $photo->id}" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         {/if}
 

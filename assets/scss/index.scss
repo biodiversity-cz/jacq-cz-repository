@@ -45,3 +45,8 @@ footer {
 .boxplot {
     height: 300px;
 }
+
+//not to show before the json viewer is fully rendered
+andypf-json-viewer:not(:defined) {
+    visibility: hidden;
+}

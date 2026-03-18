@@ -1,23 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace App\Grids;
+namespace App\Grids\Admin;
 
 use App\Facades\CuratorFacade;
+use App\Grids\BaseGridFactory;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Services\DatabotsService;
 use App\Services\EntityServices\PhotoService;
-use App\Services\Exceptions\ServiceException;
-use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 use Contributte\Datagrid\Datagrid;
 use Doctrine\ORM\QueryBuilder;
 use Nette\Application\Responses\FileResponse;
 use Nette\Application\UI\Control;
-use Nette\Neon\Exception;
 use Nette\Security\User;
 use Nette\Utils\Html;
 
-class ImportedPhotosGrid extends Control
+class PublishedPhotosGrid extends Control
 {
 
     private DataGrid $grid;
@@ -40,51 +38,6 @@ class ImportedPhotosGrid extends Control
         $template->render();
     }
 
-    public function handleDelete(int $id): void
-    {
-        try {
-            $photo = $this->photoService->getPhoto($this->user, $id);
-            $this->curatorFacade->deletePhoto($this->user, $photo);
-        } catch (ServiceException $exception){
-            $this->presenter->flashMessage($exception->getMessage(), 'danger');
-        }
-        catch (Exception $e) {
-            $this->presenter->flashMessage("It is not possible to delete the photo now, it has some unresolved \"duplicateTo\" relationship.", 'danger');
-        }
-
-        $this->redirect('this');
-    }
-
-    public function handleAddEmbargo(int $id): void
-    {
-        try {
-            $photo = $this->photoService->getPhoto($this->user, $id);
-            $this->curatorFacade->addEmbargoPhoto($this->user, $photo);
-        } catch (ServiceException $exception){
-            $this->presenter->flashMessage($exception->getMessage(), 'danger');
-        }
-        catch (Exception $e) {
-            $this->presenter->flashMessage("It is not possible to put the emabrgo to the photo now", 'danger');
-        }
-
-        $this->redirect('this');
-    }
-
-    public function handleDropEmbargo(int $id): void
-    {
-        try {
-            $photo = $this->photoService->getPhoto($this->user, $id);
-            $this->curatorFacade->dropEmbargoPhoto($this->user, $photo);
-        } catch (ServiceException $exception){
-            $this->presenter->flashMessage($exception->getMessage(), 'danger');
-        }
-        catch (Exception $e) {
-            $this->presenter->flashMessage("It is not possible to put the emabrgo to the photo now", 'danger');
-        }
-
-        $this->redirect('this');
-    }
-
     public function handleExportAll(): void
     {
         $qb = $this->defaultDatasource($this->user);
@@ -101,27 +54,17 @@ class ImportedPhotosGrid extends Control
         $this->grid->addColumnNumber('id', 'ID')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Import:photo', ['id' => $item->id]);
+                $url = $this->presenter->link('Repository:photo', ['id' => $item->id]);
                 $el->addHtml('<a href="' . $url . '">' . $item->id . '</a>');
 
                 return $el;
             });
-        $this->grid->addColumnText('status', 'status')
-            ->setRenderer(function (Photos $item) {
-                $el = Html::el('i');
-                $el->addHtml($item->status->name);
-                if($item->status->id === PhotosStatus::EMBARGO){
-                    $elInt = Html::el('span');
-                    $elInt->addHtml(' (expires '.$item->embargoTimeout->format('d.m.Y') . ')');
-                    $el->addHtml($elInt);
-                }
-                return $el;
-            }) ->setFilterSelect($this->curatorFacade->getAllStatuses());
-        $this->grid->addColumnDateTime('lastEditAt', 'processed at (FROM - TO)')->setRenderer(function (Photos $item){return $item->lastEdit->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
+
+        $this->grid->addColumnDateTime('createdAt', 'created at (FROM - TO)')->setRenderer(function (Photos $item){return $item->createdAt->format('j. n. Y H:i');})->setFilterDateRange( 'createdAt', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Import:specimen', ['specimenNumericPartOfId' => $item->specimenId]);
+                $url = $this->presenter->link('Repository:specimen', $item->specimenId);
                 $el->addHtml('<a href="' . $url . '">' . $item->getFullSpecimenId() . '</a>');
 
                 return $el;
@@ -146,39 +89,6 @@ class ImportedPhotosGrid extends Control
 //            });
 
 
-        $this->grid->addAction('delete', '', 'delete!')
-            ->setIcon('trash')
-            ->setTitle('Delete')
-            ->setClass('btn btn-xs btn-danger')
-            ->setConfirmation(
-                new StringConfirmation('Do you really want to delete photo %s? This won\'t be allowed in production mode!', 'archiveFilename') // Second parameter is optional
-            )
-            ->setRenderCondition(function (Photos $item) {
-                return in_array($item->status->id, PhotosStatus::DELETEABLE);
-            });
-
-        $this->grid->addAction('embargo', '', 'addEmbargo!')
-            ->setIcon('clock')
-            ->setTitle('Set embargo')
-            ->setClass('btn btn-xs btn-warning')
-            ->setConfirmation(
-                new StringConfirmation('Do you really want to embargo photo %s? If already in embargo, the expiration interval will be restarted.', 'archiveFilename')
-            )
-            ->setRenderCondition(function (Photos $item) {
-                return in_array($item->status->id, PhotosStatus::EMBARGOABLE);
-            });
-
-        $this->grid->addAction('dropEmbargo', '', 'dropEmbargo!')
-            ->setIcon('clock-rotate-left')
-            ->setTitle('Drop embargo')
-            ->setClass('btn btn-xs btn-info')
-            ->setConfirmation(
-                new StringConfirmation('Do you really want to drop the embargo from photo %s?', 'archiveFilename')
-            )
-            ->setRenderCondition(function (Photos $item) {
-                return $item->status->id === PhotosStatus::EMBARGO;
-            });
-
         $this->grid->addExportCsvFiltered('Csv export (filtered)', 'curator_imported.csv')
             ->setTitle('Csv export (filtered)')
             ->setIcon('file-csv');
@@ -202,7 +112,7 @@ class ImportedPhotosGrid extends Control
     {
         return $this->photoService->getDefaultDatasource($user)
             ->andWhere('p.status IN (:status)')
-            ->setParameter('status', PhotosStatus::PASSED)
+            ->setParameter('status', PhotosStatus::PUBLISHED)
             ->orderBy('p.id', 'DESC');
     }
 
@@ -228,7 +138,7 @@ class ImportedPhotosGrid extends Control
                 /** @var Photos $photo */
                 $row = [
                     $photo->id,
-                    $photo->lastEdit->format('Y-m-d H:i:s'),
+                    $photo->createdAt->format('Y-m-d H:i:s'),
                     $photo->getFullSpecimenId(),
                     $photo->originalFilename,
                     $photo->type->name,

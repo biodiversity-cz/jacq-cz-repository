@@ -3,7 +3,7 @@
 <header xmlns:n="http://www.w3.org/1999/xhtml">
     <nav class="navbar navbar-expand-lg navbar bg-primary-subtle mb-2 py-1">
         <div class="container-fluid">
-            <a class="navbar-brand" n:href="Home:"><em>Herbaria images</em></a>
+            <a class="navbar-brand" n:href="Home:"><em>HerbBIO Repository</em></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -17,12 +17,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {if $presenter->isLinkCurrent('Home:overview')}active{/if}"
-                           n:href="Home:overview">Work-in-progress items</a>
+                        <a class="nav-link {if $presenter->isLinkCurrent('Repository:in-progress')}active{/if}"
+                           n:href="Repository:in-progress">Work-in-progress items</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {if $presenter->isLinkCurrent('Home:published')}active{/if}"
-                           n:href="Home:published">Published items</a>
+                        <a class="nav-link {if $presenter->isLinkCurrent('Repository:published')}active{/if}"
+                           n:href="Repository:published">Published items</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {if $presenter->isLinkCurrent('Report:')}active{/if}"
@@ -39,20 +39,28 @@
                     <!--                           n:href="Funding:">Funding</a>-->
                     <!--                    </li>-->
                 </ul>
-                <form class="d-flex" action="{link Import:specimen}" method="GET">
-                    <input name="specimenNumericPartOfId" class="form-control me-2" type="search"
+                <form class="d-flex" action="{link Repository:search}" method="GET">
+                    <input name="numeric_part" class="form-control me-2" type="search"
                            placeholder="put numeric part of ID"
                            aria-label="Search specimen">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" n:href="Herbarium:">{$user->getIdentity()->getCurrentHerbariumAcronym()}
-                            Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" n:href=":Front:Sign:out"><i class="bi bi-box-arrow-right"></i>
-                            Sign out {$user->getIdentity()->name}</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person"></i>{$user->getIdentity()->getCurrentHerbariumAcronym()} {$user->getIdentity()->name}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a class="dropdown-item" n:href="Herbarium:">Settings</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" n:href=":Front:Sign:out"><i class="bi bi-box-arrow-right"></i>
+                                    Sign out</a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
 

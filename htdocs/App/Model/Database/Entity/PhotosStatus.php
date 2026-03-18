@@ -26,6 +26,8 @@ class PhotosStatus
     public const array PASSED = [self::IMAGE_CONTROL_OK, self::SPECIMEN_CONTROL_OK, self::WAITING_FOR_PUBLISHING, self::EMBARGO];
     public const array DELETEABLE = [self::IMAGE_CONTROL_ERROR, self::IMAGE_CONTROL_OK, self::SPECIMEN_CONTROL_OK, self::EMBARGO];
     public const array EMBARGOABLE = [self::SPECIMEN_CONTROL_OK, self::EMBARGO];
+    public const array WITH_CETAF_SPECIMEN = [self::SPECIMEN_CONTROL_OK, self::WAITING_FOR_PUBLISHING, self::EMBARGO, self::PUBLISHED];
+    public const array WITHOUT_CETAF_SPECIMEN = [self::IMAGE_CONTROL_OK, self::IMAGE_CONTROL_ERROR, self::WAITING];
 
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'name of the status'])]

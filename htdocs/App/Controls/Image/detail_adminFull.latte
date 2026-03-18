@@ -1,17 +1,34 @@
 <div class="col-4">
     <img
-        src="{plink Import:databotThumbImage $photo->id}"
-        class="img-fluid rounded-start" style="height: 90vh; object-fit: cover;">
+        src="{plink Repository:databotThumbImage $photo->id}"
+        class="img-fluid rounded-start"
+        style="object-fit: cover; cursor:pointer;"
+        data-bs-toggle="modal"
+        data-bs-target="#imageModal">
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="modal-body text-center p-0">
+                    <img src="{plink Repository:databotThumbImage $photo->id}" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="col-4">
-    <h5>ID {$photo->id}, belongs to the specimen <span class="fs-6"><a
-        href="{plink Import:specimen $photo->specimenId}">{$photo->getFullSpecimenId()}</a></span></h5>
+    <h5>Photo ID: {$photo->id}, belongs to the specimen <span class="fs-6"><a
+        href="{plink Repository:specimen $photo->specimenId}">{$photo->getFullSpecimenId()}</a></span></h5>
+    {if $photo->status->id == \App\Model\Database\Entity\PhotosStatus::PUBLISHED}
+    <p>PID: <a href="https://n2t.net/{$photo->pid}"><span id="photoPID-{$photo->id}">{$photo->pid}</span></a><span
+        class="copyIcon" data-copy-target="#photoPID-{$photo->id}" title="Copy">
+                <i class="fa-regular fa-copy"></i>
+            </span></p>    {/if}
     <p>W×H: {$photo->width}×{$photo->height}</p>
     <p>Filesize: {$photo->archiveFileSize|bytes:2}</p>
     <p>Status: <span class="badge bg-{$photo->status->color}">{$photo->status->name}</span>
     </p>
     {*<p>Quality metric: {$metric}*}
-    </p>
+</p>
     <p>Type: <span
         class="badge bg-{$photo->type->color}">{$photo->type->name}</span></p>
     {if $photo->funding !== null}
@@ -21,30 +38,56 @@
     <p><small class="text-muted">File created at
         {$photo->createdAt|localDate}</small></p>
     {if $photo->status->id === \App\Model\Database\Entity\PhotosStatus::IMAGE_CONTROL_ERROR}
-    <hr>
-    <b>import error:</b> {$photo->error->message} </br>
-    {if $photo->error->duplicateTo}
-    <b>duplicate to:</b> ID {$photo->error->duplicateTo->id}, that is  {$photo->error->duplicateTo->jp2Filename} </br>
-    go to the errors' <a href="{plink :revise $photo->id}">resolve</a> page
-    {/if}
+        <hr>
+        <b>import error:</b> {$photo->error->message} </br>
+        {if $photo->error->duplicateTo}
+        <b>duplicate to:</b> ID {$photo->error->duplicateTo->id}, that is {$photo->error->duplicateTo->jp2Filename} </br>
+        go to the errors' <a href="{plink :revise $photo->id}">resolve</a> page
+        {/if}
     {else}
-        <p class="card-text"><h5>Archive Master (original TIF file)</h5> filename: {$photo->archiveFilename} <br>
-            <a href="{plink Import:masterImage $photo->id}">download</a>
-        </p>
-    <p class="card-text"><h5>JP2 Master (quality as Master but much lower filesize) </h5> filename: {$photo->archiveFilename} <br>
-    <a href="{plink Import:jp2Image $photo->id}">download</a>
-    </p>
-    <p class="card-text"><h5>DataBot thumb (1280px)</h5> filename: {$photo->archiveFilename} <br>
-    <a href="{plink Import:databotThumbImage $photo->id}">download</a>
-    </p>
+        <h4>Download</h4>
+        <ul>
+            <li><a href="{plink Repository:masterImage $photo->id}">Archive Master (original TIF file)</a> [{$photo->archiveFileSize|bytes:2}]</li>
+            {if $photo->status->id === \App\Model\Database\Entity\PhotosStatus::PUBLISHED}
+                <li><a href="{plink Repository:jp2Image $photo->id}" title="quality as Archive Master but ten times smaller filesize">JPEG2000 Master</a> [{$photo->JP2FileSize|bytes:2}]</li>
+            {/if}
+            <li><a href="{plink Repository:databotThumbImage $photo->id}">PNG DataBot thumb (longer side 1280px)</a> [approx 25 kB]</li>
+        </ul>
     {/if}
-    <hr>
-    <a class="btn btn-outline-danger deleteButton" n:href="delete!" role="button">Delete</a>
+    {if in_array($photo->status->id,\App\Model\Database\Entity\PhotosStatus::DELETEABLE)}
+        <hr>
+        <a class="btn btn-outline-danger deleteButton" n:href="delete!" role="button">Delete</a>
+    {/if}
 
 </div>
 <div class="col-4">
-    <h4>Import analyse</h4>
-    <code>{$coreInfo|dumpArray|noescape}</code>
+    <h4>Import analysis</h4>
+    <andypf-json-viewer
+        indent="4"
+        expanded="false"
+        theme="cupertino"
+        show-data-types="false"
+        show-toolbar="true"
+        expand-icon-type="square"
+        show-copy="true"
+        show-size="true"
+    >
+        {$coreInfo|dumpArray}
+    </andypf-json-viewer>
+
+    {if !empty($databots)}
     <h4>DataBots</h4>
-    <code>{$databots|dumpArray|noescape}</code>
+    <andypf-json-viewer
+        indent="4"
+        expanded="false"
+        theme="cupertino"
+        show-data-types="false"
+        show-toolbar="true"
+        expand-icon-type="square"
+        show-copy="true"
+        show-size="true"
+    >
+        {$databots|dumpArray}
+    </andypf-json-viewer>
+    {/if}
 </div>

@@ -1,16 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace App\Grids;
+namespace App\Grids\Front;
 
 use App\Facades\CuratorFacade;
-use App\Model\Database\Entity\Herbaria;
+use App\Grids\BaseGridFactory;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Services\DatabotsService;
 use App\Services\EntityServices\PhotoService;
 use Contributte\Datagrid\Datagrid;
 use Doctrine\ORM\QueryBuilder;
-use Nette\Application\Responses\FileResponse;
 use Nette\Application\UI\Control;
 use Nette\Utils\Html;
 
@@ -19,9 +18,18 @@ class FrontPhotosGrid extends Control
 
     private Datagrid $grid;
 
-    public function __construct(protected Herbaria $herbarium, protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, protected DatabotsService $databotsService)
+    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, protected DatabotsService $databotsService)
     {
         $this->grid = $this->gridFactory->createBaseDatagrid();
+    }
+
+    protected function getHerbarium(): \App\Model\Database\Entity\Herbaria
+    {
+        $herbarium = $this->getPresenter()->herbarium;
+        if ($herbarium === null) {
+            throw new \RuntimeException('Herbarium is not set in the presenter.');
+        }
+        return $herbarium;
     }
 
     public function create(): self
@@ -82,7 +90,7 @@ class FrontPhotosGrid extends Control
         return $this->photoService->getAllPublishedPhotosDatasource()
             ->andWhere('p.status IN (:status)')
             ->andWhere('p.herbarium = :herbarium')
-            ->setParameter('herbarium', $this->herbarium->id)
+            ->setParameter('herbarium', $this->getHerbarium()->id)
             ->setParameter('status', PhotosStatus::PUBLISHED)
             ->orderBy('p.id', 'DESC');
     }

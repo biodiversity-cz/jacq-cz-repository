@@ -13,6 +13,7 @@ final class ArkPresenter extends UnsecuredPresenter
 
     /**
      * works only with value of ark, without protocol&naan prefix
+     * synergic with \App\Services\SpecimenIdService::generateArk
      */
     public function actionDefault(string $value): void
     {
@@ -22,13 +23,14 @@ final class ArkPresenter extends UnsecuredPresenter
             $this->redirect('Home:');
         }
 
+
         $parts = explode('/', $value);
         switch (count($parts)) {
             case 2:
                 $this->redirect('Repository:herbarium', $parts[1]);
                 break;
             case 3:
-                $this->redirect('Repository:specimen', $parts[2]);
+                $this->redirect('Repository:specimen', ['sid' =>$parts[1].'_'.$parts[2]]);
                 break;
             case 4:
                 $this->redirect('Repository:image', $parts[3]);

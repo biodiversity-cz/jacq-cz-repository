@@ -51,6 +51,7 @@ final class SpecimenPidCallerService
 //                $response = ($reason instanceof RequestException && $reason->hasResponse())
 //                    ? $reason->getResponse()
 //                    : null;
+//                throw $reason;
                 $entity->setLastEditAt();
                 $this->em->persist($entity);
             },

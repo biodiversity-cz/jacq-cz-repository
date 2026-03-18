@@ -103,6 +103,20 @@ class PhotosRepository extends AbstractRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function getMaxPhotoStatusOfSpecimen(User $user, Specimen $specimen): PhotosStatus
+    {
+        $qb = $this->getDefaultDatasource($user)
+            ->select('p, status')
+            ->andWhere('p.specimenId = :specimenId')
+            ->setParameter('specimenId', $specimen->numericPartOfId)
+            ->join('p.status', 'status')
+            ->orderBy('status.succession', 'DESC')
+            ->setMaxResults(1);
+
+        $photo = $qb->getQuery()->getOneOrNullResult();
+        return $photo?->status;
+    }
+
     /**
      * @return Photos[]
      */

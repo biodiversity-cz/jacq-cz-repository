@@ -32,7 +32,7 @@ class DuplicityStage extends BaseStage implements StageInterface
                 if ($imagickNewFile->getImageSignature() === $imagickFromDuplicateCandidate->getImageSignature()) {
                     $this->item->error->setDuplicateTo($duplicate);
 
-                    throw new DuplicityStageException('suspicious similarity with already imported file');
+                    throw new DuplicityStageException('total similarity with already imported file');
                 }
 
                 $imagickFromDuplicateCandidate->clear();
