@@ -18,6 +18,11 @@
 <div class="col-4">
     <h5>Photo ID: {$photo->id}, belongs to the specimen <span class="fs-6"><a
         href="{plink Repository:specimen $photo->specimenId}">{$photo->getFullSpecimenId()}</a></span></h5>
+    {if $photo->status->id == \App\Model\Database\Entity\PhotosStatus::PUBLISHED}
+    <p>PID: <a href="https://n2t.net/{$photo->pid}"><span id="photoPID-{$photo->id}">{$photo->pid}</span></a><span
+        class="copyIcon" data-copy-target="#photoPID-{$photo->id}" title="Copy">
+                <i class="fa-regular fa-copy"></i>
+            </span></p>    {/if}
     <p>W×H: {$photo->width}×{$photo->height}</p>
     <p>Filesize: {$photo->archiveFileSize|bytes:2}</p>
     <p>Status: <span class="badge bg-{$photo->status->color}">{$photo->status->name}</span>

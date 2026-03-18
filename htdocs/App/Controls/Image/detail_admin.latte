@@ -11,9 +11,15 @@
                 {/if}
         </div>
         <div class="row g-0">
-            <div class="col-md-8">
+            <div class="col">
                 <div class="card-body">
                     <h5 class="card-title">Photo ID: {$photo->id} <span class="fs-6">(see <a href="{plink Repository:photo $photo->id}">detail</a>)</span></h5>
+                    {if $photo->status->id == \App\Model\Database\Entity\PhotosStatus::PUBLISHED}
+                    <p>PID: <a href="https://n2t.net/{$photo->pid}"><span id="photoPID-{$photo->id}">{$photo->pid}</span></a><span
+                            class="copyIcon" data-copy-target="#photoPID-{$photo->id}" title="Copy">
+                <i class="fa-regular fa-copy"></i>
+            </span></p>
+                    {/if}
                     <p class="card-text"><span class="badge bg-{$photo->status->color}">{$photo->status->name}</span>  <span class="badge bg-{$photo->type->color}">{$photo->type->name}</span> </p>
                     <p class="card-text"><small class="text-muted">Created at
                         {$photo->createdAt|localDate}</small></p>

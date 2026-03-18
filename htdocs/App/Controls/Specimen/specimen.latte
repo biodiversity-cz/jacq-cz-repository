@@ -2,9 +2,12 @@
 <ul class="list-group">
     <li class="list-group-item list-group-item-primary disabled" aria-disabled="true">Specimen <b>{$photo->getFullSpecimenId()}</b>
     </li>
-    <li class="list-group-item list-group-item-primary disabled" aria-disabled="true">
+    <li class="list-group-item list-group-item-primary" >
         {if $maxPhotoStatus->id ===  \App\Model\Database\Entity\PhotosStatus::PUBLISHED  }
-            TBD show specimen ARK
+        PID: <a href="https://n2t.net/{$specimenPID}"><span id="specimenPID">{$specimenPID}</span></a><span
+        class="copyIcon" data-copy-target="#specimenPID" title="Copy">
+                <i class="fa-regular fa-copy"></i>
+            </span>
         {else}
             This specimen has no public photos yet, therefore it does not have ARK assigned, and is visible only via this admin interface.
         {/if}

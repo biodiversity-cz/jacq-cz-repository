@@ -60,11 +60,11 @@ class PublishedPhotosGrid extends Control
                 return $el;
             });
 
-        $this->grid->addColumnDateTime('lastEditAt', 'published at (FROM - TO)')->setRenderer(function (Photos $item){return $item->lastEdit->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
+        $this->grid->addColumnDateTime('createdAt', 'created at (FROM - TO)')->setRenderer(function (Photos $item){return $item->createdAt->format('j. n. Y H:i');})->setFilterDateRange( 'createdAt', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Repository:specimen', ['specimenNumericPartOfId' => $item->specimenId]);
+                $url = $this->presenter->link('Repository:specimen', $item->specimenId);
                 $el->addHtml('<a href="' . $url . '">' . $item->getFullSpecimenId() . '</a>');
 
                 return $el;
@@ -138,7 +138,7 @@ class PublishedPhotosGrid extends Control
                 /** @var Photos $photo */
                 $row = [
                     $photo->id,
-                    $photo->lastEdit->format('Y-m-d H:i:s'),
+                    $photo->createdAt->format('Y-m-d H:i:s'),
                     $photo->getFullSpecimenId(),
                     $photo->originalFilename,
                     $photo->type->name,
