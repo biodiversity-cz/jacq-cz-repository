@@ -42,7 +42,7 @@
         </div>
         <div>
             <a href="{$photo->specimenPid}"><span id="PID"
-                                                           data-url="{$photo->specimenPid}">link</span></a>
+                                                           data-url="https://api.jacq.org/v1/stableIdentifier/resolve/{$photo->specimenPid}?withredirect=false">link</span></a>
         </div>
     </li>
     {if $photo->herbarium->externalDatabase->id === \App\Model\Database\Entity\ExternalDatabase::JACQ }
