@@ -55,4 +55,8 @@ class AppConfiguration
         return $this->config['openid']['providers'][$provider];
     }
 
+    public function getSolrBasePath(): string
+    {
+        return $this->config['solr']['basePath'];
+    }
 }

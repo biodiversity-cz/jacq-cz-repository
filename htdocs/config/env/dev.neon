@@ -16,6 +16,8 @@ parameters:
         imageServerBaseUrl: http://localhost:8080/iiif/
     databot:
         basePath: http://databot:5000
+    solr:
+        basePath: http://solr:8983
 
 services:
     cache.storage: Nette\Caching\Storages\DevNullStorage

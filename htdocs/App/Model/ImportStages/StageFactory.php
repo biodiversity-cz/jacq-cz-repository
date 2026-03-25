@@ -84,4 +84,9 @@ readonly class StageFactory
         return new ChecksumStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
     }
 
+    public function createSolrStage(): SolrStage
+    {
+        return new SolrStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
+    }
+
 }
