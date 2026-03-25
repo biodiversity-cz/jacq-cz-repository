@@ -6,13 +6,18 @@ use App\Model\Database\Entity\Photos;
 use App\Model\ImportStages\Exceptions\PublishStageException;
 use App\Services\ImagickService;
 use App\Services\RepositoryConfiguration;
+use App\Services\Solr\SolrClientService;
 use App\Services\TempDir;
 use League\Pipeline\StageInterface;
 
 class SolrStage extends BaseStage implements StageInterface
 {
-    public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService)
-    {
+    public function __construct(
+        TempDir $tempDir,
+        RepositoryConfiguration $repositoryConfiguration,
+        ImagickService $imagickService,
+        private readonly SolrClientService $solrClientService,
+    ) {
         parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
     }
 
@@ -21,13 +26,13 @@ class SolrStage extends BaseStage implements StageInterface
         $this->item = $payload;
         try {
             /** @var Photos $payload */
+            $this->solrClientService->indexPhoto($payload);
 
         } catch (\Throwable $exception) {
-            throw new PublishStageException('unable index specimen in Solr: ' . $payload->id);
+            throw new PublishStageException('unable index specimen in Solr: ' . $exception->getMessage() . ' '. $payload->id);
         }
 
         return $payload;
     }
-
 
 }

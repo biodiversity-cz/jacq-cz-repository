@@ -9,6 +9,7 @@ use App\Model\Database\Entity\PhotosStatus;
 use App\Security\Identity;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
+use App\Services\Solr\SolrClientService;
 use Contributte\Console\Application;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\DI\Container;
@@ -30,6 +31,7 @@ abstract class IntegrationTestCase extends TestCase
     protected ?User $user;
     protected CuratorFacade $curatorFacade;
     protected Application $application;
+    protected SolrClientService $solrClientService;
 
     protected function setUp(): void
     {
@@ -42,6 +44,7 @@ abstract class IntegrationTestCase extends TestCase
 
         $this->application = $this->container->getByType(Application::class);
         $this->application->setAutoExit(false);
+        $this->solrClientService = $this->container->getByType(SolrClientService::class);
 
     }
 

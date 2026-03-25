@@ -15,6 +15,7 @@ final class PrepareServicesTest extends IntegrationTestCase
     {
         $this->cleanDb();
         $this->cleanS3();
+        $this->cleanSolr();
         Assert::equal(1,1);
     }
 
@@ -70,6 +71,16 @@ final class PrepareServicesTest extends IntegrationTestCase
             throw new RuntimeException($e->getMessage());
         }
 
+    }
+
+    protected function cleanSolr():void
+    {
+        $update = $this->solrClientService->getClient()->createUpdate();
+
+        $update->addDeleteQuery('*:*');
+        $update->addCommit();
+
+        $this->solrClientService->getClient()->update($update);
     }
 
 }

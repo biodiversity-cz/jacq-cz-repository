@@ -6,6 +6,7 @@ services:
     - App\Services\TempDir(%tempDir%)
     - App\Services\RepositoryConfiguration(%storage%)
     - App\Services\AppConfiguration(@container::getParameters())
+    - Symfony\Component\EventDispatcher\EventDispatcher
 
     - {factory: App\Console\Scheduled\ProceedCuratorImage, tags: {console.command: curator:importImage}}
     - {factory: App\Console\Scheduled\ResolveSpecimenPid, tags: {console.command: curator:resolveSpecimenPid}}
@@ -30,6 +31,19 @@ services:
             class: App\UI\Front\OaiPmh\OaiPmhPresenter
             arguments:
                 recordProvider: @OaiPmhRecordProvider
+    solarium.adapter:
+            class: Solarium\Core\Client\Adapter\Http
+    solarium.client:
+            factory: Solarium\Client
+            arguments:
+                - @solarium.adapter
+                - @Symfony\Component\EventDispatcher\EventDispatcher
+                -
+                    endpoint:
+                        default:
+                            host: %solr.host%
+                            port: %solr.port%
+                            core: specimens
 
 search:
     in: %appDir%

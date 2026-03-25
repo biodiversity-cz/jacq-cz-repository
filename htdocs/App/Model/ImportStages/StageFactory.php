@@ -7,6 +7,7 @@ use App\Services\EntityServices\PhotoService;
 use App\Services\ImagickService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
+use App\Services\Solr\SolrClientService;
 use App\Services\SpecimenIdService;
 use App\Services\TempDir;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,7 +16,7 @@ use Nette\Application\LinkGenerator;
 readonly class StageFactory
 {
 
-    public function __construct(protected S3Service $s3Service, protected TempDir $tempDir, protected EntityManagerInterface $entityManager, protected RepositoryConfiguration $repositoryConfiguration, protected ImagickService $imagickService, protected LinkGenerator $linkGenerator, protected PhotoService $photoService, protected AppConfiguration $appConfiguration, protected SpecimenIdService $specimenIdService)
+    public function __construct(protected S3Service $s3Service, protected TempDir $tempDir, protected EntityManagerInterface $entityManager, protected RepositoryConfiguration $repositoryConfiguration, protected ImagickService $imagickService, protected LinkGenerator $linkGenerator, protected PhotoService $photoService, protected AppConfiguration $appConfiguration, protected SpecimenIdService $specimenIdService, protected SolrClientService $solrClientService)
     {
     }
 
@@ -86,7 +87,7 @@ readonly class StageFactory
 
     public function createSolrStage(): SolrStage
     {
-        return new SolrStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
+        return new SolrStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->solrClientService);
     }
 
 }

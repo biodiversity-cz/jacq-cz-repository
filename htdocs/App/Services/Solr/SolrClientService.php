@@ -2,18 +2,57 @@
 
 namespace App\Services\Solr;
 
-use App\Services\AppConfiguration;
+use App\Model\Database\Entity\Photos;
+use Solarium\Client;
+use Solarium\Core\Query\DocumentInterface;
 
-class SolrClientService
+
+final readonly class SolrClientService
 {
-    protected string $baseUrl;
-
     public function __construct(
-        private readonly AppConfiguration $appConfiguration,
+        private Client $client,
     )
     {
-        $this->baseUrl = $this->appConfiguration->getSolrBasePath() . '/solr/specimens';
     }
 
+    public function indexPhoto(Photos $photo): void
+    {
+        $update = $this->client->createUpdate();
+        $doc = $update->createDocument();
+        $doc = $this->prepareIngest($photo, $doc);
+        $update->addDocument($doc);
+        $update->addCommit();
 
+        $this->client->update($update);
+    }
+
+    protected function debugSolrCall(mixed $update): void
+    {
+        $builder = $update->getRequestBuilder();
+        $request = $builder->build($update);
+        // základ z client configu
+        $baseUri = $this->client->getEndpoint()->getBaseUri();
+        // request path
+        $path = $request->getUri();
+        // finální URL
+        $fullUrl = rtrim($baseUri, '/') . '/' . ltrim($path, '/');
+
+        dump($fullUrl);
+        dump($request->getMethod());   // POST
+        dump($request->getUri());      // URL do Solr
+        dump($request->getRawData());  // payload
+    }
+
+    protected function prepareIngest(Photos $photo, DocumentInterface $document): DocumentInterface
+    {
+        $document->setField('id', (string)$photo->id);
+        $document->setField('herbarium_acronym', strtoupper($photo->herbarium->acronym));
+
+        return $document;
+    }
+
+    public function getClient(): Client
+    {
+        return $this->client;
+    }
 }
