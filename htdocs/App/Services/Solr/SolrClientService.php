@@ -2,7 +2,9 @@
 
 namespace App\Services\Solr;
 
+use App\Model\Database\Entity\Databot;
 use App\Model\Database\Entity\Photos;
+use Doctrine\ORM\EntityManagerInterface;
 use Solarium\Client;
 use Solarium\Core\Query\DocumentInterface;
 
@@ -10,7 +12,8 @@ use Solarium\Core\Query\DocumentInterface;
 final readonly class SolrClientService
 {
     public function __construct(
-        private Client $client,
+        private Client                 $client,
+        private EntityManagerInterface $entityManager,
     )
     {
     }
@@ -45,7 +48,8 @@ final readonly class SolrClientService
 
     protected function prepareIngest(Photos $photo, DocumentInterface $document): DocumentInterface
     {
-        $document->setField('id', (string)$photo->id);
+        $document->setField('id', (string)$photo->pid);
+        $document->setField('title', $photo->getDatabotResultById($this->entityManager->getRepository(Databot::class)->findOneBy(['name' => 'cetaf_metadata']))['score'] ?? null);
         $document->setField('herbarium_acronym', strtoupper($photo->herbarium->acronym));
 
         return $document;

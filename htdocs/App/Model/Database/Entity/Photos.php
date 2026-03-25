@@ -340,4 +340,13 @@ class Photos
         return $this;
     }
 
+    public function getDatabotResultById(Databot $databot): ?DatabotResult
+    {
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('databot', $databot))
+            ->setMaxResults(1);
+
+        return $this->databotResults->matching($criteria)->first() ?: null;
+    }
+
 }

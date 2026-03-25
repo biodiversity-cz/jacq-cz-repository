@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\SpecimenIdException;
 use App\Model\Database\Entity\ExternalDatabase;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
@@ -72,19 +73,26 @@ final class SpecimenPidCallerService
     private function defaultHandler(Photos $entity, $response): void
     {
         $status = $response?->getStatusCode();
-        if (($status === 200 || $status === 303) && $response) {
-            /**
-             * There is an awful url where the specimen is resolved, let's store nice url that use internal db id of the CETAF SID
-             */
-            $rawUrl = $entity->getSpecimenPidApiEndpoint();
-            $entity->setSpecimenPid($this->folowRedirectUri($rawUrl));
+        try {
+            if ($status === 200 && $response) {
+                $body = (string)$response->getBody();
+                $data = json_decode($body, true);
 
-            $entity->setStatus($this->em->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK));
-            $entity->setLastEditAt();
+                $sid = $data['cetaf_sid'] ?? null;
+                if (empty($sid)) {
+                    throw new SpecimenIdException('Invalid CETAF endpoint response');
+                }
+                $entity->setSpecimenPid($sid);
+                $entity->setStatus($this->em->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK));
+                $entity->setLastEditAt();
+            }
+        } catch (\Exception $e) {
         }
     }
 
-
+    /**
+     * For case one wanna store the final url where the specimen is resolved, let's store nice url that use internal db id of the CETAF SID
+     */
     private function folowRedirectUri(string $url): string
     {
         $client = new Client([
@@ -110,7 +118,7 @@ final class SpecimenPidCallerService
         $baseUri = new Uri($url);
         $redirectUri = new Uri($location);
 
-        return (string) UriResolver::resolve($baseUri, $redirectUri);
+        return (string)UriResolver::resolve($baseUri, $redirectUri);
     }
 
     private function jacqHandler(Photos $entity, $response): void
@@ -122,7 +130,11 @@ final class SpecimenPidCallerService
                 $data = json_decode($body, true);
 
                 if ($data['jacq']['jacq:accessible'] === true) {
-                    $entity->setSpecimenPid($data['jacq']['jacq:stableIdentifier']);
+                    $sid = $data['jacq']['jacq:stableIdentifier'] ?? null;
+                    if (empty($sid)) {
+                        throw new SpecimenIdException('Invalid CETAF endpoint response');
+                    }
+                    $entity->setSpecimenPid($sid);
                     $entity->setStatus($this->em->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK));
                 }
                 $entity->setLastEditAt();

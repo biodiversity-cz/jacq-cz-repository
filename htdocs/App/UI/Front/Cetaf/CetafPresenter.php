@@ -5,16 +5,33 @@ namespace App\UI\Front\Cetaf;
 use App\Services\EntityServices\CetafSidService;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\Responses\RedirectResponse;
-use Nette\Application\Responses\TextResponse;
 
 final class CetafPresenter extends UnsecuredPresenter
 {
 
     /** @inject */ public CetafSidService $cetafSidRepository;
 
-    public function actionSid(string $id, int $herbariumId): void
+    /**
+     * service used for detection if specimen exists + returns link to CETAF
+     */
+    public function renderExists(string $id, int $herbariumId): void
     {
         $specimen = $this->cetafSidRepository->findOneBy(['barcode' => $id, 'herbarium' => $herbariumId]);
+
+        if ($specimen === null) {
+            $this->error('Specimen not found');
+        }
+
+        $this->sendJson(['cetaf_sid' => $this->link('//:sid', $specimen->id)]);
+
+    }
+
+    /**
+     * CETAF endpoint
+     */
+    public function actionSid(string $id): void
+    {
+        $specimen = $this->cetafSidRepository->find((int) $id);
 
         if ($specimen === null) {
             $this->error('Specimen not found');

@@ -5,7 +5,10 @@ namespace App\Services;
 use App\Exceptions\SpecimenIdException;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
+use App\Model\Database\Entity\PhotosStatus;
+use App\Model\Specimen\SpecimenFactory;
 use App\Services\EntityServices\HerbariumService;
+use App\Services\EntityServices\PhotoService;
 
 class SpecimenIdService
 {
@@ -16,7 +19,7 @@ class SpecimenIdService
 
     public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<' . self::REGEX_HERBARIUM . '>[a-zA-Z]+)[\s\-–_](?<' . self::REGEX_SPECIMEN . '>\d+)$/iu';
 
-    public function __construct(protected RepositoryConfiguration $repositoryConfiguration, protected HerbariumService $herbariumService)
+    public function __construct(protected RepositoryConfiguration $repositoryConfiguration, protected HerbariumService $herbariumService, protected SpecimenFactory $specimenFactory, protected PhotoService $photoService)
     {
     }
 
@@ -72,7 +75,15 @@ class SpecimenIdService
 
     public function getSpecimenPid(Photos $photo): string
     {
-        return substr($photo->pid, 0, strrpos($photo->pid, '/'));
+        if ($photo->status->id === PhotosStatus::PUBLISHED){
+            return substr($photo->pid, 0, strrpos($photo->pid, '/'));
+        }
+        $specimen = $this->specimenFactory->create($photo->getFullSpecimenId());
+        $publicPhotos = $this->photoService->getPublicPhotosOfSpecimen($specimen);
+        if (!empty($publicPhotos)) {
+            return substr($publicPhotos[0]->pid, 0, strrpos($publicPhotos[0]->pid, '/'));
+        }
+        return '';
     }
 
 }

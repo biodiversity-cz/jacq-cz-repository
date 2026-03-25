@@ -152,6 +152,8 @@ class CetafSidImportService
             ];
         }
 
+        //TODO add validation of barcode - that it fits to the herbarium acronym..
+
     }
 
     protected function importRow(array $row): void

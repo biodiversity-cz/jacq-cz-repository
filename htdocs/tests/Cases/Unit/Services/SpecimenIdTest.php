@@ -5,6 +5,8 @@ namespace Tests\Cases\Unit\Services;
 use App\Bootstrap;
 use App\Exceptions\SpecimenIdException;
 use App\Model\Database\Entity\Herbaria;
+use App\Model\Specimen\SpecimenFactory;
+use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use App\Services\SpecimenIdService;
 use App\Services\EntityServices\HerbariumService;
@@ -17,7 +19,9 @@ require __DIR__ . '/../../../bootstrap.php';
 function createService(Mockery\MockInterface $mockHerbariumService): SpecimenIdService {
     $container = Bootstrap::boot()->createContainer();
     $mockRepoConfig = $container->getByType(RepositoryConfiguration::class);
-    return new SpecimenIdService($mockRepoConfig, $mockHerbariumService);
+    $mockSpecimenFactory = $container->getByType(SpecimenFactory::class);
+    $mockPhotoService = $container->getByType(PhotoService::class);
+    return new SpecimenIdService($mockRepoConfig, $mockHerbariumService, $mockSpecimenFactory, $mockPhotoService);
 }
 
 test('splitSpecimenId parses valid specimenId with different separators', function (): void {

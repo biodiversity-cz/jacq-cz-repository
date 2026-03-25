@@ -115,6 +115,7 @@ IS \'Register databot. Return TRUE if a databot is successfully registered and a
         ");
         $this->addSql("GRANT USAGE ON SCHEMA public TO databot");
         $this->addSql("GRANT SELECT ON public.photos TO databot");
+        $this->addSql("GRANT SELECT ON public.photos_status TO databot");
 
         // schéma databots (plná práva)
         $this->addSql("GRANT USAGE ON SCHEMA databots TO databot");

@@ -270,7 +270,7 @@ class CetafSid
     public function toRdfXml(string $uri): string
     {
         $xml = [];
-        $xml[] = '<?xml version="1.0"?>';
+        $xml[] = '<?xml version="1.0" encoding="UTF-8"?>';
         $xml[] = '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dwc="http://rs.tdwg.org/dwc/terms/">';
         $xml[] = "  <rdf:Description rdf:about=\"{$uri}\">";
 
