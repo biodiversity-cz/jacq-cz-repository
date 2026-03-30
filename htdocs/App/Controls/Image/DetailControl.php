@@ -4,7 +4,7 @@ namespace App\Controls\Image;
 
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
-use App\Services\DatabotsService;
+use App\Services\DatabotsResultService;
 use App\Services\EntityServices\PhotoService;
 use Nette\Application\UI\Control;
 use Nette\Neon\Exception;
@@ -15,7 +15,7 @@ class DetailControl extends Control
 
     private Photos $photo;
 
-    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user,  protected DatabotsService $databotsService)
+    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user,  protected DatabotsResultService $databotsService)
     {
         $this->photo = $this->photoService->getPhoto($this->user, $this->id);
     }

@@ -6,14 +6,15 @@ use App\Model\Database\Entity\Databot;
 use App\Model\Database\Entity\DatabotResult;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Enums\DatabotResultStatus;
+use App\Model\Database\Repository\DatabotRepository;
 use App\Model\Database\Repository\DatabotResultRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\Utils\Html;
 
-class DatabotsService
+class DatabotsResultService
 {
 
-    public const string DATABOT = 'no-ref-image-metrics';
+
     protected DatabotResultRepository $repository;
 
     public function __construct(protected EntityManagerInterface $entityManager)
@@ -25,7 +26,7 @@ class DatabotsService
     public function getQualityEvaluation(Photos $photo): Html
     {
         $element = Html::el('span');
-        $databotResult = $this->repository->findLatestByPhotoAndDatabotName($photo, self::DATABOT);
+        $databotResult = $this->repository->findLatestByPhotoAndDatabotName($photo, DatabotRepository::IMAGE_QUALITY);
         if ($databotResult?->status !== DatabotResultStatus::OK) {
             return $element
                 ->addHtml(
@@ -146,11 +147,6 @@ class DatabotsService
             $values[$acronym] = array_values($h);
         }
         return $values;
-    }
-
-    public function getDatabot(int $databotId): Databot
-    {
-        return $this->entityManager->getRepository(Databot::class)->find($databotId);
     }
 
 }

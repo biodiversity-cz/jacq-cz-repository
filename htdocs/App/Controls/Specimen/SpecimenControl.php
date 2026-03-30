@@ -5,7 +5,7 @@ namespace App\Controls\Specimen;
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Specimen\SpecimenFactory;
-use App\Services\DatabotsService;
+use App\Services\DatabotsResultService;
 use App\Services\EntityServices\PhotoService;
 use App\Services\SpecimenIdService;
 use Nette\Application\UI\Control;
@@ -15,7 +15,7 @@ class SpecimenControl extends Control
 {
 
 
-    public function __construct(private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsService $databotsService, private SpecimenFactory $specimenFactory, private SpecimenIdService $specimenIdService)
+    public function __construct(private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsResultService $databotsService, private SpecimenFactory $specimenFactory, private SpecimenIdService $specimenIdService)
     {
 
     }

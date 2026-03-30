@@ -75,12 +75,12 @@ final class PrepareServicesTest extends IntegrationTestCase
 
     protected function cleanSolr():void
     {
-        $update = $this->solrClientService->getClient()->createUpdate();
+        $update = $this->solrClientService->client->createUpdate();
 
         $update->addDeleteQuery('*:*');
         $update->addCommit();
 
-        $this->solrClientService->getClient()->update($update);
+        $this->solrClientService->client->update($update);
     }
 
 }

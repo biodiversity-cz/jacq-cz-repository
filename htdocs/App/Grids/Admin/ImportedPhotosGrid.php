@@ -6,7 +6,7 @@ use App\Facades\CuratorFacade;
 use App\Grids\BaseGridFactory;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
-use App\Services\DatabotsService;
+use App\Services\DatabotsResultService;
 use App\Services\EntityServices\PhotoService;
 use App\Services\Exceptions\ServiceException;
 use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
@@ -23,7 +23,7 @@ class ImportedPhotosGrid extends Control
 
     private DataGrid $grid;
 
-    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsService $databotsService)
+    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsResultService $databotsService)
     {
         $this->grid = $this->gridFactory->createBaseDatagrid();
     }

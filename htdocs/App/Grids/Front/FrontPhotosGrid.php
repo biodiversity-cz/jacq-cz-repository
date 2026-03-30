@@ -6,7 +6,7 @@ use App\Facades\CuratorFacade;
 use App\Grids\BaseGridFactory;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
-use App\Services\DatabotsService;
+use App\Services\DatabotsResultService;
 use App\Services\EntityServices\PhotoService;
 use Contributte\Datagrid\Datagrid;
 use Doctrine\ORM\QueryBuilder;
@@ -18,7 +18,7 @@ class FrontPhotosGrid extends Control
 
     private Datagrid $grid;
 
-    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, protected DatabotsService $databotsService)
+    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, protected DatabotsResultService $databotsService)
     {
         $this->grid = $this->gridFactory->createBaseDatagrid();
     }

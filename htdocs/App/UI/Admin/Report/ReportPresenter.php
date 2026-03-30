@@ -2,15 +2,19 @@
 
 namespace App\UI\Admin\Report;
 
-use App\Services\DatabotsService;
+use App\Model\Database\Entity\Databot;
+use App\Model\Database\Repository\DatabotRepository;
+use App\Services\DatabotsResultService;
 use App\UI\Base\SecuredPresenter;
+use Doctrine\ORM\EntityManagerInterface;
 use Nette\Application\Responses\TextResponse;
 
 final class ReportPresenter extends SecuredPresenter
 {
 
-    /** @inject  */
-    public DatabotsService $databotsService;
+    /** @inject  */ public DatabotsResultService $databotsService;
+    /** @inject  */ public EntityManagerInterface $entityManager;
+
     public function actionDatabotStatusRaw(): void
     {
 
@@ -80,6 +84,6 @@ final class ReportPresenter extends SecuredPresenter
         $this->template->brisque_score =  json_encode($this->databotsService->getStats("brisque_score", 2));
 
 
-        $this->template->databot = $this->databotsService->getDatabot(2);
+        $this->template->databot = $this->entityManager->getRepository(Databot::class)->getByName(DatabotRepository::IMAGE_QUALITY);
     }
 }

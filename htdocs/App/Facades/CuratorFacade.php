@@ -148,10 +148,10 @@ readonly class CuratorFacade
         return new Pipeline()
             ->pipe($this->stageFactory->createDownloadFromMasterStage())
             ->pipe($this->stageFactory->createConvertStage())
-            ->pipe($this->stageFactory->createTransferJp2Stage())
             ->pipe($this->stageFactory->createPidStage())
             ->pipe($this->stageFactory->createChecksumStage())
             ->pipe($this->stageFactory->createSolrStage())
+            ->pipe($this->stageFactory->createTransferJp2Stage())
             ->pipe($this->stageFactory->createCleanupTempFilesStage());
     }
 

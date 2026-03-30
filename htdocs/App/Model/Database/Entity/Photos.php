@@ -340,10 +340,11 @@ class Photos
         return $this;
     }
 
-    public function getDatabotResultById(Databot $databot): ?DatabotResult
+    public function getDatabotOkResultById(Databot $databot): ?DatabotResult
     {
         $criteria = Criteria::create()
             ->where(Criteria::expr()->eq('databot', $databot))
+            ->andWhere(Criteria::expr()->eq('status', 'ok'))
             ->setMaxResults(1);
 
         return $this->databotResults->matching($criteria)->first() ?: null;

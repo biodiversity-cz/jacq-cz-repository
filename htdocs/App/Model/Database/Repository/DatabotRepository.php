@@ -13,7 +13,12 @@ use App\Model\Database\Entity\Databot;
  */
 final class DatabotRepository extends AbstractRepository
 {
+    public const string IMAGE_QUALITY = 'no-ref-image-metrics';
+    public const string CETAF = 'cetaf_metadata';
 
 
-
+    public function getByName(string $name): ?Databot
+    {
+        return $this->findOneBy(['name' => $name]);
+    }
 }
