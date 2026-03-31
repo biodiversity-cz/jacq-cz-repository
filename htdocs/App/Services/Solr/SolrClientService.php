@@ -5,7 +5,6 @@ namespace App\Services\Solr;
 use App\Model\Database\Entity\Databot;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Repository\DatabotRepository;
-use App\Model\ImportStages\Exceptions\PublishStageException;
 use Doctrine\ORM\EntityManagerInterface;
 use Solarium\Client;
 use Solarium\Core\Query\DocumentInterface;
@@ -14,21 +13,30 @@ use Solarium\Core\Query\DocumentInterface;
 final readonly class SolrClientService
 {
     public function __construct(
-        protected(set) Client                 $client,
+        protected(set) Client          $client,
         private EntityManagerInterface $entityManager,
     )
     {
     }
 
-    public function indexPhoto(Photos $photo): void
+    public function flushPhotos(array $photos, bool $commit = false): void
     {
-        $update = $this->client->createUpdate();
-        $doc = $update->createDocument();
-        $doc = $this->prepareIngest($photo, $doc);
-        $update->addDocument($doc);
-        $update->addCommit();
+        if ($photos === []) {
+            return;
+        }
 
+        $update = $this->client->createUpdate();
+
+        foreach ($photos as $photo) {
+            $doc = $update->createDocument();
+            $doc = $this->prepareIngest($photo, $doc);
+            $update->addDocument($doc);
+        }
+        if ($commit) {
+            $update->addCommit();
+        }
         $this->client->update($update);
+
     }
 
     protected function debugSolrCall(mixed $update): void
@@ -51,8 +59,8 @@ final readonly class SolrClientService
     protected function prepareIngest(Photos $photo, DocumentInterface $document): DocumentInterface
     {
         $cetafJson = $photo->getDatabotOkResultById($this->entityManager->getRepository(Databot::class)->getByName(DatabotRepository::CETAF))?->resultData ?? null;
-        if(empty($cetafJson)){
-            throw new PublishStageException('missing CETAF metadata');
+        if (empty($cetafJson)) {
+            return $document;
         }
         $document->setField('id', (string)$photo->pid);
 

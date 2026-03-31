@@ -26,7 +26,7 @@ class SolrStage extends BaseStage implements StageInterface
         $this->item = $payload;
         try {
             /** @var Photos $payload */
-            $this->solrClientService->indexPhoto($payload);
+            $this->solrClientService->flushPhotos([$payload], true);
 
         } catch (\Throwable $exception) {
             throw new PublishStageException('unable index specimen in Solr: ' . $exception->getMessage() . ' '. $payload->id);
