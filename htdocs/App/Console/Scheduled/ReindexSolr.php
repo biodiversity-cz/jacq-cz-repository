@@ -61,7 +61,7 @@ class ReindexSolr extends Command
 
         // flush zbytku
         $this->solrClientService->flushPhotos($buffer, true);
-
+        $this->solrClientService->buildSuggest();
         $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
 
         return Command::SUCCESS;

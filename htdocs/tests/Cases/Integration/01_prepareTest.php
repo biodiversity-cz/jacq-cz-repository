@@ -81,6 +81,7 @@ final class PrepareServicesTest extends IntegrationTestCase
         $update->addCommit();
 
         $this->solrClientService->client->update($update);
+        $this->solrClientService->buildSuggest(); //deletes it
     }
 
 }

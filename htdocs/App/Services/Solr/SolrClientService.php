@@ -42,6 +42,16 @@ final readonly class SolrClientService
 
     }
 
+    public function buildSuggest()
+    {
+        $this->client->createSuggester();
+        $query = $this->client->createSuggester();
+        $query->setHandler('suggest');
+        $query->setBuild(true);
+
+        $result = $this->client->suggester($query);
+    }
+
     protected function debugSolrCall(mixed $update): void
     {
         $builder = $update->getRequestBuilder();
@@ -68,6 +78,11 @@ final readonly class SolrClientService
             return null;
         }
 
+        //TODO more solid date ingestion
+        $date = $cetafJson['http://rs.tdwg.org/dwc/terms/eventDate'];
+        if (!empty($date)){
+            $date .= 'T00:00:00Z';
+        }
         $document->setField('title', $cetafJson["http://purl.org/dc/terms/title"] ?? null);
         $document->setField('basis_of_record', 'PreservedSpecimen');
         $document->setField('herbarium_acronym', strtoupper($photo->herbarium->acronym));
@@ -91,7 +106,7 @@ final readonly class SolrClientService
         $document->setField('country_code', $cetafJson['http://rs.tdwg.org/dwc/terms/countryCode'] ?? null);
 
         // dates
-        $document->setField('event_date', $cetafJson['http://rs.tdwg.org/dwc/terms/eventDate'] ?? null);
+        $document->setField('event_date', $date ?? null);
         $document->setField('created', $cetafJson['dc:created'] ?? null);
 
         // identifiers
