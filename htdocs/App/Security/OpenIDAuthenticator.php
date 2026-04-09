@@ -31,6 +31,9 @@ final class OpenIDAuthenticator
         $scopesArray = explode(' ', $scopesString);
         $oidc->addScope($scopesArray);
 
+        //TODO enable PKCE - for e-infra facility
+//        $oidc->setCodeChallengeMethod('S256');
+
         // Authenticate
         $oidc->authenticate();
 
