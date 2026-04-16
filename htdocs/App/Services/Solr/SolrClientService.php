@@ -71,16 +71,20 @@ final readonly class SolrClientService
 
     protected function prepareIngest(Photos $photo, DocumentInterface $document): ?DocumentInterface
     {
-        $cetafJson = $photo->getDatabotOkResultById($this->entityManager->getRepository(Databot::class)->getByName(DatabotRepository::CETAF))?->resultData ?? null;
-        $document->setField('id', (string)$photo->pid);
+        $cetafDatabot = $this->entityManager->getRepository(Databot::class)->getByName(DatabotRepository::CETAF);
+        if ($cetafDatabot === null) {
+            return null;
+        }
+        $cetafJson = $photo->getDatabotOkResultById($cetafDatabot)?->resultData ?? null;
 
         if ($cetafJson === null) {
             return null;
         }
+        $document->setField('id', (string)$photo->pid);
 
-        //TODO more solid date ingestion
+        //TODO more solid date ingestion https://chatgpt.com/c/69d64e3a-96a8-8330-a4b6-912a2731bfbb
         $date = $cetafJson['http://rs.tdwg.org/dwc/terms/eventDate'];
-        if (!empty($date)){
+        if (!empty($date)) {
             $date .= 'T00:00:00Z';
         }
         $document->setField('title', $cetafJson["http://purl.org/dc/terms/title"] ?? null);

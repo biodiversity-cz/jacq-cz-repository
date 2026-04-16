@@ -1,4 +1,4 @@
 aws:
     credentials:
-        key: xx
-        secret: yy
+        key: test
+        secret: testSecret
