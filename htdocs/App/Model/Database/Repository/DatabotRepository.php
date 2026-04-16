@@ -15,6 +15,7 @@ final class DatabotRepository extends AbstractRepository
 {
     public const string IMAGE_QUALITY = 'no-ref-image-metrics';
     public const string CETAF = 'cetaf_metadata';
+    public const string HESPI_SHEET = 'hespi_v1_sheet_detector';
 
 
     public function getByName(string $name): ?Databot

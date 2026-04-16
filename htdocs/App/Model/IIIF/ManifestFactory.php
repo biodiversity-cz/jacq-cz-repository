@@ -2,7 +2,9 @@
 
 namespace App\Model\IIIF;
 
+use App\Model\Database\Entity\Databot;
 use App\Model\Database\Entity\Photos;
+use App\Model\Database\Repository\DatabotRepository;
 use App\Model\Specimen\Specimen;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
@@ -15,6 +17,7 @@ use IIIF\PresentationAPI\Parameters\ViewingDirection;
 use IIIF\PresentationAPI\Properties\Logo;
 use IIIF\PresentationAPI\Properties\Thumbnail;
 use IIIF\PresentationAPI\Resources\Annotation;
+use IIIF\PresentationAPI\Resources\AnnotationList;
 use IIIF\PresentationAPI\Resources\Canvas;
 use IIIF\PresentationAPI\Resources\Content;
 use IIIF\PresentationAPI\Resources\Manifest;
@@ -24,15 +27,12 @@ use Nette\Application\LinkGenerator;
 class ManifestFactory
 {
 
-    protected EntityRepository $photosRepository;
-
     protected Specimen $specimen;
 
     protected string $selfReferencingLink;
 
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly LinkGenerator $linkGenerator, protected readonly PhotoService $photoService)
     {
-        $this->photosRepository = $this->entityManager->getRepository(Photos::class);
     }
 
     public function createManifest(Specimen $specimen, string $selfReferencingLink): Manifest
@@ -125,8 +125,23 @@ class ManifestFactory
             ->setMetadata($metadata)
             ->addImage($this->createAnnotation($photo));
 
+        $cetafDatabot = $this->entityManager->getRepository(Databot::class)->getByName(DatabotRepository::HESPI_SHEET);
+
+        if ($cetafDatabot && $photo->getDatabotOkResultById($cetafDatabot)?->resultData) {
+            $canvas->addOtherContent($this->createAnnotationList($photo));
+        }
+
         return $canvas;
     }
+
+    protected function createAnnotationList(Photos $photo): AnnotationList
+    {
+        $annotationList = new AnnotationList();
+        $annotationList
+            ->setID($this->linkGenerator->link('Front:Iiif:annotationList', [$photo->id]));
+        return $annotationList;
+    }
+
 
     protected function createAnnotation(Photos $photo): Annotation
     {

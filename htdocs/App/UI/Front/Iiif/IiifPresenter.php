@@ -3,6 +3,7 @@
 namespace App\UI\Front\Iiif;
 
 use App\Exceptions\SpecimenIdException;
+use App\Model\IIIF\AnnotationListFactory;
 use App\Model\IIIF\ManifestFactory;
 use App\Model\Specimen\Specimen;
 use App\Model\Specimen\SpecimenFactory;
@@ -16,6 +17,8 @@ final class IiifPresenter extends UnsecuredPresenter
     /** @inject */ public SpecimenFactory $specimenFactory;
 
     /** @inject */ public ManifestFactory $manifestFactory;
+
+    /** @inject */ public AnnotationListFactory $annotationListFactory;
 
     /** @inject */ public PhotoService $photoService;
 
@@ -36,6 +39,18 @@ final class IiifPresenter extends UnsecuredPresenter
         );
 
         $this->sendJson($manifest->toArray());
+    }
+
+    public function actionAnnotationList(int $id): void
+    {
+        $photo = $this->photoService->getPublicPhoto($id);
+        if ($photo === null) {
+            $this->error('The requested photo does not exists.');
+        }
+
+        $annotationList = $this->annotationListFactory->createList($photo, $this->link('//this'));
+
+        $this->sendJson($annotationList->toArray());
     }
 
     protected function getSpecimen(string $specimenFullId): Specimen
