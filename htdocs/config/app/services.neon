@@ -53,3 +53,4 @@ search:
         - *Facade
         - *Service
         - *Form
+        - *Controller

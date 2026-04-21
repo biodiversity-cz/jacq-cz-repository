@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a0d5605a1dd3a9a4b11d329e1b540fd3",
+    "content-hash": "c0304565c3a9029481760edde7d4ee2f",
     "packages": [
         {
             "name": "68publishers/asset",
@@ -201,16 +201,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.379.0",
+            "version": "3.379.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "a50c3cc2c59f5ebeb56cbe170e6f144034b252b6"
+                "reference": "45c385619d43e54ede8daca211960c345d3ff3b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a50c3cc2c59f5ebeb56cbe170e6f144034b252b6",
-                "reference": "a50c3cc2c59f5ebeb56cbe170e6f144034b252b6",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/45c385619d43e54ede8daca211960c345d3ff3b7",
+                "reference": "45c385619d43e54ede8daca211960c345d3ff3b7",
                 "shasum": ""
             },
             "require": {
@@ -292,9 +292,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.379.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.379.2"
             },
-            "time": "2026-04-13T18:11:10+00:00"
+            "time": "2026-04-17T18:05:27+00:00"
         },
         {
             "name": "composer/pcre",
@@ -374,6 +374,94 @@
                 }
             ],
             "time": "2024-11-12T16:29:46+00:00"
+        },
+        {
+            "name": "contributte/apitte",
+            "version": "v0.14.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contributte/apitte.git",
+                "reference": "c6cb21b8ab1c4e61c962d8c9d10b7908dd3da529"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contributte/apitte/zipball/c6cb21b8ab1c4e61c962d8c9d10b7908dd3da529",
+                "reference": "c6cb21b8ab1c4e61c962d8c9d10b7908dd3da529",
+                "shasum": ""
+            },
+            "require": {
+                "contributte/middlewares": "^0.11.0 || ^0.12.0 || ^0.13.0",
+                "contributte/openapi": "^0.1.0",
+                "contributte/psr7-http-message": "^0.9.0 || ^0.10.0 || ^0.11.0",
+                "ext-json": "*",
+                "nette/di": "^3.1.8",
+                "nette/utils": "^4.1.0",
+                "php": ">=8.2"
+            },
+            "provide": {
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "contributte/dev": "^0.5",
+                "contributte/phpstan": "^0.3.1",
+                "contributte/qa": "^0.4",
+                "contributte/tester": "^0.4.1",
+                "mockery/mockery": "^1.6.12",
+                "nette/application": "^3.1.4",
+                "nette/http": "^3.2.3",
+                "psr/log": "^2.0.0 || ^3.0.0",
+                "symfony/console": "^6.4.0 || ^7.0.0 || ^8.0.0",
+                "symfony/translation": "^6.4.0 | ^7.0.0 || ^8.0.0",
+                "symfony/validator": "^6.4.0 || ^7.0.0 || ^8.0.0",
+                "symfony/yaml": "^6.4.0 || ^7.0.0 || ^8.0.0",
+                "tracy/tracy": "^2.10.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.13.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Apitte\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Milan Felix Šulc",
+                    "homepage": "https://f3l1x.io"
+                }
+            ],
+            "description": "An opinionated and enjoyable API framework based on Nette Framework. Supporting content negotiation, debugging, middlewares, attributes and loving openapi/swagger.",
+            "homepage": "https://github.com/contributte/apitte",
+            "keywords": [
+                "api",
+                "apitte",
+                "attribute",
+                "http",
+                "nette",
+                "rest"
+            ],
+            "support": {
+                "issues": "https://github.com/contributte/apitte/issues",
+                "source": "https://github.com/contributte/apitte/tree/v0.14.0"
+            },
+            "funding": [
+                {
+                    "url": "https://contributte.org/partners.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/f3l1x",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-01-14T07:08:06+00:00"
         },
         {
             "name": "contributte/console",
@@ -598,6 +686,241 @@
                 }
             ],
             "time": "2026-03-06T19:49:06+00:00"
+        },
+        {
+            "name": "contributte/middlewares",
+            "version": "v0.13.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contributte/middlewares.git",
+                "reference": "cf5a4e04dd36d0e551aa17b7a5b7dc21f0255dea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contributte/middlewares/zipball/cf5a4e04dd36d0e551aa17b7a5b7dc21f0255dea",
+                "reference": "cf5a4e04dd36d0e551aa17b7a5b7dc21f0255dea",
+                "shasum": ""
+            },
+            "require": {
+                "contributte/psr7-http-message": "^0.9.0 || ^0.10.0 || ^0.11.0",
+                "nette/di": "^3.1.8",
+                "php": ">=8.2"
+            },
+            "conflict": {
+                "nette/application": "<3.2.0"
+            },
+            "require-dev": {
+                "contributte/phpstan": "^0.3.1",
+                "contributte/qa": "^0.4.0",
+                "contributte/tester": "^0.4.1",
+                "nette/application": "^3.2.0",
+                "nette/http": "^3.2.3",
+                "psr/log": "^2.0 || ^3.0",
+                "tracy/tracy": "^2.10.5"
+            },
+            "suggest": {
+                "nette/application": "to use PresenterMiddleware",
+                "nette/http": "to use NetteMiddlewareExtension & NetteMiddlewareApplication",
+                "tracy/tracy": "to use TracyMiddleware"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.13.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Contributte\\Middlewares\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Milan Felix Sulc",
+                    "homepage": "https://f3l1x.io"
+                }
+            ],
+            "description": "Middleware / Relay / PSR-7 support to Nette Framework",
+            "homepage": "https://github.com/contributte/middlewares",
+            "keywords": [
+                "Relay",
+                "middleware",
+                "nette"
+            ],
+            "support": {
+                "issues": "https://github.com/contributte/middlewares/issues",
+                "source": "https://github.com/contributte/middlewares/tree/v0.13.1"
+            },
+            "funding": [
+                {
+                    "url": "https://contributte.org/partners.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/f3l1x",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-01-13T16:45:36+00:00"
+        },
+        {
+            "name": "contributte/openapi",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contributte/openapi.git",
+                "reference": "a918d6235f7466c4bc6335ee9397613b7797f1e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contributte/openapi/zipball/a918d6235f7466c4bc6335ee9397613b7797f1e6",
+                "reference": "a918d6235f7466c4bc6335ee9397613b7797f1e6",
+                "shasum": ""
+            },
+            "require": {
+                "nette/utils": "^4.0.0",
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "contributte/phpstan": "^0.1",
+                "contributte/qa": "^0.4",
+                "contributte/tester": "^0.3",
+                "symfony/yaml": "^6.4.0 || ^7.0.0",
+                "tracy/tracy": "^2.10.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Contributte\\OpenApi\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Milan Felix Šulc",
+                    "homepage": "https://f3l1x.io"
+                }
+            ],
+            "description": "Pure OpenAPI implementation for your API applications. Great for documentation.",
+            "homepage": "https://github.com/contributte/openapi",
+            "keywords": [
+                "api",
+                "http",
+                "nette",
+                "openapi",
+                "rest",
+                "swagger"
+            ],
+            "support": {
+                "issues": "https://github.com/contributte/openapi/issues",
+                "source": "https://github.com/contributte/openapi/tree/v0.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://contributte.org/partners.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/f3l1x",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-12-01T18:20:22+00:00"
+        },
+        {
+            "name": "contributte/psr7-http-message",
+            "version": "v0.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contributte/psr7-http-message.git",
+                "reference": "e269badb77aeb2ea36ebe2a21a17af89385e6d76"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contributte/psr7-http-message/zipball/e269badb77aeb2ea36ebe2a21a17af89385e6d76",
+                "reference": "e269badb77aeb2ea36ebe2a21a17af89385e6d76",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/psr7": "^2.6.1",
+                "nette/utils": "^v4.0.2",
+                "php": ">=8.2"
+            },
+            "conflict": {
+                "nette/di": "<3.0.7",
+                "nette/http": "<3.0.5"
+            },
+            "require-dev": {
+                "contributte/phpstan": "^0.1",
+                "contributte/qa": "^0.3.1",
+                "contributte/tester": "^0.4.0",
+                "nette/application": "^3.1.14",
+                "nette/di": "^3.1.8",
+                "nette/http": "^3.2.3"
+            },
+            "suggest": {
+                "nette/application": "to use $request->withApplicationRequest[Nette\\Application\\Request]",
+                "nette/di": "to use Psr7HttpExtension[CompilerExtension]",
+                "nette/http": "to use $request->withHttpRequest[Nette\\Http\\Request], to use Psr7RequestFactory, to use Psr7ServerRequestFactory"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.10.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Contributte\\Psr7\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Milan Felix Šulc",
+                    "homepage": "https://f3l1x.io"
+                }
+            ],
+            "description": "PSR-7 (HTTP Message Interface) to Nette Framework",
+            "homepage": "https://github.com/contributte/psr7-http-message",
+            "keywords": [
+                "http",
+                "message",
+                "nette",
+                "psr7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "issues": "https://github.com/contributte/psr7-http-message/issues",
+                "source": "https://github.com/contributte/psr7-http-message/tree/v0.11.0"
+            },
+            "funding": [
+                {
+                    "url": "https://contributte.org/partners.html",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/f3l1x",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-15T09:23:28+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -3993,16 +4316,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "5.6.0",
+            "version": "5.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "9b90dee03deb0d28761479c4a3a06fba5f7e012e"
+                "reference": "9f55d3b9b7bcb1084fda8340e4b7ce4ed10cd0c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/9b90dee03deb0d28761479c4a3a06fba5f7e012e",
-                "reference": "9b90dee03deb0d28761479c4a3a06fba5f7e012e",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/9f55d3b9b7bcb1084fda8340e4b7ce4ed10cd0c8",
+                "reference": "9f55d3b9b7bcb1084fda8340e4b7ce4ed10cd0c8",
                 "shasum": ""
             },
             "require": {
@@ -4096,9 +4419,9 @@
             ],
             "support": {
                 "issues": "https://github.com/PHPOffice/PhpSpreadsheet/issues",
-                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/5.6.0"
+                "source": "https://github.com/PHPOffice/PhpSpreadsheet/tree/5.7.0"
             },
-            "time": "2026-04-10T03:00:03+00:00"
+            "time": "2026-04-20T02:42:17+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -7081,11 +7404,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.48",
+            "version": "2.1.50",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/231397213efb7c0a066ee024b5c3c87f2d3adfa0",
-                "reference": "231397213efb7c0a066ee024b5c3c87f2d3adfa0",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d452086fb4cf648c6b2d8cf3b639351f79e4f3e2",
+                "reference": "d452086fb4cf648c6b2d8cf3b639351f79e4f3e2",
                 "shasum": ""
             },
             "require": {
@@ -7130,7 +7453,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-15T20:24:19+00:00"
+            "time": "2026-04-17T13:10:32+00:00"
         },
         {
             "name": "slevomat/coding-standard",

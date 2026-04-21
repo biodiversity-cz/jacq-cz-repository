@@ -18,11 +18,11 @@ class ImageDownloadLogService extends BaseEntityService
     }
 
     public function logDownload(
-        int $photoId,
-        string $imageType,
-        ?string $ipAddress = null,
-        ?string $userAgent = null,
-        ?string $referrer = null
+        int               $photoId,
+        string            $imageType,
+        ?string           $ipAddress = null,
+        string|array|null $userAgent = null,
+        string|array|null $referrer = null
     ): void {
         // Check if the IP address is excluded from logging
         if ($ipAddress !== null && $this->excludedDownloadLogService->isIpExcluded($ipAddress)) {
@@ -34,11 +34,24 @@ class ImageDownloadLogService extends BaseEntityService
         $downloadRequest->setPhotoId($photoId)
             ->setImageType($imageType)
             ->setIpAddress($ipAddress)
-            ->setUserAgent($userAgent)
-            ->setReferrer($referrer)
+            ->setUserAgent($this->normalizeHeader($userAgent))
+            ->setReferrer($this->normalizeHeader($referrer))
             ->setCreatedAt();
 
         $this->entityManager->persist($downloadRequest);
         $this->entityManager->flush();
+    }
+
+    private function normalizeHeader(string|array|null $value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        if (is_array($value)) {
+            return implode(', ', $value);
+        }
+
+        return $value;
     }
 }

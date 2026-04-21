@@ -9,6 +9,7 @@ includes:
 	- ../ext/ublaboo.neon
 	- ../ext/nettrine.neon
 	- ../ext/68publishers.neon
+	- ../ext/apitte.neon
 
 php:
 	date.timezone: Europe/Prague

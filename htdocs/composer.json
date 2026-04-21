@@ -40,6 +40,7 @@
     "latte/latte": "^3",
     "tracy/tracy": "^2",
 
+    "contributte/apitte": "^0",
     "contributte/console": "^0",
     "contributte/console-extra": "^0",
     "contributte/forms-bootstrap": "^0",

@@ -1,0 +1,23 @@
+extensions:
+    api: Apitte\Core\DI\ApiExtension
+
+api:
+    debug: %debugMode%
+    catchException: false # Sets if exception should be catched and transformed into response or rethrown to output (debug only)
+    plugins:
+            Apitte\Debug\DI\DebugPlugin:
+                debug:
+                    panel:  %debugMode%
+                    negotiation:  %debugMode%
+            Apitte\OpenApi\DI\OpenApiPlugin:
+                definition:
+                    openapi: "3.0.2"
+                    info:
+                        title: Czech Repository of Herbarium Specimen Images - HerbBIO API
+                        version: "0.1.0"
+                swaggerUi:
+                    panel: %debugMode% #activate Tracy panel in debug mode
+                    url: null # default url
+                    expansion: list # list|full|none
+                    filter: true # true|false|string
+                    title: HerbBIO API v0.1

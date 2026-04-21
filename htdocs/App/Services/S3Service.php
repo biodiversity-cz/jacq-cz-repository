@@ -7,6 +7,7 @@ use Aws\Result;
 use Aws\S3\S3Client;
 use DateTimeImmutable;
 use Iterator;
+use Psr\Http\Message\StreamInterface;
 
 readonly class S3Service
 {
@@ -162,6 +163,16 @@ readonly class S3Service
         $this->s3->registerStreamWrapper();
 
         return fopen(sprintf('s3://%s/%s', $bucket, $key), 'r');
+    }
+
+    public function getPsrStreamOfObject(string $bucket, string $key): StreamInterface
+    {
+        $result = $this->s3->getObject([
+            'Bucket' => $bucket,
+            'Key' => $key,
+        ]);
+
+        return $result['Body'];
     }
 
 }

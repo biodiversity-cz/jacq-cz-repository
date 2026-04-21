@@ -14,7 +14,8 @@
     "@contributte/datagrid": "^7",
     "mirador": "^4",
     "plotly.js": "^3",
-    "@andypf/json-viewer": "^2"
+    "@andypf/json-viewer": "^2",
+    "swagger-ui-dist": "^5"
   },
   "devDependencies": {
     "core-js": "^3",

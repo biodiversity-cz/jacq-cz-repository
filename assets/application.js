@@ -10,7 +10,11 @@ import '@contributte/datagrid/dist/datagrid-full.css';
 import '@contributte/datagrid/dist/datagrid-full.js';
 import drawBoxplot from "./js/stats";
 import Dropdown from 'bootstrap/js/dist/dropdown'; //has to be present to keep dropdowns - probably datagrid is breaking it..
-import "@andypf/json-viewer" //keep the import toi run the JSON viewer
+import "@andypf/json-viewer"
+import swagger from "./js/swagger"; //keep the import toi run the JSON viewer
+
+
+
 document.addEventListener("DOMContentLoaded", function (event) {
 
     regexValidation();
@@ -19,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
     initCopyButtons();
     setSettings();
     drawBoxplot();
+    swagger();
     if (document.querySelector('#mirador')) {
         import('./js/mirador').then((module) => {
             module.default();
