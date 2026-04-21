@@ -19,7 +19,8 @@ class SystemController extends BasePubV1Controller
 	#[Apitte\OpenApi('summary: Get core version')]
 	#[Apitte\Path('/version')]
 	#[Apitte\Method('GET')]
-	public function version(): string
+    #[Apitte\Response(description: 'Success', code: '200')]
+    public function version(): string
 	{
         return $this->appConfiguration->getVersion();
 

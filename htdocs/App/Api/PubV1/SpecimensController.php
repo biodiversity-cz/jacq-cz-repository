@@ -22,6 +22,7 @@ class SpecimensController extends BasePubV1Controller
 	#[Apitte\OpenApi('summary: Get specimen representation')]
 	#[Apitte\Path('/{herbCode}')]
 	#[Apitte\Method('GET')]
+    #[Apitte\Response(description: 'Success', code: '200')]
 	public function get(ApiRequest $request, ApiResponse $response): ResponseInterface
 	{
         $id = $request->getParameter('herbCode');
@@ -39,6 +40,7 @@ class SpecimensController extends BasePubV1Controller
     #[Apitte\OpenApi('summary: Get published images of specimen')]
     #[Apitte\Path('/{herbCode}/images')]
     #[Apitte\Method('GET')]
+    #[Apitte\Response(description: 'Success', code: '200')]
     public function images(ApiRequest $request, ApiResponse $response): ResponseInterface
     {
         $id = $request->getParameter('herbCode');

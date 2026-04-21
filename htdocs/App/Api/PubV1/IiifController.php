@@ -30,6 +30,7 @@ class IiifController extends BasePubV1Controller
     #[Apitte\OpenApi('summary: IIIF v2 manifest for a specimen ID')]
     #[Apitte\Path('/manifest/{herbCode}')]
     #[Apitte\Method('GET')]
+    #[Apitte\Response(description: 'Success', code: '200')]
     public function manifest(ApiRequest $request, ApiResponse $response): ResponseInterface
     {
         $id = $request->getParameter('herbCode');
@@ -56,6 +57,7 @@ class IiifController extends BasePubV1Controller
     #[Apitte\OpenApi('summary: IIIF v2.1 and prior compatible Open Annotation of a photo')]
     #[Apitte\Path('/annotationList/{photoId}')]
     #[Apitte\Method('GET')]
+    #[Apitte\Response(description: 'Success', code: '200')]
     public function annotationList(ApiRequest $request, ApiResponse $response): ResponseInterface
     {
         $id = (int) $request->getParameter('photoId');

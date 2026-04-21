@@ -31,6 +31,7 @@ class ImageController extends BasePubV1Controller
     #[Apitte\OpenApi('summary: Download Archive Master image')]
     #[Apitte\Path('/archive/{photoId}')]
     #[Apitte\Method('GET')]
+    #[Apitte\Response(description: 'Success', code: '200')]
     public function archive(ApiRequest $request, ApiResponse $response): ResponseInterface
     {
         $id = (int)  $request->getParameter('photoId');
@@ -52,6 +53,7 @@ class ImageController extends BasePubV1Controller
     #[Apitte\OpenApi('summary: Download JP2 fullsize image')]
     #[Apitte\Path('/jp2/{photoId}')]
     #[Apitte\Method('GET')]
+    #[Apitte\Response(description: 'Success', code: '200')]
     public function jp2(ApiRequest $request, ApiResponse $response): ResponseInterface
     {
         $id = (int) $request->getParameter('photoId');
@@ -72,6 +74,7 @@ class ImageController extends BasePubV1Controller
     #[Apitte\OpenApi('summary: Download thumbnail for image')]
     #[Apitte\Path('/thumb/{photoId}')]
     #[Apitte\Method('GET')]
+    #[Apitte\Response(description: 'Success', code: '200')]
     public function thumb(ApiRequest $request, ApiResponse $response): ResponseInterface
     {
         $id = (int) $request->getParameter('photoId');
