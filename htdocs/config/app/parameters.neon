@@ -25,5 +25,5 @@ parameters:
                 enabled: true
                 clientId: %env.CESNET_CLIENT_ID%
                 clientSecret: %env.CESNET_CLIENT_SECRET%
-                issuer: 'https://login.cesnet.cz/oidc/'
-                scopes: 'openid profile email isCesnetEligibleLastSeen'
+                issuer: 'https://login.e-infra.cz/oidc/'
+                scopes: 'openid profile email'
