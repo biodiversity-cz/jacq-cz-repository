@@ -18,12 +18,20 @@ class BarcodeStage extends BaseStage implements StageInterface
         try {
             $this->item = $payload;
             /**
-             * skip detection when manually inserted id
+             * process detection only when have not manually inserted id
              */
             if ($this->item->specimenId === null) {
-                $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
-                $this->createContrastedImage($imagick);
+                $this->createContrastedImage();
                 $this->detectCodes();
+
+                /**
+                 * if no barcode detected, try again with larger image
+                 */
+                if (empty($this->barcodes)) {
+                    $this->createContrastedImage(1.5);
+                    $this->detectCodes();
+                }
+
                 if (empty($this->barcodes)) {
                     $this->noBarcodeDetected();
                 } else {
@@ -44,9 +52,11 @@ class BarcodeStage extends BaseStage implements StageInterface
         }
     }
 
-    protected function createContrastedImage(Imagick $imagick): void
+    protected function createContrastedImage(float $scaleFactor = 1): void
     {
-        $imagick = $this->imagickService->resizeImage($imagick, $this->repositoryConfiguration->getZbarImageSize());
+        $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
+        $longerSideLenght = $this->repositoryConfiguration->getZbarImageSize() * $scaleFactor;
+        $imagick = $this->imagickService->resizeImage($imagick, (int) $longerSideLenght);
         $imagick->modulateImage(100, 0, 100);
         // adaptive threshold had worse results than unmodified image        * $imagick->adaptiveThresholdImage(150, 150, 1);
         $imagick->setImageFormat('png');
