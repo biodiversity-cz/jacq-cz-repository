@@ -31,7 +31,7 @@ class SpecimenControl extends Control
         $template->setFile(__DIR__ . '/specimen.latte');
 
         $template->photo = $photo;
-        $specimen = $this->specimenFactory->createFromNumeric($this->user, (int) $photo->specimenId);
+        $specimen = $this->specimenFactory->createFromInternalPart($this->user, $photo->specimenId);
         $template->specimen = $specimen;
         $template->specimenPID = $this->specimenIdService->getSpecimenPid($photo);
         $this->template->maxPhotoStatus = $this->photoService->getMaxPhotoStatusOfSpecimen($this->user, $specimen);

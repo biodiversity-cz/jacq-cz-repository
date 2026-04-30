@@ -170,7 +170,10 @@ class Photos
 
     public function getSpecimenIdFixedWidth():string
     {
-        return sprintf('%0'.$this->herbarium->digitsCount.'d', $this->specimenId);
+        if (ctype_digit($this->specimenId)) {
+            return sprintf('%0'.$this->herbarium->digitsCount.'d', $this->specimenId);
+        }
+       return $this->specimenId;
     }
 
     public function getExpectedJacqPid(): string
@@ -316,7 +319,12 @@ class Photos
             return $baseurl . rawurlencode($this->getExpectedJacqPid());
         }
         if ($externalDatabase->id === ExternalDatabase::INTERNAL) {
-            return $baseurl . strtoupper($this->herbarium->acronym) . '_' . $this->specimenId . '?herbariumId=' . $this->herbarium->id;
+            $params = [
+                'barcode' => strtoupper($this->herbarium->acronym) . '_' . $this->specimenId,
+                'herbariumId' => $this->herbarium->id,
+            ];
+
+            return $baseurl . '?' . http_build_query($params);
         }
 
         return $baseurl . $this->getFullSpecimenId();

@@ -14,10 +14,9 @@ final class CetafPresenter extends UnsecuredPresenter
     /**
      * service used for detection if specimen exists + returns link to CETAF
      */
-    public function renderExists(string $id, int $herbariumId): void
+    public function renderExists(string $barcode, int $herbariumId): void
     {
-        $specimen = $this->cetafSidRepository->findOneBy(['barcode' => $id, 'herbarium' => $herbariumId]);
-
+        $specimen = $this->cetafSidRepository->findOneBy(['barcode' => $barcode, 'herbarium' => $herbariumId]);
         if ($specimen === null) {
             $this->error('Specimen not found');
         }

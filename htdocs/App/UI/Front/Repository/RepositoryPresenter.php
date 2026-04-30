@@ -122,9 +122,8 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $specimen = $this->specimenFactory->create($sid);
         } catch (SpecimenIdException $exception) {
             $this->flashMessage($exception->getMessage(), 'error');
-            $this->redirect('Home:');
+            $this->redirect('Front:Home:');
         }
-
         if (!$this->photoService->specimenHasPublicPhotos($specimen)) {
             $this->error('Specimen ' . $sid . ' not in evidence.');
         }

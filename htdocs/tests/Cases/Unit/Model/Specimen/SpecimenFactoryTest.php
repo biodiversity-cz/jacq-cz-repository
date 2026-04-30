@@ -31,10 +31,10 @@ test('SpecimenFactory::create builds specimen from full id', function (): void {
     $herbarium = \Mockery::mock(Herbaria::class);
 
     $specimenIdService = \Mockery::mock(SpecimenIdService::class);
-    $specimenIdService->shouldReceive('getHerbariumFromId')
+    $specimenIdService->shouldReceive('getHerbariumFromFullId')
         ->with('PR-000123')
         ->andReturn($herbarium);
-    $specimenIdService->shouldReceive('getNumericPartFromId')
+    $specimenIdService->shouldReceive('getInternalPartFromId')
         ->with('PR-000123')
         ->andReturn(123);
 
@@ -45,7 +45,7 @@ test('SpecimenFactory::create builds specimen from full id', function (): void {
 
     Assert::type(Specimen::class, $specimen);
     Assert::same($herbarium, $specimen->herbarium);
-    Assert::same(123, $specimen->numericPartOfId);
+    Assert::same(123, $specimen->id);
 });
 
 test('SpecimenFactory::createFromNumeric builds specimen for current user herbarium', function (): void {
@@ -64,5 +64,5 @@ test('SpecimenFactory::createFromNumeric builds specimen for current user herbar
 
     Assert::type(Specimen::class, $specimen);
     Assert::same($herbarium, $specimen->herbarium);
-    Assert::same(999, $specimen->numericPartOfId);
+    Assert::same(999, $specimen->id);
 });

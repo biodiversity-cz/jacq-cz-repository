@@ -33,6 +33,7 @@ final class SpecimenPidCallerService
     {
         $requests = function ($entities) {
             foreach ($entities as $entity) {
+                /** @var Photos $entity */
                 yield new Request('GET', $entity->getSpecimenPidApiEndpoint());
             }
         };

@@ -68,7 +68,7 @@ test('getNumericPartFromId returns integer part', function (): void {
     $service = createService($mockHerbariumService);
 
     $id = 'XYZ 9876';
-    $num = $service->getNumericPartFromId($id);
+    $num = $service->getInternalPartFromId($id);
     Assert::same(9876, $num);
 });
 
@@ -79,7 +79,7 @@ test('getHerbariumFromId returns Herbaria entity if found', function (): void {
     $mockHerbariumService->shouldReceive('findOneWithAcronym')->once()->with('PRC')->andReturn($herbarium);
 
     $service = createService($mockHerbariumService);
-    $result = $service->getHerbariumFromId('PRC-37');
+    $result = $service->getHerbariumFromFullId('PRC-37');
 
     Assert::same($herbarium, $result);
 });
@@ -92,7 +92,7 @@ test('getHerbariumFromId throws if herbarium not found', function (): void {
     $service = createService($mockHerbariumService);
 
     Assert::exception(
-        fn() => $service->getHerbariumFromId('PRC 456'),
+        fn() => $service->getHerbariumFromFullId('PRC 456'),
         SpecimenIdException::class,
         'Unknown herbarium'
     );

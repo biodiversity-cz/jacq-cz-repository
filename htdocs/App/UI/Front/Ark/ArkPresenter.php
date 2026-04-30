@@ -30,6 +30,7 @@ final class ArkPresenter extends UnsecuredPresenter
                 $this->redirect('Repository:herbarium', $parts[1]);
                 break;
             case 3:
+                //TODO barcodes with slashes etc (due Strings:webalize) are not resolvable via this approach
                 $this->redirect('Repository:specimen', ['sid' =>$parts[1].'_'.$parts[2]]);
                 break;
             case 4:

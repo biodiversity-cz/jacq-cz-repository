@@ -9,6 +9,7 @@ use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Specimen\SpecimenFactory;
 use App\Services\EntityServices\HerbariumService;
 use App\Services\EntityServices\PhotoService;
+use Nette\Utils\Strings;
 
 class SpecimenIdService
 {
@@ -17,13 +18,13 @@ class SpecimenIdService
     public const string REGEX_HERBARIUM = 'herbarium';
     public const string REGEX_EXTENSION = 'extension';
 
-    public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<' . self::REGEX_HERBARIUM . '>[a-zA-Z]+)[\s\-–_](?<' . self::REGEX_SPECIMEN . '>\d+)$/iu';
+    public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<' . self::REGEX_HERBARIUM . '>[a-zA-Z]+)[\s\-–_](?<' . self::REGEX_SPECIMEN . '>.+)$/iu';
 
     public function __construct(protected RepositoryConfiguration $repositoryConfiguration, protected HerbariumService $herbariumService, protected SpecimenFactory $specimenFactory, protected PhotoService $photoService)
     {
     }
 
-    public function getHerbariumFromId(string $specimenId): Herbaria
+    public function getHerbariumFromFullId(string $specimenId): Herbaria
     {
         $acronym = strtoupper($this->splitSpecimenId($specimenId)[self::REGEX_HERBARIUM]);
         $herbarium = $this->herbariumService->findOneWithAcronym($acronym);
@@ -34,9 +35,9 @@ class SpecimenIdService
         return $herbarium;
     }
 
-    public function getNumericPartFromId(string $specimenId): int
+    public function getInternalPartFromId(string $specimenId): string
     {
-        return (int)$this->splitSpecimenId($specimenId)[self::REGEX_SPECIMEN];
+        return $this->splitSpecimenId($specimenId)[self::REGEX_SPECIMEN];
     }
 
     /**
@@ -68,7 +69,7 @@ class SpecimenIdService
             $settings['shoulder'].
             $settings['repository']. "/" .
             $photo->herbarium->acronym . "/" .
-            $photo->specimenId . "/".
+            Strings::webalize($photo->specimenId, null, false) . "/".
             $photo->id;
         return $ark;
     }

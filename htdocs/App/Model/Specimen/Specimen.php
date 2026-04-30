@@ -1,20 +1,23 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
 namespace App\Model\Specimen;
 
 use App\Model\Database\Entity\Herbaria;
-use App\Services\RepositoryConfiguration;
 
 class Specimen
 {
 
     protected(set) Herbaria $herbarium;
 
-    protected(set) int $numericPartOfId;
+    protected(set) string $id;
 
     public function getStandardizedId(): string
     {
-        return $this->herbarium->acronym . '-' . sprintf(RepositoryConfiguration::SPECIMEN_NUMERIC_FORMAT, $this->numericPartOfId);
+        if (ctype_digit($this->id)) {
+            return $this->herbarium->acronym . '-' . sprintf('%0' . $this->herbarium->digitsCount . 'd', $this->id);
+        }
+        return $this->herbarium->acronym . '-' . $this->id;
+
     }
 
     public function setHerbarium(Herbaria $herbarium): Specimen
@@ -24,9 +27,9 @@ class Specimen
         return $this;
     }
 
-    public function setNumericPartOfId(int $numericPartOfId): Specimen
+    public function setId(string $id): Specimen
     {
-        $this->numericPartOfId = $numericPartOfId;
+        $this->id = $id;
 
         return $this;
     }

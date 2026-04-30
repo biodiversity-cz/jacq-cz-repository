@@ -94,10 +94,9 @@ final class RepositoryPresenter extends SecuredPresenter
     {
         try {
             if ($id == null) {
-                throw new SpecimenIdException('Unknown specimen');
+                throw new SpecimenIdException();
             }
-
-            $specimen = $this->specimenFactory->createFromNumeric($this->user, (int) $id);
+            $specimen = $this->specimenFactory->createFromInternalPart($this->user, $id);
             $images = $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
             if (count($images) === 0) {
                 throw new SpecimenIdException('Specimen not in evidence');

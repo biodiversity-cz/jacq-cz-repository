@@ -21,19 +21,19 @@ class SpecimenFactory
         }
 
         $specimen = new Specimen();
-        $specimen->setHerbarium($this->specimenIdService->getHerbariumFromId($fullSpecimenId));
+        $specimen->setHerbarium($this->specimenIdService->getHerbariumFromFullId($fullSpecimenId));
 
-        $specimenId = $this->specimenIdService->getNumericPartFromId($fullSpecimenId);
-        $specimen->setNumericPartOfId($specimenId);
+        $specimenId = $this->specimenIdService->getInternalPartFromId($fullSpecimenId);
+        $specimen->setId($specimenId);
 
         return $specimen;
     }
 
-    public function createFromNumeric(User $user, int $numericSpecimenId): Specimen
+    public function createFromInternalPart(User $user, string $specimenId): Specimen
     {
         $specimen = new Specimen();
         $specimen->setHerbarium($this->herbariumService->getCurrentUserHerbarium($user));
-        $specimen->setNumericPartOfId($numericSpecimenId);
+        $specimen->setId($specimenId);
 
         return $specimen;
     }

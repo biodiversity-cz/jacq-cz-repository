@@ -24,6 +24,7 @@ final class RouterFactory
     protected static function buildAdmin(RouteList $router): RouteList
     {
         $router[] = $list = new RouteList('Admin');
+        $list[] = new Route('admin/repository/specimen[/<id .+>]','Repository:specimen');
         $list[] = new Route('admin/<presenter>/<action>[/<id>]', 'Home:default');
 
         return $router;
@@ -33,6 +34,8 @@ final class RouterFactory
     {
         $router[] = $list = new RouteList('Front');
         $list[] = new Route('ark[/<value .+>]','Ark:default');
+        $list[] = new Route('iiif/manifest[/<id .+>]','Iiif:manifest');
+        $list[] = new Route('repository/specimen[/<sid .+>]','Repository:specimen');
         $list[] = new Route('<presenter>/<action>[/<id>]', 'Home:default');
 
         return $router;
