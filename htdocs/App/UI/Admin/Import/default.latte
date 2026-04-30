@@ -55,7 +55,7 @@
                 </div>
                 <div class="col">
                     <h6>Import settings</h6>
-                {if $herbarium->usesFilenameFallback()}
+                {if $herbarium->fallbackFilename}
                     <div class="alert alert-secondary" role="alert">
                         Specimen ID detection from the filename is ON <i class="fa-solid fa-exclamation blink"></i> <span class="badge bg-danger">not recommended</span>
                     </div>

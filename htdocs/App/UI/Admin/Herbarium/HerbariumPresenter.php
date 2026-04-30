@@ -41,6 +41,7 @@ final class HerbariumPresenter extends SecuredPresenter
                 match ($feature) {
                     'filenameFallbackSwitch' => $this->herbariumService->setFilenameFallback($this->user, (bool)$value),
                     'multiplierSwitch' => $this->herbariumService->setMultiplier($this->user, (bool)$value),
+                    'strictAcronymPrefix' => $this->herbariumService->setStrictAcronymPrefix($this->user, (bool)$value),
                 };
             }
         }catch (RiskOfUnpredictabilityException $exception){

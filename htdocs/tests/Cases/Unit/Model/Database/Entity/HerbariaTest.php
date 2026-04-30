@@ -32,9 +32,9 @@ test('Herbaria entity getters and setters', function (): void {
 
 // test set/get fallbackFilename
     $herbaria->setFallbackFilename(true);
-    Assert::true($herbaria->usesFilenameFallback());
+    Assert::true($herbaria->fallbackFilename);
     $herbaria->setFallbackFilename(false);
-    Assert::false($herbaria->usesFilenameFallback());
+    Assert::false($herbaria->fallbackFilename);
 
 // test set/get logo
     $herbaria->setLogo('https://example.com/logo.png');

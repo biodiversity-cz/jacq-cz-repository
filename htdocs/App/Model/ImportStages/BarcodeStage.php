@@ -4,7 +4,6 @@ namespace App\Model\ImportStages;
 
 use App\Model\ImportStages\Exceptions\BarcodeStageException;
 use App\Services\SpecimenIdService;
-use Imagick;
 use League\Pipeline\StageInterface;
 use Throwable;
 
@@ -56,7 +55,7 @@ class BarcodeStage extends BaseStage implements StageInterface
     {
         $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
         $longerSideLenght = $this->repositoryConfiguration->getZbarImageSize() * $scaleFactor;
-        $imagick = $this->imagickService->resizeImage($imagick, (int) $longerSideLenght);
+        $imagick = $this->imagickService->resizeImage($imagick, (int)$longerSideLenght);
         $imagick->modulateImage(100, 0, 100);
         // adaptive threshold had worse results than unmodified image        * $imagick->adaptiveThresholdImage(150, 150, 1);
         $imagick->setImageFormat('png');
@@ -89,7 +88,7 @@ class BarcodeStage extends BaseStage implements StageInterface
 
     protected function noBarcodeDetected(): void
     {
-        if (!$this->item->herbarium->usesFilenameFallback()) {
+        if (!$this->item->herbarium->fallbackFilename) {
             throw new BarcodeStageException('No barcode detected');
         }
 
@@ -105,11 +104,9 @@ class BarcodeStage extends BaseStage implements StageInterface
     {
         $validCodes = [];
         foreach ($this->barcodes as $code) {
-            $parts = [];
-            if (preg_match($this->item->herbarium->regexBarcode, $code, $parts)) {
-                if ($this->item->herbarium->acronym === strtoupper($parts['herbarium']) && $parts['specimenId'] !== '') {
-                    $validCodes[] = $parts['specimenId'];
-                }
+            $validCode = $this->validateBarcode($code);
+            if (!empty($validCode)) {
+                $validCodes[] = $validCode;
             }
         }
 
@@ -129,6 +126,25 @@ class BarcodeStage extends BaseStage implements StageInterface
             $this->item->error->setBarcodes(implode($this->barcodes));
             throw new BarcodeStageException('Multiple valid barcodes detected');
         }
+    }
+
+    protected function validateBarcode($barcode): ?string
+    {
+        $parts = [];
+        if (!preg_match($this->item->herbarium->regexBarcode, $barcode, $parts)) {
+            return null;
+        }
+        $specimenId = $parts['specimenId'] ?? null;
+        if (empty($specimenId)) {
+            return null;
+        }
+
+        if ($this->item->herbarium->strictBarcodeAcronymPrefix &&
+            strtoupper($parts['herbarium'] ?? '') !== $this->item->herbarium->acronym) {
+            return null;
+        }
+
+        return $specimenId;
     }
 
 }

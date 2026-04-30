@@ -37,6 +37,7 @@ class Herbaria extends \App\Model\Database\Entity\Herbaria implements \Doctrine\
         'photos' => [parent::class, 'photos', null, 8196],
         'regexBarcode' => [parent::class, 'regexBarcode', null, 8196],
         'regexFilename' => [parent::class, 'regexFilename', null, 8196],
+        'strictBarcodeAcronymPrefix' => [parent::class, 'strictBarcodeAcronymPrefix', null, 8196],
         'userHerbariumRoles' => [parent::class, 'userHerbariumRoles', null, 8196],
     ];
 

@@ -46,7 +46,7 @@
                 <input type="text" readonly class="form-control-plaintext" id="barcodeRegexNumber" value="">
             </div>
         </div>
-        {if $herbarium->usesFilenameFallback()}
+        {if $herbarium->fallbackFilename}
         <hr>
         <div class="alert alert-secondary" role="alert">
             Specimen ID detection from the filename is ON <span class="badge bg-danger">not recommended</span>
@@ -76,6 +76,14 @@
             </div>
         </div>
         {/if}
+        {if !$herbarium->strictBarcodeAcronymPrefix}
+        <hr>
+        <div class="alert alert-secondary" role="alert">
+            Barcode content from imported image is not checked for a prefix equal to the herbarium acronym <span class="badge bg-danger">not recommended</span>
+        </div>
+        <p class="ms-5">This makes it weak/unpossible to control that the image belongs to the actual herbarium.</p>
+        {/if}
+
         {if $herbarium->multipleBarcodeMultiplier}
         <hr>
         <div class="alert alert-secondary" role="alert">
@@ -124,7 +132,7 @@
                     </td>
                     <td>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="filenameFallbackSwitch" data-target="{link :setSettings 'filenameFallbackSwitch'}" {if $herbarium->usesFilenameFallback()}checked{/if} {if !$user->isInRole('curator')}disabled{/if}>
+                            <input class="form-check-input" type="checkbox" role="switch" id="filenameFallbackSwitch" data-target="{link :setSettings 'filenameFallbackSwitch'}" {if $herbarium->fallbackFilename}checked{/if} {if !$user->isInRole('curator')}disabled{/if}>
                         </div>
                     </td>
                 </tr>
@@ -135,6 +143,16 @@
                     <td>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" role="switch" id="multiplierSwitch" data-target="{link :setSettings 'multiplierSwitch'}" {if $herbarium->multipleBarcodeMultiplier}checked{/if} {if !$user->isInRole('curator')}disabled{/if}>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="form-check-label" for="strictAcronymPrefix">Acronym must be barcode prefix</label>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="strictAcronymPrefix" data-target="{link :setSettings 'strictAcronymPrefix'}" {if $herbarium->strictBarcodeAcronymPrefix}checked{/if} {if !$user->isInRole('curator')}disabled{/if}>
                         </div>
                     </td>
                 </tr>

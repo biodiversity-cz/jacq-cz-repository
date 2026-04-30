@@ -44,6 +44,9 @@ class Herbaria
     #[Column(unique: false, nullable: false, options: ['comment' => 'When multiple valid barcodes are present, multiply image to all these IDs', 'default' => false])]
     protected(set) bool $multipleBarcodeMultiplier = false;
 
+    #[Column(unique: false, nullable: false, options: ['comment' => 'Require herbarium acronym on the start of the barcode to be accepted as valid', 'default' => true])]
+    protected(set) bool $strictBarcodeAcronymPrefix = true;
+
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'logo URL'])]
     protected(set) ?string $logo = null;
 
@@ -126,15 +129,15 @@ class Herbaria
         return $this;
     }
 
-    public function usesFilenameFallback(): bool
-    {
-        return $this->fallbackFilename;
-    }
-
     public function setMultipleBarcodeMultiplier(bool $multipleBarcodeMultiplier): Herbaria
     {
         $this->multipleBarcodeMultiplier = $multipleBarcodeMultiplier;
         return $this;
+    }
+
+    public function setStrictBarcodeAcronymPrefix(bool $strictBarcodeAcronymPrefix): void
+    {
+        $this->strictBarcodeAcronymPrefix = $strictBarcodeAcronymPrefix;
     }
 
     public function setBucket(string $bucket): Herbaria

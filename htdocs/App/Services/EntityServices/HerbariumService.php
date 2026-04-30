@@ -65,6 +65,20 @@ class HerbariumService extends BaseEntityService
         return $this;
     }
 
+    public function setStrictAcronymPrefix(User $user, bool $value): HerbariumService
+    {
+        $herbarium = $this->getCurrentUserHerbarium($user);
+        $photosRepository = $this->entityManager->getRepository(Photos::class);
+        if (count($photosRepository->findUnprocessedPhotos($user)) > 0){
+            throw new RiskOfUnpredictabilityException('Change this setting is allowed only when having no unprocessed photos.');
+        }
+        if ($herbarium) {
+            $herbarium->setStrictBarcodeAcronymPrefix($value);
+            $this->entityManager->flush();
+        }
+        return $this;
+    }
+
     public function getList(): array
     {
         return $this->repository->findBy([], ['id' => 'ASC']);
