@@ -82,11 +82,8 @@ final readonly class SolrClientService
         }
         $document->setField('id', (string)$photo->pid);
 
-        //TODO more solid date ingestion https://chatgpt.com/c/69d64e3a-96a8-8330-a4b6-912a2731bfbb
-        $date = $cetafJson['http://rs.tdwg.org/dwc/terms/eventDate'];
-        if (!empty($date)) {
-            $date .= 'T00:00:00Z';
-        }
+        $date = $this->normalizeDwCEventDate($cetafJson['http://rs.tdwg.org/dwc/terms/eventDate'] ?? null);
+
         $document->setField('title', $cetafJson["http://purl.org/dc/terms/title"] ?? null);
         $document->setField('basis_of_record', 'PreservedSpecimen');
         $document->setField('herbarium_acronym', strtoupper($photo->herbarium->acronym));
@@ -110,7 +107,9 @@ final readonly class SolrClientService
         $document->setField('country_code', $cetafJson['http://rs.tdwg.org/dwc/terms/countryCode'] ?? null);
 
         // dates
-        $document->setField('event_date', $date ?? null);
+        $document->setField('event_date_from', $date['from'] ?? null);
+        $document->setField('event_date_to', $date['to'] ?? null);
+        $document->setField('event_date_raw', $cetafJson['http://rs.tdwg.org/dwc/terms/eventDate'] ?? null);
         $document->setField('created', $cetafJson['dc:created'] ?? null);
 
         // identifiers
@@ -123,6 +122,92 @@ final readonly class SolrClientService
         $document->setField('previous_identifications', $cetafJson['http://rs.tdwg.org/dwc/terms/previousIdentifications'] ?? null);
 
         return $document;
+    }
+
+    function normalizeDwCEventDate(?string $input): array
+    {
+
+        if (empty($input)) {
+            return [
+                'from' => null,
+                'to' => null,
+            ];
+        }
+        $input = trim($input);
+        // Interval A/B
+
+        try {
+
+            if (str_contains($input, '/')) {
+                [$start, $end] = explode('/', $input, 2);
+
+                // 2007-11-13/15 → doplnění dne
+                if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) && preg_match('/^\d{2}$/', $end)) {
+                    $end = substr($start, 0, 8) . $end;
+                }
+
+                $startRange = $this->normalizeSingleDateToRange($start);
+                $endRange = $this->normalizeSingleDateToRange($end);
+
+                return [
+                    'from' => $startRange['from'],
+                    'to' => $endRange['to'],
+                ];
+            }
+
+            return $this->normalizeSingleDateToRange($input);
+        } catch (\Exception $e) {
+            return [
+                'from' => null,
+                'to' => null,
+            ];
+        }
+    }
+
+    function normalizeSingleDateToRange(string $value): array
+    {
+        $value = trim($value);
+        $tz = new \DateTimeZone('UTC');
+
+        // YYYY
+        if (preg_match('/^\d{4}$/', $value)) {
+            $from = new \DateTimeImmutable($value . '-01-01T00:00:00', $tz);
+            $to = new \DateTimeImmutable($value . '-12-31T23:59:59.999999', $tz);
+
+            return compact('from', 'to');
+        }
+
+        // YYYY-MM
+        if (preg_match('/^\d{4}-\d{2}$/', $value)) {
+            $from = new \DateTimeImmutable($value . '-01T00:00:00', $tz);
+
+            $to = $from
+                ->modify('first day of next month')
+                ->modify('-1 microsecond');
+
+            return compact('from', 'to');
+        }
+
+        // YYYY-MM-DD
+        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+            $from = new \DateTimeImmutable($value . 'T00:00:00', $tz);
+
+            $to = $from
+                ->modify('+1 day')
+                ->modify('-1 microsecond');
+
+            return compact('from', 'to');
+        }
+
+        // ISO datetime
+        $dt = new \DateTimeImmutable($value);
+        $dt = $dt->setTimezone($tz);
+
+        // přesnost na minuty → interval 1 minuta
+        $from = $dt;
+        $to = $dt->modify('+1 minute')->modify('-1 microsecond');
+
+        return compact('from', 'to');
     }
 
 }
