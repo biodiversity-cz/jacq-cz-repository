@@ -203,15 +203,18 @@ readonly class CuratorFacade
      */
     public function getOrphanedItems(User $user): array
     {
-        $photos = [];
         $dbItems = $this->entityManager->getRepository(Photos::class)->getOrphanable($user);
+
+        $existingFiles = $this->s3Service->listObjectsNamesOnly($this->herbariumService->getCurrentUserHerbarium($user)->bucket);
+        $existingFilesSet = array_flip($existingFiles); // For O(1) lookup
+
+        $orphaned = [];
         foreach ($dbItems as $photo) {
-            if (!$this->s3Service->objectExists($this->herbariumService->getCurrentUserHerbarium($user)->bucket, $photo->originalFilename)) {
-                $photos[] = $photo;
+            if (!isset($existingFilesSet[$photo->originalFilename])) {
+                $orphaned[] = $photo;
             }
         }
-
-        return $photos;
+        return $orphaned;
     }
 
     public function deletePhoto(User $user, Photos $entity): CuratorFacade
