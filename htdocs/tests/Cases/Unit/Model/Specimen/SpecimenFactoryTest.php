@@ -36,7 +36,7 @@ test('SpecimenFactory::create builds specimen from full id', function (): void {
         ->andReturn($herbarium);
     $specimenIdService->shouldReceive('getInternalPartFromId')
         ->with('PR-000123')
-        ->andReturn(123);
+        ->andReturn('123');
 
     $herbariumService = \Mockery::mock(HerbariumService::class);
 
@@ -45,10 +45,10 @@ test('SpecimenFactory::create builds specimen from full id', function (): void {
 
     Assert::type(Specimen::class, $specimen);
     Assert::same($herbarium, $specimen->herbarium);
-    Assert::same(123, $specimen->id);
+    Assert::same('123', $specimen->id);
 });
 
-test('SpecimenFactory::createFromNumeric builds specimen for current user herbarium', function (): void {
+test('SpecimenFactory::createFromInternalPart builds specimen for current user herbarium', function (): void {
     $herbarium = \Mockery::mock(Herbaria::class);
     $user = \Mockery::mock(User::class);
 
@@ -60,9 +60,9 @@ test('SpecimenFactory::createFromNumeric builds specimen for current user herbar
     $specimenIdService = \Mockery::mock(SpecimenIdService::class);
 
     $factory = new SpecimenFactory($herbariumService, $specimenIdService);
-    $specimen = $factory->createFromNumeric($user, 999);
+    $specimen = $factory->createFromInternalPart($user, '999');
 
     Assert::type(Specimen::class, $specimen);
     Assert::same($herbarium, $specimen->herbarium);
-    Assert::same(999, $specimen->id);
+    Assert::same('999', $specimen->id);
 });

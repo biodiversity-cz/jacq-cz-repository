@@ -13,7 +13,7 @@ final class SpecimenTestFactory
     {
         $specimen = new Specimen();
         $specimen->setHerbarium(HerbariumTestFactory::testHerbarium());
-        self::set($specimen, 'numericPartOfId', 123);
+        self::set($specimen, 'id', 123);
         return $specimen;
     }
 

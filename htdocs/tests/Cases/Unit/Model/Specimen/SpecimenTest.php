@@ -25,7 +25,7 @@ test('Specimen getters and setters work', function (): void {
     $specimen->setId("123");
 
     Assert::same($herbarium, $specimen->herbarium);
-    Assert::same(123, $specimen->id);
+    Assert::same('123', $specimen->id);
 });
 
 test('Specimen creates standardized ID correctly', function (): void {
@@ -36,6 +36,6 @@ test('Specimen creates standardized ID correctly', function (): void {
     $specimen->setHerbarium($herbarium);
     $specimen->setId("42");
 
-    $expected = 'TEST-' . sprintf('%0'.$this->herbarium->digitsCount.'d', 42);
+    $expected = 'TEST-' . sprintf('%0'.$herbarium->digitsCount.'d', 42);
     Assert::same($expected, $specimen->getStandardizedId());
 });
