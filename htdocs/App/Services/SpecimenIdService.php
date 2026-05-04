@@ -66,17 +66,29 @@ class SpecimenIdService
 
         $ark =
             'ark:' . $settings['naan'] . "/" .
-            $settings['shoulder'].
-            $settings['repository']. "/" .
+            $settings['shoulder'] .
+            $settings['repository'] . "/" .
             $photo->herbarium->acronym . "/" .
-            Strings::webalize($photo->specimenId, null, false) . "/".
+            Strings::webalize($photo->specimenId, null, false) . "/" .
             $photo->id;
         return $ark;
     }
 
+    public function searchSpecimenIdByArk(string $ark, bool $fullArk = false): ?string
+    {
+        $settings = $this->repositoryConfiguration->getArkProperties();
+
+        if (!$fullArk) {
+            $ark = 'ark:' . $settings['naan'] . "/" .
+                $settings['shoulder'] . "/". $ark;
+        }
+
+        return $this->photoService->findOneByArk($ark)?->getFullSpecimenId();
+    }
+
     public function getSpecimenPid(Photos $photo): string
     {
-        if ($photo->status->id === PhotosStatus::PUBLISHED){
+        if ($photo->status->id === PhotosStatus::PUBLISHED) {
             return substr($photo->pid, 0, strrpos($photo->pid, '/'));
         }
         $specimen = $this->specimenFactory->create($photo->getFullSpecimenId());
