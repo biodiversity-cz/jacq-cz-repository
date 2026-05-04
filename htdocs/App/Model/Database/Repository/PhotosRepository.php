@@ -61,7 +61,7 @@ class PhotosRepository extends AbstractRepository
      */
     public function getPublicPhotosOfSpecimen(Specimen $specimen): array
     {
-        return $this->findBy(['specimenId' => $specimen->numericPartOfId, 'herbarium' => $specimen->herbarium, 'status' => PhotosStatus::PUBLISHED]);
+        return $this->findBy(['specimenId' => $specimen->id, 'herbarium' => $specimen->herbarium, 'status' => PhotosStatus::PUBLISHED]);
     }
 
     public function getPublicPhoto(int $id): ?Photos
@@ -98,7 +98,7 @@ class PhotosRepository extends AbstractRepository
      */
     public function getAllPhotosOfSpecimen(User $user, Specimen $specimen): array
     {
-        $qb = $this->getDefaultDatasource($user)->andWhere('p.specimenId = :specimenId')->setParameter('specimenId', $specimen->numericPartOfId);
+        $qb = $this->getDefaultDatasource($user)->andWhere('p.specimenId = :specimenId')->setParameter('specimenId', $specimen->id);
 
         return $qb->getQuery()->getResult();
     }
@@ -108,7 +108,7 @@ class PhotosRepository extends AbstractRepository
         $qb = $this->getDefaultDatasource($user)
             ->select('p, status')
             ->andWhere('p.specimenId = :specimenId')
-            ->setParameter('specimenId', $specimen->numericPartOfId)
+            ->setParameter('specimenId', $specimen->id)
             ->join('p.status', 'status')
             ->orderBy('status.succession', 'DESC')
             ->setMaxResults(1);

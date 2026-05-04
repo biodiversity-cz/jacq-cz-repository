@@ -33,7 +33,7 @@ class FixtureUsers extends FixtureBase
             ->setPassword($password)
             ->setName('Petr')
             ->setSurname('Novotný')
-            ->setEmail('petr.novotny@natur.cuni.cz')
+            ->setEmail('nobody@natur.cuni.cz')
             ->setLastVisitedHerbarium($herbariumTest)
             ->setCreatedAt()
             ->setLastEditAt();
@@ -46,7 +46,7 @@ class FixtureUsers extends FixtureBase
             ->setPassword($password)
             ->setName('Zdeněk')
             ->setSurname('Vaněček')
-            ->setEmail('krkabol@gmail.com')
+            ->setEmail('nobody@gmail.com')
             ->setLastVisitedHerbarium($herbariumPrc)
             ->setCreatedAt()
             ->setLastEditAt();

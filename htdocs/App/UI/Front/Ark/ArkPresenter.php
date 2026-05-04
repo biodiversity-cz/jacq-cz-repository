@@ -3,6 +3,7 @@
 namespace App\UI\Front\Ark;
 
 use App\Services\RepositoryConfiguration;
+use App\Services\SpecimenIdService;
 use App\UI\Base\UnsecuredPresenter;
 
 final class ArkPresenter extends UnsecuredPresenter
@@ -10,6 +11,9 @@ final class ArkPresenter extends UnsecuredPresenter
 
     /** @inject */
     public RepositoryConfiguration $repositoryConfiguration;
+
+    /** @inject */
+    public SpecimenIdService $specimenIdService;
 
     /**
      * works only with value of ark, without protocol&naan prefix
@@ -30,7 +34,8 @@ final class ArkPresenter extends UnsecuredPresenter
                 $this->redirect('Repository:herbarium', $parts[1]);
                 break;
             case 3:
-                $this->redirect('Repository:specimen', ['sid' =>$parts[1].'_'.$parts[2]]);
+                $specimenID = $this->specimenIdService->searchSpecimenIdByArk($value, false);
+                $this->redirect('Repository:specimen', $specimenID);
                 break;
             case 4:
                 $this->redirect('Repository:image', $parts[3]);

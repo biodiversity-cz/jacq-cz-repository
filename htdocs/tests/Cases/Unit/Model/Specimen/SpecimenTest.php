@@ -22,10 +22,10 @@ test('Specimen getters and setters work', function (): void {
     $herbarium = HerbariumTestFactory::testHerbarium();
 
     $specimen->setHerbarium($herbarium);
-    $specimen->setNumericPartOfId(123);
+    $specimen->setId("123");
 
     Assert::same($herbarium, $specimen->herbarium);
-    Assert::same(123, $specimen->numericPartOfId);
+    Assert::same('123', $specimen->id);
 });
 
 test('Specimen creates standardized ID correctly', function (): void {
@@ -34,8 +34,8 @@ test('Specimen creates standardized ID correctly', function (): void {
     $herbarium = HerbariumTestFactory::testHerbarium();
 
     $specimen->setHerbarium($herbarium);
-    $specimen->setNumericPartOfId(42);
+    $specimen->setId("42");
 
-    $expected = 'TEST-' . sprintf(RepositoryConfiguration::SPECIMEN_NUMERIC_FORMAT, 42);
+    $expected = 'TEST-' . sprintf('%0'.$herbarium->digitsCount.'d', 42);
     Assert::same($expected, $specimen->getStandardizedId());
 });

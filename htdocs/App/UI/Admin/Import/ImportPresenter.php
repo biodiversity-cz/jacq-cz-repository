@@ -152,7 +152,7 @@ final class ImportPresenter extends SecuredPresenter
                 $this->error('Photo not found');
             }
 
-            $this->curatorFacade->reimportPhoto($this->user, $this->photoService->getPhotoReference((int)$values['photoId']), (string)$values['specimen']);
+            $this->curatorFacade->reimportPhoto($this->user, $this->photoService->getPhotoReference((int)$values['photoId']), $values['specimen']);
 
             $fullID = $this->herbarium->acronym . '-' . $values['specimen'];
             $this->flashMessage('File successfully marked to be re-processed with ID ' . $fullID, 'success');
@@ -167,9 +167,8 @@ final class ImportPresenter extends SecuredPresenter
     protected function createComponentSpecimenIdForm(): Form
     {
         $form = $this->formFactory->forBackend();
-        $form->addInteger('specimen', 'ID:')
-            ->setRequired('Please insert only number.')
-            ->addRule($form::Integer, 'It must be integer');
+        $form->addText('specimen', 'ID:')
+            ->setRequired('Please insert only number.');
         $form->addHidden('photoId', $this->photo->id);
         $form->addSubmit('submit', 'Import with this ID');
         $form->onSuccess[] = [$this, 'specimenIdFormSucceeded'];

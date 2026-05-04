@@ -3,9 +3,11 @@
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
 use App\Bootstrap;
+use App\Model\Database\Entity\Databot;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\License;
 use App\Model\Database\Entity\Photos;
+use App\Model\Database\Repository\DatabotRepository;
 use App\Model\IIIF\ManifestFactory;
 use App\Model\Specimen\Specimen;
 use App\Services\EntityServices\PhotoService;
@@ -34,10 +36,16 @@ test('ManifestFactory creates manifest with thumbnail and sequence', function ()
     $linkGenerator = $container->getByType(LinkGenerator::class);
 
     $repo = \Mockery::mock(EntityRepository::class);
+    $repo->shouldReceive('getByName')
+        ->with(DatabotRepository::HESPI_SHEET)
+        ->andReturn(null);
 
     $em = \Mockery::mock(EntityManagerInterface::class);
     $em->shouldReceive('getRepository')
         ->with(Photos::class)
+        ->andReturn($repo);
+    $em->shouldReceive('getRepository')
+        ->with(Databot::class)
         ->andReturn($repo);
 
     $factory = new ManifestFactory($em, $repoConfig, $linkGenerator, $photoService);
@@ -71,9 +79,16 @@ test('ManifestFactory omits logo when herbarium has no logo', function (): void 
     $linkGenerator = $container->getByType(LinkGenerator::class);
 
     $repo = \Mockery::mock(EntityRepository::class);
+    $repo->shouldReceive('getByName')
+        ->with(DatabotRepository::HESPI_SHEET)
+        ->andReturn(null);
+
     $em = \Mockery::mock(EntityManagerInterface::class);
     $em->shouldReceive('getRepository')
         ->with(Photos::class)
+        ->andReturn($repo);
+    $em->shouldReceive('getRepository')
+        ->with(Databot::class)
         ->andReturn($repo);
 
     $factory = new ManifestFactory($em, $repoConfig, $linkGenerator, $photoService);
@@ -100,20 +115,27 @@ test('ManifestFactory::getFirstImage returns null when there are no public photo
 
     // EntityManager musí vrátit EntityRepository (typový hint v konstruktoru)
     $repo = \Mockery::mock(EntityRepository::class);
-    $em = \Mockery::mock(\Doctrine\ORM\EntityManagerInterface::class);
+    $repo->shouldReceive('getByName')
+        ->with(DatabotRepository::HESPI_SHEET)
+        ->andReturn(null);
+
+    $em = \Mockery::mock(EntityManagerInterface::class);
     $em->shouldReceive('getRepository')
-        ->with(\App\Model\Database\Entity\Photos::class)
+        ->with(Photos::class)
+        ->andReturn($repo);
+    $em->shouldReceive('getRepository')
+        ->with(Databot::class)
         ->andReturn($repo);
 
-    $factory = new \App\Model\IIIF\ManifestFactory($em, $repoConfig, $linkGenerator, $photoService);
+    $factory = new ManifestFactory($em, $repoConfig, $linkGenerator, $photoService);
 
     // Nastavíme chráněnou property $specimen, protože getFirstImage() ji používá
-    $rp = new \ReflectionProperty(\App\Model\IIIF\ManifestFactory::class, 'specimen');
+    $rp = new \ReflectionProperty(ManifestFactory::class, 'specimen');
 
     $rp->setValue($factory, $specimen);
 
     // Zavoláme protected metodu getFirstImage() přes Reflection
-    $rm = new \ReflectionMethod(\App\Model\IIIF\ManifestFactory::class, 'getFirstImage');
+    $rm = new \ReflectionMethod(ManifestFactory::class, 'getFirstImage');
 
     $result = $rm->invoke($factory);
 

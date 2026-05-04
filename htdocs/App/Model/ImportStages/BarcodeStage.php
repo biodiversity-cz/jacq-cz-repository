@@ -130,6 +130,7 @@ class BarcodeStage extends BaseStage implements StageInterface
 
     protected function validateBarcode($barcode): ?string
     {
+        //TODO ? first and last character must be alfanumeric to prevent white char chaos?
         $parts = [];
         if (!preg_match($this->item->herbarium->regexBarcode, $barcode, $parts)) {
             return null;

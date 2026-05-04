@@ -9,6 +9,7 @@ use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Specimen\SpecimenFactory;
 use App\Services\EntityServices\HerbariumService;
 use App\Services\EntityServices\PhotoService;
+use Nette\Utils\Strings;
 
 class SpecimenIdService
 {
@@ -17,13 +18,13 @@ class SpecimenIdService
     public const string REGEX_HERBARIUM = 'herbarium';
     public const string REGEX_EXTENSION = 'extension';
 
-    public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<' . self::REGEX_HERBARIUM . '>[a-zA-Z]+)[\s\-–_](?<' . self::REGEX_SPECIMEN . '>\d+)$/iu';
+    public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<' . self::REGEX_HERBARIUM . '>[a-zA-Z]+)[\s\-–_](?<' . self::REGEX_SPECIMEN . '>.+)$/iu';
 
     public function __construct(protected RepositoryConfiguration $repositoryConfiguration, protected HerbariumService $herbariumService, protected SpecimenFactory $specimenFactory, protected PhotoService $photoService)
     {
     }
 
-    public function getHerbariumFromId(string $specimenId): Herbaria
+    public function getHerbariumFromFullId(string $specimenId): Herbaria
     {
         $acronym = strtoupper($this->splitSpecimenId($specimenId)[self::REGEX_HERBARIUM]);
         $herbarium = $this->herbariumService->findOneWithAcronym($acronym);
@@ -34,9 +35,9 @@ class SpecimenIdService
         return $herbarium;
     }
 
-    public function getNumericPartFromId(string $specimenId): int
+    public function getInternalPartFromId(string $specimenId): string
     {
-        return (int)$this->splitSpecimenId($specimenId)[self::REGEX_SPECIMEN];
+        return $this->splitSpecimenId($specimenId)[self::REGEX_SPECIMEN];
     }
 
     /**
@@ -65,17 +66,29 @@ class SpecimenIdService
 
         $ark =
             'ark:' . $settings['naan'] . "/" .
-            $settings['shoulder'].
-            $settings['repository']. "/" .
+            $settings['shoulder'] .
+            $settings['repository'] . "/" .
             $photo->herbarium->acronym . "/" .
-            $photo->specimenId . "/".
+            Strings::webalize($photo->specimenId, null, false) . "/" .
             $photo->id;
         return $ark;
     }
 
+    public function searchSpecimenIdByArk(string $ark, bool $fullArk = false): ?string
+    {
+        $settings = $this->repositoryConfiguration->getArkProperties();
+
+        if (!$fullArk) {
+            $ark = 'ark:' . $settings['naan'] . "/" .
+                $settings['shoulder'] . "/". $ark;
+        }
+
+        return $this->photoService->findOneByArk($ark)?->getFullSpecimenId();
+    }
+
     public function getSpecimenPid(Photos $photo): string
     {
-        if ($photo->status->id === PhotosStatus::PUBLISHED){
+        if ($photo->status->id === PhotosStatus::PUBLISHED) {
             return substr($photo->pid, 0, strrpos($photo->pid, '/'));
         }
         $specimen = $this->specimenFactory->create($photo->getFullSpecimenId());

@@ -48,7 +48,6 @@ test('splitSpecimenId throws on invalid specimenIds', function (): void {
     $invalids = [
         'ABC12345',    // no separator
         '123-456',     // herbarium not letters
-        'ABC-12A45',   // specimen not numeric
         'AB!C-123',    // invalid character in herbarium
         'ABC-',        // missing specimen part
         '-12345',      // missing herbarium
@@ -63,13 +62,22 @@ test('splitSpecimenId throws on invalid specimenIds', function (): void {
     }
 });
 
-test('getNumericPartFromId returns integer part', function (): void {
+test('getInternalPartFromId returns internal part', function (): void {
     $mockHerbariumService = Mockery::mock(HerbariumService::class);
     $service = createService($mockHerbariumService);
 
     $id = 'XYZ 9876';
-    $num = $service->getNumericPartFromId($id);
-    Assert::same(9876, $num);
+    $num = $service->getInternalPartFromId($id);
+    Assert::same('9876', $num);
+});
+
+test('getInternalPartFromId returns integer part 2nd', function (): void {
+    $mockHerbariumService = Mockery::mock(HerbariumService::class);
+    $service = createService($mockHerbariumService);
+
+    $id = 'XYZ ac98/76';
+    $num = $service->getInternalPartFromId($id);
+    Assert::same('ac98/76', $num);
 });
 
 test('getHerbariumFromId returns Herbaria entity if found', function (): void {
@@ -79,7 +87,7 @@ test('getHerbariumFromId returns Herbaria entity if found', function (): void {
     $mockHerbariumService->shouldReceive('findOneWithAcronym')->once()->with('PRC')->andReturn($herbarium);
 
     $service = createService($mockHerbariumService);
-    $result = $service->getHerbariumFromId('PRC-37');
+    $result = $service->getHerbariumFromFullId('PRC-37');
 
     Assert::same($herbarium, $result);
 });
@@ -92,7 +100,7 @@ test('getHerbariumFromId throws if herbarium not found', function (): void {
     $service = createService($mockHerbariumService);
 
     Assert::exception(
-        fn() => $service->getHerbariumFromId('PRC 456'),
+        fn() => $service->getHerbariumFromFullId('PRC 456'),
         SpecimenIdException::class,
         'Unknown herbarium'
     );
