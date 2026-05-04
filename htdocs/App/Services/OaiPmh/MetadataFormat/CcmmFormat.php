@@ -102,10 +102,9 @@ final class CcmmFormat implements MetadataFormatInterface
 
         //TIFF Master
         $dataDownload = new DistributionDownloadableFile();
-        //TODO provide checksum (wwe have pixel level checksum, but file level is expected)
         $checksum = new Checksum()
-            ->setChecksumValue('')
-            ->setAlgorithm('sha256');
+            ->setChecksumValue($photo->archiveFileChecksum)
+            ->setAlgorithm('md5');
         $format = new Format()
             ->addLabel('TIFF')
             ->addLabel('TIFF', Language::EN)
@@ -122,7 +121,7 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setDownloadUrl($downloadUrl)
             ->setFormat($format)
             ->setByteSize($photo->archiveFileSize)
-//            ->setChecksum($checksum)
+            ->setChecksum($checksum)
             ->setMediaType($mediaType)
             ->addTitle('original data',Language::EN);
 
