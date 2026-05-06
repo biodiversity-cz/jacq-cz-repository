@@ -319,8 +319,9 @@ class Photos
             return $baseurl . rawurlencode($this->getExpectedJacqPid());
         }
         if ($externalDatabase->id === ExternalDatabase::INTERNAL) {
+            //TODO zde může být problém s oddělovačem mezi acronymem a id - záleží co Museion exporter generuje - nyní dává mezeru..
             $params = [
-                'barcode' => strtoupper($this->herbarium->acronym) . '_' . $this->specimenId,
+                'barcode' => strtoupper($this->herbarium->acronym) . ' ' . $this->specimenId,
                 'herbariumId' => $this->herbarium->id,
             ];
 
