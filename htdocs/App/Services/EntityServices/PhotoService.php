@@ -156,7 +156,7 @@ class PhotoService extends BaseEntityService
     public function findOneByArk(string $ark): ?Photos
     {
         $qb = $this->repository->createQueryBuilder('p');
-        $qb ->andWhere('p.ark LIKE :ark')
+        $qb ->andWhere('p.pid LIKE :ark')
             ->setParameter('ark', $ark.'%');
 
         return $qb->getQuery()->getResult();
