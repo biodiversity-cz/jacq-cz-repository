@@ -157,9 +157,10 @@ class PhotoService extends BaseEntityService
     {
         $qb = $this->repository->createQueryBuilder('p');
         $qb ->andWhere('p.pid LIKE :ark')
-            ->setParameter('ark', $ark.'%');
+            ->setParameter('ark', $ark.'%')
+            ->setMaxResults(1);
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getSingleResult();
     }
 
 }
