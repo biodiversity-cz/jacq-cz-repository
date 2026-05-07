@@ -79,8 +79,7 @@ class SpecimenIdService
         $settings = $this->repositoryConfiguration->getArkProperties();
 
         if (!$fullArk) {
-            $ark = 'ark:' . $settings['naan'] . "/" .
-                $settings['shoulder'] . "/". $ark;
+            $ark = 'ark:' . $settings['naan'] . "/" . $ark;
         }
 
         return $this->photoService->findOneByArk($ark)?->getFullSpecimenId();
