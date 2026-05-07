@@ -11,7 +11,7 @@
     }
   ],
 	"require": {
-		"php": ">= 8.4",
+		"php": ">= 8.5",
     "ext-imagick": "*",
     "ext-intl": "*",
     "ext-exif": "*",
@@ -46,14 +46,14 @@
     "contributte/forms-bootstrap": "^0",
     "guzzlehttp/guzzle": "^7",
     "league/pipeline": "^1",
-    "ublaboo/aws-sdk-nette-extension": "dev-master",
+    "ublaboo/aws-sdk-nette-extension": "dev-master#0c2dfd5",
     "ublaboo/datagrid": "^v7",
     "yale-web-technologies/iiif-manifest-generator": "dev-develop",
     "phpoffice/phpspreadsheet": "^5",
     "68publishers/asset": "^3",
     "68publishers/webpack-encore-bundle": "^3",
     "mk-j/php_xlsxwriter": "^0",
-    "jumbojett/openid-connect-php": "^1"
+    "jumbojett/openid-connect-php": "dev-master#3067281"
   },
 	"require-dev": {
     "contributte/qa": "^0",
@@ -72,7 +72,7 @@
 	"minimum-stability": "stable",
 	"config": {
     "platform": {
-      "php": "8.4",
+      "php": "8.5",
       "ext-imagick": "3",
       "ext-intl": "3",
       "ext-exif": "3",

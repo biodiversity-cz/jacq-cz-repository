@@ -1,4 +1,4 @@
-FROM ghcr.io/biodiversity-cz/jacq-repository-base:main@sha256:e5e8a3b6fd37b3794c9124f6d85712e0169f5756cd226ab1e257b27d9e8c286c
+FROM ghcr.io/biodiversity-cz/jacq-repository-base:main@sha256:834f39c1468e04a70a44a9767297b734cabc35bd5c3b0389d974ec91e37d0bd5
 
 MAINTAINER Petr Novotný <novotp@natur.cuni.cz>
 LABEL org.opencontainers.image.source=https://github.com/biodiversity-cz/jacq-repository
