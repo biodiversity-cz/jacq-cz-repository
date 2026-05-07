@@ -37,7 +37,11 @@ class SpecimenIdService
 
     public function getInternalPartFromId(string $specimenId): string
     {
-        return $this->splitSpecimenId($specimenId)[self::REGEX_SPECIMEN];
+        $internalPart = $this->splitSpecimenId($specimenId)[self::REGEX_SPECIMEN];
+        if (ctype_digit($internalPart)) {
+            $internalPart = (int) $internalPart;
+        }
+        return (string) $internalPart;
     }
 
     /**

@@ -112,6 +112,12 @@ final class RepositoryPresenter extends UnsecuredPresenter
         }
     }
 
+    public function actionFormHelperSpecimen(?string $sid): void
+    {
+            $this->redirect('specimen', ['sid'=>$sid]);
+    }
+
+
     public function renderSpecimen(?string $sid): void
     {
         try {
@@ -122,7 +128,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $specimen = $this->specimenFactory->create($sid);
         } catch (SpecimenIdException $exception) {
             $this->flashMessage($exception->getMessage(), 'error');
-            $this->redirect('Front:Home:');
+            $this->redirect(':Front:Home:');
         }
         if (!$this->photoService->specimenHasPublicPhotos($specimen)) {
             $this->error('Specimen ' . $sid . ' not in evidence.');
