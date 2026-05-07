@@ -15,7 +15,7 @@ parameters:
     databot:
         basePath: http://127.0.0.1:5000
     solr:
-        host: 127.0.0.1
+        host: solr
         port: 8983
 
 
