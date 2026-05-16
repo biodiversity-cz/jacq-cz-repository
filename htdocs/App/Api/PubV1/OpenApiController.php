@@ -21,10 +21,13 @@ class OpenApiController extends BasePubV1Controller
 
 	#[Apitte\OpenApi('summary: Get OpenAPI definition.')]
 	#[Apitte\Path('/meta')]
-	#[Apitte\Method('GET')]
+	#[Apitte\Method('GET', 'OPTIONS')]
     #[Apitte\Response(description: 'Success', code: '200')]
 	public function meta(ApiRequest $request, ApiResponse $response): ResponseInterface
 	{
+	    if ($request->getMethod() === 'OPTIONS') {
+                return $response->withStatus(204); // No Content
+            }
 		return $response
 			->withAddedHeader('Access-Control-Allow-Origin', '*')
 			->writeJsonBody(
