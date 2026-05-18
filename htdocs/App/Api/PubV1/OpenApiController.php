@@ -23,7 +23,7 @@ class OpenApiController extends BasePubV1Controller
 
     #[Apitte\OpenApi('summary: Get OpenAPI definition.')]
     #[Apitte\Path('/meta')]
-    #[Apitte\Method('GET', 'OPTIONS')]
+    #[Apitte\Method(['GET', 'OPTIONS'])]
     #[Apitte\Response(description: 'Success', code: '200')]
     public function meta(ApiRequest $request, ApiResponse $response): ResponseInterface
     {
