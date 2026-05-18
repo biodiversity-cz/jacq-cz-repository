@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace App\Services;
 
@@ -15,11 +13,12 @@ use Nette\Utils\Strings;
 
 class SpecimenIdService
 {
+
     public const string REGEX_SPECIMEN = 'specimenId';
     public const string REGEX_HERBARIUM = 'herbarium';
     public const string REGEX_EXTENSION = 'extension';
 
-    public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<'.self::REGEX_HERBARIUM.'>[a-zA-Z]+)[\s\-–_](?<'.self::REGEX_SPECIMEN.'>.+)$/iu';
+    public const string REGEX_PUBLIC_SPECIMEN_ID = '/^(?<' . self::REGEX_HERBARIUM . '>[a-zA-Z]+)[\s\-–_](?<' . self::REGEX_SPECIMEN . '>.+)$/iu';
 
     public function __construct(protected RepositoryConfiguration $repositoryConfiguration, protected HerbariumService $herbariumService, protected SpecimenFactory $specimenFactory, protected PhotoService $photoService)
     {
@@ -29,7 +28,7 @@ class SpecimenIdService
     {
         $acronym = strtoupper($this->splitSpecimenId($specimenId)[self::REGEX_HERBARIUM]);
         $herbarium = $this->herbariumService->findOneWithAcronym($acronym);
-        if (null === $herbarium) {
+        if ($herbarium === null) {
             throw new SpecimenIdException('Unknown herbarium');
         }
 
@@ -38,7 +37,11 @@ class SpecimenIdService
 
     public function getInternalPartFromId(string $specimenId): string
     {
-        return $this->splitSpecimenId($specimenId)[self::REGEX_SPECIMEN];
+        $internalPart = $this->splitSpecimenId($specimenId)[self::REGEX_SPECIMEN];
+        if (ctype_digit($internalPart)) {
+            $internalPart = (int) $internalPart;
+        }
+        return (string) $internalPart;
     }
 
     /**
@@ -49,14 +52,15 @@ class SpecimenIdService
         $parts = [];
         if (preg_match(self::REGEX_PUBLIC_SPECIMEN_ID, $specimenId, $parts)) {
             return $parts;
+        } else {
+            throw new SpecimenIdException('invalid name format: ' . $specimenId);
         }
-        throw new SpecimenIdException('invalid name format: '.$specimenId);
     }
 
     /**
      * responsible for ARK PID identifier generation.
      * the PID is stored in db, but the hierarchical nature of ARK requires to be able to resolve individual subpaths --> do not change unless really sure about
-     * template = ark:12661/nrp1HERB/PRC/37/321354321.
+     * template = ark:12661/nrp1HERB/PRC/37/321354321
      *
      * synergic with \App\UI\Front\Ark\ArkPresenter
      */
@@ -65,13 +69,12 @@ class SpecimenIdService
         $settings = $this->repositoryConfiguration->getArkProperties();
 
         $ark =
-            'ark:'.$settings['naan'].'/'.
-            $settings['shoulder'].
-            $settings['repository'].'/'.
-            $photo->herbarium->acronym.'/'.
-            Strings::webalize($photo->specimenId, null, false).'/'.
+            'ark:' . $settings['naan'] . "/" .
+            $settings['shoulder'] .
+            $settings['repository'] . "/" .
+            $photo->herbarium->acronym . "/" .
+            Strings::webalize($photo->specimenId, null, false) . "/" .
             $photo->id;
-
         return $ark;
     }
 
@@ -80,8 +83,7 @@ class SpecimenIdService
         $settings = $this->repositoryConfiguration->getArkProperties();
 
         if (!$fullArk) {
-            $ark = 'ark:'.$settings['naan'].'/'.
-                $settings['shoulder'].'/'.$ark;
+            $ark = 'ark:' . $settings['naan'] . "/" . $ark;
         }
 
         return $this->photoService->findOneByArk($ark)?->getFullSpecimenId();
@@ -89,7 +91,7 @@ class SpecimenIdService
 
     public function getSpecimenPid(Photos $photo): string
     {
-        if (PhotosStatus::PUBLISHED === $photo->status->id) {
+        if ($photo->status->id === PhotosStatus::PUBLISHED) {
             return substr($photo->pid, 0, strrpos($photo->pid, '/'));
         }
         $specimen = $this->specimenFactory->create($photo->getFullSpecimenId());
@@ -97,7 +99,7 @@ class SpecimenIdService
         if (!empty($publicPhotos)) {
             return substr($publicPhotos[0]->pid, 0, strrpos($publicPhotos[0]->pid, '/'));
         }
-
         return '';
     }
+
 }
