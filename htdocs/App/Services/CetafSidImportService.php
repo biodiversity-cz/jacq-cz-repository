@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -17,26 +19,25 @@ class CetafSidImportService
 {
     public const array expectedHeaders = ['id', 'basisOfRecord', 'occurrenceID', 'recordedBy', 'occurrenceRemarks', 'eventDate', 'locality', 'verbatimElevation', 'decimalLatitude', 'decimalLongitude', 'verbatimIdentification', 'identifiedBy', 'dateIdentified', 'scientificName'];
 
-
     protected const int dataStartingRow = 2;
     public const array colNames = [
         'id' => 0,
         'basisOfRecord' => 1,
-        "occurrenceID" => 2,
-        "recordedBy" => 3,
+        'occurrenceID' => 2,
+        'recordedBy' => 3,
         'occurrenceRemarks' => 4,
-        "eventDate" => 5,
+        'eventDate' => 5,
         'locality' => 6,
-        "verbatimElevation" => 7,
+        'verbatimElevation' => 7,
         'decimalLatitude' => 8,
-        "decimalLongitude" => 9,
-        "verbatimIdentification" => 10,
-        "identifiedBy" => 11,
-        "dateIdentified" => 12,
-        'scientificName' => 13
+        'decimalLongitude' => 9,
+        'verbatimIdentification' => 10,
+        'identifiedBy' => 11,
+        'dateIdentified' => 12,
+        'scientificName' => 13,
     ];
 
-    public const string SESSION_SECTION = "importCetaf";
+    public const string SESSION_SECTION = 'importCetaf';
 
     protected ?Worksheet $worksheet = null;
 
@@ -56,18 +57,18 @@ class CetafSidImportService
         $this->checkHeader();
         $rowIndex = self::dataStartingRow;
         while (true) {
-            $row = $this->worksheet->rangeToArray("A" . $rowIndex . ":" . $this->lastColumn() . $rowIndex)[0];
+            $row = $this->worksheet->rangeToArray('A'.$rowIndex.':'.$this->lastColumn().$rowIndex)[0];
             if (count(array_filter($row)) > 0) {
                 $this->validateRow($row, $rowIndex);
             } else {
                 break;
             }
-            $rowIndex++;
+            ++$rowIndex;
         }
         if (count($this->errors) > 0) {
             $storage = $this->session->getSection(self::SESSION_SECTION);
             $storage->set('errors', $this->errors);
-            throw new ImportValuesException("Invalid value(s), please revise your import file.");
+            throw new ImportValuesException('Invalid value(s), please revise your import file.');
         }
 
         return $rowIndex - 1;
@@ -79,13 +80,13 @@ class CetafSidImportService
         $rowIndex = self::dataStartingRow;
         $this->entityManager->beginTransaction();
         while (true) {
-            $row = $this->worksheet->rangeToArray("A" . $rowIndex . ":" . $this->lastColumn() . $rowIndex)[0];
+            $row = $this->worksheet->rangeToArray('A'.$rowIndex.':'.$this->lastColumn().$rowIndex)[0];
             if (count(array_filter($row)) > 0) {
                 $this->importRow($row);
             } else {
                 break;
             }
-            $rowIndex++;
+            ++$rowIndex;
         }
         $this->entityManager->commit();
         $this->entityManager->flush();
@@ -97,15 +98,16 @@ class CetafSidImportService
     protected function generateColumnNamesRange($columnCount): array
     {
         $columns = [];
-        for ($i = 0; $i < $columnCount; $i++) {
+        for ($i = 0; $i < $columnCount; ++$i) {
             $letter = '';
             $temp = $i;
             do {
-                $letter = chr(65 + ($temp % 26)) . $letter;
+                $letter = chr(65 + ($temp % 26)).$letter;
                 $temp = intdiv($temp, 26) - 1;
             } while ($temp >= 0);
             $columns[] = strtolower($letter);
         }
+
         return $columns;
     }
 
@@ -115,23 +117,25 @@ class CetafSidImportService
         $file = $formData->table;
         $spreadsheet = IOFactory::load($file->getTemporaryFile());
         $this->worksheet = $spreadsheet->getActiveSheet();
+
         return $this->worksheet;
     }
 
     protected function checkHeader(): void
     {
-        $firstRow = $this->worksheet->rangeToArray('A1:' . $this->lastColumn() . '1')[0];
+        $firstRow = $this->worksheet->rangeToArray('A1:'.$this->lastColumn().'1')[0];
         $headers = array_map('strtolower', $firstRow);
         $expectedHeaders = array_map('strtolower', self::expectedHeaders);
 
         if ($headers !== $expectedHeaders) {
-            throw new ImportValuesException("File does not contain headers (the first row) in expected format.");
+            throw new ImportValuesException('File does not contain headers (the first row) in expected format.');
         }
     }
 
     protected function lastColumn(): string
     {
         $cols = $this->generateColumnNamesRange(count(self::expectedHeaders));
+
         return end($cols);
     }
 
@@ -152,15 +156,14 @@ class CetafSidImportService
             ];
         }
 
-        //TODO add validation of barcode - that it fits to the herbarium acronym..
-
+        // TODO add validation of barcode - that it fits to the herbarium acronym..
     }
 
     protected function importRow(array $row): void
     {
         $sid = $this->service->findOneBy(['externalIdFromInstitution' => $row[self::colNames['id']], 'herbarium' => $this->herbarium]);
 
-        if ($sid === null) {
+        if (null === $sid) {
             $sid = new CetafSid()
                 ->setHerbarium($this->herbarium)
                 ->setExternalIdFromInstitution($row[self::colNames['id']])
@@ -181,13 +184,10 @@ class CetafSidImportService
             ->setPreviousIdentifications($row[self::colNames['verbatimIdentification']])
             ->setCreatedAt()
             ->setLastEditAt();
-
     }
-
 
     public function getErrors()
     {
         return $this->session->getSection(self::SESSION_SECTION)->get('errors');
     }
-
 }

@@ -1,27 +1,24 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
 use App\Bootstrap;
 use App\Model\Database\Entity\Databot;
-use App\Model\Database\Entity\Herbaria;
-use App\Model\Database\Entity\License;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Repository\DatabotRepository;
 use App\Model\IIIF\ManifestFactory;
-use App\Model\Specimen\Specimen;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Nette\Application\LinkGenerator;
 use Tester\Assert;
-use Tests\Toolkit\HerbariumTestFactory;
 use Tests\Toolkit\PhotoTestFactory;
 use Tests\Toolkit\SpecimenTestFactory;
 
-require_once __DIR__ . '/../../../../bootstrap.php';
-
+require_once __DIR__.'/../../../../bootstrap.php';
 
 test('ManifestFactory creates manifest with thumbnail and sequence', function (): void {
     $photo = PhotoTestFactory::detailed();
@@ -58,7 +55,7 @@ test('ManifestFactory creates manifest with thumbnail and sequence', function ()
 
     $sequence = $manifest->getSequences()[0];
     Assert::equal('http://manifest/1#sequence-1', $sequence->getId());
-    Assert::true(count($sequence->getCanvases()) === 1);
+    Assert::true(1 === count($sequence->getCanvases()));
 
     $canvas = $sequence->getCanvases()[0];
 
@@ -109,9 +106,9 @@ test('ManifestFactory::getFirstImage returns null when there are no public photo
         ->andReturn([]);
 
     // DI služby z containeru (stejně jako v ostatních testech)
-    $container = \App\Bootstrap::boot()->createContainer();
-    $repoConfig = $container->getByType(\App\Services\RepositoryConfiguration::class);
-    $linkGenerator = $container->getByType(\Nette\Application\LinkGenerator::class);
+    $container = Bootstrap::boot()->createContainer();
+    $repoConfig = $container->getByType(RepositoryConfiguration::class);
+    $linkGenerator = $container->getByType(LinkGenerator::class);
 
     // EntityManager musí vrátit EntityRepository (typový hint v konstruktoru)
     $repo = \Mockery::mock(EntityRepository::class);
@@ -139,5 +136,5 @@ test('ManifestFactory::getFirstImage returns null when there are no public photo
 
     $result = $rm->invoke($factory);
 
-    \Tester\Assert::null($result);
+    Assert::null($result);
 });

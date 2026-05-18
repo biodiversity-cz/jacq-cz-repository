@@ -1,12 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Services;
 
 use App\Bootstrap;
-use App\Services\TempDir;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../bootstrap.php';
+require_once __DIR__.'/../../bootstrap.php';
 
 test('Bootstrap loads test.neon config when NETTE_ENV is test', function (): void {
     putenv('NETTE_ENV=test');
@@ -25,7 +26,4 @@ test('Bootstrap loads prod.neon config by default', function (): void {
     Assert::same('production', $params['environment'] ?? null);
     putenv('NETTE_ENV'); // unset
     putenv('DB_PASSWORD');
-
 });
-
-

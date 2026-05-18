@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -7,11 +9,10 @@ use App\Model\Database\Entity\Photos;
 
 final readonly class RepositoryConfiguration
 {
-
     /**
      * @param mixed[] $config
      */
-    public function __construct(protected array $config, protected TempDir $tempDir)
+    public function __construct(private array $config, private TempDir $tempDir)
     {
     }
 
@@ -22,7 +23,7 @@ final readonly class RepositoryConfiguration
 
     public function getArchiveBucket(Photos $photo): string
     {
-        return $this->getRepositoryArchiveBucketPrefix() . $photo->bucketSuffix;
+        return $this->getRepositoryArchiveBucketPrefix().$photo->bucketSuffix;
     }
 
     public function getRepositoryArchiveBucketPrefix(): string
@@ -37,14 +38,13 @@ final readonly class RepositoryConfiguration
 
     public function getRecentlyUsedArchiveBucket(): string
     {
-        return $this->getRepositoryArchiveBucketPrefix() . $this->getRecentlyUsedBucketSuffix();
+        return $this->getRepositoryArchiveBucketPrefix().$this->getRecentlyUsedBucketSuffix();
     }
 
-
-    protected function getKey(string $key, string $msg = ''): mixed
+    private function getKey(string $key, string $msg = ''): mixed
     {
         if (!isset($this->config[$key])) {
-            $text = $msg === '' ? 'Configuration parameter ' . strtoupper($key) . ' not set!' : $msg;
+            $text = '' === $msg ? 'Configuration parameter '.strtoupper($key).' not set!' : $msg;
 
             throw new ConfigurationException($text);
         }
@@ -54,7 +54,7 @@ final readonly class RepositoryConfiguration
 
     public function getImageServerBucket(Photos $photo): string
     {
-        return $this->getRepositoryImageServerBucketPrefix() . $photo->bucketSuffix;
+        return $this->getRepositoryImageServerBucketPrefix().$photo->bucketSuffix;
     }
 
     public function getRepositoryImageServerBucketPrefix(): string
@@ -64,12 +64,12 @@ final readonly class RepositoryConfiguration
 
     public function getRecentlyUsedImageServerBucket(): string
     {
-        return $this->getRepositoryImageServerBucketPrefix() . $this->getRecentlyUsedBucketSuffix();
+        return $this->getRepositoryImageServerBucketPrefix().$this->getRecentlyUsedBucketSuffix();
     }
 
     public function getDatabotThumbsBucket(Photos $photo): string
     {
-        return $this->getRepositoryDatabotThumbsBucketPrefix() . $photo->bucketSuffix;
+        return $this->getRepositoryDatabotThumbsBucketPrefix().$photo->bucketSuffix;
     }
 
     public function getRepositoryDatabotThumbsBucketPrefix(): string
@@ -79,9 +79,8 @@ final readonly class RepositoryConfiguration
 
     public function getRecentlyUsedDatabotThumbsBucket(): string
     {
-        return $this->getRepositoryDatabotThumbsBucketPrefix() . $this->getRecentlyUsedBucketSuffix();
+        return $this->getRepositoryDatabotThumbsBucketPrefix().$this->getRecentlyUsedBucketSuffix();
     }
-
 
     public function getJp2Quality(): int
     {
@@ -90,11 +89,10 @@ final readonly class RepositoryConfiguration
 
     public function getImageServerInfoUrl(Photos $photo): string
     {
-        return $this->getImageServerBaseUrl() . $this->getEncodedIiifId($photo);
-
+        return $this->getImageServerBaseUrl().$this->getEncodedIiifId($photo);
     }
 
-    protected function getImageServerBaseUrl(): string
+    private function getImageServerBaseUrl(): string
     {
         return $this->getKey('imageServerBaseUrl');
     }
@@ -121,7 +119,7 @@ final readonly class RepositoryConfiguration
 
     public function getImageServerUrlThumbnail(Photos $photo): string
     {
-        return $this->getImageServerBaseUrl() . $this->getEncodedIiifId($photo) . '/full/' . $this->getThumbnailSize() . ',/0/default.jpg';
+        return $this->getImageServerBaseUrl().$this->getEncodedIiifId($photo).'/full/'.$this->getThumbnailSize().',/0/default.jpg';
     }
 
     public function getThumbnailSize(): int
@@ -131,23 +129,23 @@ final readonly class RepositoryConfiguration
 
     public function createS3Jp2Name(Photos $photo): string
     {
-        return $photo->getFullSpecimenId() . '_' . $photo->id . '.jp2';
+        return $photo->getFullSpecimenId().'_'.$photo->id.'.jp2';
     }
 
     public function createS3DatabotThumbName(Photos $photo): string
     {
-        return $photo->getFullSpecimenId() . '_' . $photo->id . '.png';
+        return $photo->getFullSpecimenId().'_'.$photo->id.'.png';
     }
 
     public function createS3TifName(Photos $photo): string
     {
-        return $photo->getFullSpecimenId() . '_' . $photo->id . '.tif';
+        return $photo->getFullSpecimenId().'_'.$photo->id.'.tif';
     }
 
-    protected function getEncodedIiifId(Photos $photo): string
+    private function getEncodedIiifId(Photos $photo): string
     {
-        $objectId = 's3://' . $this->getImageServerBucket($photo) . '/' . $photo->jp2Filename;
-        return rawurlencode($objectId);
+        $objectId = 's3://'.$this->getImageServerBucket($photo).'/'.$photo->jp2Filename;
 
+        return rawurlencode($objectId);
     }
 }

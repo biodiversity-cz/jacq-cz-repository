@@ -4,51 +4,54 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a description with text and description type
+ * Represents a description with text and description type.
  */
 class Description implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?string $descriptionText = null;
-    protected(set) ?DescriptionType $descriptionType = null;
+    public protected(set) ?string $descriptionText = null;
+    public protected(set) ?DescriptionType $descriptionType = null;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-
     // Getters
-    public function getDescriptionText(): ?string {
+    public function getDescriptionText(): ?string
+    {
         return $this->descriptionText;
     }
 
-    public function getDescriptionType(): ?DescriptionType {
+    public function getDescriptionType(): ?DescriptionType
+    {
         return $this->descriptionType;
     }
 
     // Setters
-    public function setDescriptionText(?string $descriptionText): self {
+    public function setDescriptionText(?string $descriptionText): self
+    {
         $this->descriptionText = $descriptionText;
+
         return $this;
     }
 
-    public function setDescriptionType(?DescriptionType $descriptionType): self {
+    public function setDescriptionType(?DescriptionType $descriptionType): self
+    {
         $this->descriptionType = $descriptionType;
+
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'description');
 
-        if ($this->getDescriptionText() !== null) {
+        if (null !== $this->getDescriptionText()) {
             $textElement = $this->createElement($document, 'description_text', $this->getDescriptionText());
             $element->appendChild($textElement);
         }

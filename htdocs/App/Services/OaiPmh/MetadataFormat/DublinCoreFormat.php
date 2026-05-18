@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\OaiPmh\MetadataFormat;
 
@@ -6,12 +8,12 @@ use App\Model\Database\Entity\Photos;
 use App\Services\RepositoryConfiguration;
 
 /**
- * Dublin Core (oai_dc) metadata format implementation
+ * Dublin Core (oai_dc) metadata format implementation.
  */
 final class DublinCoreFormat implements MetadataFormatInterface
 {
     public function __construct(
-        private readonly RepositoryConfiguration $repositoryConfig
+        private readonly RepositoryConfiguration $repositoryConfig,
     ) {
     }
 
@@ -47,13 +49,13 @@ final class DublinCoreFormat implements MetadataFormatInterface
         $dc = $doc->createElementNS($this->getMetadataNamespace(), 'oai_dc:dc');
         $dc->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:dc', 'http://purl.org/dc/elements/1.1/');
         $dc->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation',
-            $this->getMetadataNamespace() . ' ' . $this->getSchema());
+            $this->getMetadataNamespace().' '.$this->getSchema());
 
         $doc->appendChild($dc);
 
         // dc:title - Specimen identifier as title
         $this->addElement($doc, $dc, 'dc:title',
-            'Herbarium specimen ' . $item->getFullSpecimenId());
+            'Herbarium specimen '.$item->getFullSpecimenId());
 
         // dc:creator - Herbarium name
         if ($item->herbarium->fullname) {
@@ -147,7 +149,7 @@ final class DublinCoreFormat implements MetadataFormatInterface
     }
 
     /**
-     * Helper method to add DC elements
+     * Helper method to add DC elements.
      */
     private function addElement(\DOMDocument $doc, \DOMElement $parent, string $name, string $value): void
     {

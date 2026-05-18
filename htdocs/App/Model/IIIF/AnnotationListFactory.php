@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\IIIF;
 
@@ -17,7 +19,6 @@ use Nette\Application\LinkGenerator;
 
 class AnnotationListFactory
 {
-
     protected Photos $photo;
 
     protected string $selfReferencingLink;
@@ -52,27 +53,25 @@ class AnnotationListFactory
         foreach ($segments as $segment) {
             $annotationList->addAnnotation($this->createAnnotation($photo, $segment, $categories));
         }
-
     }
 
     protected function createAnnotation(Photos $photo, array $segment, array $categories): Annotation
     {
         $content = new Content();
         $content
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo) . '#' . DatabotRepository::HESPI_SHEET . '_segmentcontent_' . $segment['id'])
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo).'#'.DatabotRepository::HESPI_SHEET.'_segmentcontent_'.$segment['id'])
             ->setType(DCType::TEXT)
             ->setFormat('text/plain')
-            ->setChars(DatabotRepository::HESPI_SHEET . ':' . $categories[$segment['category_id']]['name']);
+            ->setChars(DatabotRepository::HESPI_SHEET.':'.$categories[$segment['category_id']]['name']);
 
         $bbox = implode(',', $segment['bbox']);
         $annotation = new Annotation();
         $annotation
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo) . '#' . DatabotRepository::HESPI_SHEET . '_segment_' . $segment['id'])
-            ->setOn($this->repositoryConfiguration->getImageServerInfoUrl($photo) . '#canvas#xywh=' . $bbox)
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo).'#'.DatabotRepository::HESPI_SHEET.'_segment_'.$segment['id'])
+            ->setOn($this->repositoryConfiguration->getImageServerInfoUrl($photo).'#canvas#xywh='.$bbox)
             ->setMotivation('tagging')
             ->setContent($content);
 
         return $annotation;
     }
-
 }

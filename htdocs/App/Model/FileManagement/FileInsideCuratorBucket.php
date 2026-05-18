@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\FileManagement;
 
@@ -6,7 +8,6 @@ use Aws\Api\DateTimeResult;
 
 class FileInsideCuratorBucket
 {
-
     public const int MIN_FILESIZE = 5 * 1024 * 1024;
     public const int MAX_FILESIZE = 650 * 1024 * 1024;
 
@@ -15,7 +16,7 @@ class FileInsideCuratorBucket
 
     protected bool $isEligibleForImport = false;
 
-    public function __construct(protected(set) readonly string $name, protected(set) readonly int $size, protected(set) readonly DateTimeResult $timestamp, protected(set) readonly bool $alreadyWaiting, protected(set) readonly bool $hasControlError, protected(set) readonly ?int $rowId, protected(set) readonly ?string $controlMsg)
+    public function __construct(public protected(set) readonly string $name, public protected(set) readonly int $size, public protected(set) readonly DateTimeResult $timestamp, public protected(set) readonly bool $alreadyWaiting, public protected(set) readonly bool $hasControlError, public protected(set) readonly ?int $rowId, public protected(set) readonly ?string $controlMsg)
     {
         $this->isEligibleForImport = $this->isSizeOk() && $this->isTypeOk() && !$this->isAlreadyWaiting() && !$this->hasControlError();
     }
@@ -32,7 +33,7 @@ class FileInsideCuratorBucket
 
     public function isTypeOk(): bool
     {
-        return pathinfo($this->name, PATHINFO_EXTENSION) === self::EXTENSION;
+        return self::EXTENSION === pathinfo($this->name, PATHINFO_EXTENSION);
     }
 
     public function isAlreadyWaiting(): bool
@@ -57,7 +58,7 @@ class FileInsideCuratorBucket
 
     public function hasPrecontrolError(): bool
     {
-        return !$this->isSizeOk() ||  !$this->isTypeOk();
+        return !$this->isSizeOk() || !$this->isTypeOk();
     }
 
     public function setIneligibleForImport(): self
@@ -66,5 +67,4 @@ class FileInsideCuratorBucket
 
         return $this;
     }
-
 }

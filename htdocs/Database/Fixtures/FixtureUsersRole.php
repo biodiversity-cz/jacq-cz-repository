@@ -8,12 +8,10 @@ use App\Model\Database\Entity\UserRole;
 use Database\Base\FixtureBase;
 use Doctrine\Persistence\ObjectManager;
 
-
 class FixtureUsersRole extends FixtureBase
 {
-
     /**
-     * Load data fixtures with the passed ObjectManager
+     * Load data fixtures with the passed ObjectManager.
      */
     public function load(ObjectManager $manager): void
     {
@@ -40,10 +38,8 @@ class FixtureUsersRole extends FixtureBase
         $manager->flush();
     }
 
-
     public function getOrder(): int
     {
         return 20;
     }
-
 }

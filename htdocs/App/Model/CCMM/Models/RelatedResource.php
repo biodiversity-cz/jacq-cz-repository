@@ -4,91 +4,103 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a related resource with IRI, title, URL, type and relation type
+ * Represents a related resource with IRI, title, URL, type and relation type.
  */
 class RelatedResource implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?string $iri = null;
-    protected(set) ?string $title = null;
-    protected(set) ?string $resourceUrl = null;
-    protected(set) ?ResourceType $resourceType = null;
-    protected(set) ?ResourceRelationType $resourceRelationType = null;
+    public protected(set) ?string $iri = null;
+    public protected(set) ?string $title = null;
+    public protected(set) ?string $resourceUrl = null;
+    public protected(set) ?ResourceType $resourceType = null;
+    public protected(set) ?ResourceRelationType $resourceRelationType = null;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-
     // Getters
-    public function getIri(): ?string {
+    public function getIri(): ?string
+    {
         return $this->iri;
     }
 
-    public function getTitle(): ?string {
+    public function getTitle(): ?string
+    {
         return $this->title;
     }
 
-    public function getResourceUrl(): ?string {
+    public function getResourceUrl(): ?string
+    {
         return $this->resourceUrl;
     }
 
-    public function getResourceType(): ?ResourceType {
+    public function getResourceType(): ?ResourceType
+    {
         return $this->resourceType;
     }
 
-    public function getResourceRelationType(): ?ResourceRelationType {
+    public function getResourceRelationType(): ?ResourceRelationType
+    {
         return $this->resourceRelationType;
     }
 
     // Setters
-    public function setIri(?string $iri): self {
+    public function setIri(?string $iri): self
+    {
         $this->iri = $iri;
+
         return $this;
     }
 
-    public function setTitle(?string $title): self {
+    public function setTitle(?string $title): self
+    {
         $this->title = $title;
+
         return $this;
     }
 
-    public function setResourceUrl(?string $resourceUrl): self {
+    public function setResourceUrl(?string $resourceUrl): self
+    {
         $this->resourceUrl = $resourceUrl;
+
         return $this;
     }
 
-    public function setResourceType(?ResourceType $resourceType): self {
+    public function setResourceType(?ResourceType $resourceType): self
+    {
         $this->resourceType = $resourceType;
+
         return $this;
     }
 
-    public function setResourceRelationType(?ResourceRelationType $resourceRelationType): self {
+    public function setResourceRelationType(?ResourceRelationType $resourceRelationType): self
+    {
         $this->resourceRelationType = $resourceRelationType;
+
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'related_resource');
 
-        if ($this->getIri() !== null) {
+        if (null !== $this->getIri()) {
             $iriElement = $this->createElement($document, 'iri', $this->getIri());
             $element->appendChild($iriElement);
         }
 
-        if ($this->getTitle() !== null) {
+        if (null !== $this->getTitle()) {
             $titleElement = $this->createElement($document, 'title', $this->getTitle());
             $element->appendChild($titleElement);
         }
 
-        if ($this->getResourceUrl() !== null) {
+        if (null !== $this->getResourceUrl()) {
             $urlElement = $this->createElement($document, 'resource_url', $this->getResourceUrl());
             $element->appendChild($urlElement);
         }

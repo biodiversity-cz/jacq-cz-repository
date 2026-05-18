@@ -1,9 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Toolkit;
 
-use App\Model\Database\Entity\Herbaria;
-use App\Model\Database\Entity\License;
 use App\Model\Database\Entity\Photos;
 
 final class PhotoTestFactory

@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -11,7 +13,6 @@ use League\Pipeline\StageInterface;
 
 class DownloadStage extends BaseStage implements StageInterface
 {
-
     public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService, protected S3Service $s3Service)
     {
         parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
@@ -24,12 +25,10 @@ class DownloadStage extends BaseStage implements StageInterface
         try {
             $this->s3Service->getObject($this->item->herbarium->bucket, $this->item->originalFilename, $this->getMasterTempPath());
             $this->item->setOriginalFileAt($this->s3Service->getObjectOriginalTimestamp($this->item->herbarium->bucket, $this->item->originalFilename));
-
         } catch (\Throwable $exception) {
-            throw new DownloadStageException('download original file error (' . $exception->getMessage() . ')');
+            throw new DownloadStageException('download original file error ('.$exception->getMessage().')');
         }
 
         return $this->item;
     }
-
 }

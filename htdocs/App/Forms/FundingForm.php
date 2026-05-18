@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Forms;
 
@@ -12,20 +14,19 @@ use Nette\Security\User;
 final readonly class FundingForm
 {
     public function __construct(
-        private FormFactory      $formFactory,
-        private FundingService   $fundingService,
+        private FormFactory $formFactory,
+        private FundingService $fundingService,
         private HerbariumService $herbariumService,
-        protected User           $user
-    )
-    {
+        private User $user,
+    ) {
     }
 
     public function formSucceeded(Form $form, $values): void
     {
         try {
-            if ((isset($values['id'])) && $values['id'] != "") {
+            if ((isset($values['id'])) && '' != $values['id']) {
                 /** @var Funding $funding */
-                $funding = $this->fundingService->find((int)$values['id']);
+                $funding = $this->fundingService->find((int) $values['id']);
                 $funding
                     ->setName($values['name'])
                     ->setDescription($values['description'])
@@ -92,8 +93,8 @@ final readonly class FundingForm
 
         $form->addSubmit('save', 'Save');
 
-        if ($funding != null) {
-            $form->addHidden("id");
+        if (null != $funding) {
+            $form->addHidden('id');
             $form = $this->presetDefaultValues($form, $funding);
         }
         $form->onSuccess[] = [$this, 'formSucceeded'];
@@ -101,18 +102,19 @@ final readonly class FundingForm
         return $form;
     }
 
-    protected function presetDefaultValues(Form $form, Funding $funding): Form
+    private function presetDefaultValues(Form $form, Funding $funding): Form
     {
         $defaults = [
-            "id" => $funding->id,
+            'id' => $funding->id,
             'name' => $funding->name,
             'description' => $funding->description,
             'code' => $funding->code,
             'funder' => $funding->funder,
             'note' => $funding->note,
             'ccmm_format' => $funding->ccmmFormat,
-            'active' => $funding->active
+            'active' => $funding->active,
         ];
+
         return $form->setDefaults($defaults);
     }
 }

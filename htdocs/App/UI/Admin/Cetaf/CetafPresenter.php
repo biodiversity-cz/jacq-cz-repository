@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Admin\Cetaf;
 
@@ -13,7 +15,6 @@ use App\UI\Base\SecuredPresenter;
 
 final class CetafPresenter extends SecuredPresenter
 {
-
     /** @inject */
     public CetafSidService $cetafSidRepository;
 
@@ -28,14 +29,14 @@ final class CetafPresenter extends SecuredPresenter
     public function checkRequirements(\ReflectionClass|\ReflectionMethod $element): void
     {
         parent::startup();
-        if ($this->herbarium->externalDatabase->id !== ExternalDatabase::INTERNAL) {
-            $this->redirect("Homepage");
+        if (ExternalDatabase::INTERNAL !== $this->herbarium->externalDatabase->id) {
+            $this->redirect('Homepage');
         }
     }
 
     public function renderErrors(): void
     {
-        if ($this->sidManagementService->getErrors() === null) {
+        if (null === $this->sidManagementService->getErrors()) {
             $this->redirect(':default');
         }
         $this->template->errors = $this->sidManagementService->getErrors();
@@ -55,5 +56,4 @@ final class CetafPresenter extends SecuredPresenter
     {
         return $this->cetafSidGrid->create();
     }
-
 }

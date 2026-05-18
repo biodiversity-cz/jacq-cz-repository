@@ -37,8 +37,6 @@ final class Version20240903131737 extends AbstractMigration
 
         $this->addSql('COMMENT ON COLUMN photos.original_filename IS \'Filename that was provided during curator upload, could make sense or completely missing semantical content\'');
         $this->addSql('ALTER TABLE photos ALTER lastedit_timestamp SET DEFAULT \'now()\'');
-
-
     }
 
     public function down(Schema $schema): void
@@ -50,7 +48,5 @@ final class Version20240903131737 extends AbstractMigration
         $this->addSql('ALTER TABLE photos DROP original_file_timestamp');
         $this->addSql('ALTER TABLE photos DROP lastedit_timestamp');
         $this->addSql('ALTER TABLE photos DROP original_filename');
-
-
     }
 }

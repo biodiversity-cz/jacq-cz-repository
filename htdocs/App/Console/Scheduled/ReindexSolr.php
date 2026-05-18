@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Scheduled;
 
@@ -11,13 +13,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ReindexSolr extends Command
 {
-
     private const DB_BATCH_SIZE = 100;
     private const SOLR_BATCH_SIZE = 100;
 
-
     /**
-     * Running as a CronJob - index all published photos data from CETAF databot to Solr, replace document logic (no partial updates)
+     * Running as a CronJob - index all published photos data from CETAF databot to Solr, replace document logic (no partial updates).
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SolrClientService $solrClientService, ?string $name = null)
     {
@@ -56,15 +56,13 @@ class ReindexSolr extends Command
             }
 
             $this->entityManager->clear();
-
-        } while (count($photos) === self::DB_BATCH_SIZE);
+        } while (self::DB_BATCH_SIZE === count($photos));
 
         // flush zbytku
         $this->solrClientService->flushPhotos($buffer, true);
         $this->solrClientService->buildSuggest();
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
-
 }

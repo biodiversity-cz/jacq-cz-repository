@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Front\Home;
 
@@ -7,7 +9,6 @@ use App\UI\Base\UnsecuredPresenter;
 
 final class HomePresenter extends UnsecuredPresenter
 {
-
     /** @inject */ public HerbariumService $herbariumService;
 
     public function renderContact(): void
@@ -25,5 +26,4 @@ final class HomePresenter extends UnsecuredPresenter
     {
         $this->redirectUrl('https://biodiversity-cz.github.io/herbarium-documentation/docs/legal/gdpr');
     }
-
 }

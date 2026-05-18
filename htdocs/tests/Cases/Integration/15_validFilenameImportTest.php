@@ -2,10 +2,9 @@
 
 namespace Tests\Cases\Integration;
 
-
 use App\Model\Database\Entity\Herbaria;
 
-require __DIR__ . '/../../bootstrap.integration.php';
+require __DIR__.'/../../bootstrap.integration.php';
 
 final class ValidImportFilenameTest extends IntegrationTestCase
 {
@@ -14,9 +13,8 @@ final class ValidImportFilenameTest extends IntegrationTestCase
 
     public function testRegisterNewFiles(): void
     {
-
         $this->checkBefore();
-//        $this->getUserEntity()->herbarium //tohle nějak nepersistuje, musí se vzít rovnou ta entita
+        //        $this->getUserEntity()->herbarium //tohle nějak nepersistuje, musí se vzít rovnou ta entita
         $this->em->getRepository(Herbaria::class)->find($this->provideLoggedCuratorUser()->getIdentity()->getCurrentHerbariumId())
             ->setFallbackFilename(true)
             ->setMultipleBarcodeMultiplier(false);
@@ -25,7 +23,6 @@ final class ValidImportFilenameTest extends IntegrationTestCase
 
         $this->expectAllImported();
     }
-
 }
 
 new ValidImportFilenameTest()->run();

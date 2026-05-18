@@ -9,13 +9,10 @@ use App\Model\Database\Entity\Herbaria;
 use Database\Base\FixtureBase;
 use Doctrine\Persistence\ObjectManager;
 
-
 class FixtureFunding extends FixtureBase
 {
-
     public function load(ObjectManager $manager): void
     {
-
         $s1 = new Funding();
         $s1->setName('Grant 1')
             ->setDescription('obecný grant do kterého mohou přispívat všichni')
@@ -57,7 +54,7 @@ class FixtureFunding extends FixtureBase
             ->setCreatedAt()
             ->setLastEditAt();
 
-        $herbariumTest =  $manager->getRepository(Herbaria::class)->findOneBy(['acronym'=>'PRC']);
+        $herbariumTest = $manager->getRepository(Herbaria::class)->findOneBy(['acronym' => 'PRC']);
         $s3 = new Funding();
         $s3->setName('Grant 2 private')
             ->setDescription('PRC only avaialable')
@@ -72,10 +69,8 @@ class FixtureFunding extends FixtureBase
         $manager->flush();
     }
 
-
     public function getOrder(): int
     {
         return 80;
     }
-
 }

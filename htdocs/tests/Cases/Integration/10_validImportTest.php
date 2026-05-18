@@ -2,10 +2,9 @@
 
 namespace Tests\Cases\Integration;
 
-
 use App\Model\Database\Entity\Herbaria;
 
-require __DIR__ . '/../../bootstrap.integration.php';
+require __DIR__.'/../../bootstrap.integration.php';
 
 final class ValidImportTest extends IntegrationTestCase
 {
@@ -23,7 +22,6 @@ final class ValidImportTest extends IntegrationTestCase
         $this->curatorFacade->registerNewFiles($this->provideLoggedCuratorUser(), ['photoType' => 1]);
         $this->expectAllImported();
     }
-
 }
 
 new ValidImportTest()->run();

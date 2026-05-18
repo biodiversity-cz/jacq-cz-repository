@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Admin;
 
@@ -15,13 +17,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BatchDelete extends Command
 {
-
     /**
-     * For development purpose only, let's delete images with status 100
+     * For development purpose only, let's delete images with status 100.
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorFacade, protected User $user, ?string $name = null)
     {
-        exit; //disabled just for sure
+        exit; // disabled just for sure
         parent::__construct($name);
     }
 
@@ -42,13 +43,13 @@ class BatchDelete extends Command
     {
         $startTime = microtime(true);
         $photos = $this->getPhotos();
-        $output->writeln(count($photos) . ' files will be affected.');
+        $output->writeln(count($photos).' files will be affected.');
         foreach ($photos as $photo) {
             $this->user->login(new SimpleIdentity(1, ['curator'], ['name' => 'faker', 'herbarium' => $photo->herbarium->id]));
             $this->curatorFacade->deletePhoto($this->user, $photo);
         }
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
@@ -58,5 +59,4 @@ class BatchDelete extends Command
         $this->setName('admin:batchDelete');
         $this->setDescription('delete items');
     }
-
 }

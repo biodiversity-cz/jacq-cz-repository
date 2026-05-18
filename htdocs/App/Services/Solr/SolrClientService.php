@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\Solr;
 
@@ -9,19 +11,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Solarium\Client;
 use Solarium\Core\Query\DocumentInterface;
 
-
 final readonly class SolrClientService
 {
     public function __construct(
-        protected(set) Client          $client,
+        protected(set) Client $client,
         private EntityManagerInterface $entityManager,
-    )
-    {
+    ) {
     }
 
     public function flushPhotos(array $photos, bool $commit = false): void
     {
-        if ($photos === []) {
+        if ([] === $photos) {
             return;
         }
 
@@ -30,7 +30,7 @@ final readonly class SolrClientService
         foreach ($photos as $photo) {
             $doc = $update->createDocument();
             $doc = $this->prepareIngest($photo, $doc);
-            if ($doc === null) {
+            if (null === $doc) {
                 continue;
             }
             $update->addDocument($doc);
@@ -39,7 +39,6 @@ final readonly class SolrClientService
             $update->addCommit();
         }
         $this->client->update($update);
-
     }
 
     public function buildSuggest()
@@ -52,7 +51,7 @@ final readonly class SolrClientService
         $result = $this->client->suggester($query);
     }
 
-    protected function debugSolrCall(mixed $update): void
+    private function debugSolrCall(mixed $update): void
     {
         $builder = $update->getRequestBuilder();
         $request = $builder->build($update);
@@ -61,7 +60,7 @@ final readonly class SolrClientService
         // request path
         $path = $request->getUri();
         // finální URL
-        $fullUrl = rtrim($baseUri, '/') . '/' . ltrim($path, '/');
+        $fullUrl = rtrim($baseUri, '/').'/'.ltrim($path, '/');
 
         dump($fullUrl);
         dump($request->getMethod());   // POST
@@ -69,25 +68,24 @@ final readonly class SolrClientService
         dump($request->getRawData());  // payload
     }
 
-    protected function prepareIngest(Photos $photo, DocumentInterface $document): ?DocumentInterface
+    private function prepareIngest(Photos $photo, DocumentInterface $document): ?DocumentInterface
     {
         $cetafDatabot = $this->entityManager->getRepository(Databot::class)->getByName(DatabotRepository::CETAF);
-        if ($cetafDatabot === null) {
+        if (null === $cetafDatabot) {
             return null;
         }
         $cetafJson = $photo->getDatabotOkResultById($cetafDatabot)?->resultData ?? null;
 
-        if ($cetafJson === null) {
+        if (null === $cetafJson) {
             return null;
         }
-        $document->setField('id', (string)$photo->pid);
+        $document->setField('id', (string) $photo->pid);
 
         $date = $this->normalizeDwCEventDate($cetafJson['http://rs.tdwg.org/dwc/terms/eventDate'] ?? null);
 
-        $document->setField('title', $cetafJson["http://purl.org/dc/terms/title"] ?? null);
+        $document->setField('title', $cetafJson['http://purl.org/dc/terms/title'] ?? null);
         $document->setField('basis_of_record', 'PreservedSpecimen');
         $document->setField('herbarium_acronym', strtoupper($photo->herbarium->acronym));
-
 
         $document->setField('description', 'Photo of a herbarium specimen');
         $document->setField('locality', $cetafJson['http://rs.tdwg.org/dwc/terms/locality'] ?? null);
@@ -124,9 +122,8 @@ final readonly class SolrClientService
         return $document;
     }
 
-    function normalizeDwCEventDate(?string $input): array
+    public function normalizeDwCEventDate(?string $input): array
     {
-
         if (empty($input)) {
             return [
                 'from' => null,
@@ -137,13 +134,12 @@ final readonly class SolrClientService
         // Interval A/B
 
         try {
-
             if (str_contains($input, '/')) {
                 [$start, $end] = explode('/', $input, 2);
 
                 // 2007-11-13/15 → doplnění dne
                 if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) && preg_match('/^\d{2}$/', $end)) {
-                    $end = substr($start, 0, 8) . $end;
+                    $end = substr($start, 0, 8).$end;
                 }
 
                 $startRange = $this->normalizeSingleDateToRange($start);
@@ -164,22 +160,22 @@ final readonly class SolrClientService
         }
     }
 
-    function normalizeSingleDateToRange(string $value): array
+    public function normalizeSingleDateToRange(string $value): array
     {
         $value = trim($value);
         $tz = new \DateTimeZone('UTC');
 
         // YYYY
         if (preg_match('/^\d{4}$/', $value)) {
-            $from = new \DateTimeImmutable($value . '-01-01T00:00:00', $tz);
-            $to = new \DateTimeImmutable($value . '-12-31T23:59:59.999999', $tz);
+            $from = new \DateTimeImmutable($value.'-01-01T00:00:00', $tz);
+            $to = new \DateTimeImmutable($value.'-12-31T23:59:59.999999', $tz);
 
             return compact('from', 'to');
         }
 
         // YYYY-MM
         if (preg_match('/^\d{4}-\d{2}$/', $value)) {
-            $from = new \DateTimeImmutable($value . '-01T00:00:00', $tz);
+            $from = new \DateTimeImmutable($value.'-01T00:00:00', $tz);
 
             $to = $from
                 ->modify('first day of next month')
@@ -190,7 +186,7 @@ final readonly class SolrClientService
 
         // YYYY-MM-DD
         if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
-            $from = new \DateTimeImmutable($value . 'T00:00:00', $tz);
+            $from = new \DateTimeImmutable($value.'T00:00:00', $tz);
 
             $to = $from
                 ->modify('+1 day')
@@ -209,5 +205,4 @@ final readonly class SolrClientService
 
         return compact('from', 'to');
     }
-
 }

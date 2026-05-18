@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
@@ -7,25 +9,24 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ImageDownloadLogService extends BaseEntityService
 {
-
     protected string $entityName = ImageDownloadLog::class;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        private readonly ExcludedDownloadLogService $excludedDownloadLogService
+        private readonly ExcludedDownloadLogService $excludedDownloadLogService,
     ) {
         parent::__construct($entityManager);
     }
 
     public function logDownload(
-        int               $photoId,
-        string            $imageType,
-        ?string           $ipAddress = null,
+        int $photoId,
+        string $imageType,
+        ?string $ipAddress = null,
         string|array|null $userAgent = null,
-        string|array|null $referrer = null
+        string|array|null $referrer = null,
     ): void {
         // Check if the IP address is excluded from logging
-        if ($ipAddress !== null && $this->excludedDownloadLogService->isIpExcluded($ipAddress)) {
+        if (null !== $ipAddress && $this->excludedDownloadLogService->isIpExcluded($ipAddress)) {
             // IP is excluded, do not log the download
             return;
         }
@@ -44,7 +45,7 @@ class ImageDownloadLogService extends BaseEntityService
 
     private function normalizeHeader(string|array|null $value): ?string
     {
-        if ($value === null) {
+        if (null === $value) {
             return null;
         }
 

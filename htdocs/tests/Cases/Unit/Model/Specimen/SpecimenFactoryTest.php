@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
@@ -12,8 +14,7 @@ use App\Services\SpecimenIdService;
 use Nette\Security\User;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../../bootstrap.php';
-
+require_once __DIR__.'/../../../../bootstrap.php';
 
 test('SpecimenFactory throws exception for empty id', function (): void {
     $herbariumService = \Mockery::mock(HerbariumService::class);

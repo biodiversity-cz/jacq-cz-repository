@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Security;
@@ -11,9 +12,8 @@ use Nette\Application\LinkGenerator;
 final class OpenIDAuthenticator
 {
     public function __construct(
-        private EntityManagerInterface $entityManager, private LinkGenerator $linkGenerator
-    )
-    {
+        private EntityManagerInterface $entityManager, private LinkGenerator $linkGenerator,
+    ) {
     }
 
     public function authenticate(array $config): Identity
@@ -62,15 +62,15 @@ final class OpenIDAuthenticator
         switch ($user->openidProvider) {
             case 'keycloak':
                 // Keycloak supports RP-initiated logout
-                $logoutUrl = rtrim($config['baseUrl'], '/') . '/realms/' . $config['realm'] .
-                    '/protocol/openid-connect/logout?redirect_uri=' . urlencode($config['signoutRedirectUri']);
+                $logoutUrl = rtrim($config['baseUrl'], '/').'/realms/'.$config['realm'].
+                    '/protocol/openid-connect/logout?redirect_uri='.urlencode($config['signoutRedirectUri']);
                 break;
         }
 
         return $logoutUrl;
     }
 
-    private function findOrCreateUser(string $subject,   object $userInfo, string $idToken, ?string $refreshToken): User
+    private function findOrCreateUser(string $subject, object $userInfo, string $idToken, ?string $refreshToken): User
     {
         // Try to find existing user by OpenID subject and provider
         $user = $this->entityManager->getRepository(User::class)
@@ -85,6 +85,7 @@ final class OpenIDAuthenticator
                 ->initializeCurrentHerbarium();
 
             $this->entityManager->flush();
+
             return $user;
         }
 
@@ -100,6 +101,7 @@ final class OpenIDAuthenticator
                 ->initializeCurrentHerbarium();
 
             $this->entityManager->flush();
+
             return $user;
         }
 

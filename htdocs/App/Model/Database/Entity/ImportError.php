@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -16,27 +18,25 @@ use Doctrine\ORM\Mapping\Table;
 // phpcs:disable SlevomatCodingStandard.Classes.SuperfluousErrorNaming.SuperfluousSuffix
 class ImportError
 {
-
-// phpcs:enable
+    // phpcs:enable
     use TId;
 
     #[OneToOne(targetEntity: Photos::class)]
     #[JoinColumn(name: 'photo_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE', options: ['comment' => 'photo to which this error belongs'])]
-    protected(set) Photos $photo;
+    public protected(set) Photos $photo;
 
     #[ManyToOne(targetEntity: Photos::class)]
     #[JoinColumn(name: 'duplicate_id', referencedColumnName: 'id', unique: false, nullable: true, options: ['comment' => 'already imported photo to which is this probably duplicity'])]
-    protected(set) ?Photos $duplicateTo;
+    public protected(set) ?Photos $duplicateTo;
 
     #[Column(type: Types::BLOB, nullable: true, options: ['comment' => 'Thumbnail during import phase'])]
-    protected(set) mixed $thumbnail;
+    public protected(set) mixed $thumbnail;
 
     #[Column(type: Types::TEXT, length: 60000, unique: false, nullable: false, options: ['comment' => 'description fo the error'])]
-    protected(set) string $message = '';
+    public protected(set) string $message = '';
 
     #[Column(type: Types::TEXT, length: 60000, unique: false, nullable: true, options: ['comment' => 'barcode detected in the image'])]
-    protected(set) ?string $barcodes;
-
+    public protected(set) ?string $barcodes;
 
     public function setPhoto(Photos $photo): ImportError
     {
@@ -51,7 +51,6 @@ class ImportError
 
         return $this;
     }
-
 
     public function setMessage(string $message): ImportError
     {
@@ -73,5 +72,4 @@ class ImportError
 
         return $this;
     }
-
 }

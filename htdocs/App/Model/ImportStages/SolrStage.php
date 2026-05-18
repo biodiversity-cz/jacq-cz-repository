@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -25,14 +27,12 @@ class SolrStage extends BaseStage implements StageInterface
     {
         $this->item = $payload;
         try {
-            /** @var Photos $payload */
+            /* @var Photos $payload */
             $this->solrClientService->flushPhotos([$payload], true);
-
         } catch (\Throwable $exception) {
-            throw new PublishStageException('unable index specimen in Solr: ' . $exception->getMessage() . ' '. $payload->id);
+            throw new PublishStageException('unable index specimen in Solr: '.$exception->getMessage().' '.$payload->id);
         }
 
         return $payload;
     }
-
 }

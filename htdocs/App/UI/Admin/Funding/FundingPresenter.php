@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Admin\Funding;
 
@@ -19,8 +21,8 @@ final class FundingPresenter extends SecuredPresenter
 
     public function checkRequirements(\ReflectionMethod|\ReflectionClass $element): void
     {
-        //TODO unsure to whom allow editing the Funding
-        if (!$this->user->isInRole('ROLE_ADMIN')){
+        // TODO unsure to whom allow editing the Funding
+        if (!$this->user->isInRole('ROLE_ADMIN')) {
             $this->redirect(':Admin:Home:');
         }
         parent::checkRequirements($element);
@@ -34,7 +36,7 @@ final class FundingPresenter extends SecuredPresenter
 
     public function actionAdd(): void
     {
-        $this->template->setFile(__DIR__ . '/edit.latte');
+        $this->template->setFile(__DIR__.'/edit.latte');
         $this->template->title = 'Create Funding';
         $form = $this->getComponent('fundingForm');
         $form->onSuccess[] = [$this, 'addingFormSucceeded'];
@@ -61,7 +63,7 @@ final class FundingPresenter extends SecuredPresenter
             $this->fundingService->delete($this->user, $funding);
             $this->flashMessage('Funding deleted successfully.', 'success');
         } catch (\Throwable $exception) {
-            $this->flashMessage('An error occurred: ' . $exception->getMessage(), 'danger');
+            $this->flashMessage('An error occurred: '.$exception->getMessage(), 'danger');
         }
 
         $this->redirect('default');
@@ -72,6 +74,7 @@ final class FundingPresenter extends SecuredPresenter
         if (!in_array($this->getAction(), ['add', 'edit'])) {
             $this->error();
         }
+
         return $this->fundingForm->create($this->funding);
     }
 }

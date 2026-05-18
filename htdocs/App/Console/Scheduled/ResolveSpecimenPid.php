@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Scheduled;
 
@@ -13,11 +15,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ResolveSpecimenPid extends Command
 {
-
     public const int LIMIT = 4;
 
     /**
-     * Running as a CronJob - process images from curatorBucket to the repository waiting room, cleans expired Embargo
+     * Running as a CronJob - process images from curatorBucket to the repository waiting room, cleans expired Embargo.
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SpecimenPidCallerService $pidCallerService, protected readonly CuratorFacade $curatorFacade, ?string $name = null)
     {
@@ -38,10 +39,11 @@ class ResolveSpecimenPid extends Command
         try {
             $this->pidCallerService->callAsync($this->getPhotos(), 3);
         } catch (\Throwable $e) {
-            $output->writeln("\n" . $e->getMessage());
+            $output->writeln("\n".$e->getMessage());
+
             return Command::FAILURE;
         }
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
@@ -55,6 +57,4 @@ class ResolveSpecimenPid extends Command
 
         return $query->getResult();
     }
-
-
 }

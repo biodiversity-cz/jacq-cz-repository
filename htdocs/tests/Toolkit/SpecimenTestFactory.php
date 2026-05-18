@@ -1,10 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Toolkit;
 
-use App\Model\Database\Entity\Herbaria;
-use App\Model\Database\Entity\License;
-use App\Model\Database\Entity\Photos;
 use App\Model\Specimen\Specimen;
 
 final class SpecimenTestFactory
@@ -14,6 +13,7 @@ final class SpecimenTestFactory
         $specimen = new Specimen();
         $specimen->setHerbarium(HerbariumTestFactory::testHerbarium());
         self::set($specimen, 'id', 123);
+
         return $specimen;
     }
 

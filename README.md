@@ -2,6 +2,7 @@
 [![Build Status](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/tests.yml/badge.svg)](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/tests.yml?query=branch%3Amain++)
 [![codecov](https://codecov.io/gh/biodiversity-cz/jacq-cz-repository/branch/main/graph/badge.svg?token=YOUR_TOKEN)](https://codecov.io/gh/biodiversity-cz/jacq-cz-repository)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fbiodiversity-cz%2Fjacq-cz-repository.svg?type=small)](https://app.fossa.com/projects/git%2Bgithub.com%2Fbiodiversity-cz%2Fjacq-cz-repository?ref=badge_small)
+[![CSFixer](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/phpfixer.yml/badge.svg)](https://github.com/biodiversity-cz/jacq-cz-repository/actions/workflows/phpfixer.yml/badge.svg)
 
 [//]: # (![PHPStan]&#40;https://img.shields.io/badge/style-level%207-brightgreen.svg?&label=phpstan&#41;)
 

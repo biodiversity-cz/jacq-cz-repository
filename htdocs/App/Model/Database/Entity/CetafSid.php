@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -6,245 +8,261 @@ use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
 use App\Model\Database\Repository\CetafSidRepository;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
 #[Entity(repositoryClass: CetafSidRepository::class)]
 #[Table(name: 'sid', schema: 'cetaf')]
 #[UniqueConstraint(
-    name: "uniq_herbarium_externalid",
-    columns: ["herbarium", "external_id_from_institution"])
-]
+    name: 'uniq_herbarium_externalid',
+    columns: ['herbarium', 'external_id_from_institution'])]
 
 class CetafSid
 {
-
     use TId;
     use TCreatedAt;
     use TLastEditAt;
 
     #[Column(options: ['comment' => 'e.g. GUID in case of Museion, something totally persistent and unique across institution, that will allow a redirect in the feature to the original data provider'])]
-    protected(set) string $externalIdFromInstitution;
+    public protected(set) string $externalIdFromInstitution;
 
     #[Column(options: ['comment' => 'specimens identificator that allows match the repository photos'])]
-    protected(set) string $barcode;
+    public protected(set) string $barcode;
 
     /**
      * CETAFSID:scientificNameCurrent
-     * dwc:scientificName
+     * dwc:scientificName.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $scientificName = null;
+    public protected(set) ?string $scientificName = null;
 
     /**
-     * dwc:identifiedBy
+     * dwc:identifiedBy.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $identifiedBy = null;
+    public protected(set) ?string $identifiedBy = null;
 
     /**
-     * dwc:dateIdentified
+     * dwc:dateIdentified.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $dateIdentified = null;
+    public protected(set) ?string $dateIdentified = null;
 
     /**
      * CETAFSID:family
-     * dwc:family
+     * dwc:family.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $family = null;
+    public protected(set) ?string $family = null;
 
     /**
      * CETAFSID:scientificNameOriginal
-     * dwc:previousIdentifications
+     * dwc:previousIdentifications.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $previousIdentifications = null;
+    public protected(set) ?string $previousIdentifications = null;
 
     /**
      * CETAFSID:collectorNumber
-     * dwc:fieldNumber
+     * dwc:fieldNumber.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $fieldNumber = null;
+    public protected(set) ?string $fieldNumber = null;
 
     /**
-     * dwc:locality
+     * dwc:locality.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $locality = null;
+    public protected(set) ?string $locality = null;
 
     /**
-     * dwc:verbatimElevation
+     * dwc:verbatimElevation.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $verbatimElevation = null;
+    public protected(set) ?string $verbatimElevation = null;
 
     /**
-     * CETAFSID:occurrenceRemarks
+     * CETAFSID:occurrenceRemarks.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $occurrenceRemarks = null;
+    public protected(set) ?string $occurrenceRemarks = null;
 
     /**
      * CETAFSID:collectorName
-     * dwc:recordedBy
+     * dwc:recordedBy.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $recordedBy = null;
+    public protected(set) ?string $recordedBy = null;
     /**
      * CETAFSID:latitude
-     * dwc:decimalLatitude
+     * dwc:decimalLatitude.
      */
-    #[Column(type: "decimal", precision: 10, scale: 7, nullable: true)]
-    protected(set) ?string $decimalLatitude = null;
+    #[Column(type: 'decimal', precision: 10, scale: 7, nullable: true)]
+    public protected(set) ?string $decimalLatitude = null;
     /**
      * CETAFSID:longitude
-     * dwc:decimalLongitude
+     * dwc:decimalLongitude.
      */
-    #[Column(type: "decimal", precision: 10, scale: 7, nullable: true)]
-    protected(set) ?string $decimalLongitude = null;
+    #[Column(type: 'decimal', precision: 10, scale: 7, nullable: true)]
+    public protected(set) ?string $decimalLongitude = null;
     /**
      * CETAFSID:isoCountry
-     * dwc:countryCode
+     * dwc:countryCode.
      */
     #[Column(length: 10, nullable: true)]
-    protected(set) ?string $countryCode = null;
+    public protected(set) ?string $countryCode = null;
     /**
      * CETAFSID:collectionDate
      * dwc:eventDate
-     * dc:created
+     * dc:created.
      */
     #[Column(nullable: true)]
-    protected(set) ?string $eventDate = null;
+    public protected(set) ?string $eventDate = null;
 
     #[ManyToOne(targetEntity: Herbaria::class)]
     #[JoinColumn(name: 'herbarium', referencedColumnName: 'id', nullable: false, options: ['comment' => 'source institution'])]
-    protected(set) Herbaria $herbarium;
+    public protected(set) Herbaria $herbarium;
 
     public function setExternalIdFromInstitution(string $externalIdFromInstitution): CetafSid
     {
         $this->externalIdFromInstitution = $externalIdFromInstitution;
+
         return $this;
     }
 
     public function setBarcode(string $barcode): CetafSid
     {
         $this->barcode = $barcode;
+
         return $this;
     }
 
     public function setScientificName(?string $scientificName): CetafSid
     {
         $this->scientificName = $scientificName;
+
         return $this;
     }
 
     public function setIdentifiedBy(?string $identifiedBy): CetafSid
     {
         $this->identifiedBy = $identifiedBy;
+
         return $this;
     }
 
     public function setDateIdentified(?string $dateIdentified): CetafSid
     {
         $this->dateIdentified = $dateIdentified;
+
         return $this;
     }
 
     public function setFamily(?string $family): CetafSid
     {
         $this->family = $family;
+
         return $this;
     }
 
     public function setPreviousIdentifications(?string $previousIdentifications): CetafSid
     {
         $this->previousIdentifications = $previousIdentifications;
+
         return $this;
     }
 
     public function setFieldNumber(?string $fieldNumber): CetafSid
     {
         $this->fieldNumber = $fieldNumber;
+
         return $this;
     }
 
     public function setLocality(?string $locality): CetafSid
     {
         $this->locality = $locality;
+
         return $this;
     }
 
     public function setVerbatimElevation(?string $verbatimElevation): CetafSid
     {
         $this->verbatimElevation = $verbatimElevation;
+
         return $this;
     }
 
     public function setOccurrenceRemarks(?string $occurrenceRemarks): CetafSid
     {
         $this->occurrenceRemarks = $occurrenceRemarks;
+
         return $this;
     }
 
     public function setRecordedBy(?string $recordedBy): CetafSid
     {
         $this->recordedBy = $recordedBy;
+
         return $this;
     }
 
     public function setDecimalLatitude(?string $decimalLatitude): CetafSid
     {
         $this->decimalLatitude = $decimalLatitude;
+
         return $this;
     }
 
     public function setDecimalLongitude(?string $decimalLongitude): CetafSid
     {
         $this->decimalLongitude = $decimalLongitude;
+
         return $this;
     }
 
     public function setCountryCode(?string $countryCode): CetafSid
     {
         $this->countryCode = $countryCode;
+
         return $this;
     }
 
     public function setEventDate(?string $eventDate): CetafSid
     {
         $this->eventDate = $eventDate;
+
         return $this;
     }
 
     public function setHerbarium(Herbaria $herbarium): CetafSid
     {
         $this->herbarium = $herbarium;
+
         return $this;
     }
 
     private function safeH($value): string
     {
-        return htmlspecialchars((string)$value, ENT_XML1);
+        return htmlspecialchars((string) $value, ENT_XML1);
     }
 
     private function xmlElement(string $tag, mixed $value): ?string
     {
-        if ($value === null || $value === '') {
+        if (null === $value || '' === $value) {
             return null; // element nebude vytvořen
         }
-        return "    <{$tag}>" . $this->safeH($value) . "</{$tag}>";
+
+        return "    <{$tag}>".$this->safeH($value)."</{$tag}>";
     }
 
     private function formatDateIso(string|\DateTimeImmutable|null $date): ?string
     {
-        if ($date === null) {
+        if (null === $date) {
             return null;
         }
 
@@ -256,6 +274,7 @@ class CetafSid
         // zkusíme vytvořit DateTime z řetězce
         try {
             $dt = new \DateTimeImmutable($date);
+
             return $dt->format('Y-m-d');
         } catch (\Exception $e) {
             // nelze parsovat, vrátíme null nebo původní string
@@ -263,9 +282,8 @@ class CetafSid
         }
     }
 
-
     /**
-     *  RDF/XML according to the CSPP (CETAF Specimen Preview Profile)
+     *  RDF/XML according to the CSPP (CETAF Specimen Preview Profile).
      */
     public function toRdfXml(string $uri): string
     {
@@ -274,11 +292,11 @@ class CetafSid
         $xml[] = '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dwc="http://rs.tdwg.org/dwc/terms/">';
         $xml[] = "  <rdf:Description rdf:about=\"{$uri}\">";
 
-// povinné
+        // povinné
         $xml[] = $this->xmlElement('dcterms:title', $this->scientificName);
         $xml[] = $this->xmlElement('dcterms:type', 'PreservedSpecimen');
 
-// volitelné
+        // volitelné
         $xml[] = $this->xmlElement('dcterms:publisher', $this->herbarium?->address);
         $xml[] = $this->xmlElement('dwc:scientificName', $this->scientificName);
         $xml[] = $this->xmlElement('dwc:family', $this->family);
@@ -286,26 +304,25 @@ class CetafSid
         $xml[] = $this->xmlElement('dwc:recordNumber', $this->fieldNumber);
         $xml[] = $this->xmlElement('dcterms:creator', $this->recordedBy);
 
-// koordináty
-        if ($this->decimalLatitude !== null && $this->decimalLongitude !== null) {
+        // koordináty
+        if (null !== $this->decimalLatitude && null !== $this->decimalLongitude) {
             $xml[] = "    <dwc:decimalLatitude>{$this->decimalLatitude}</dwc:decimalLatitude>";
             $xml[] = "    <dwc:decimalLongitude>{$this->decimalLongitude}</dwc:decimalLongitude>";
         }
 
         $xml[] = $this->xmlElement('dwc:countryCode', $this->countryCode);
 
-        if ($this->eventDate !== null) {
+        if (null !== $this->eventDate) {
             $isoDate = $this->formatDateIso($this->eventDate);
-            if ($isoDate !== null) {
+            if (null !== $isoDate) {
                 $xml[] = $this->xmlElement('dwc:eventDate', $isoDate);
             }
         }
 
-        $xml[] = "  </rdf:Description>";
-        $xml[] = "</rdf:RDF>";
+        $xml[] = '  </rdf:Description>';
+        $xml[] = '</rdf:RDF>';
 
-// odstraníme null řádky
+        // odstraníme null řádky
         return implode("\n", array_filter($xml));
-
     }
 }

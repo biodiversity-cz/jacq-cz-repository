@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -12,7 +14,6 @@ use League\Pipeline\StageInterface;
 
 class TransferJp2Stage extends BaseStage implements StageInterface
 {
-
     public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService, protected readonly AppConfiguration $appConfiguration, protected readonly S3Service $s3Service)
     {
         parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
@@ -22,6 +23,7 @@ class TransferJp2Stage extends BaseStage implements StageInterface
     {
         $this->item = $payload;
         $this->uploadJp2toRepository();
+
         return $payload;
     }
 
@@ -34,8 +36,7 @@ class TransferJp2Stage extends BaseStage implements StageInterface
                 $this->getIiifTempPath());
             $this->item->setJP2Filename($this->repositoryConfiguration->createS3Jp2Name($this->item));
         } catch (\Throwable $exception) {
-            throw new TransferStageException('jp2 upload error (' . $exception->getMessage() . ')');
+            throw new TransferStageException('jp2 upload error ('.$exception->getMessage().')');
         }
     }
-
 }

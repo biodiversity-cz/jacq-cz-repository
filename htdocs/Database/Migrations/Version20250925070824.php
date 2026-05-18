@@ -67,7 +67,6 @@ final class Version20250925070824 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN image_download_requests.referrer IS \'Referrer URL\'');
         $this->addSql('DROP TABLE front.image_download_log');
 
-
         $this->addSql('CREATE TABLE user_herbaria (user_id INT NOT NULL, herbaria_id INT NOT NULL, PRIMARY KEY (user_id, herbaria_id))');
         $this->addSql('CREATE INDEX idx_a052c6ba1f5637d3 ON user_herbaria (herbaria_id)');
         $this->addSql('CREATE INDEX idx_a052c6baa76ed395 ON user_herbaria (user_id)');

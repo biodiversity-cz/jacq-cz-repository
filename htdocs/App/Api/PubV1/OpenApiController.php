@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Api\PubV1;
 
@@ -12,27 +14,27 @@ use Psr\Http\Message\ResponseInterface;
 #[Apitte\Tag('OpenApi')]
 class OpenApiController extends BasePubV1Controller
 {
-	private ISchemaBuilder $schemaBuilder;
+    private ISchemaBuilder $schemaBuilder;
 
-	public function __construct(ISchemaBuilder $schemaBuilder)
-	{
-		$this->schemaBuilder = $schemaBuilder;
-	}
+    public function __construct(ISchemaBuilder $schemaBuilder)
+    {
+        $this->schemaBuilder = $schemaBuilder;
+    }
 
-	#[Apitte\OpenApi('summary: Get OpenAPI definition.')]
-	#[Apitte\Path('/meta')]
-	#[Apitte\Method('GET', 'OPTIONS')]
+    #[Apitte\OpenApi('summary: Get OpenAPI definition.')]
+    #[Apitte\Path('/meta')]
+    #[Apitte\Method('GET', 'OPTIONS')]
     #[Apitte\Response(description: 'Success', code: '200')]
-	public function meta(ApiRequest $request, ApiResponse $response): ResponseInterface
-	{
-	    if ($request->getMethod() === 'OPTIONS') {
-                return $response->withStatus(204); // No Content
-            }
-		return $response
-			->withAddedHeader('Access-Control-Allow-Origin', '*')
-			->writeJsonBody(
-				$this->schemaBuilder->build()->toArray()
-			);
-	}
+    public function meta(ApiRequest $request, ApiResponse $response): ResponseInterface
+    {
+        if ('OPTIONS' === $request->getMethod()) {
+            return $response->withStatus(204); // No Content
+        }
 
+        return $response
+            ->withAddedHeader('Access-Control-Allow-Origin', '*')
+            ->writeJsonBody(
+                $this->schemaBuilder->build()->toArray()
+            );
+    }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Security;
 
@@ -10,7 +12,6 @@ use Nette\Security\Passwords;
 
 final class UserAuthenticator implements Authenticator
 {
-
     public const string DEFAULT_PASSWORD = 'Trogoderma2024';
 
     public function __construct(private EntityManagerInterface $entityManager, private Passwords $passwords)
@@ -36,12 +37,10 @@ final class UserAuthenticator implements Authenticator
      */
     public function calculateHash(string $password = ''): string
     {
-        if ($password === '') {
+        if ('' === $password) {
             return $this->calculateHash(self::DEFAULT_PASSWORD);
         }
 
         return $this->passwords->hash($password);
     }
-
-
 }

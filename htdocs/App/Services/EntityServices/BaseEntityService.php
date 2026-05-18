@@ -1,15 +1,14 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
-use App\Model\Database\Repository\AbstractRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ObjectRepository;
 
 abstract class BaseEntityService
 {
-
     protected EntityRepository $repository;
 
     protected string $entityName;
@@ -41,7 +40,7 @@ abstract class BaseEntityService
         return $this->repository->find($id);
     }
 
-    public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset =null): array
+    public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
         return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
     }
@@ -50,5 +49,4 @@ abstract class BaseEntityService
     {
         return $this->repository;
     }
-
 }

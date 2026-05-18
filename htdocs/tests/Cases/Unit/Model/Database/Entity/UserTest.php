@@ -1,13 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
-use App\Model\Database\Entity\UserRole;
-use Tester\Assert;
-use App\Model\Database\Entity\User;
 use App\Model\Database\Entity\Herbaria;
+use App\Model\Database\Entity\User;
+use Tester\Assert;
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__.'/../../../../../bootstrap.php';
 
 test('User entity with TId, TCreatedAt and TLastEditAt traits', function (): void {
     $user = new User();
@@ -42,8 +43,6 @@ test('User entity with TId, TCreatedAt and TLastEditAt traits', function (): voi
 
     $user->setLastVisitedHerbarium($herbarium);
     Assert::same($herbarium, $user->lastVisitedHerbarium);
-
-
 
     // --- Test TId trait ---
     $refId = new \ReflectionProperty($user, 'id');

@@ -85,21 +85,21 @@ final class Version20250908131544 extends AbstractMigration
         $this->addSql('COMMENT ON FUNCTION databots.register_databot(TEXT, TEXT, INTEGER, databots.enum_databot_role)
 IS \'Register databot. Return TRUE if a databot is successfully registered and allowed to proceed, otherwise returns FALSE - that mean dependabot should stop and leave.\';');
 
-//        GRANT USAGE ON SCHEMA public TO databot;
-//        GRANT SELECT ON public.photos TO databot;
-//
-//        GRANT USAGE ON SCHEMA databots TO databot;
-//        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA databots TO databot;
-//        ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO databot;
-//
-//        GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA databots TO databot;
-//        ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO databot;
-//
-//        GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA databots TO databot;
-//        ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT EXECUTE ON FUNCTIONS TO databot;
-//
-//        GRANT USAGE ON TYPE databots.enum_databot_role TO databot;
-//        GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot;
+        //        GRANT USAGE ON SCHEMA public TO databot;
+        //        GRANT SELECT ON public.photos TO databot;
+        //
+        //        GRANT USAGE ON SCHEMA databots TO databot;
+        //        GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA databots TO databot;
+        //        ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO databot;
+        //
+        //        GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA databots TO databot;
+        //        ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO databot;
+        //
+        //        GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA databots TO databot;
+        //        ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT EXECUTE ON FUNCTIONS TO databot;
+        //
+        //        GRANT USAGE ON TYPE databots.enum_databot_role TO databot;
+        //        GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot;
         $this->addSql("
         DO $$
             BEGIN
@@ -113,44 +113,43 @@ IS \'Register databot. Return TRUE if a databot is successfully registered and a
             END
             $$;
         ");
-        $this->addSql("GRANT USAGE ON SCHEMA public TO databot");
-        $this->addSql("GRANT SELECT ON public.photos TO databot");
-        $this->addSql("GRANT SELECT ON public.photos_status TO databot");
+        $this->addSql('GRANT USAGE ON SCHEMA public TO databot');
+        $this->addSql('GRANT SELECT ON public.photos TO databot');
+        $this->addSql('GRANT SELECT ON public.photos_status TO databot');
 
         // schéma databots (plná práva)
-        $this->addSql("GRANT USAGE ON SCHEMA databots TO databot");
-        $this->addSql("GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA databots TO databot");
-        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO databot");
+        $this->addSql('GRANT USAGE ON SCHEMA databots TO databot');
+        $this->addSql('GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA databots TO databot');
+        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO databot');
 
-        $this->addSql("GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA databots TO databot");
-        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO databot");
+        $this->addSql('GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA databots TO databot');
+        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO databot');
 
-        $this->addSql("GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA databots TO databot");
-        $this->addSql("ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT EXECUTE ON FUNCTIONS TO databot");
+        $this->addSql('GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA databots TO databot');
+        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT EXECUTE ON FUNCTIONS TO databot');
 
         // přidání práv na typy (enumy atd.)
-        $this->addSql("GRANT USAGE ON TYPE databots.enum_databot_role TO databot");
-        $this->addSql("GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot");
-
+        $this->addSql('GRANT USAGE ON TYPE databots.enum_databot_role TO databot');
+        $this->addSql('GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql("REVOKE USAGE ON TYPE databots.enum_databot_role FROM databot");
-        $this->addSql("REVOKE USAGE ON TYPE databots.enum_databot_result_status FROM databot");
+        $this->addSql('REVOKE USAGE ON TYPE databots.enum_databot_role FROM databot');
+        $this->addSql('REVOKE USAGE ON TYPE databots.enum_databot_result_status FROM databot');
 
         // odebrání práv na funkce, sekvence, tabulky
-        $this->addSql("REVOKE EXECUTE ON ALL FUNCTIONS IN SCHEMA databots FROM databot");
-        $this->addSql("REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA databots FROM databot");
-        $this->addSql("REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA databots FROM databot");
-        $this->addSql("REVOKE CREATE ON SCHEMA databots FROM databot");
-        $this->addSql("REVOKE USAGE ON SCHEMA databots FROM databot");
+        $this->addSql('REVOKE EXECUTE ON ALL FUNCTIONS IN SCHEMA databots FROM databot');
+        $this->addSql('REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA databots FROM databot');
+        $this->addSql('REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA databots FROM databot');
+        $this->addSql('REVOKE CREATE ON SCHEMA databots FROM databot');
+        $this->addSql('REVOKE USAGE ON SCHEMA databots FROM databot');
 
-        $this->addSql("REVOKE SELECT ON ALL TABLES IN SCHEMA public FROM databot");
-        $this->addSql("REVOKE USAGE ON SCHEMA public FROM databot");
+        $this->addSql('REVOKE SELECT ON ALL TABLES IN SCHEMA public FROM databot');
+        $this->addSql('REVOKE USAGE ON SCHEMA public FROM databot');
 
-//        // odstranění uživatele
-//        $this->addSql("DROP ROLE databot");
+        //        // odstranění uživatele
+        //        $this->addSql("DROP ROLE databot");
 
         $this->addSql('ALTER TABLE databots.databot SET SCHEMA public;');
         $this->addSql('ALTER TABLE databots.databot_results SET SCHEMA public;');
@@ -158,6 +157,5 @@ IS \'Register databot. Return TRUE if a databot is successfully registered and a
         $this->addSql('ALTER TYPE databots.enum_databot_result_status SET SCHEMA public');
         $this->addSql('ALTER TYPE databots.enum_databot_role SET SCHEMA public');
         $this->addSql('DROP SCHEMA databots');
-
     }
 }

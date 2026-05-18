@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
@@ -7,7 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ExcludedDownloadLogService extends BaseEntityService
 {
-
     protected string $entityName = ExcludedDownloadLog::class;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -17,7 +18,7 @@ class ExcludedDownloadLogService extends BaseEntityService
 
     /**
      * Check if an IP address is excluded from logging
-     * Supports wildcard matching for partial IPs
+     * Supports wildcard matching for partial IPs.
      */
     public function isIpExcluded(string $ip): bool
     {
@@ -42,7 +43,7 @@ class ExcludedDownloadLogService extends BaseEntityService
     }
 
     /**
-     * Get all excluded IP addresses
+     * Get all excluded IP addresses.
      *
      * @return ExcludedDownloadLog[]
      */
@@ -52,7 +53,7 @@ class ExcludedDownloadLogService extends BaseEntityService
     }
 
     /**
-     * Add a new IP to the exclusion list
+     * Add a new IP to the exclusion list.
      */
     public function addExcludedIp(string $ip, string $description): ExcludedDownloadLog
     {
@@ -67,12 +68,12 @@ class ExcludedDownloadLogService extends BaseEntityService
     }
 
     /**
-     * Remove an IP from the exclusion list
+     * Remove an IP from the exclusion list.
      */
     public function removeExcludedIp(string $ip): void
     {
         $excludedIp = $this->findOneBy(['ip' => $ip]);
-        if ($excludedIp !== null) {
+        if (null !== $excludedIp) {
             $this->entityManager->remove($excludedIp);
             $this->entityManager->flush();
         }

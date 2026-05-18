@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Admin;
 
@@ -17,9 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateThumbs1280 extends Command
 {
-
-    protected const string TEMPNAME = DIRECTORY_SEPARATOR . 'thumb1280.tif';
-    protected const string TEMPNAME2 = DIRECTORY_SEPARATOR . 'thumb1280.png';
+    protected const string TEMPNAME = DIRECTORY_SEPARATOR.'thumb1280.tif';
+    protected const string TEMPNAME2 = DIRECTORY_SEPARATOR.'thumb1280.png';
 
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorService, protected readonly TempDir $tempDir, protected readonly ImagickService $imageService, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service, ?string $name = null)
     {
@@ -59,8 +60,9 @@ class CreateThumbs1280 extends Command
     {
         $startTime = microtime(true);
         foreach ($this->getListOfPhotos() as $photo) {
-            if ($this->s3Service->objectExists($this->repositoryConfiguration->getDatabotThumbsBucket($photo), $this->repositoryConfiguration->createS3DatabotThumbName($photo)))
+            if ($this->s3Service->objectExists($this->repositoryConfiguration->getDatabotThumbsBucket($photo), $this->repositoryConfiguration->createS3DatabotThumbName($photo))) {
                 continue;
+            }
 
             try {
                 $output->writeln("Processing photoId: {$photo->id}");
@@ -79,12 +81,10 @@ class CreateThumbs1280 extends Command
                 unlink($this->tempFile());
                 unlink($this->tempFile2());
             }
-
         }
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
-
 }

@@ -1,19 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Services;
 
 use App\Exceptions\S3Exception;
 use App\Services\S3Service;
-use ArrayIterator;
 use Aws\Result;
 use Aws\S3\S3Client;
-use DateTimeImmutable;
-use Iterator;
 use Mockery;
 use Tester\Assert;
 
-require __DIR__ . '/../../../bootstrap.php';
-
+require __DIR__.'/../../../bootstrap.php';
 
 function createS3Service(Mockery\MockInterface $mockS3Client): S3Service
 {
@@ -21,7 +19,7 @@ function createS3Service(Mockery\MockInterface $mockS3Client): S3Service
 }
 
 test('objectExists returns true/false based on S3Client', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
     $mock->shouldReceive('doesObjectExist')->with('bucket', 'key')->andReturn(true);
 
     $service = createS3Service($mock);
@@ -29,30 +27,29 @@ test('objectExists returns true/false based on S3Client', function (): void {
 });
 
 test('putFileIfNotExists throws if file exists', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
     $mock->shouldReceive('doesObjectExist')->with('bucket', 'key')->andReturn(true);
 
     $service = createS3Service($mock);
 
     Assert::exception(
-        fn() => $service->putFileIfNotExists('bucket', 'key', __FILE__, 'text/plain'),
+        fn () => $service->putFileIfNotExists('bucket', 'key', __FILE__, 'text/plain'),
         S3Exception::class,
         'file key already exists'
     );
 });
 
-
 foreach ([
-             'image/tiff' => 'putTiffIfNotExists',
-             'image/jp2' => 'putJp2IfNotExists',
-             'image/png' => 'putPngIfNotExists',
-         ] as $expectedContentType => $method) {
+    'image/tiff' => 'putTiffIfNotExists',
+    'image/jp2' => 'putJp2IfNotExists',
+    'image/png' => 'putPngIfNotExists',
+] as $expectedContentType => $method) {
     test("$method uploads with correct content type", function () use ($expectedContentType, $method): void {
-        $mock = Mockery::mock(S3Client::class);
+        $mock = \Mockery::mock(S3Client::class);
 
         $mock->shouldReceive('doesObjectExist')->once()->andReturn(false);
         $mock->shouldReceive('putObject')->once()
-            ->with(Mockery::on(fn($arg) => $arg['ContentType'] === $expectedContentType))
+            ->with(\Mockery::on(fn ($arg) => $arg['ContentType'] === $expectedContentType))
             ->andReturn(new Result(['ok' => true]));
         $mock->shouldReceive('headObject')->once()->andReturn(new Result(['ContentLength' => filesize(__FILE__)]));
 
@@ -62,13 +59,12 @@ foreach ([
     });
 }
 
-
 test('putFileIfNotExists uploads file and checks size success', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
 
     $mock->shouldReceive('doesObjectExist')->once()->with('bucket', 'key')->andReturn(false);
-    $mock->shouldReceive('putObject')->once()->with(Mockery::on(function ($arg) {
-        return $arg['Bucket'] === 'bucket' && $arg['Key'] === 'key' && $arg['ContentType'] === 'text/plain' && file_exists($arg['SourceFile']);
+    $mock->shouldReceive('putObject')->once()->with(\Mockery::on(function ($arg) {
+        return 'bucket' === $arg['Bucket'] && 'key' === $arg['Key'] && 'text/plain' === $arg['ContentType'] && file_exists($arg['SourceFile']);
     }))->andReturn(new Result(['foo' => 'bar']));
 
     $mock->shouldReceive('headObject')->once()->with(['Bucket' => 'bucket', 'Key' => 'key'])
@@ -81,7 +77,7 @@ test('putFileIfNotExists uploads file and checks size success', function (): voi
 });
 
 test('putFileIfNotExists uploads file but size mismatch throws and deletes', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
 
     $mock->shouldReceive('doesObjectExist')->once()->with('bucket', 'key')->andReturn(false);
     $mock->shouldReceive('putObject')->once()->andReturn(new Result(['foo' => 'bar']));
@@ -91,14 +87,14 @@ test('putFileIfNotExists uploads file but size mismatch throws and deletes', fun
     $service = createS3Service($mock);
 
     Assert::exception(
-        fn() => $service->putFileIfNotExists('bucket', 'key', __FILE__, 'text/plain'),
+        fn () => $service->putFileIfNotExists('bucket', 'key', __FILE__, 'text/plain'),
         S3Exception::class,
         'Uploaded file size mismatch for key'
     );
 });
 
 test('getObjectSize returns content length', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
     $mock->shouldReceive('headObject')->once()->with(['Bucket' => 'bucket', 'Key' => 'key'])
         ->andReturn(new Result(['ContentLength' => 1234]));
 
@@ -107,7 +103,7 @@ test('getObjectSize returns content length', function (): void {
 });
 
 test('headObject returns Result', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
     $result = new Result(['foo' => 'bar']);
     $mock->shouldReceive('headObject')->once()->andReturn($result);
 
@@ -116,7 +112,7 @@ test('headObject returns Result', function (): void {
 });
 
 test('getObjectOriginalTimestamp returns DateTimeImmutable or null', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
 
     // with metadata
     $mock->shouldReceive('headObject')->once()->andReturn(new Result([
@@ -124,7 +120,7 @@ test('getObjectOriginalTimestamp returns DateTimeImmutable or null', function ()
     ]));
     $service = createS3Service($mock);
     $dt = $service->getObjectOriginalTimestamp('bucket', 'key');
-    Assert::type(DateTimeImmutable::class, $dt);
+    Assert::type(\DateTimeImmutable::class, $dt);
     Assert::same('2023-08-05T12:34:56+00:00', $dt->format(DATE_ATOM));
 
     // without metadata
@@ -134,7 +130,7 @@ test('getObjectOriginalTimestamp returns DateTimeImmutable or null', function ()
 });
 
 test('deleteObject returns Result', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
     $result = new Result(['deleted' => true]);
     $mock->shouldReceive('deleteObject')->once()->andReturn($result);
 
@@ -142,9 +138,8 @@ test('deleteObject returns Result', function (): void {
     Assert::same($result, $service->deleteObject('bucket', 'key'));
 });
 
-
 test('getObject returns Result', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
     $result = new Result(['body' => 'data']);
     $mock->shouldReceive('getObject')->once()->andReturn($result);
 
@@ -153,11 +148,11 @@ test('getObject returns Result', function (): void {
 });
 
 test('listObjectsNamesOnly returns array of keys from S3 iterator', function (): void {
-    $mock = Mockery::mock(S3Client::class);
+    $mock = \Mockery::mock(S3Client::class);
     $mock->shouldReceive('getIterator')
         ->once()
         ->with('ListObjects', ['Bucket' => 'bucket'])
-        ->andReturn(new ArrayIterator([
+        ->andReturn(new \ArrayIterator([
             ['Key' => 'file1.txt'],
             ['Key' => 'file2.txt'],
         ]));
@@ -167,8 +162,8 @@ test('listObjectsNamesOnly returns array of keys from S3 iterator', function ():
 });
 
 test('listObjects returns an Iterator from S3Client', function (): void {
-    $mock = Mockery::mock(S3Client::class);
-    $iter = new ArrayIterator([
+    $mock = \Mockery::mock(S3Client::class);
+    $iter = new \ArrayIterator([
         ['Key' => 'a'],
         ['Key' => 'b'],
     ]);
@@ -179,8 +174,6 @@ test('listObjects returns an Iterator from S3Client', function (): void {
 
     $service = createS3Service($mock);
     $result = $service->listObjects('bucket');
-    Assert::type(Iterator::class, $result);
+    Assert::type(\Iterator::class, $result);
     Assert::same(['Key' => 'a'], $result->current());
 });
-
-

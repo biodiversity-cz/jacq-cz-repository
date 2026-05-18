@@ -10,12 +10,10 @@ use App\Model\Database\Entity\License;
 use Database\Base\FixtureBase;
 use Doctrine\Persistence\ObjectManager;
 
-
 class FixtureHerbaria extends FixtureBase
 {
-
     /**
-     * Load data fixtures with the passed ObjectManager
+     * Load data fixtures with the passed ObjectManager.
      */
     public function load(ObjectManager $manager): void
     {
@@ -52,10 +50,8 @@ class FixtureHerbaria extends FixtureBase
         $manager->flush();
     }
 
-
     public function getOrder(): int
     {
         return 10;
     }
-
 }

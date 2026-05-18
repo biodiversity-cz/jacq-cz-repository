@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a location with bounding box, name, geometry and related objects
+ * Represents a location with bounding box, name, geometry and related objects.
  */
 class Location implements XmlSerializable
 {
@@ -22,13 +22,10 @@ class Location implements XmlSerializable
         protected(set) ?string $name = null,
         protected(set) ?Geometry $geometry = null,
         protected(set) array $relatedObjects = [],
-        protected(set) ?RelationType $relationType = null
+        protected(set) ?RelationType $relationType = null,
     ) {
     }
 
-    /**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'location');
@@ -37,7 +34,7 @@ class Location implements XmlSerializable
         $this->appendChildIfNotNull($element, $this->getGeometry());
         $this->appendChildIfNotNull($element, $this->getRelationType(), 'relation_type');
 
-        if ($this->name !== null) {
+        if (null !== $this->name) {
             $nameElement = $this->createElement($document, 'name', $this->name);
             $element->appendChild($nameElement);
         }

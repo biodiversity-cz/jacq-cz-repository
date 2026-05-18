@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Scheduled;
 
@@ -15,11 +17,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PublishPhoto extends Command
 {
-
     public const int LIMIT = 4;
 
     /**
-     * Running as a CronJob - process images from curatorBucket to the repository waiting room, cleans expired Embargo
+     * Running as a CronJob - process images from curatorBucket to the repository waiting room, cleans expired Embargo.
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorFacade, ?string $name = null)
     {
@@ -35,26 +36,28 @@ class PublishPhoto extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
-        for ($i = 0; $i < self::LIMIT; $i++) {
+        for ($i = 0; $i < self::LIMIT; ++$i) {
             try {
                 $this->proceedPhoto($output);
             } catch (ImportStageException $e) {
-                $output->writeln("\n" . $e->getMessage());
+                $output->writeln("\n".$e->getMessage());
+
                 return Command::FAILURE;
             }
         }
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
 
     protected function proceedPhoto(OutputInterface $output): ?Photos
     {
-        $this->entityManager->getConnection()->beginTransaction(); //we are locking the selected row
+        $this->entityManager->getConnection()->beginTransaction(); // we are locking the selected row
         $photo = $this->getPhoto();
-        if ($photo === null) {
+        if (null === $photo) {
             $this->entityManager->getConnection()->rollBack();
+
             return null;
         }
 
@@ -65,7 +68,7 @@ class PublishPhoto extends Command
             $this->curatorFacade->publishPhotoPipeline()->process($photo);
         } catch (\Throwable $e) {
             $this->entityManager->getConnection()->rollBack();
-            $output->write("\n ERROR: " . $e->getMessage() . "\n");
+            $output->write("\n ERROR: ".$e->getMessage()."\n");
             throw new ImportStageException($e->getMessage());
         }
 
@@ -90,6 +93,4 @@ class PublishPhoto extends Command
 
         return $photo;
     }
-
-
 }

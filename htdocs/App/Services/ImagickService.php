@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -6,13 +8,12 @@ use Imagick;
 
 class ImagickService
 {
-
     /**
-     * creates Imagick instance with the largest page of file activated
+     * creates Imagick instance with the largest page of file activated.
      */
-    public function createImagick(string $path): Imagick
+    public function createImagick(string $path): \Imagick
     {
-        $imagick = new Imagick($path);
+        $imagick = new \Imagick($path);
         $imagick->setIteratorIndex($this->getLargestImageIndex($imagick));
 
         return $imagick;
@@ -23,13 +24,13 @@ class ImagickService
      * this helps to find the largest
      * and returns index that Imagick need to be set to.
      */
-    public function getLargestImageIndex(Imagick $imagick): int
+    public function getLargestImageIndex(\Imagick $imagick): int
     {
         $numberOfImages = $imagick->getNumberImages();
         $maxWidth = 0;
         $maxHeight = 0;
         $largestImageIndex = null;
-        for ($i = 0; $i < $numberOfImages; $i++) {
+        for ($i = 0; $i < $numberOfImages; ++$i) {
             $imagick->setIteratorIndex($i);
             $width = $imagick->getImageWidth();
             $height = $imagick->getImageHeight();
@@ -44,7 +45,7 @@ class ImagickService
         return $largestImageIndex;
     }
 
-    public function resizeImage(Imagick $imagick, int $maxEdgeLength): Imagick
+    public function resizeImage(\Imagick $imagick, int $maxEdgeLength): \Imagick
     {
         $width = $imagick->getImageWidth();
         $height = $imagick->getImageHeight();
@@ -57,16 +58,16 @@ class ImagickService
                 $newWidth = intval(($maxEdgeLength / $height) * $width);
             }
 
-            $imagick->resizeImage($newWidth, $newHeight, Imagick::FILTER_GAUSSIAN, 1);
+            $imagick->resizeImage($newWidth, $newHeight, \Imagick::FILTER_GAUSSIAN, 1);
         }
 
         return $imagick;
     }
 
     /**
-     * Thumbs devoted for AI and Databots,s tored in S3
+     * Thumbs devoted for AI and Databots,s tored in S3.
      */
-    public function preparePngThumb(Imagick $imagick, int $maxEdgeLength = 640): Imagick
+    public function preparePngThumb(\Imagick $imagick, int $maxEdgeLength = 640): \Imagick
     {
         $imagick = $this->resizeImage($imagick, $maxEdgeLength);
         $imagick->setImageFormat('png');
@@ -74,13 +75,14 @@ class ImagickService
         $imagick->setImageCompressionQuality(90);
         $imagick->setImageDepth(8);
         $imagick->stripImage();
+
         return $imagick;
     }
 
     /**
      * @return mixed[]
      */
-    public function readIdentify(Imagick $imagick): array
+    public function readIdentify(\Imagick $imagick): array
     {
         $identify = $imagick->identifyImage(true);
         if (isset($identify['rawOutput'])) {
@@ -93,14 +95,14 @@ class ImagickService
     /**
      * @return mixed[]
      */
-    public function readExif(Imagick $imagick): array
+    public function readExif(\Imagick $imagick): array
     {
         return $imagick->getImageProperties();
     }
 
     /**
      * from https://www.php.net/manual/en/imagick.identifyimage.php
-     * $identify = $this->parseIdentify($identify['rawOutput']);
+     * $identify = $this->parseIdentify($identify['rawOutput']);.
      */
     protected function parseIdentify(string $info): mixed
     {
@@ -116,9 +118,9 @@ class ImagickService
         foreach ($lines as $line) {
             $trimLine = $this->sanitizeUtf8(trim($line));
 
-            if (empty($trimLine))
-
+            if (empty($trimLine)) {
                 continue;
+            }
 
             if ($raw) {
                 preg_match('/^[0-9]+:\s/', $trimLine, $match);
@@ -135,10 +137,9 @@ class ImagickService
                     $output['Image'][$raw][] = array_map([$this, 'sanitizeUtf8'], $matches);
 
                     continue;
-                } else {
-                    $raw = false;
-                    array_pop($keys);
                 }
+                $raw = false;
+                array_pop($keys);
             }
 
             preg_match('/^\s+/', $line, $match);
@@ -150,8 +151,7 @@ class ImagickService
             $_key = str_replace(' ', '', $_key);
             $_val = isset($parts[1]) ? $this->sanitizeUtf8($parts[1]) : [];
 
-
-            if ($_key === 'Image') {
+            if ('Image' === $_key) {
                 if (!empty($output)) {
                     $outputs[] = $output['Image'];
                     $output = [];
@@ -161,7 +161,7 @@ class ImagickService
             }
 
             if ($spaces < $currSpaces) {
-                for ($i = 0; $i < ($currSpaces - $spaces) / 2; $i++) {
+                for ($i = 0; $i < ($currSpaces - $spaces) / 2; ++$i) {
                     array_pop($keys);
                 }
             }
@@ -170,12 +170,12 @@ class ImagickService
                 $_key = rtrim($_key, ':');
                 $keys[] = $_key;
 
-                if ($_key === 'Histogram' || $_key === 'Colormap') {
+                if ('Histogram' === $_key || 'Colormap' === $_key) {
                     $raw = $_key;
                 }
             }
 
-// phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference
+            // phpcs:disable SlevomatCodingStandard.PHP.DisallowReference.DisallowedAssigningByReference
             $currSpaces = $spaces;
             $arr = &$output;
 
@@ -187,7 +187,7 @@ class ImagickService
                 $arr = &$arr[$key];
             }
 
-// phpcs:enable
+            // phpcs:enable
             if (!is_array($_val)) {
                 $arr[$_key] = $_val;
             }
@@ -205,16 +205,15 @@ class ImagickService
         }
 
         $converted = mb_convert_encoding($text, 'UTF-8', 'UTF-8, ISO-8859-2, WINDOWS-1252');
-        if ($converted !== false) {
+        if (false !== $converted) {
             return $converted;
         }
 
         $converted = iconv('ISO-8859-2', 'UTF-8//IGNORE', $text);
-        if ($converted !== false) {
+        if (false !== $converted) {
             return $converted;
         }
 
         return preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $text) ?: '';
     }
-
 }

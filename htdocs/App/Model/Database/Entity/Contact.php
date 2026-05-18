@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -13,24 +15,23 @@ use Doctrine\ORM\Mapping\Table;
 #[Table(name: 'contact', schema: 'front', options: ['comment' => 'People from herbaria, not necessary connected to repository users'])]
 class Contact
 {
-
     use TId;
 
     #[Column(nullable: false)]
-    protected(set) string $name;
+    public protected(set) string $name;
 
     #[Column(nullable: false)]
-    protected(set) string $surname;
+    public protected(set) string $surname;
 
     #[Column]
-    protected(set) string $description;
+    public protected(set) string $description;
 
     #[Column]
-    protected(set) string $email;
+    public protected(set) string $email;
 
     #[ManyToOne(targetEntity: Herbaria::class, inversedBy: 'contacts')]
     #[JoinColumn(name: 'herbarium_id', referencedColumnName: 'id', nullable: false)]
-    protected(set) Herbaria $herbarium;
+    public protected(set) Herbaria $herbarium;
 
     public function setName(string $name): Contact
     {
@@ -69,7 +70,6 @@ class Contact
 
     public function getFullname(): string
     {
-        return $this->name . ' ' . $this->surname;
+        return $this->name.' '.$this->surname;
     }
-
 }

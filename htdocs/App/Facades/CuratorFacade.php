@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Facades;
 
@@ -17,13 +19,11 @@ use App\Services\SpecimenIdService;
 use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Pipeline\Pipeline;
-use Nette\Neon\Exception;
 use Nette\Security\AuthenticationException;
 use Nette\Security\User;
 
 readonly class CuratorFacade
 {
-
     public function __construct(protected EntityManagerInterface $entityManager, protected S3Service $s3Service, protected StageFactory $stageFactory, protected RepositoryConfiguration $repositoryConfiguration, protected PhotoService $photoService, protected HerbariumService $herbariumService, protected SpecimenIdService $specimenIdService)
     {
     }
@@ -64,7 +64,7 @@ readonly class CuratorFacade
     }
 
     /**
-     * On curator request read curatorBucket and insert files basic info into the database
+     * On curator request read curatorBucket and insert files basic info into the database.
      *
      * @param mixed[] $formData
      */
@@ -98,7 +98,7 @@ readonly class CuratorFacade
      */
     protected function getEligibleCuratorBucketFiles(User $user): array
     {
-        return array_filter($this->getAvailableCuratorBucketFiles($user), fn($item) => $item->isEligibleToBeImported() === true);
+        return array_filter($this->getAvailableCuratorBucketFiles($user), fn ($item) => true === $item->isEligibleToBeImported());
     }
 
     /**
@@ -110,12 +110,12 @@ readonly class CuratorFacade
         $unprocessedPhotos = $this->photoService->findUnprocessedPhotos($user);
         foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium($user)->bucket) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {
-                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], false, false, null, null);
+                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], false, false, null, null);
             } else {
                 $entity = $unprocessedPhotos[$filename['Key']];
-                $alreadyWaiting = $entity->status->id === PhotosStatus::WAITING;
-                $hasControlError = $entity->status->id === PhotosStatus::IMAGE_CONTROL_ERROR;
-                $file = new FileInsideCuratorBucket($filename['Key'], (int)$filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->id, $entity->error?->message);
+                $alreadyWaiting = PhotosStatus::WAITING === $entity->status->id;
+                $hasControlError = PhotosStatus::IMAGE_CONTROL_ERROR === $entity->status->id;
+                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->id, $entity->error?->message);
             }
 
             $files[] = $file;
@@ -138,7 +138,7 @@ readonly class CuratorFacade
     public function importMultiplierPipeline(): Pipeline
     {
         return new Pipeline()
-            ->pipe($this->stageFactory->createThumbnailStage()) //to generate thumb into ImportError just for case of error..
+            ->pipe($this->stageFactory->createThumbnailStage()) // to generate thumb into ImportError just for case of error..
             ->pipe($this->stageFactory->createDuplicityStage())
             ->pipe($this->stageFactory->createTransferStage());
     }
@@ -169,7 +169,6 @@ readonly class CuratorFacade
     {
         $newItems = [];
         foreach ($originalPhoto->multiplier->barcodes as $barcode) {
-
             $copy = new Photos();
             $copy->addImportError();
             $copy->setOriginalFilename($originalPhoto->originalFilename)
@@ -214,6 +213,7 @@ readonly class CuratorFacade
                 $orphaned[] = $photo;
             }
         }
+
         return $orphaned;
     }
 
@@ -271,7 +271,7 @@ readonly class CuratorFacade
         } catch (\Throwable $e) {
             $this->entityManager->rollback();
 
-            throw new ServiceException('Error in photo delete: ' . $e->getMessage(), previous: $e);
+            throw new ServiceException('Error in photo delete: '.$e->getMessage(), previous: $e);
         }
 
         return $this;
@@ -305,13 +305,12 @@ readonly class CuratorFacade
                 throw new ServiceException('This photo cannot be edited.');
             }
 
-
             $this->entityManager->flush();
             $this->entityManager->commit();
         } catch (\Throwable $e) {
             $this->entityManager->rollback();
 
-            throw new ServiceException('Error in photo delete: ' . $e->getMessage());
+            throw new ServiceException('Error in photo delete: '.$e->getMessage());
         }
 
         return $this;
@@ -336,7 +335,7 @@ readonly class CuratorFacade
                 ->setLockMode(LockMode::PESSIMISTIC_WRITE)
                 ->getSingleResult();
 
-            if ($lockedEntity->status->id == PhotosStatus::EMBARGO) {
+            if (PhotosStatus::EMBARGO == $lockedEntity->status->id) {
                 $lockedEntity
                     ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::SPECIMEN_CONTROL_OK))
                     ->dropEmbargoTimeout()
@@ -345,29 +344,28 @@ readonly class CuratorFacade
                 throw new ServiceException('This photo cannot be edited.');
             }
 
-
             $this->entityManager->flush();
             $this->entityManager->commit();
         } catch (\Throwable $e) {
             $this->entityManager->rollback();
 
-            throw new ServiceException('Error in photo delete: ' . $e->getMessage());
+            throw new ServiceException('Error in photo delete: '.$e->getMessage());
         }
 
         return $this;
     }
 
-
     public function deleteJustNotimportedFile(User $user, string $filename): CuratorFacade
     {
         $this->s3Service->deleteObject($this->herbariumService->getCurrentUserHerbarium($user)->bucket, $filename);
+
         return $this;
     }
 
     public function reimportPhoto(User $user, Photos $photo, ?string $manualSpecimenId = null): CuratorFacade
     {
         if ($this->herbariumService->getCurrentUserHerbarium($user) === $photo->herbarium) {
-            if ($photo->error !== null) {
+            if (null !== $photo->error) {
                 $this->entityManager->remove($photo->error);
                 $photo->removeImportError();
                 $photo
@@ -375,6 +373,7 @@ readonly class CuratorFacade
                     ->setSpecimenId($manualSpecimenId)
                     ->setStatus($this->photoService->getWaitingStatus());
                 $this->entityManager->flush();
+
                 return $this;
             }
         }
@@ -398,18 +397,19 @@ readonly class CuratorFacade
         $query->setParameter('oldStatus', PhotosStatus::EMBARGO);
 
         $query->execute();
+
         return $this;
     }
 
     /**
      * Mark all publishable photos (status = SPECIMEN_CONTROL_OK) as WAITING_FOR_PUBLISHING
      * Uses the same criteria as getPublishablePhotosDatasource() for consistency
-     * Executes as a single bulk UPDATE query - no entity loading overhead
+     * Executes as a single bulk UPDATE query - no entity loading overhead.
      */
     public function markPublishable(User $user): self
     {
         $this->photoService->markAllPublishableAsWaitingForPublishing($user);
+
         return $this;
     }
-
 }

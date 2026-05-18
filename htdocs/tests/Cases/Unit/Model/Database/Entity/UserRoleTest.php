@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
 use App\Model\Database\Entity\UserRole;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__.'/../../../../../bootstrap.php';
 
 test('UserRole getters, setters and TId trait', function (): void {
     $role = new UserRole();
@@ -38,5 +40,4 @@ test('UserRole getters, setters and TId trait', function (): void {
     // Test klonování - id by se mělo nastavit na null
     $cloned = clone $role;
     Assert::null($refId->getValue($cloned));
-
 });

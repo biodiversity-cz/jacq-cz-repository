@@ -7,7 +7,7 @@ namespace App\Model\CCMM\Models;
 use App\Model\CCMM\Models\Base\IriLabelsBase;
 
 /**
- * Represents a download URL with IRI and labels
+ * Represents a download URL with IRI and labels.
  */
 class DownloadUrl extends IriLabelsBase
 {
@@ -15,5 +15,4 @@ class DownloadUrl extends IriLabelsBase
     {
         return 'download_url';
     }
-
 }

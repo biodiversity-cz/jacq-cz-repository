@@ -19,7 +19,7 @@ final class Version20260430065242 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-           $this->addSql('ALTER TABLE herbaria ADD strict_barcode_acronym_prefix BOOLEAN DEFAULT true NOT NULL');
+        $this->addSql('ALTER TABLE herbaria ADD strict_barcode_acronym_prefix BOOLEAN DEFAULT true NOT NULL');
         $this->addSql('COMMENT ON COLUMN herbaria.strict_barcode_acronym_prefix IS \'Require herbarium acronym on the start of the barcode to be accepted as valid\'');
     }
 

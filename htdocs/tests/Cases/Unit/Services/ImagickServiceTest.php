@@ -1,22 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Services;
 
-use App\Services\AppConfiguration;
 use App\Services\ImagickService;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Result;
-use Doctrine\ORM\EntityManagerInterface;
-use Mockery;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../bootstrap.php';
-//due Imagick..
+require_once __DIR__.'/../../../bootstrap.php';
+// due Imagick..
 $old = error_reporting();
 error_reporting(E_ALL & ~E_DEPRECATED);
 
 test('ImagickService::getLargestImageIndex selects largest image', function (): void {
-    $imagick = Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
+    $imagick = \Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
     $imagick->shouldReceive('getNumberImages')->andReturn(3);
 
     $imagick->shouldReceive('setIteratorIndex')->with(0);
@@ -31,7 +28,7 @@ test('ImagickService::getLargestImageIndex selects largest image', function (): 
 });
 
 test('ImagickService::resizeImage downsizes correctly for wide and tall images', function (): void {
-    $imagick = Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
+    $imagick = \Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
 
     // Wide image (šířka > výška)
     $imagick->shouldReceive('getImageWidth')->andReturn(2000);
@@ -45,7 +42,7 @@ test('ImagickService::resizeImage downsizes correctly for wide and tall images',
     Assert::same($imagick, $result);
 
     // Tall image (výška > šířka)
-    $imagickTall = Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
+    $imagickTall = \Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
     $imagickTall->shouldReceive('getImageWidth')->andReturn(800);
     $imagickTall->shouldReceive('getImageHeight')->andReturn(1600);
     $imagickTall->shouldReceive('resizeImage')
@@ -56,9 +53,8 @@ test('ImagickService::resizeImage downsizes correctly for wide and tall images',
     Assert::same($imagickTall, $resultTall);
 });
 
-
 test('ImagickService::preparePngThumb applies PNG settings', function (): void {
-    $imagick = Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
+    $imagick = \Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
 
     $imagick->shouldReceive('getImageWidth')->andReturn(100);
     $imagick->shouldReceive('getImageHeight')->andReturn(100);
@@ -77,8 +73,8 @@ test('ImagickService::preparePngThumb applies PNG settings', function (): void {
 });
 
 test('ImagickService::readIdentify parses rawOutput', function (): void {
-    $imagick = Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
-    $exampleIdentify = array (
+    $imagick = \Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
+    $exampleIdentify = [
         'imageName' => '/IMG_0558_01.jpg',
         'mimetype' => 'image/jpeg',
         'format' => 'JPEG (Joint Photographic Experts Group JFIF format)',
@@ -87,16 +83,14 @@ test('ImagickService::readIdentify parses rawOutput', function (): void {
         'type' => 'TrueColor',
         'compression' => 'JPEG',
         'fileSize' => '5.0602MiB',
-        'geometry' =>
-            array (
-                'width' => 3906,
-                'height' => 2602,
-            ),
-        'resolution' =>
-            array (
-                'x' => 0.0,
-                'y' => 0.0,
-            ),
+        'geometry' => [
+            'width' => 3906,
+            'height' => 2602,
+        ],
+        'resolution' => [
+            'x' => 0.0,
+            'y' => 0.0,
+        ],
         'signature' => 'cd60a81df1e180bba8dd0cf1b8622223d43e6234436aad9cea0ad7f10ece432a',
         'rawOutput' => 'Image:
   Filename: /IMG_0558_01.jpg
@@ -228,7 +222,7 @@ test('ImagickService::readIdentify parses rawOutput', function (): void {
   Elapsed time: 0:01.112
   Version: ImageMagick 6.9.12-98 Q16 x86_64 18038 https://legacy.imagemagick.org
 ',
-    );
+    ];
     $imagick->shouldReceive('identifyImage')->andReturn($exampleIdentify);
 
     $service = new ImagickService();
@@ -243,10 +237,10 @@ test('ImagickService::readIdentify parses rawOutput', function (): void {
 });
 
 test('ImagickService::readExif returns properties', function (): void {
-    $imagick = Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
+    $imagick = \Mockery::mock(\Imagick::class)->shouldIgnoreMissing();
     $imagick->shouldReceive('getImageProperties')->andReturn([
         'EXIF:Make' => 'Canon',
-        'EXIF:Model' => 'EOS'
+        'EXIF:Model' => 'EOS',
     ]);
 
     $service = new ImagickService();
@@ -259,7 +253,6 @@ test('ImagickService::sanitizeUtf8 cleans invalid UTF8', function (): void {
     $service = new ImagickService();
 
     $method = new \ReflectionMethod(ImagickService::class, 'sanitizeUtf8');
-
 
     $clean = $method->invoke($service, "valid\xFFtext");
 

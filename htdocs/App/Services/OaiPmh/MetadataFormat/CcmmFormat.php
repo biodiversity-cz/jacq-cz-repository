@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\OaiPmh\MetadataFormat;
 
@@ -16,11 +18,11 @@ use App\Model\Database\Entity\Photos;
 use Nette\Application\LinkGenerator;
 
 /**
- * CCMM metadata format
+ * CCMM metadata format.
  */
 final class CcmmFormat implements MetadataFormatInterface
 {
-    public function __construct(protected LinkGenerator $linkGenerator)
+    public function __construct(private LinkGenerator $linkGenerator)
     {
     }
 
@@ -60,7 +62,6 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataset->setRawFundingReference($this->addFunding($item));
 
         return $dataset->toXml($doc);
-
     }
 
     /**
@@ -70,37 +71,37 @@ final class CcmmFormat implements MetadataFormatInterface
     {
         $items = [];
 
-        //Databot thumbnails
+        // Databot thumbnails
         $dataService = new DistributionDataService();
         $documentation = new Documentation();
         $documentation
             ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-thumb');
         $dataService
             ->setIri($this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->id]))
-            ->addTitle('1280px thumbnail',Language::EN)
-            ->addDescription('Serves image as thumbnail suitable for AI processing with longer side equal to 1280px',Language::EN)
+            ->addTitle('1280px thumbnail', Language::EN)
+            ->addDescription('Serves image as thumbnail suitable for AI processing with longer side equal to 1280px', Language::EN)
             ->setDocumentation($documentation);
 
         $distribution = new Distribution();
         $distribution->setDistributionDataService($dataService);
         $items[] = $distribution;
 
-        //JPEG2000 fullsize
+        // JPEG2000 fullsize
         $dataService = new DistributionDataService();
         $documentation = new Documentation();
         $documentation
             ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-jp2');
         $dataService
             ->setIri($this->linkGenerator->link('Front:Repository:Jp2Image', [$photo->id]))
-            ->addTitle('JPEG 2000',Language::EN)
-            ->addDescription('Serves full size image in JPEG 2000 format.',Language::EN)
+            ->addTitle('JPEG 2000', Language::EN)
+            ->addDescription('Serves full size image in JPEG 2000 format.', Language::EN)
             ->setDocumentation($documentation);
 
         $distribution = new Distribution();
         $distribution->setDistributionDataService($dataService);
         $items[] = $distribution;
 
-        //TIFF Master
+        // TIFF Master
         $dataDownload = new DistributionDownloadableFile();
         $checksum = new Checksum()
             ->setChecksumValue($photo->archiveFileChecksum)
@@ -123,7 +124,7 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setByteSize($photo->archiveFileSize)
             ->setChecksum($checksum)
             ->setMediaType($mediaType)
-            ->addTitle('original data',Language::EN);
+            ->addTitle('original data', Language::EN);
 
         $distribution = new Distribution();
         $distribution->setDistributionDownloadableFile($dataDownload);
@@ -135,8 +136,7 @@ final class CcmmFormat implements MetadataFormatInterface
     private function addFunding(Photos $photo): ?string
     {
         $funding = $photo->funding;
-        if(empty($funding))
-        {
+        if (empty($funding)) {
             return null;
         }
 

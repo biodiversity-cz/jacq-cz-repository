@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Enums;
 
@@ -7,7 +9,7 @@ use Doctrine\DBAL\Types\Type;
 
 final class EnumDatabotStatusType extends Type
 {
-    public const NAME = 'databots.' . 'enum_databot_result_status';
+    public const NAME = 'databots.enum_databot_result_status';
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
@@ -33,5 +35,4 @@ final class EnumDatabotStatusType extends Type
     {
         return $value instanceof DatabotResultStatus ? $value->value : $value;
     }
-
 }

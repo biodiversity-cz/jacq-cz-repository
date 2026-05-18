@@ -1,24 +1,23 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Repository\HerbariaRepository;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__.'/../../../../../bootstrap.php';
 
 test('HerbariaRepository::findOneWithAcronym returns entity', function (): void {
     $acronym = 'PR';
 
-
     $em = \Mockery::mock(EntityManagerInterface::class)->makePartial();
     $em->shouldReceive('getConfiguration')->andReturn(\Mockery::mock(\Doctrine\ORM\Configuration::class)->makePartial());
-
 
     // Mock QueryBuilder
     $qb = \Mockery::mock(QueryBuilder::class, [$em])->makePartial();

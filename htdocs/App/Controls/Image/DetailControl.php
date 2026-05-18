@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Controls\Image;
 
@@ -12,10 +14,9 @@ use Nette\Security\User;
 
 class DetailControl extends Control
 {
-
     private Photos $photo;
 
-    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user,  protected DatabotsResultService $databotsService)
+    public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsResultService $databotsService)
     {
         $this->photo = $this->photoService->getPhoto($this->user, $this->id);
     }
@@ -29,18 +30,17 @@ class DetailControl extends Control
     {
         $template = $this->template;
         $template->photo = $this->photo;
-        $template->coreInfo = ['EXIF'=>$this->photo->exif, 'Identify' => $this->photo->identify];
+        $template->coreInfo = ['EXIF' => $this->photo->exif, 'Identify' => $this->photo->identify];
         $template->databots = $this->databotsService->databotResultsToArray($this->photo);
-//        $template->metric = $this->databotsService->getQualityEvaluation($this->photo);
+        //        $template->metric = $this->databotsService->getQualityEvaluation($this->photo);
         if ($forPublic) {
-            $template->setFile(__DIR__ . '/detail_front.latte');
+            $template->setFile(__DIR__.'/detail_front.latte');
         } else {
             if ($fullInfo) {
-                $template->setFile(__DIR__ . '/detail_adminFull.latte');
+                $template->setFile(__DIR__.'/detail_adminFull.latte');
             } else {
-                $template->setFile(__DIR__ . '/detail_admin.latte');
+                $template->setFile(__DIR__.'/detail_admin.latte');
             }
-
         }
 
         $template->render();
@@ -56,5 +56,4 @@ class DetailControl extends Control
 
         $this->redirect('this');
     }
-
 }

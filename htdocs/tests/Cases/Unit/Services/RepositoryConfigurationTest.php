@@ -1,17 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Services;
 
 use App\Bootstrap;
 use App\Exceptions\ConfigurationException;
-use App\Model\Database\Entity\Photos;
 use App\Services\RepositoryConfiguration;
 use App\Services\TempDir;
-use Mockery;
 use Tester\Assert;
 use Tests\Toolkit\PhotoTestFactory;
 
-require_once __DIR__ . '/../../../bootstrap.php';
+require_once __DIR__.'/../../../bootstrap.php';
 
 test('RepositoryConfiguration - basic config directives', function (): void {
     $service = createClassMock();
@@ -25,9 +25,9 @@ test('RepositoryConfiguration - basic config directives', function (): void {
     Assert::type('string', $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
     Assert::notEqual('', $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
 
-    Assert::notEqual( $service->getArchiveBucket(PhotoTestFactory::minimal()), $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
-    Assert::notEqual( $service->getArchiveBucket(PhotoTestFactory::minimal()), $service->getImageServerBucket(PhotoTestFactory::minimal()));
-    Assert::notEqual( $service->getImageServerBucket(PhotoTestFactory::minimal()), $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
+    Assert::notEqual($service->getArchiveBucket(PhotoTestFactory::minimal()), $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
+    Assert::notEqual($service->getArchiveBucket(PhotoTestFactory::minimal()), $service->getImageServerBucket(PhotoTestFactory::minimal()));
+    Assert::notEqual($service->getImageServerBucket(PhotoTestFactory::minimal()), $service->getDatabotThumbsBucket(PhotoTestFactory::minimal()));
 
     Assert::type('string', $service->getImageServerInfoUrl(PhotoTestFactory::minimal()));
 
@@ -47,11 +47,9 @@ test('RepositoryConfiguration - basic config directives', function (): void {
 
     Assert::type('int', $service->getPreviewQuality());
     Assert::true($service->getPreviewQuality() >= 0 && $service->getPreviewQuality() <= 100);
-
 });
 
 test('RepositoryConfiguration::createS3Jp2Name returns correct filename', function (): void {
-
     $service = createClassMock();
     $photo = PhotoTestFactory::minimal();
     $filename = $service->createS3Jp2Name($photo);
@@ -60,7 +58,6 @@ test('RepositoryConfiguration::createS3Jp2Name returns correct filename', functi
 });
 
 test('RepositoryConfiguration::createS3DatabotThumbName returns correct filename', function (): void {
-
     $service = createClassMock();
     $photo = PhotoTestFactory::minimal();
     $filename = $service->createS3DatabotThumbName($photo);
@@ -69,7 +66,6 @@ test('RepositoryConfiguration::createS3DatabotThumbName returns correct filename
 });
 
 test('RepositoryConfiguration::createS3TifName returns correct filename', function (): void {
-
     $service = createClassMock();
     $photo = PhotoTestFactory::minimal();
     $filename = $service->createS3TifName($photo);
@@ -78,12 +74,12 @@ test('RepositoryConfiguration::createS3TifName returns correct filename', functi
 });
 
 test('RepositoryConfiguration throws exception for missing key', function (): void {
-    $tempDir = Mockery::mock(TempDir::class);
+    $tempDir = \Mockery::mock(TempDir::class);
     $config = [];
     $service = new RepositoryConfiguration($config, $tempDir);
 
     Assert::exception(
-        fn() => $service->getRecentlyUsedArchiveBucket(),
+        fn () => $service->getRecentlyUsedArchiveBucket(),
         ConfigurationException::class,
         'Archive bucket prefix not set.'
     );
@@ -94,6 +90,6 @@ function createClassMock(): RepositoryConfiguration
     $container = Bootstrap::boot()->createContainer();
     $tempDir = $container->getByType(TempDir::class);
     $parameters = $container->getParameters();
-    return new RepositoryConfiguration($parameters["storage"], $tempDir);
-}
 
+    return new RepositoryConfiguration($parameters['storage'], $tempDir);
+}

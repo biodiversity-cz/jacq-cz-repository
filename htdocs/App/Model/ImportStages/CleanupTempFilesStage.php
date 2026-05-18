@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -9,7 +11,6 @@ use League\Pipeline\StageInterface;
 
 class CleanupTempFilesStage extends BaseStage implements StageInterface
 {
-
     public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService)
     {
         parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
@@ -25,7 +26,7 @@ class CleanupTempFilesStage extends BaseStage implements StageInterface
                 @unlink($path);
             }
         }
+
         return $payload;
     }
-
 }

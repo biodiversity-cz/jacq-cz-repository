@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents metadata identification information
+ * Represents metadata identification information.
  */
 class MetadataIdentification implements XmlSerializable
 {
@@ -24,18 +24,15 @@ class MetadataIdentification implements XmlSerializable
         public ?string $dateUpdated = null,
         public ?string $dateCreated = null,
         public ?ConformsToStandard $conformsToStandard = null,
-        public ?OriginalRepository $originalRepository = null
+        public ?OriginalRepository $originalRepository = null,
     ) {
     }
 
-    /**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'metadata_identification');
 
-        if ($this->getIri() !== null) {
+        if (null !== $this->getIri()) {
             $iriElement = $this->createElement($document, 'iri', $this->getIri());
             $element->appendChild($iriElement);
         }
@@ -47,12 +44,12 @@ class MetadataIdentification implements XmlSerializable
             $element->appendChild($qualifiedRelationElement);
         }
 
-        if ($this->getDateUpdated() !== null) {
+        if (null !== $this->getDateUpdated()) {
             $dateUpdatedElement = $this->createElement($document, 'date_updated', $this->getDateUpdated());
             $element->appendChild($dateUpdatedElement);
         }
 
-        if ($this->getDateCreated() !== null) {
+        if (null !== $this->getDateCreated()) {
             $dateCreatedElement = $this->createElement($document, 'date_created', $this->getDateCreated());
             $element->appendChild($dateCreatedElement);
         }

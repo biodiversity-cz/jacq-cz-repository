@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -12,7 +14,6 @@ use League\Pipeline\StageInterface;
 
 class CleanCuratorBucketStage extends BaseStage implements StageInterface
 {
-
     public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService, protected S3Service $s3Service, protected AppConfiguration $appConfiguration)
     {
         parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
@@ -31,7 +32,7 @@ class CleanCuratorBucketStage extends BaseStage implements StageInterface
         try {
             $this->s3Service->deleteObject($this->item->herbarium->bucket, $this->item->originalFilename);
         } catch (\Throwable $exception) {
-            throw new CleanupStageException('deleting tif from curatorBucket error (' . $exception->getMessage() . ')');
+            throw new CleanupStageException('deleting tif from curatorBucket error ('.$exception->getMessage().')');
         }
     }
 }

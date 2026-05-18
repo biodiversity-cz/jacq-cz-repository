@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
@@ -10,7 +12,6 @@ use Nette\Security\User;
 
 class PhotoService extends BaseEntityService
 {
-
     protected string $entityName = Photos::class;
 
     public function specimenHasPublicPhotos(Specimen $specimen): bool
@@ -44,7 +45,7 @@ class PhotoService extends BaseEntityService
     /**
      * Mark all publishable photos as WAITING_FOR_PUBLISHING in a single bulk operation
      * Reuses the same criteria as getPublishablePhotosDatasource() for consistency
-     * Executes as a single DQL UPDATE query - no entity loading overhead
+     * Executes as a single DQL UPDATE query - no entity loading overhead.
      */
     public function markAllPublishableAsWaitingForPublishing(User $user): int
     {
@@ -78,11 +79,12 @@ class PhotoService extends BaseEntityService
     public function getPhoto(User $user, int $id): ?Photos
     {
         if ($user->isLoggedIn()) {
-            $photoIncludingPrivate =  $this->repository->getPhoto($user, $id);
-            if ($photoIncludingPrivate!==null) {
+            $photoIncludingPrivate = $this->repository->getPhoto($user, $id);
+            if (null !== $photoIncludingPrivate) {
                 return $photoIncludingPrivate;
             }
         }
+
         return $this->repository->getPublicPhoto($id);
     }
 
@@ -131,7 +133,7 @@ class PhotoService extends BaseEntityService
     }
 
     /**
-     * how many records area waiting for processing by the import pipeline
+     * how many records area waiting for processing by the import pipeline.
      *
      * @return mixed[]
      */
@@ -156,10 +158,9 @@ class PhotoService extends BaseEntityService
     public function findOneByArk(string $ark): ?Photos
     {
         $qb = $this->repository->createQueryBuilder('p');
-        $qb ->andWhere('p.ark LIKE :ark')
+        $qb->andWhere('p.ark LIKE :ark')
             ->setParameter('ark', $ark.'%');
 
         return $qb->getQuery()->getResult();
     }
-
 }

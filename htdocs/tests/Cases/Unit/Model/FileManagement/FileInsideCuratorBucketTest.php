@@ -1,15 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
-use App\Model\FileManagement\File;
 use App\Model\FileManagement\FileInsideCuratorBucket;
 use Aws\Api\DateTimeResult;
-use Aws\Result;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../../bootstrap.php';
-
+require_once __DIR__.'/../../../../bootstrap.php';
 
 test('FileInsideCuratorBucket::getUploaded formats timestamp correctly', function (): void {
     $timestamp = new DateTimeResult('2025-08-28T12:00:00+00:00');

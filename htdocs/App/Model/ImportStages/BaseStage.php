@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -10,7 +12,6 @@ use League\Pipeline\StageInterface;
 
 abstract class BaseStage implements StageInterface
 {
-
     protected const string ARCHIVE_MASTER = 'archive';
     protected const string ARCHIVE_MASTER_SINGLEPAGE = 'archive-singlepage'; /* tif file where only the largest page is extracted */
     protected const string THUMB_FOR_DATABOT = 'databot';
@@ -25,32 +26,32 @@ abstract class BaseStage implements StageInterface
 
     protected function getDatabotThumbTempPath(): string
     {
-        return $this->tempDir->getPath(self::THUMB_FOR_DATABOT . '.png');
+        return $this->tempDir->getPath(self::THUMB_FOR_DATABOT.'.png');
     }
 
     protected function getZbarThumbTempPath(): string
     {
-        return $this->tempDir->getPath(self::ZBAR .  '.png');
+        return $this->tempDir->getPath(self::ZBAR.'.png');
     }
 
     protected function getIiifTempPath(): string
     {
-        return $this->tempDir->getPath(self::JP2_FOR_IIIF .  '.jp2');
+        return $this->tempDir->getPath(self::JP2_FOR_IIIF.'.jp2');
     }
 
     protected function getMasterTempPath(): string
     {
-        return $this->tempDir->getPath(self::ARCHIVE_MASTER . '.' . $this->getOriginalFileExtension($this->item));
+        return $this->tempDir->getPath(self::ARCHIVE_MASTER.'.'.$this->getOriginalFileExtension($this->item));
     }
 
     protected function getMasterSinglePageTempPath(): string
     {
-        return $this->tempDir->getPath(self::ARCHIVE_MASTER_SINGLEPAGE . '.tiff');
+        return $this->tempDir->getPath(self::ARCHIVE_MASTER_SINGLEPAGE.'.tiff');
     }
 
     protected function getDuplicateTempPath(Photos $photo): string
     {
-        return $this->tempDir->getPath(self::DUPLICATE . '.' . $this->getOriginalFileExtension($photo));
+        return $this->tempDir->getPath(self::DUPLICATE.'.'.$this->getOriginalFileExtension($photo));
     }
 
     protected function getOriginalFileExtension(Photos $photo): string

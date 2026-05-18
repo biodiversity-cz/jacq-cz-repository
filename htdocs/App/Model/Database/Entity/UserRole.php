@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -11,7 +13,6 @@ use Doctrine\ORM\Mapping\Table;
 #[Table(name: 'usersrole', options: ['comment' => 'List of available roles for users'])]
 class UserRole
 {
-
     use TId;
 
     public const int SUPER_ADMIN = 1;
@@ -19,21 +20,22 @@ class UserRole
     public const int USER = 3;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'name of the role'])]
-    protected(set) string $name;
+    public protected(set) string $name;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'short description'])]
-    protected(set) string $description;
+    public protected(set) string $description;
 
     public function setName(string $name): UserRole
     {
         $this->name = $name;
+
         return $this;
     }
 
     public function setDescription(string $description): UserRole
     {
         $this->description = $description;
+
         return $this;
     }
-
 }

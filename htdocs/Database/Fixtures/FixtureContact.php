@@ -9,16 +9,13 @@ use App\Model\Database\Entity\Herbaria;
 use Database\Base\FixtureBase;
 use Doctrine\Persistence\ObjectManager;
 
-
 class FixtureContact extends FixtureBase
 {
-
     /**
-     * Load data fixtures with the passed ObjectManager
+     * Load data fixtures with the passed ObjectManager.
      */
     public function load(ObjectManager $manager): void
     {
-
         $c1 = new Contact();
         $c1->setName('Patrik')
             ->setSurname('Mráz')
@@ -30,10 +27,8 @@ class FixtureContact extends FixtureBase
         $manager->flush();
     }
 
-
     public function getOrder(): int
     {
         return 50;
     }
-
 }

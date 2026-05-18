@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -15,7 +17,6 @@ use Nette\Application\LinkGenerator;
 
 readonly class StageFactory
 {
-
     public function __construct(protected S3Service $s3Service, protected TempDir $tempDir, protected EntityManagerInterface $entityManager, protected RepositoryConfiguration $repositoryConfiguration, protected ImagickService $imagickService, protected LinkGenerator $linkGenerator, protected PhotoService $photoService, protected AppConfiguration $appConfiguration, protected SpecimenIdService $specimenIdService, protected SolrClientService $solrClientService)
     {
     }
@@ -89,5 +90,4 @@ readonly class StageFactory
     {
         return new SolrStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->solrClientService);
     }
-
 }

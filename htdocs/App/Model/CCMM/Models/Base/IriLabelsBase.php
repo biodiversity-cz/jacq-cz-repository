@@ -9,16 +9,17 @@ use App\Model\CCMM\Traits\XmlSerializableTrait;
 use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a media type with IRI and label
+ * Represents a media type with IRI and label.
  */
 abstract class IriLabelsBase implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?string $iri = null;
-    protected(set) array $labels = [];
+    public protected(set) ?string $iri = null;
+    public protected(set) array $labels = [];
 
     abstract public static function elementName(): string;
+
     public function getIri(): ?string
     {
         return $this->iri;
@@ -32,11 +33,14 @@ abstract class IriLabelsBase implements XmlSerializable
     public function setIri(?string $iri): self
     {
         $this->iri = $iri;
+
         return $this;
     }
 
-    public function addLabel(string $label, Language $lang = Language::CS): self {
+    public function addLabel(string $label, Language $lang = Language::CS): self
+    {
         $this->labels[$lang->value] = $label;
+
         return $this;
     }
 
@@ -44,7 +48,7 @@ abstract class IriLabelsBase implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? static::elementName());
 
-        if ($this->getIri() !== null) {
+        if (null !== $this->getIri()) {
             $iriElement = $this->createElement($document, 'iri', $this->getIri());
             $element->appendChild($iriElement);
         }

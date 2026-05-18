@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -19,53 +21,52 @@ use Doctrine\ORM\Mapping\Table;
 #[Table(name: 'users', options: ['comment' => 'Repository users'])]
 class User
 {
-
     use TId;
     use TCreatedAt;
     use TLastEditAt;
 
     #[Column(unique: true, nullable: false)]
-    protected(set) string $username;
+    public protected(set) string $username;
 
     #[Column(nullable: false)]
-    protected(set) string $password;
+    public protected(set) string $password;
 
     #[Column(nullable: false)]
-    protected(set) string $name;
+    public protected(set) string $name;
 
     #[Column(nullable: false)]
-    protected(set) string $surname;
+    public protected(set) string $surname;
 
     #[Column(nullable: false, options: ['comment' => 'User email address'])]
-    protected(set) string $email;
+    public protected(set) string $email;
 
     #[Column(type: Types::TEXT, length: 5000, nullable: true, options: ['comment' => 'OpenID subject identifier'])]
-    protected(set) ?string $openidSubject = null;
+    public protected(set) ?string $openidSubject = null;
 
     #[Column(type: Types::TEXT, length: 5000, nullable: true, options: ['comment' => 'OpenID provider'])]
-    protected(set) ?string $openidProvider = null;
+    public protected(set) ?string $openidProvider = null;
 
     #[Column(type: Types::TEXT, length: 5000, nullable: true, options: ['comment' => 'OpenID ID token'])]
-    protected(set) ?string $openidIdToken = null;
+    public protected(set) ?string $openidIdToken = null;
 
     #[Column(type: Types::TEXT, length: 5000, nullable: true, options: ['comment' => 'OpenID refresh token'])]
-    protected(set) ?string $openidRefreshToken = null;
+    public protected(set) ?string $openidRefreshToken = null;
 
     #[ManyToOne(targetEntity: Herbaria::class)]
-    #[JoinColumn(name: 'last_visited_herbarium',   referencedColumnName: 'id', nullable: true, options: ['comment' => 'Last visited herbarium'])]
-    protected(set) ?Herbaria $lastVisitedHerbarium = null;
+    #[JoinColumn(name: 'last_visited_herbarium', referencedColumnName: 'id', nullable: true, options: ['comment' => 'Last visited herbarium'])]
+    public protected(set) ?Herbaria $lastVisitedHerbarium = null;
 
     #[Column(type: Types::BOOLEAN, nullable: false, options: ['comment' => 'Option to disable access for a specific user'])]
-    protected(set) bool $active = true;
+    public protected(set) bool $active = true;
 
     #[Column(type: Types::TEXT, length: 60000, nullable: true, options: ['comment' => 'additional information about user'])]
-    protected(set) ?string $comment;
+    public protected(set) ?string $comment;
 
     /**
      * @var UserHerbariumRole[]
      */
     #[OneToMany(targetEntity: UserHerbariumRole::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
-    protected(set) Collection $userHerbariumRoles;
+    public protected(set) Collection $userHerbariumRoles;
 
     public function __construct()
     {
@@ -85,6 +86,7 @@ class User
 
         return $this;
     }
+
     public function setEmail(string $email): User
     {
         $this->email = $email;
@@ -98,6 +100,7 @@ class User
 
         return $this;
     }
+
     public function setComment(?string $comment): User
     {
         $this->comment = $comment;
@@ -107,7 +110,7 @@ class User
 
     public function getFullname(): string
     {
-        return $this->name . ' ' . $this->surname;
+        return $this->name.' '.$this->surname;
     }
 
     public function setName(string $name): User
@@ -123,27 +126,35 @@ class User
 
         return $this;
     }
+
     public function setOpenidSubject(?string $openidSubject): User
     {
         $this->openidSubject = $openidSubject;
+
         return $this;
     }
+
     public function setOpenidProvider(?string $openidProvider): User
     {
         $this->openidProvider = $openidProvider;
+
         return $this;
     }
 
     public function setOpenidIdToken(?string $openidIdToken): User
     {
         $this->openidIdToken = $openidIdToken;
+
         return $this;
     }
+
     public function setOpenidRefreshToken(?string $openidRefreshToken): User
     {
         $this->openidRefreshToken = $openidRefreshToken;
+
         return $this;
     }
+
     public function addUserHerbariumRole(UserHerbariumRole $userHerbariumRole): User
     {
         if (!$this->userHerbariumRoles->contains($userHerbariumRole)) {
@@ -162,15 +173,15 @@ class User
     }
 
     /**
-     * Get all herbaria this user has access to
+     * Get all herbaria this user has access to.
      */
     public function getHerbaria(): Collection
     {
-        return $this->userHerbariumRoles->map(fn(UserHerbariumRole $uhr) => $uhr->herbarium);
+        return $this->userHerbariumRoles->map(fn (UserHerbariumRole $uhr) => $uhr->herbarium);
     }
 
     /**
-     * Get the role of this user in a specific herbarium
+     * Get the role of this user in a specific herbarium.
      */
     public function getRoleInHerbarium(Herbaria $herbarium): ?UserRole
     {
@@ -184,16 +195,17 @@ class User
     }
 
     /**
-     * Check if user has a specific role in a herbarium
+     * Check if user has a specific role in a herbarium.
      */
     public function hasRoleInHerbarium(Herbaria $herbarium, string $roleName): bool
     {
         $role = $this->getRoleInHerbarium($herbarium);
+
         return $role && $role->name === $roleName;
     }
 
     /**
-     * Assign a role to this user in a specific herbarium
+     * Assign a role to this user in a specific herbarium.
      */
     public function assignRoleToHerbarium(Herbaria $herbarium, UserRole $role): User
     {
@@ -201,6 +213,7 @@ class User
         foreach ($this->userHerbariumRoles as $userHerbariumRole) {
             if ($userHerbariumRole->herbarium->id === $herbarium->id) {
                 $userHerbariumRole->setRole($role);
+
                 return $this;
             }
         }
@@ -225,9 +238,10 @@ class User
 
     public function initializeCurrentHerbarium(): User
     {
-        if ($this->lastVisitedHerbarium === null && !empty($this->userHerbariumRoles)) {
+        if (null === $this->lastVisitedHerbarium && !empty($this->userHerbariumRoles)) {
             $this->setLastVisitedHerbarium($this->userHerbariumRoles[0]->herbarium);
         }
-        return  $this;
+
+        return $this;
     }
 }

@@ -4,50 +4,53 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a Well-Known Text (WKT) geometry representation
+ * Represents a Well-Known Text (WKT) geometry representation.
  */
 class Wkt implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?string $wktText = null;
-    protected(set) ?string $srsName = null;
+    public protected(set) ?string $wktText = null;
+    public protected(set) ?string $srsName = null;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-
     // Getters
-    public function getWktText(): ?string {
+    public function getWktText(): ?string
+    {
         return $this->WktText;
     }
 
-    public function getSrsName(): ?string {
+    public function getSrsName(): ?string
+    {
         return $this->SrsName;
     }
 
     // Setters
-    public function setWktText(?string $wktText): self {
+    public function setWktText(?string $wktText): self
+    {
         $this->WktText = $wktText;
+
         return $this;
     }
 
-    public function setSrsName(?string $srsName): self {
+    public function setSrsName(?string $srsName): self
+    {
         $this->SrsName = $srsName;
+
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $attributes = [];
-        if ($this->getSrsName() !== null) {
+        if (null !== $this->getSrsName()) {
             $attributes['srsName'] = $this->getSrsName();
         }
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Front\Ark;
 
@@ -8,7 +10,6 @@ use App\UI\Base\UnsecuredPresenter;
 
 final class ArkPresenter extends UnsecuredPresenter
 {
-
     /** @inject */
     public RepositoryConfiguration $repositoryConfiguration;
 
@@ -17,16 +18,15 @@ final class ArkPresenter extends UnsecuredPresenter
 
     /**
      * works only with value of ark, without protocol&naan prefix
-     * synergic with \App\Services\SpecimenIdService::generateArk
+     * synergic with \App\Services\SpecimenIdService::generateArk.
      */
     public function actionDefault(string $value): void
     {
         $settings = $this->repositoryConfiguration->getArkProperties();
 
-        if ($value === $settings['shoulder'] . $settings['repository']) {
+        if ($settings['shoulder'].$settings['repository'] === $value) {
             $this->redirect('Home:');
         }
-
 
         $parts = explode('/', $value);
         switch (count($parts)) {

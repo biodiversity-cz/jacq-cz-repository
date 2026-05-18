@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -12,23 +14,25 @@ use Doctrine\ORM\Mapping\Table;
 #[Table(name: 'excluded_download_log', schema: 'front', options: ['comment' => 'IP addresses excluded from download logging'])]
 class ExcludedDownloadLog
 {
-
     use TId;
 
     #[Column(type: Types::STRING, nullable: false, options: ['comment' => 'IP address to be excluded from logging'])]
-    protected(set) string $ip;
+    public protected(set) string $ip;
 
     #[Column(type: Types::STRING, nullable: false, options: ['comment' => 'Description of why this IP is excluded'])]
-    protected(set) string $description;
+    public protected(set) string $description;
 
     public function setIp(string $ip): ExcludedDownloadLog
     {
         $this->ip = $ip;
+
         return $this;
     }
+
     public function setDescription(string $description): ExcludedDownloadLog
     {
         $this->description = $description;
+
         return $this;
     }
 }

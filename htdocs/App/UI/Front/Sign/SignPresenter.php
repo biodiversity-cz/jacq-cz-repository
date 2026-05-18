@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Front\Sign;
 
@@ -11,9 +13,9 @@ use Nette\Application\AbortException;
 
 final class SignPresenter extends UnsecuredPresenter
 {
-
     /**
      * @persistent
+     *
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
      */
     public $backlink;
@@ -46,6 +48,7 @@ final class SignPresenter extends UnsecuredPresenter
                     // Redirect to provider logout if available
                     if ($logoutUrl) {
                         $this->redirectUrl($logoutUrl);
+
                         return;
                     }
                 }
@@ -66,15 +69,14 @@ final class SignPresenter extends UnsecuredPresenter
             $identity = $this->openIDAuthenticator->authenticate($config);
             $this->user->login($identity);
 
-            if ($this->backlink !== null) {
+            if (null !== $this->backlink) {
                 $this->restoreRequest($this->backlink);
             }
 
             $this->redirect(BasePresenter::DESTINATION_AFTER_SIGN_IN);
-        }catch (AbortException $e){
+        } catch (AbortException $e) {
             throw $e;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
     }
@@ -88,7 +90,7 @@ final class SignPresenter extends UnsecuredPresenter
     private function getOpenIDConfig(string $provider): array
     {
         $config = $this->appConfiguration->getOpenIDProviders($provider);
-        if (empty($config))  {
+        if (empty($config)) {
             throw new \InvalidArgumentException("OpenID provider '$provider' not configured");
         }
         $config['redirectUri'] = $this->link(':openid-callback');
@@ -96,5 +98,4 @@ final class SignPresenter extends UnsecuredPresenter
 
         return $config;
     }
-
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Services;
 
@@ -6,26 +8,27 @@ use App\Bootstrap;
 use App\Exceptions\SpecimenIdException;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Specimen\SpecimenFactory;
+use App\Services\EntityServices\HerbariumService;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use App\Services\SpecimenIdService;
-use App\Services\EntityServices\HerbariumService;
 use Mockery;
-use ReflectionMethod;
 use Tester\Assert;
 
-require __DIR__ . '/../../../bootstrap.php';
+require __DIR__.'/../../../bootstrap.php';
 
-function createService(Mockery\MockInterface $mockHerbariumService): SpecimenIdService {
+function createService(Mockery\MockInterface $mockHerbariumService): SpecimenIdService
+{
     $container = Bootstrap::boot()->createContainer();
     $mockRepoConfig = $container->getByType(RepositoryConfiguration::class);
     $mockSpecimenFactory = $container->getByType(SpecimenFactory::class);
     $mockPhotoService = $container->getByType(PhotoService::class);
+
     return new SpecimenIdService($mockRepoConfig, $mockHerbariumService, $mockSpecimenFactory, $mockPhotoService);
 }
 
 test('splitSpecimenId parses valid specimenId with different separators', function (): void {
-    $mockHerbariumService = Mockery::mock(HerbariumService::class);
+    $mockHerbariumService = \Mockery::mock(HerbariumService::class);
     $service = createService($mockHerbariumService);
 
     $examples = [
@@ -35,14 +38,14 @@ test('splitSpecimenId parses valid specimenId with different separators', functi
         'Herb–789',
     ];
     foreach ($examples as $id) {
-        $result = (new ReflectionMethod($service, 'splitSpecimenId'))->invoke($service, $id);
+        $result = (new \ReflectionMethod($service, 'splitSpecimenId'))->invoke($service, $id);
         Assert::same(strtoupper($result[SpecimenIdService::REGEX_HERBARIUM]), strtoupper(preg_replace('/[\s\-–_].*/', '', $id)));
         Assert::true(is_numeric($result[SpecimenIdService::REGEX_SPECIMEN]));
     }
 });
 
 test('splitSpecimenId throws on invalid specimenIds', function (): void {
-    $mockHerbariumService = Mockery::mock(HerbariumService::class);
+    $mockHerbariumService = \Mockery::mock(HerbariumService::class);
     $service = createService($mockHerbariumService);
 
     $invalids = [
@@ -55,15 +58,15 @@ test('splitSpecimenId throws on invalid specimenIds', function (): void {
 
     foreach ($invalids as $id) {
         Assert::exception(
-            fn() => (new ReflectionMethod($service, 'splitSpecimenId'))->invoke($service, $id),
+            fn () => (new \ReflectionMethod($service, 'splitSpecimenId'))->invoke($service, $id),
             SpecimenIdException::class,
-            'invalid name format: ' . $id
+            'invalid name format: '.$id
         );
     }
 });
 
 test('getInternalPartFromId returns internal part', function (): void {
-    $mockHerbariumService = Mockery::mock(HerbariumService::class);
+    $mockHerbariumService = \Mockery::mock(HerbariumService::class);
     $service = createService($mockHerbariumService);
 
     $id = 'XYZ 9876';
@@ -72,7 +75,7 @@ test('getInternalPartFromId returns internal part', function (): void {
 });
 
 test('getInternalPartFromId returns integer part 2nd', function (): void {
-    $mockHerbariumService = Mockery::mock(HerbariumService::class);
+    $mockHerbariumService = \Mockery::mock(HerbariumService::class);
     $service = createService($mockHerbariumService);
 
     $id = 'XYZ ac98/76';
@@ -81,8 +84,8 @@ test('getInternalPartFromId returns integer part 2nd', function (): void {
 });
 
 test('getHerbariumFromId returns Herbaria entity if found', function (): void {
-    $mockHerbariumService = Mockery::mock(HerbariumService::class);
-    $herbarium = Mockery::mock(Herbaria::class);
+    $mockHerbariumService = \Mockery::mock(HerbariumService::class);
+    $herbarium = \Mockery::mock(Herbaria::class);
 
     $mockHerbariumService->shouldReceive('findOneWithAcronym')->once()->with('PRC')->andReturn($herbarium);
 
@@ -93,16 +96,15 @@ test('getHerbariumFromId returns Herbaria entity if found', function (): void {
 });
 
 test('getHerbariumFromId throws if herbarium not found', function (): void {
-    $mockHerbariumService = Mockery::mock(HerbariumService::class);
+    $mockHerbariumService = \Mockery::mock(HerbariumService::class);
 
     $mockHerbariumService->shouldReceive('findOneWithAcronym')->once()->with('PRC')->andReturn(null);
 
     $service = createService($mockHerbariumService);
 
     Assert::exception(
-        fn() => $service->getHerbariumFromFullId('PRC 456'),
+        fn () => $service->getHerbariumFromFullId('PRC 456'),
         SpecimenIdException::class,
         'Unknown herbarium'
     );
 });
-

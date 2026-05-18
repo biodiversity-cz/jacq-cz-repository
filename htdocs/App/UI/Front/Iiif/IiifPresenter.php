@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Front\Iiif;
 
@@ -13,7 +15,6 @@ use App\UI\Base\UnsecuredPresenter;
 
 final class IiifPresenter extends UnsecuredPresenter
 {
-
     /** @inject */ public SpecimenFactory $specimenFactory;
 
     /** @inject */ public ManifestFactory $manifestFactory;
@@ -44,7 +45,7 @@ final class IiifPresenter extends UnsecuredPresenter
     public function actionAnnotationList(int $id): void
     {
         $photo = $this->photoService->getPublicPhoto($id);
-        if ($photo === null) {
+        if (null === $photo) {
             $this->error('The requested photo does not exists.');
         }
 
@@ -68,5 +69,4 @@ final class IiifPresenter extends UnsecuredPresenter
 
         return $specimen;
     }
-
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -12,7 +14,6 @@ use Doctrine\ORM\Mapping\Table;
 #[Table(name: 'photos_status', options: ['comment' => 'List of allowed photo statuses'])]
 class PhotosStatus
 {
-
     use TId;
 
     public const int WAITING = 1;
@@ -29,19 +30,17 @@ class PhotosStatus
     public const array WITH_CETAF_SPECIMEN = [self::SPECIMEN_CONTROL_OK, self::WAITING_FOR_PUBLISHING, self::EMBARGO, self::PUBLISHED];
     public const array WITHOUT_CETAF_SPECIMEN = [self::IMAGE_CONTROL_OK, self::IMAGE_CONTROL_ERROR, self::WAITING];
 
-
     #[Column(unique: true, nullable: false, options: ['comment' => 'name of the status'])]
-    protected(set) string $name;
+    public protected(set) string $name;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'short description'])]
-    protected(set) string $description;
+    public protected(set) string $description;
 
     #[Column(nullable: false, options: ['comment' => 'CSS color class for status visualisation', 'default' => 'primary'])]
-    protected(set) string $color;
+    public protected(set) string $color;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'how to order statuses when presented, not necessary the only succession that exists'])]
-    protected(set) int $succession;
-
+    public protected(set) int $succession;
 
     public function setColor(string $color): PhotosStatus
     {
@@ -53,19 +52,21 @@ class PhotosStatus
     public function setName(string $name): PhotosStatus
     {
         $this->name = $name;
+
         return $this;
     }
 
     public function setDescription(string $description): PhotosStatus
     {
         $this->description = $description;
+
         return $this;
     }
 
     public function setSuccession(int $succession): PhotosStatus
     {
         $this->succession = $succession;
+
         return $this;
     }
-
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Base\Error\Error5xx;
 
@@ -15,11 +17,9 @@ use Tracy\ILogger;
  */
 final class Error5xxPresenter implements IPresenter
 {
-
     public function __construct(
         private ILogger $logger,
-    )
-    {
+    ) {
     }
 
     public function run(Request $request): Response
@@ -31,9 +31,8 @@ final class Error5xxPresenter implements IPresenter
         // Display a generic error message to the user
         return new CallbackResponse(function (IRequest $httpRequest, IResponse $httpResponse): void {
             if (preg_match('#^text/html(?:;|$)#', (string) $httpResponse->getHeader('Content-Type'))) {
-                require __DIR__ . '/500.phtml';
+                require __DIR__.'/500.phtml';
             }
         });
     }
-
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -13,8 +15,6 @@ use Nette\Utils\Html;
 
 class DatabotsResultService
 {
-
-
     protected DatabotResultRepository $repository;
 
     public function __construct(protected EntityManagerInterface $entityManager)
@@ -22,12 +22,11 @@ class DatabotsResultService
         $this->repository = $this->entityManager->getRepository(DatabotResult::class);
     }
 
-
     public function getQualityEvaluation(Photos $photo): Html
     {
         $element = Html::el('span');
         $databotResult = $this->repository->findLatestByPhotoAndDatabotName($photo, DatabotRepository::IMAGE_QUALITY);
-        if ($databotResult?->status !== DatabotResultStatus::OK) {
+        if (DatabotResultStatus::OK !== $databotResult?->status) {
             return $element
                 ->addHtml(
                     Html::el('i')->class('fa-solid fa-question text-secondary')
@@ -57,8 +56,6 @@ class DatabotsResultService
                 Html::el('i')->class('fa-solid fa-star text-success')
             )
             ->addText(' good');
-
-
     }
 
     protected function isOkMetric(DatabotResult $databotResult, Photos $photo, string $name, int $thresholdPercentile, bool $higherIsBetter = true): bool
@@ -66,9 +63,9 @@ class DatabotsResultService
         $percentil = $this->repository->getPercentilOfMetric($databotResult->databot->id, $name, $photo);
         if ($higherIsBetter) {
             return $percentil >= $thresholdPercentile;
-        } else {
-            return $percentil < $thresholdPercentile;
         }
+
+        return $percentil < $thresholdPercentile;
     }
 
     public function databotResultsToArray(Photos $photo): array
@@ -79,34 +76,31 @@ class DatabotsResultService
         }
 
         foreach ($photo->databotResults as $databotRecord) {
-            $identikit = $databotRecord->databot->name . ' v' . $databotRecord->databot->version . ' - ' . $databotRecord->createdAt->format('j.n.Y H:i');
+            $identikit = $databotRecord->databot->name.' v'.$databotRecord->databot->version.' - '.$databotRecord->createdAt->format('j.n.Y H:i');
             $databot['name'] = $databotRecord->databot->name;
             $databot['version'] = $databotRecord->databot->version;
             $databot['computedAt'] = $databotRecord->createdAt->format('j.n.Y H:i');
             $databot['description'] = $databotRecord->databot->description;
-            if ($databotRecord->status->value == 'ok') {
-//                if(is_array($databotRecord->resultData)){
-//                    foreach ($databotRecord->resultData as $score) {
-//                        $databot['data'][$score['name']] = $score['value'];
-//                        if ($databotRecord->databot->name === "no-ref-image-metrics") {
-//                            $databot['percentile_all'][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo);
-//                            $databot['percentile_' . $photo->herbarium->acronym][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo, false);
-//                        }
-//                    }
-//                }else{
-                    $databot['data'] = $databotRecord->resultData;
-//                }
-
+            if ('ok' == $databotRecord->status->value) {
+                //                if(is_array($databotRecord->resultData)){
+                //                    foreach ($databotRecord->resultData as $score) {
+                //                        $databot['data'][$score['name']] = $score['value'];
+                //                        if ($databotRecord->databot->name === "no-ref-image-metrics") {
+                //                            $databot['percentile_all'][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo);
+                //                            $databot['percentile_' . $photo->herbarium->acronym][$score['name']] = $this->repository->getPercentilOfMetric($databotRecord->databot->id, $score['name'], $photo, false);
+                //                        }
+                //                    }
+                //                }else{
+                $databot['data'] = $databotRecord->resultData;
+            //                }
             } else {
                 $databot['message'] = $databotRecord->message;
             }
             $value[$identikit] = $databot;
         }
 
-
         return $value;
     }
-
 
     public function getStats(string $variableName, int $databotId): array
     {
@@ -146,7 +140,7 @@ class DatabotsResultService
             unset($h[0]);
             $values[$acronym] = array_values($h);
         }
+
         return $values;
     }
-
 }

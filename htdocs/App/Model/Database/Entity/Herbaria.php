@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -11,7 +13,6 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\ManyToMany;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\OrderBy;
 use Doctrine\ORM\Mapping\Table;
@@ -20,58 +21,57 @@ use Doctrine\ORM\Mapping\Table;
 #[Table(name: 'herbaria', options: ['comment' => 'List of involved herbaria'])]
 class Herbaria
 {
-
     use TId;
 
     #[ManyToOne(targetEntity: ExternalDatabase::class)]
     #[JoinColumn(name: 'external_database_id', referencedColumnName: 'id', nullable: false)]
-    protected(set) ExternalDatabase $externalDatabase;
+    public protected(set) ExternalDatabase $externalDatabase;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'Acronym of herbarium according to Index Herbariorum'])]
-    protected(set) string $acronym;
+    public protected(set) string $acronym;
 
     #[Column(unique: true, nullable: false, options: ['comment' => 'S3 bucket where are stored new images before imported to the repository'])]
-    protected(set) string $bucket;
+    public protected(set) string $bucket;
 
     #[Column(unique: false, nullable: false, options: ['comment' => 'RegEx for barcode on the specimen'])]
-    protected(set) string $regexBarcode;
+    public protected(set) string $regexBarcode;
 
     #[Column(unique: false, nullable: false, options: ['comment' => 'RegEx for image filenames'])]
-    protected(set) string $regexFilename;
+    public protected(set) string $regexFilename;
     #[Column(unique: false, nullable: false, options: ['comment' => 'Allow use filename when barcode is not present in the image', 'default' => false])]
-    protected(set) bool $fallbackFilename = false;
+    public protected(set) bool $fallbackFilename = false;
 
     #[Column(unique: false, nullable: false, options: ['comment' => 'When multiple valid barcodes are present, multiply image to all these IDs', 'default' => false])]
-    protected(set) bool $multipleBarcodeMultiplier = false;
+    public protected(set) bool $multipleBarcodeMultiplier = false;
 
     #[Column(unique: false, nullable: false, options: ['comment' => 'Require herbarium acronym on the start of the barcode to be accepted as valid', 'default' => true])]
-    protected(set) bool $strictBarcodeAcronymPrefix = true;
+    public protected(set) bool $strictBarcodeAcronymPrefix = true;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'logo URL'])]
-    protected(set) ?string $logo = null;
+    public protected(set) ?string $logo = null;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'full name of the herbarium'])]
-    protected(set) ?string $fullname = null;
+    public protected(set) ?string $fullname = null;
 
     #[Column(type: Types::TEXT, length: 5000, unique: false, nullable: true, options: ['comment' => 'address of the institution/herbarium'])]
-    protected(set) ?string $address = null;
+    public protected(set) ?string $address = null;
 
     #[OneToMany(targetEntity: Photos::class, mappedBy: 'herbarium')]
-    protected(set) Collection $photos;
+    public protected(set) Collection $photos;
 
     #[OneToMany(targetEntity: UserHerbariumRole::class, mappedBy: 'herbarium')]
-    protected(set) Collection $userHerbariumRoles;
+    public protected(set) Collection $userHerbariumRoles;
 
     #[OneToMany(targetEntity: Contact::class, mappedBy: 'herbarium')]
     #[OrderBy(['surname' => 'ASC'])]
-    protected(set) Collection $contacts;
+    public protected(set) Collection $contacts;
 
     #[ManyToOne(targetEntity: License::class)]
     #[JoinColumn(name: 'license_id', referencedColumnName: 'id', nullable: false)]
-    protected(set) License $license;
+    public protected(set) License $license;
 
     #[Column(type: Types::INTEGER, nullable: false, options: ['default' => 6, 'comment' => 'count of digits in HerbNr stored in JACQ, important for SID prediction and other "standard" representation of the HerbNr'])]
-    protected(set) int $digitsCount = 6;
+    public protected(set) int $digitsCount = 6;
 
     public function __construct()
     {
@@ -83,6 +83,7 @@ class Herbaria
     public function setExternalDatabase(ExternalDatabase $externalDatabase): Herbaria
     {
         $this->externalDatabase = $externalDatabase;
+
         return $this;
     }
 
@@ -114,7 +115,6 @@ class Herbaria
         return $this;
     }
 
-
     public function setRegexBarcode(string $regexBarcode): Herbaria
     {
         $this->regexBarcode = $regexBarcode;
@@ -132,6 +132,7 @@ class Herbaria
     public function setMultipleBarcodeMultiplier(bool $multipleBarcodeMultiplier): Herbaria
     {
         $this->multipleBarcodeMultiplier = $multipleBarcodeMultiplier;
+
         return $this;
     }
 
@@ -143,12 +144,14 @@ class Herbaria
     public function setBucket(string $bucket): Herbaria
     {
         $this->bucket = $bucket;
+
         return $this;
     }
 
     public function setFallbackFilename(bool $fallbackFilename): Herbaria
     {
         $this->fallbackFilename = $fallbackFilename;
+
         return $this;
     }
 
@@ -171,14 +174,14 @@ class Herbaria
     public function setLicense(License $license): Herbaria
     {
         $this->license = $license;
+
         return $this;
     }
 
     public function setDigitsCount(int $digitsCount): Herbaria
     {
         $this->digitsCount = $digitsCount;
+
         return $this;
     }
-
-
 }

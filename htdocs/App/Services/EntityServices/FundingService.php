@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
@@ -17,6 +19,7 @@ class FundingService extends BaseEntityService
         }
         $this->entityManager->persist($funding);
         $this->entityManager->flush();
+
         return $funding;
     }
 
@@ -24,6 +27,7 @@ class FundingService extends BaseEntityService
     {
         $this->entityManager->persist($funding);
         $this->entityManager->flush();
+
         return $funding;
     }
 
@@ -34,7 +38,7 @@ class FundingService extends BaseEntityService
         }
         $this->entityManager->remove($funding);
         $this->entityManager->flush();
+
         return $this;
     }
-
 }

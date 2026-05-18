@@ -5,121 +5,145 @@ declare(strict_types=1);
 namespace App\Model\CCMM\Models;
 
 use App\Model\CCMM\Enum\Language;
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a distribution downloadable file
+ * Represents a distribution downloadable file.
  */
 class DistributionDownloadableFile implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?string $iri = null;
-    protected(set) array $titles = [];
-    protected(set) ?AccessUrl $accessUrl = null;
-    protected(set) ?DownloadUrl $downloadUrl = null;
-    protected(set) ?ConformsToSchema $conformsToSchema = null;
-    protected(set) ?Format $format = null;
-    protected(set) ?MediaType $mediaType = null;
-    protected(set) ?int $byteSize = null;
-    protected(set) ?Checksum $checksum = null;
+    public protected(set) ?string $iri = null;
+    public protected(set) array $titles = [];
+    public protected(set) ?AccessUrl $accessUrl = null;
+    public protected(set) ?DownloadUrl $downloadUrl = null;
+    public protected(set) ?ConformsToSchema $conformsToSchema = null;
+    public protected(set) ?Format $format = null;
+    public protected(set) ?MediaType $mediaType = null;
+    public protected(set) ?int $byteSize = null;
+    public protected(set) ?Checksum $checksum = null;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-
     // Getters
-    public function getIri(): ?string {
+    public function getIri(): ?string
+    {
         return $this->iri;
     }
 
-    public function getTitles(): array {
+    public function getTitles(): array
+    {
         return $this->titles;
     }
 
-    public function getAccessUrl(): ?AccessUrl {
+    public function getAccessUrl(): ?AccessUrl
+    {
         return $this->accessUrl;
     }
 
-    public function getDownloadUrl(): ?DownloadUrl {
+    public function getDownloadUrl(): ?DownloadUrl
+    {
         return $this->downloadUrl;
     }
 
-    public function getConformsToSchema(): ?ConformsToSchema {
+    public function getConformsToSchema(): ?ConformsToSchema
+    {
         return $this->conformsToSchema;
     }
 
-    public function getFormat(): ?Format {
+    public function getFormat(): ?Format
+    {
         return $this->format;
     }
 
-    public function getMediaType(): ?MediaType {
+    public function getMediaType(): ?MediaType
+    {
         return $this->mediaType;
     }
 
-    public function getByteSize(): ?int {
+    public function getByteSize(): ?int
+    {
         return $this->byteSize;
     }
 
-    public function getChecksum(): ?Checksum {
+    public function getChecksum(): ?Checksum
+    {
         return $this->checksum;
     }
 
     // Setters
-    public function setIri(?string $iri): self {
+    public function setIri(?string $iri): self
+    {
         $this->iri = $iri;
+
         return $this;
     }
 
-    public function addTitle(string $title, Language $lang = Language::CS): self {
+    public function addTitle(string $title, Language $lang = Language::CS): self
+    {
         $this->titles[$lang->value] = $title;
+
         return $this;
     }
 
-    public function setAccessUrl(?AccessUrl $accessUrl): self {
+    public function setAccessUrl(?AccessUrl $accessUrl): self
+    {
         $this->accessUrl = $accessUrl;
+
         return $this;
     }
 
-    public function setDownloadUrl(?DownloadUrl $downloadUrl): self {
+    public function setDownloadUrl(?DownloadUrl $downloadUrl): self
+    {
         $this->downloadUrl = $downloadUrl;
+
         return $this;
     }
 
-    public function setConformsToSchema(?ConformsToSchema $conformsToSchema): self {
+    public function setConformsToSchema(?ConformsToSchema $conformsToSchema): self
+    {
         $this->conformsToSchema = $conformsToSchema;
+
         return $this;
     }
 
-    public function setFormat(?Format $format): self {
+    public function setFormat(?Format $format): self
+    {
         $this->format = $format;
+
         return $this;
     }
 
-    public function setMediaType(?MediaType $mediaType): self {
+    public function setMediaType(?MediaType $mediaType): self
+    {
         $this->mediaType = $mediaType;
+
         return $this;
     }
 
-    public function setByteSize(?int $byteSize): self {
+    public function setByteSize(?int $byteSize): self
+    {
         $this->byteSize = $byteSize;
+
         return $this;
     }
 
-    public function setChecksum(?Checksum $checksum): self {
+    public function setChecksum(?Checksum $checksum): self
+    {
         $this->checksum = $checksum;
+
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'distribution_downloadable_file');
 
-        if ($this->getIri() !== null) {
+        if (null !== $this->getIri()) {
             $iriElement = $this->createElement($document, 'iri', $this->getIri());
             $element->appendChild($iriElement);
         }
@@ -138,7 +162,7 @@ class DistributionDownloadableFile implements XmlSerializable
         $this->appendChildIfNotNull($element, $this->getFormat());
         $this->appendChildIfNotNull($element, $this->getMediaType(), 'media_type');
 
-        if ($this->getByteSize() !== null) {
+        if (null !== $this->getByteSize()) {
             $sizeElement = $this->createElement($document, 'byte_size', (string) $this->getByteSize());
             $element->appendChild($sizeElement);
         }

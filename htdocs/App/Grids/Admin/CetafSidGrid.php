@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Grids\Admin;
 
@@ -14,10 +16,9 @@ use Nette\Utils\Html;
 
 class CetafSidGrid extends Control
 {
+    private Datagrid $grid;
 
-    private DataGrid $grid;
-
-    public function __construct(protected readonly CetafSidService $cetafSidService, protected readonly BaseGridFactory $gridFactory,  private readonly User $user)
+    public function __construct(protected readonly CetafSidService $cetafSidService, protected readonly BaseGridFactory $gridFactory, private readonly User $user)
     {
         $this->grid = $this->gridFactory->createBaseDatagrid();
     }
@@ -30,7 +31,7 @@ class CetafSidGrid extends Control
     public function render(): void
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/cetagSidGrid.latte');
+        $template->setFile(__DIR__.'/cetagSidGrid.latte');
 
         $template->render();
     }
@@ -40,19 +41,18 @@ class CetafSidGrid extends Control
         $qb = $this->defaultDatasource($this->user);
         $iterableResult = $qb->getQuery()->toIterable();
 
-         $this->exportToXlsx($iterableResult);
+        $this->exportToXlsx($iterableResult);
     }
 
     public function createComponentGrid(): Datagrid
     {
         $this->grid->setDataSource($this->defaultDatasource($this->user))->setDefaultSort(['id' => 'DESC'])->setRememberState(false);
 
-
         $this->grid->addColumnNumber('id', 'repoID')
             ->setRenderer(function (CetafSid $item) {
                 $el = Html::el(null);
                 $url = $this->presenter->link(':Front:Cetaf:object', ['id' => $item->id]);
-                $el->addHtml('<a href="' . $url . '">' . $item->id . '</a>');
+                $el->addHtml('<a href="'.$url.'">'.$item->id.'</a>');
 
                 return $el;
             });
@@ -70,7 +70,7 @@ class CetafSidGrid extends Control
         $this->grid->addColumnText('dateIdentified', 'dateIdentified');
         $this->grid->addColumnText('scientificName', 'scientificName');
 
-        $this->grid->addColumnDateTime('lastEditAt', 'lastEdit at (FROM - TO)')->setRenderer(function (CetafSid $item){return $item->lastEdit->format('j. n. Y H:i');})->setFilterDateRange( 'lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
+        $this->grid->addColumnDateTime('lastEditAt', 'lastEdit at (FROM - TO)')->setRenderer(function (CetafSid $item) {return $item->lastEdit->format('j. n. Y H:i'); })->setFilterDateRange('lastEdit', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
 
         $this->grid->addExportCsvFiltered('Csv export (filtered)', 'cetafsid_imported.csv')
             ->setTitle('Csv export (filtered)')
@@ -87,7 +87,6 @@ class CetafSidGrid extends Control
             ->setClass('btn btn-xs btn-info')
             ->setIcon('file-excel');
 
-
         return $this->grid;
     }
 
@@ -99,13 +98,12 @@ class CetafSidGrid extends Control
 
     private function exportToXlsx(iterable $data): void
     {
-        $filename = tempnam(sys_get_temp_dir(), 'export_') . '.xlsx';
+        $filename = tempnam(sys_get_temp_dir(), 'export_').'.xlsx';
         $writer = new \XLSXWriter();
 
         if (!empty($data)) {
-
             $headers = ['id' => 'integer',
-                'processed at' => 'datetime'
+                'processed at' => 'datetime',
             ];
             $writer->writeSheetHeader('Export', $headers);
 
@@ -127,6 +125,4 @@ class CetafSidGrid extends Control
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ));
     }
-
-
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
@@ -8,8 +10,7 @@ use App\Model\Database\Entity\Photos;
 use App\Model\Database\Enums\DatabotResultStatus;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
-
+require_once __DIR__.'/../../../../../bootstrap.php';
 
 test('DatabotResult entity getters and setters', function (): void {
     $result = new DatabotResult();

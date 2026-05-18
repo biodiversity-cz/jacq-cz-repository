@@ -2,14 +2,13 @@
 
 namespace Tests\Cases\Integration;
 
-
 use App\Console\Scheduled\ProceedCuratorImage;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use Tester\Assert;
 
-require __DIR__ . '/../../bootstrap.integration.php';
+require __DIR__.'/../../bootstrap.integration.php';
 
 final class ValidImportMultiplierTest extends IntegrationTestCase
 {
@@ -50,9 +49,9 @@ final class ValidImportMultiplierTest extends IntegrationTestCase
         $waiting = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING]);
         Assert::count(2, $waiting, 'al images marked as waiting');
 
-        $rounds = ceil(count($this::SPECIMENS)/ProceedCuratorImage::LIMIT);
-        for ($i = 0; $i < $rounds; $i++) {
-            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true,], 'import images failed');
+        $rounds = ceil(count($this::SPECIMENS) / ProceedCuratorImage::LIMIT);
+        for ($i = 0; $i < $rounds; ++$i) {
+            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true], 'import images failed');
         }
 
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING, 'specimenId' => $this::SPECIMENS]);
@@ -63,7 +62,6 @@ final class ValidImportMultiplierTest extends IntegrationTestCase
         $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(0, $filesInCuratorBucket, 'curator bucket is empty again');
     }
-
 }
 
 new ValidImportMultiplierTest()->run();

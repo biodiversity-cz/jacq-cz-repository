@@ -33,8 +33,8 @@ final class Version20250724114035 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN databot_results.result_data IS \'Structured result data, e.g. metrics, checks\'');
         $this->addSql('ALTER TABLE databot_results ADD CONSTRAINT FK_CC2B43905646E484 FOREIGN KEY (databot_id) REFERENCES databot (id) ON DELETE CASCADE NOT DEFERRABLE');
         $this->addSql('ALTER TABLE databot_results ADD CONSTRAINT FK_CC2B43907E9E4C8C FOREIGN KEY (photo_id) REFERENCES photos (id) ON DELETE CASCADE NOT DEFERRABLE');
-        //sample call is SELECT register_databot('plagiary_bot', 'Detects duplicates', 3, 'scanner');
-        //-- => true nebo false
+        // sample call is SELECT register_databot('plagiary_bot', 'Detects duplicates', 3, 'scanner');
+        // -- => true nebo false
         $this->addSql('
         CREATE OR REPLACE FUNCTION register_databot(
     p_name TEXT,

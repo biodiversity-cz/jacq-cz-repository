@@ -1,20 +1,21 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Front\OaiPmh;
 
-use App\Services\OaiPmh\OaiPmhRecordProviderInterface;
-use App\Services\OaiPmh\MetadataFormat\MetadataFormatInterface;
-use App\Services\OaiPmh\MetadataFormat\DublinCoreFormat;
-use App\Services\OaiPmh\MetadataFormat\CcmmFormat;
-use App\Services\RepositoryConfiguration;
 use App\Services\AppConfiguration;
+use App\Services\OaiPmh\MetadataFormat\CcmmFormat;
+use App\Services\OaiPmh\MetadataFormat\DublinCoreFormat;
+use App\Services\OaiPmh\MetadataFormat\MetadataFormatInterface;
+use App\Services\OaiPmh\OaiPmhRecordProviderInterface;
+use App\Services\RepositoryConfiguration;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\AbortException;
 use Nette\Application\BadRequestException;
-use Nette\Http\Response;
 
 /**
- * OAI-PMH v2.0 presenter implementing all mandatory verbs
+ * OAI-PMH v2.0 presenter implementing all mandatory verbs.
  */
 final class OaiPmhPresenter extends UnsecuredPresenter
 {
@@ -50,7 +51,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $this->getHttpResponse()->setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         $this->getHttpResponse()->setHeader('Pragma', 'no-cache');
         $this->getHttpResponse()->setHeader('Expires', '0');
-         try {
+        try {
             $writer = match ($verb) {
                 'Identify' => $this->verbIdentify(),
                 'ListMetadataFormats' => $this->verbListMetadataFormats(),
@@ -59,29 +60,29 @@ final class OaiPmhPresenter extends UnsecuredPresenter
                 'ListRecords' => $this->verbListRecords(),
                 'GetRecord' => $this->verbGetRecord(),
                 null => throw new BadRequestException('Missing verb parameter', 400),
-                default => throw new BadRequestException('Illegal verb: ' . $verb, 400),
+                default => throw new BadRequestException('Illegal verb: '.$verb, 400),
             };
-             $writer->endElement(); // OAI-PMH
-             $writer->endDocument();
-             echo $writer->outputMemory();
-             $this->terminate();
+            $writer->endElement(); // OAI-PMH
+            $writer->endDocument();
+            echo $writer->outputMemory();
+            $this->terminate();
         } catch (BadRequestException $e) {
-//            $this->error($e->getMessage());
-             $writer = $this->createErrorResponse($e->getMessage(),
-             $this->mapHttpCodeToOaiError($e->getCode()));
-             $writer->endElement(); // OAI-PMH
-             $writer->endDocument();
-             echo $writer->outputMemory();
-             $this->terminate();
-         } catch (AbortException $e) {
-             throw $e;
+            //            $this->error($e->getMessage());
+            $writer = $this->createErrorResponse($e->getMessage(),
+                $this->mapHttpCodeToOaiError($e->getCode()));
+            $writer->endElement(); // OAI-PMH
+            $writer->endDocument();
+            echo $writer->outputMemory();
+            $this->terminate();
+        } catch (AbortException $e) {
+            throw $e;
         } catch (\Throwable $e) {
-//             throw $e;
-             $writer = $this->createErrorResponse('Internal repository error', 'badArgument');
-             $writer->endElement(); // OAI-PMH
-             $writer->endDocument();
-             echo $writer->outputMemory();
-             $this->terminate();
+            //             throw $e;
+            $writer = $this->createErrorResponse('Internal repository error', 'badArgument');
+            $writer->endElement(); // OAI-PMH
+            $writer->endDocument();
+            echo $writer->outputMemory();
+            $this->terminate();
         }
     }
 
@@ -90,14 +91,14 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $writer = $this->createXMLWriter('Identify');
 
         $writer->startElement('Identify');
-            $writer->writeElement('repositoryName', self::REPOSITORY_NAME);
-            $writer->writeElement('baseURL', $this->getBaseUrl());
-            $writer->writeElement('protocolVersion', self::OAI_PMH_VERSION);
-            $writer->writeElement('adminEmail', self::ADMIN_EMAIL);
-            $writer->writeElement('earliestDatestamp',
-                $this->recordProvider->getEarliestDatestamp()?->format('Y-m-d\TH:i:s\Z') ?? '1970-01-01T00:00:00Z');
-            $writer->writeElement('deletedRecord', 'no');
-            $writer->writeElement('granularity', 'YYYY-MM-DDThh:mm:ssZ');
+        $writer->writeElement('repositoryName', self::REPOSITORY_NAME);
+        $writer->writeElement('baseURL', $this->getBaseUrl());
+        $writer->writeElement('protocolVersion', self::OAI_PMH_VERSION);
+        $writer->writeElement('adminEmail', self::ADMIN_EMAIL);
+        $writer->writeElement('earliestDatestamp',
+            $this->recordProvider->getEarliestDatestamp()?->format('Y-m-d\TH:i:s\Z') ?? '1970-01-01T00:00:00Z');
+        $writer->writeElement('deletedRecord', 'no');
+        $writer->writeElement('granularity', 'YYYY-MM-DDThh:mm:ssZ');
         $writer->endElement();
 
         return $writer;
@@ -108,13 +109,13 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $writer = $this->createXMLWriter('ListMetadataFormats');
 
         $writer->startElement('ListMetadataFormats');
-            foreach ($this->metadataFormats as $format) {
-                $writer->startElement('metadataFormat');
-                    $writer->writeElement('metadataPrefix', $format->getMetadataPrefix());
-                    $writer->writeElement('schema', $format->getSchema());
-                    $writer->writeElement('metadataNamespace', $format->getMetadataNamespace());
-                $writer->endElement();
-            }
+        foreach ($this->metadataFormats as $format) {
+            $writer->startElement('metadataFormat');
+            $writer->writeElement('metadataPrefix', $format->getMetadataPrefix());
+            $writer->writeElement('schema', $format->getSchema());
+            $writer->writeElement('metadataNamespace', $format->getMetadataNamespace());
+            $writer->endElement();
+        }
         $writer->endElement();
 
         return $writer;
@@ -125,10 +126,10 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $writer = $this->createXMLWriter('ListMetadataFormats');
 
         $writer->startElement('ListSets');
-        foreach ($this->recordProvider->getAvailableSets() as  $setSpec => $setName) {
+        foreach ($this->recordProvider->getAvailableSets() as $setSpec => $setName) {
             $writer->startElement('set');
-                $writer->writeElement('setSpec', $setSpec);
-                $writer->writeElement('setName', $setName);
+            $writer->writeElement('setSpec', $setSpec);
+            $writer->writeElement('setName', $setName);
             $writer->endElement();
         }
         $writer->endElement();
@@ -179,23 +180,21 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $verb = $includeMetadata ? 'ListRecords' : 'ListIdentifiers';
         $writer = $this->createXMLWriter($verb);
 
-
         $writer->startElement($verb);
-
 
         $format = $this->metadataFormats[$metadataPrefix];
         $recordsCount = 0;
         $hasMore = false;
 
         foreach ($records as $photo) {
-            $recordsCount++;
+            ++$recordsCount;
 
             if ($recordsCount > $limit) {
                 $hasMore = true;
                 break;
             }
 
-             $this->writeRecordElement($writer, $photo, $format, $includeMetadata);
+            $this->writeRecordElement($writer, $photo, $format, $includeMetadata);
         }
         $writer->endElement();
 
@@ -205,11 +204,11 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             $newToken = $this->createResumptionToken($newOffset, $totalRecords, $metadataPrefix, $from, $until, $set);
 
             $writer->startElement('resumptionToken');
-                $writer->text($newToken);
-                $writer->writeAttribute('cursor', (string) $offset);
-                if ($totalRecords > 0) {
-                    $writer->writeAttribute('completeListSize', (string) $totalRecords);
-                }
+            $writer->text($newToken);
+            $writer->writeAttribute('cursor', (string) $offset);
+            if ($totalRecords > 0) {
+                $writer->writeAttribute('completeListSize', (string) $totalRecords);
+            }
             $writer->endElement();
         } elseif ($resumptionToken) {
             // Empty resumption token to indicate end of list
@@ -240,19 +239,18 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
         $writer = $this->createXMLWriter('GetRecord');
         $writer->startElement('GetRecord');
-            $format = $this->metadataFormats[$metadataPrefix];
-            $this->writeRecordElement($writer, $photo, $format, true);
+        $format = $this->metadataFormats[$metadataPrefix];
+        $this->writeRecordElement($writer, $photo, $format, true);
         $writer->endElement();
 
         return $writer;
     }
 
-
     private function writeRecordElement(
         \XMLWriter $writer,
         \App\Model\Database\Entity\Photos $photo,
         MetadataFormatInterface $format,
-        bool $includeMetadata
+        bool $includeMetadata,
     ): void {
         $writer->startElement('record');
 
@@ -289,14 +287,13 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $writer->endElement(); // record
     }
 
-
     private function createXMLWriter(string $verb): \XMLWriter
     {
         $writer = new \XMLWriter();
         $writer->openMemory();
-         $writer->startDocument('1.0', 'UTF-8');
+        $writer->startDocument('1.0', 'UTF-8');
 
-// root element s namespace
+        // root element s namespace
         $writer->startElementNS(null, 'OAI-PMH', 'http://www.openarchives.org/OAI/2.0/');
         $writer->writeAttributeNS(
             'xsi',
@@ -305,15 +302,15 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd'
         );
 
-// responseDate
+        // responseDate
         $writer->writeElement('responseDate', new \DateTimeImmutable()->format('Y-m-d\TH:i:s\Z'));
 
-// request element
+        // request element
         $writer->startElement('request');
         $writer->writeAttribute('verb', $verb);
         foreach ($this->getHttpRequest()->getQuery() as $param => $value) {
-            if ($param !== 'verb' && $value !== null && $value !== '') {
-                $writer->writeAttribute($param, (string)$value);
+            if ('verb' !== $param && null !== $value && '' !== $value) {
+                $writer->writeAttribute($param, (string) $value);
             }
         }
         $writer->text($this->getBaseUrl());
@@ -333,11 +330,11 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         return $writer;
     }
 
-
     private function getBaseUrl(): string
     {
         $request = $this->getHttpRequest();
-        return $request->getUrl()->getBaseUrl() . 'oai-pmh';
+
+        return $request->getUrl()->getBaseUrl().'oai-pmh';
     }
 
     private function parseDate(string $date): \DateTimeInterface
@@ -347,12 +344,12 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
         foreach ($formats as $format) {
             $parsed = \DateTimeImmutable::createFromFormat($format, $date);
-            if ($parsed !== false) {
+            if (false !== $parsed) {
                 return $parsed;
             }
         }
 
-        throw new BadRequestException('Invalid date format: ' . $date, 400);
+        throw new BadRequestException('Invalid date format: '.$date, 400);
     }
 
     private function parseResumptionToken(
@@ -360,11 +357,11 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         ?string $metadataPrefix,
         ?string $from,
         ?string $until,
-        ?string $set
+        ?string $set,
     ): array {
         if ($token) {
             $decoded = base64_decode($token, true);
-            if ($decoded === false) {
+            if (false === $decoded) {
                 throw new BadRequestException('Invalid resumption token', 400);
             }
 
@@ -392,7 +389,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         string $metadataPrefix,
         ?string $from,
         ?string $until,
-        ?string $set
+        ?string $set,
     ): string {
         $data = [
             'offset' => $offset,

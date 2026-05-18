@@ -1,9 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Services\EntityServices;
 
 use App\Bootstrap;
-use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Specimen\Specimen;
@@ -12,19 +13,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Mockery;
 use Nette\Security\SimpleIdentity;
 use Nette\Security\User;
 use Tester\Assert;
 use Tests\Toolkit\PhotoTestFactory;
 
-require_once __DIR__ . '/../../../../bootstrap.php';
-
+require_once __DIR__.'/../../../../bootstrap.php';
 
 test('PhotoService: specimenHasPublicPhotos true if repository returns some photos', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
-    $specimen = Mockery::mock(Specimen::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
+    $specimen = \Mockery::mock(Specimen::class);
 
     $em->shouldReceive('getRepository')->with(Photos::class)->andReturn($repository);
 
@@ -39,9 +38,9 @@ test('PhotoService: specimenHasPublicPhotos true if repository returns some phot
 });
 
 test('PhotoService: specimenHasPublicPhotos false if repository returns empty', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
-    $specimen = Mockery::mock(Specimen::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
+    $specimen = \Mockery::mock(Specimen::class);
 
     $em->shouldReceive('getRepository')->with(Photos::class)->andReturn($repository);
 
@@ -53,8 +52,8 @@ test('PhotoService: specimenHasPublicPhotos false if repository returns empty', 
 });
 
 test('PhotoService: getDefaultDatasource delegates to repository', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
 
     $container = Bootstrap::boot()->createContainer();
     $user = $container->getByType(User::class);
@@ -63,7 +62,7 @@ test('PhotoService: getDefaultDatasource delegates to repository', function (): 
 
     $service = new PhotoService($em);
 
-    $qb = Mockery::mock(QueryBuilder::class);
+    $qb = \Mockery::mock(QueryBuilder::class);
 
     $repository->shouldReceive('getDefaultDatasource')->with($user)->andReturn($qb);
 
@@ -71,12 +70,12 @@ test('PhotoService: getDefaultDatasource delegates to repository', function (): 
 });
 
 test('PhotoService: getAllPhotosOfSpecimen delegates to repository', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
     $container = Bootstrap::boot()->createContainer();
     $user = $container->getByType(User::class);
 
-    $specimen = Mockery::mock(Specimen::class);
+    $specimen = \Mockery::mock(Specimen::class);
 
     $em->shouldReceive('getRepository')->with(Photos::class)->andReturn($repository);
 
@@ -90,8 +89,8 @@ test('PhotoService: getAllPhotosOfSpecimen delegates to repository', function ()
 });
 
 test('PhotoService: getPhotoReference returns entity reference', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
     $photo = PhotoTestFactory::detailed();
 
     $em->shouldReceive('getRepository')->with(Photos::class)->andReturn($repository);
@@ -104,8 +103,8 @@ test('PhotoService: getPhotoReference returns entity reference', function (): vo
 });
 
 test('PhotoService: getPhoto returns private photo if logged in and found', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
 
     $container = Bootstrap::boot()->createContainer();
     $user = $container->getByType(User::class);
@@ -124,8 +123,8 @@ test('PhotoService: getPhoto returns private photo if logged in and found', func
 });
 
 test('PhotoService: getPhoto falls back to public if not logged in or private not found', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
     $container = Bootstrap::boot()->createContainer();
     $user = $container->getByType(User::class);
     $user->logout();
@@ -142,8 +141,8 @@ test('PhotoService: getPhoto falls back to public if not logged in or private no
 });
 
 test('PhotoService: getPublicPhoto delegates to repository', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
     $photo = PhotoTestFactory::detailed();
 
     $em->shouldReceive('getRepository')->with(Photos::class)->andReturn($repository);
@@ -156,9 +155,9 @@ test('PhotoService: getPublicPhoto delegates to repository', function (): void {
 });
 
 test('PhotoService: getWaitingStatus returns entity reference', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
-    $status = Mockery::mock(PhotosStatus::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
+    $status = \Mockery::mock(PhotosStatus::class);
 
     $em->shouldReceive('getRepository')->with(Photos::class)->andReturn($repository);
 
@@ -170,8 +169,8 @@ test('PhotoService: getWaitingStatus returns entity reference', function (): voi
 });
 
 test('PhotoService: getPhotoWithError delegates to repository', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
     $container = Bootstrap::boot()->createContainer();
     $user = $container->getByType(User::class);
     $photo = PhotoTestFactory::detailed();
@@ -186,11 +185,11 @@ test('PhotoService: getPhotoWithError delegates to repository', function (): voi
 });
 
 test('PhotoService: getPhotosWithError delegates to repository', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
     $container = Bootstrap::boot()->createContainer();
     $user = $container->getByType(User::class);
-    $photos = [   PhotoTestFactory::detailed()    ];
+    $photos = [PhotoTestFactory::detailed()];
 
     $em->shouldReceive('getRepository')->with(Photos::class)->andReturn($repository);
 
@@ -202,8 +201,8 @@ test('PhotoService: getPhotosWithError delegates to repository', function (): vo
 });
 
 test('PhotoService: findUnprocessedPhotos builds associative array by filename', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
     $container = Bootstrap::boot()->createContainer();
     $user = $container->getByType(User::class);
 
@@ -220,12 +219,11 @@ test('PhotoService: findUnprocessedPhotos builds associative array by filename',
     Assert::same(['specimen_123.tif' => $photo1], $result);
 });
 
-
 test('PhotoService: pendingPhotosCount builds query and returns result', function (): void {
-    $repository = Mockery::mock(EntityRepository::class);
-    $em = Mockery::mock(EntityManagerInterface::class);
-    $qb = Mockery::mock(QueryBuilder::class);
-    $query = Mockery::mock(Query::class);
+    $repository = \Mockery::mock(EntityRepository::class);
+    $em = \Mockery::mock(EntityManagerInterface::class);
+    $qb = \Mockery::mock(QueryBuilder::class);
+    $query = \Mockery::mock(Query::class);
 
     $em->shouldReceive('getRepository')->with(Photos::class)->andReturn($repository);
     $em->shouldReceive('createQueryBuilder')->andReturn($qb);
@@ -247,5 +245,5 @@ test('PhotoService: pendingPhotosCount builds query and returns result', functio
 });
 
 register_shutdown_function(function (): void {
-    Mockery::close();
+    \Mockery::close();
 });

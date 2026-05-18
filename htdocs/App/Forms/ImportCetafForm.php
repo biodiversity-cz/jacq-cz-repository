@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Forms;
 
@@ -10,7 +12,6 @@ use Nette\Application\UI\Form;
 
 class ImportCetafForm
 {
-
     public const int VALIDATION = 0;
     public const int IMPORT = 1;
 
@@ -22,10 +23,10 @@ class ImportCetafForm
     {
         try {
             $processedRowsCount = $this->service->validate($values);
-            $form->getPresenter()->flashMessage("Validation is ok, " . $processedRowsCount . " rows processed");
+            $form->getPresenter()->flashMessage('Validation is ok, '.$processedRowsCount.' rows processed');
             $form->getPresenter()->redirect(':import');
         } catch (ImportValuesException  $e) {
-            $form->getPresenter()->flashMessage($e->getMessage(),  'error');
+            $form->getPresenter()->flashMessage($e->getMessage(), 'error');
             $form->getPresenter()->redirect(':errors');
         } catch (\Exception  $e) {
             $form->addError($e->getMessage());
@@ -39,7 +40,7 @@ class ImportCetafForm
     {
         try {
             $this->service->import($values);
-            $form->getPresenter()->flashMessage("Specimens were successfully imported/updated");
+            $form->getPresenter()->flashMessage('Specimens were successfully imported/updated');
             $form->getPresenter()->redirect('Cetaf:');
         } catch (ImportValuesException  $e) {
             $form->getPresenter()->flashMessage($e->getMessage());
@@ -56,22 +57,21 @@ class ImportCetafForm
     {
         $form = $this->factory->forBackend();
 
-        $form->addUpload("table", "DwC XLSX file")
+        $form->addUpload('table', 'DwC XLSX file')
             ->addRule(Form::MaxFileSize, 'error.size', 1024 * 1024 * 11 / 10)
-            ->setRequired("missingFile")
-            ->setHtmlAttribute("class", "form-control-file");
+            ->setRequired('missingFile')
+            ->setHtmlAttribute('class', 'form-control-file');
 
-        if ($type === self::VALIDATION) {
-            $form->onSuccess[] = array($this, 'validationFormSucceeded');
-            $form->addSubmit('send', "Validate")
-                ->setHtmlAttribute("class", "btn btn-primary");
+        if (self::VALIDATION === $type) {
+            $form->onSuccess[] = [$this, 'validationFormSucceeded'];
+            $form->addSubmit('send', 'Validate')
+                ->setHtmlAttribute('class', 'btn btn-primary');
         } else {
-            $form->onSuccess[] = array($this, 'importFormSucceeded');
-            $form->addSubmit('send', "Import specimens")
-                ->setHtmlAttribute("class", "btn btn-primary");
+            $form->onSuccess[] = [$this, 'importFormSucceeded'];
+            $form->addSubmit('send', 'Import specimens')
+                ->setHtmlAttribute('class', 'btn btn-primary');
         }
 
         return $form;
     }
-
 }

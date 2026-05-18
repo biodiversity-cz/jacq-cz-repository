@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Admin;
 
@@ -15,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BatchDownload extends Command
 {
-
     /**
      * For development purpose, we may need to download multiple Archive Master files.
      *
@@ -49,14 +50,13 @@ class BatchDownload extends Command
     {
         $startTime = microtime(true);
         $photos = $this->getPhotos();
-        $output->writeln(count($photos) . ' files will be downloaded.');
+        $output->writeln(count($photos).' files will be downloaded.');
         foreach ($photos as $photo) {
-            $this->s3Service->getObject($this->repositoryConfiguration->getArchiveBucket($photo), $photo->archiveFilename, $this->tempDir->getPath('downloaded') . DIRECTORY_SEPARATOR . $photo->archiveFilename);
+            $this->s3Service->getObject($this->repositoryConfiguration->getArchiveBucket($photo), $photo->archiveFilename, $this->tempDir->getPath('downloaded').DIRECTORY_SEPARATOR.$photo->archiveFilename);
         }
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
-
 }

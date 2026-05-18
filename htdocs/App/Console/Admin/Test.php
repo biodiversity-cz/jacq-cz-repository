@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Admin;
 
@@ -14,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Test extends Command
 {
-
     public function __construct(protected readonly TempDir $tempDir, protected readonly EntityManagerInterface $entityManager, protected readonly RepositoryConfiguration $storageConfiguration, protected readonly S3Service $s3Service, protected readonly CuratorFacade $curatorService, protected readonly ImagickService $imageService, ?string $name = null)
     {
         parent::__construct($name);
@@ -35,23 +36,22 @@ class Test extends Command
         $imagick = $this->imageService->resizeImage($imagick, $limit);
 
         $imagick->modulateImage(100, 0, 100);
-//        $imagick->adaptiveThresholdImage(150, 150, 1);
+        //        $imagick->adaptiveThresholdImage(150, 150, 1);
         $imagick->setImageFormat('png');
         $imagick->setImageCompressionQuality(100);
         $imagick->writeImage($this->tempDir->getPath('output.png'));
-        $output->writeln(sprintf("\n Conversion time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Conversion time: %.2f sec", microtime(true) - $startTime));
 
         $outputZbar = [];
         $returnVar = 0;
-        $info = exec('zbarimg --quiet --raw ' . escapeshellarg($this->tempDir->getPath('output.png')), $outputZbar, $returnVar);
+        $info = exec('zbarimg --quiet --raw '.escapeshellarg($this->tempDir->getPath('output.png')), $outputZbar, $returnVar);
         var_dump($info);
         var_dump($returnVar);
 
         var_dump($outputZbar);
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
-
 }

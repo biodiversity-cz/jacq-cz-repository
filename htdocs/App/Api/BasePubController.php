@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Api;
 
@@ -9,5 +11,4 @@ use Apitte\Core\UI\Controller\IController;
 #[Apitte\Id('api-public')]
 abstract class BasePubController implements IController
 {
-
 }

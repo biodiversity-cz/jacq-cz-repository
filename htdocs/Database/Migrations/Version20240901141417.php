@@ -7,7 +7,6 @@ namespace Database\Migrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-
 final class Version20240901141417 extends AbstractMigration
 {
     public function getDescription(): string
@@ -17,7 +16,7 @@ final class Version20240901141417 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-         $this->addSql('CREATE TABLE users (id SERIAL NOT NULL, herbarium_id INT NOT NULL, role_id INT NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, surname VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, active BOOLEAN NOT NULL, comment TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, lastedit_timestamp TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE users (id SERIAL NOT NULL, herbarium_id INT NOT NULL, role_id INT NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, surname VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, active BOOLEAN NOT NULL, comment TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, lastedit_timestamp TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_1483A5E9F85E0677 ON users (username)');
         $this->addSql('CREATE INDEX IDX_1483A5E9DD127992 ON users (herbarium_id)');
         $this->addSql('CREATE INDEX IDX_1483A5E9D60322AC ON users (role_id)');

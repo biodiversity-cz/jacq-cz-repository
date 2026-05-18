@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Admin\Report;
 
@@ -11,15 +13,13 @@ use Nette\Application\Responses\TextResponse;
 
 final class ReportPresenter extends SecuredPresenter
 {
-
     /** @inject  */ public DatabotsResultService $databotsService;
     /** @inject  */ public EntityManagerInterface $entityManager;
 
     public function actionDatabotStatusRaw(): void
     {
-
         $path = '';
-        $url = rtrim($this->appConfiguration->getDatabotBasePath(), '/') . '/' . ltrim($path, '/');
+        $url = rtrim($this->appConfiguration->getDatabotBasePath(), '/').'/'.ltrim($path, '/');
         $context = stream_context_create([
             'http' => [
                 'timeout' => 5,
@@ -29,14 +29,14 @@ final class ReportPresenter extends SecuredPresenter
 
         $content = @file_get_contents($url, false, $context);
 
-        if ($content === false) {
+        if (false === $content) {
             $this->error("Unable fetch $url", 502);
         }
 
         $contentType = 'text/html; charset=UTF-8';
-        if (http_get_last_response_headers() !== null) {
+        if (null !== http_get_last_response_headers()) {
             foreach (http_get_last_response_headers() as $header) {
-                if (stripos($header, 'Content-Type:') === 0) {
+                if (0 === stripos($header, 'Content-Type:')) {
                     $contentType = trim(substr($header, strlen('Content-Type:')));
                     break;
                 }
@@ -49,9 +49,8 @@ final class ReportPresenter extends SecuredPresenter
 
     public function actionDatabotStatus(): void
     {
-
         $path = '';
-        $url = rtrim($this->appConfiguration->getDatabotBasePath(), '/') . '/' . ltrim($path, '/');
+        $url = rtrim($this->appConfiguration->getDatabotBasePath(), '/').'/'.ltrim($path, '/');
         $context = stream_context_create([
             'http' => [
                 'timeout' => 5,
@@ -61,28 +60,26 @@ final class ReportPresenter extends SecuredPresenter
 
         $content = @file_get_contents($url, false, $context);
 
-        if ($content === false) {
+        if (false === $content) {
             $this->error("Unable fetch $url", 502);
         }
 
         $data = json_decode($content, true);
 
-        if ($data === null) {
+        if (null === $data) {
             $this->error("Invalid JSON from $url", 502);
         }
 
         $this->template->databotData = $data;
     }
 
-
     public function renderStats()
     {
-        $this->template->sharpness =  json_encode($this->databotsService->getStats("sharpness", 2));
-        $this->template->contrast =  json_encode($this->databotsService->getStats("contrast", 2));
-        $this->template->clarity =  json_encode($this->databotsService->getStats("clarity", 2));
-        $this->template->resolution =  json_encode($this->databotsService->getStats("resolution", 2));
-        $this->template->brisque_score =  json_encode($this->databotsService->getStats("brisque_score", 2));
-
+        $this->template->sharpness = json_encode($this->databotsService->getStats('sharpness', 2));
+        $this->template->contrast = json_encode($this->databotsService->getStats('contrast', 2));
+        $this->template->clarity = json_encode($this->databotsService->getStats('clarity', 2));
+        $this->template->resolution = json_encode($this->databotsService->getStats('resolution', 2));
+        $this->template->brisque_score = json_encode($this->databotsService->getStats('brisque_score', 2));
 
         $this->template->databot = $this->entityManager->getRepository(Databot::class)->getByName(DatabotRepository::IMAGE_QUALITY);
     }

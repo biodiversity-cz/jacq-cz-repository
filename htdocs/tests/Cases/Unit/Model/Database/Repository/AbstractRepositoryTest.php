@@ -1,24 +1,21 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
-use App\Model\Database\Entity\Contact;
-use App\Model\Database\Entity\Herbaria;
-use App\Model\Database\Enums\DatabotRole;
-use App\Model\Database\Enums\EnumDatabotRoleType;
 use App\Model\Database\Repository\AbstractRepository;
-use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__.'/../../../../../bootstrap.php';
 
-class TestRepository extends AbstractRepository {}
-
-
+class TestRepository extends AbstractRepository
+{
+}
 
 test('AbstractRepository::findPairs returns correct key => value array', function (): void {
     $metadata = \Mockery::mock(ClassMetadata::class);

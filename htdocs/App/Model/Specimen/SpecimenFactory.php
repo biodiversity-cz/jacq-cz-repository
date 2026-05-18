@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Specimen;
 
@@ -9,14 +11,13 @@ use Nette\Security\User;
 
 class SpecimenFactory
 {
-
     public function __construct(protected readonly HerbariumService $herbariumService, protected readonly SpecimenIdService $specimenIdService)
     {
     }
 
     public function create(string $fullSpecimenId): Specimen
     {
-        if ($fullSpecimenId === '') {
+        if ('' === $fullSpecimenId) {
             throw new SpecimenIdException('Specimen id cannot be empty');
         }
 
@@ -37,5 +38,4 @@ class SpecimenFactory
 
         return $specimen;
     }
-
 }

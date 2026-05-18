@@ -1,20 +1,17 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Admin\Herbarium;
 
-use App\Model\Database\Entity\Herbaria;
 use App\Security\Identity;
 use App\Services\EntityServices\HerbariumService;
 use App\Services\EntityServices\UserService;
 use App\Services\Exceptions\RiskOfUnpredictabilityException;
-use App\UI\Base\BasePresenter;
 use App\UI\Base\SecuredPresenter;
-use Doctrine\ORM\EntityManagerInterface;
-use Nette\Application\UI\Form;
 
 final class HerbariumPresenter extends SecuredPresenter
 {
-
     /** @inject */
     public HerbariumService $herbariumService;
 
@@ -30,21 +27,21 @@ final class HerbariumPresenter extends SecuredPresenter
 
     public function actionSetSettings(string $feature, ?string $value): void
     {
-        if ($value === 'false'){
+        if ('false' === $value) {
             $value = false;
         }
-        if ($value === 'true'){
+        if ('true' === $value) {
             $value = true;
         }
         try {
             if ($this->user->isInRole('curator')) {
                 match ($feature) {
-                    'filenameFallbackSwitch' => $this->herbariumService->setFilenameFallback($this->user, (bool)$value),
-                    'multiplierSwitch' => $this->herbariumService->setMultiplier($this->user, (bool)$value),
-                    'strictAcronymPrefix' => $this->herbariumService->setStrictAcronymPrefix($this->user, (bool)$value),
+                    'filenameFallbackSwitch' => $this->herbariumService->setFilenameFallback($this->user, (bool) $value),
+                    'multiplierSwitch' => $this->herbariumService->setMultiplier($this->user, (bool) $value),
+                    'strictAcronymPrefix' => $this->herbariumService->setStrictAcronymPrefix($this->user, (bool) $value),
                 };
             }
-        }catch (RiskOfUnpredictabilityException $exception){
+        } catch (RiskOfUnpredictabilityException $exception) {
             $this->flashMessage($exception->getMessage(), 'warning');
         }
 
@@ -55,7 +52,7 @@ final class HerbariumPresenter extends SecuredPresenter
     {
         // Get the herbarium entity
         $herbarium = $this->herbariumService->find($herbariumId);
-        if (!$herbarium || !$this->user->getIdentity()->isEligibleForHerbarium($herbarium)){
+        if (!$herbarium || !$this->user->getIdentity()->isEligibleForHerbarium($herbarium)) {
             $this->flashMessage('Herbarium not found.', 'danger');
             $this->redirect('this');
         }

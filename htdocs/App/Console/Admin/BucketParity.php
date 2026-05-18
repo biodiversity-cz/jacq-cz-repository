@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Admin;
 
@@ -16,9 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class BucketParity extends Command
 {
-
     /**
-     * Compare archive and iiif bucket if exactly what expected files are present
+     * Compare archive and iiif bucket if exactly what expected files are present.
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly RepositoryConfiguration $repositoryConfiguration, protected readonly S3Service $s3Service, ?string $name = null)
     {
@@ -30,7 +31,7 @@ class BucketParity extends Command
      */
     public function getArchiveFilesDb(): array
     {
-        $sql = 'SELECT archive_filename FROM photos p WHERE status_id IN (' . implode(',', PhotosStatus::PASSED) . ') ORDER BY archive_filename asc';
+        $sql = 'SELECT archive_filename FROM photos p WHERE status_id IN ('.implode(',', PhotosStatus::PASSED).') ORDER BY archive_filename asc';
         $smtp = $this->entityManager->getConnection()->prepare($sql);
 
         return $smtp->executeQuery()->fetchFirstColumn();
@@ -41,7 +42,7 @@ class BucketParity extends Command
      */
     public function getJp2FilesDb(): array
     {
-        $sql = 'SELECT jp2filename FROM photos p WHERE status_id IN (' . implode(',', PhotosStatus::PASSED) . ') ORDER BY jp2filename asc';
+        $sql = 'SELECT jp2filename FROM photos p WHERE status_id IN ('.implode(',', PhotosStatus::PASSED).') ORDER BY jp2filename asc';
         $smtp = $this->entityManager->getConnection()->prepare($sql);
 
         return $smtp->executeQuery()->fetchFirstColumn();
@@ -97,9 +98,8 @@ class BucketParity extends Command
             $output->writeln($file);
         }
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
-
 }

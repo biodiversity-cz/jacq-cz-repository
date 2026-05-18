@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Repository;
 
@@ -6,28 +8,29 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * @template TEntityClass
+ *
  * @extends EntityRepository<TEntityClass>
  */
 abstract class AbstractRepository extends EntityRepository
 {
-
     /**
-     * Fetches all records like $key => $value pairs
+     * Fetches all records like $key => $value pairs.
      *
      * @param mixed[] $criteria
      * @param mixed[] $orderBy
+     *
      * @return mixed[]
      */
     public function findPairs(?string $key, string $value, array $criteria = [], array $orderBy = []): array
     {
-        if ($key === null) {
+        if (null === $key) {
             $key = $this->getClassMetadata()->getSingleIdentifierFieldName();
         }
 
         $qb = $this->createQueryBuilder('e')
-            ->select(['e.' . $value, 'e.' . $key])
+            ->select(['e.'.$value, 'e.'.$key])
             ->resetDQLPart('from')
-            ->from($this->getEntityName(), 'e', 'e.' . $key);
+            ->from($this->getEntityName(), 'e', 'e.'.$key);
 
         foreach ($criteria as $k => $v) {
             if (is_array($v)) {
@@ -45,6 +48,7 @@ abstract class AbstractRepository extends EntityRepository
         foreach ($qb->getQuery()->getArrayResult() as $row) {
             $result[$row[$key]] = $row[$value];
         }
-        return $result;    }
 
+        return $result;
+    }
 }

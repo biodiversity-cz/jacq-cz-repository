@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -7,7 +9,6 @@ use League\Pipeline\StageInterface;
 
 class ConvertStage extends BaseStage implements StageInterface
 {
-
     public function __invoke(mixed $payload): mixed
     {
         $this->item = $payload;
@@ -16,7 +17,7 @@ class ConvertStage extends BaseStage implements StageInterface
             $this->createJp2File();
             $payload->setJp2FileSize(filesize($this->getIiifTempPath()));
         } catch (\Throwable $exception) {
-            throw new ConvertStageException('unable convert to JP2 (' . $exception->getMessage() . '): ' . $payload->id);
+            throw new ConvertStageException('unable convert to JP2 ('.$exception->getMessage().'): '.$payload->id);
         }
 
         return $payload;
@@ -42,9 +43,9 @@ class ConvertStage extends BaseStage implements StageInterface
             'opj_compress',
             '-i', $this->getMasterSinglePageTempPath(),
             '-o', $this->getIiifTempPath(),
-            '-t', "1024,1024",
-            '-r', "40",
-            '-n', "7",
+            '-t', '1024,1024',
+            '-r', '40',
+            '-n', '7',
         ];
 
         $descriptors = [
@@ -65,7 +66,5 @@ class ConvertStage extends BaseStage implements StageInterface
         fclose($pipes[2]);
 
         $exitCode = proc_close($process);
-
     }
-
 }

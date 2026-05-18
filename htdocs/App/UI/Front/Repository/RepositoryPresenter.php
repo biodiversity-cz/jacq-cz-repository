@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Front\Repository;
 
@@ -24,7 +26,6 @@ use Nette\Http\Response;
 
 final class RepositoryPresenter extends UnsecuredPresenter
 {
-
     /** @inject */
     public S3Service $s3Service;
 
@@ -46,14 +47,14 @@ final class RepositoryPresenter extends UnsecuredPresenter
     /** @inject */
     public DetailControlFactory $detailControlFactory;
 
-    protected(set) ?Herbaria $herbarium = null;
+    public protected(set) ?Herbaria $herbarium = null;
 
     /** @inject */ public ImageDownloadLogService $imageDownloadLogService;
 
     public function actionArchiveImage(int $id): void
     {
         $photo = $this->photoService->getPublicPhoto($id);
-        if ($photo === null) {
+        if (null === $photo) {
             $this->error('The requested photo does not exists.');
         }
 
@@ -63,7 +64,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
     public function actionJp2Image(int $id): void
     {
         $photo = $this->photoService->getPublicPhoto($id);
-        if ($photo === null) {
+        if (null === $photo) {
             $this->error('The requested photo does not exists.');
         }
 
@@ -73,7 +74,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
     public function actionDatabotThumbImage(int $id): void
     {
         $photo = $this->photoService->getPublicPhoto($id);
-        if ($photo === null) {
+        if (null === $photo) {
             $this->error('The requested photo does not exists.');
         }
 
@@ -99,7 +100,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
                 $httpResponse->setHeader('Content-Type', $head['ContentType']);
                 $httpResponse->setHeader(
                     'Content-Disposition',
-                    "attachment; filename=\"" . basename($filename) . "\"; filename*=UTF-8''" . rawurlencode($filename)
+                    'attachment; filename="'.basename($filename)."\"; filename*=UTF-8''".rawurlencode($filename)
                 );
                 fpassthru($stream);
                 fclose($stream);
@@ -115,7 +116,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
     public function renderSpecimen(?string $sid): void
     {
         try {
-            if ($sid === null) {
+            if (null === $sid) {
                 throw new SpecimenIdException();
             }
 
@@ -125,7 +126,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
             $this->redirect('Front:Home:');
         }
         if (!$this->photoService->specimenHasPublicPhotos($specimen)) {
-            $this->error('Specimen ' . $sid . ' not in evidence.');
+            $this->error('Specimen '.$sid.' not in evidence.');
         }
 
         $this->template->specimen = $specimen;
@@ -137,7 +138,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
     public function renderImage(?int $id): void
     {
         try {
-            if ($id === null) {
+            if (null === $id) {
                 throw new ImageIdException();
             }
             /** @var Photos $photo */
@@ -148,17 +149,16 @@ final class RepositoryPresenter extends UnsecuredPresenter
         }
 
         $this->template->photo = $photo;
-
     }
 
     public function actionHerbarium(?string $id): void
     {
         try {
-            if ($id === null) {
+            if (null === $id) {
                 throw new HerbariumIdException();
             }
             $herbarium = $this->herbariumService->findOneWithAcronym($id);
-            if ($herbarium === null) {
+            if (null === $herbarium) {
                 throw new HerbariumIdException();
             }
             $this->herbarium = $herbarium;
@@ -177,7 +177,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
 
     protected function createComponentDetail(): Multiplier
     {
-        return new Multiplier(fn($id) => $this->detailControlFactory->create((int)$id));
+        return new Multiplier(fn ($id) => $this->detailControlFactory->create((int) $id));
     }
 
     public function createComponentPhotosGrid(): FrontPhotosGrid

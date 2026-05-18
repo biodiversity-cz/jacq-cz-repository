@@ -4,56 +4,59 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a time reference which can be either a time instant or time interval
+ * Represents a time reference which can be either a time instant or time interval.
  */
 class TimeReference implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?TimeInstant $timeInstant = null;
-    protected(set) ?TimeInterval $timeInterval = null;
+    public protected(set) ?TimeInstant $timeInstant = null;
+    public protected(set) ?TimeInterval $timeInterval = null;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-
     // Getters
-    public function getTimeInstant(): ?TimeInstant {
+    public function getTimeInstant(): ?TimeInstant
+    {
         return $this->timeInstant;
     }
 
-    public function getTimeInterval(): ?TimeInterval {
+    public function getTimeInterval(): ?TimeInterval
+    {
         return $this->timeInterval;
     }
 
     // Setters
-    public function setTimeInstant(?TimeInstant $timeInstant): self {
+    public function setTimeInstant(?TimeInstant $timeInstant): self
+    {
         $this->timeInstant = $timeInstant;
+
         return $this;
     }
 
-    public function setTimeInterval(?TimeInterval $timeInterval): self {
+    public function setTimeInterval(?TimeInterval $timeInterval): self
+    {
         $this->timeInterval = $timeInterval;
+
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'time_reference');
 
-        if ($this->getTimeInstant() !== null) {
+        if (null !== $this->getTimeInstant()) {
             $timeInstantElement = $this->getTimeInstant()->toXml($document, 'time_instant');
             $element->appendChild($timeInstantElement);
         }
 
-        if ($this->getTimeInterval() !== null) {
+        if (null !== $this->getTimeInterval()) {
             $timeIntervalElement = $this->getTimeInterval()->toXml($document, 'time_interval');
             $element->appendChild($timeIntervalElement);
         }

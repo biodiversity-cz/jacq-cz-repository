@@ -30,7 +30,6 @@ final class Version20250217125735 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-
         $this->addSql('ALTER TABLE photos ADD use_barcode BOOLEAN DEFAULT true NOT NULL');
         $this->addSql('COMMENT ON COLUMN photos.use_barcode IS \'If true, the import pipeline will use the barcode detection. If false, the filename will be used to detect specimen id\'');
         $this->addSql('COMMENT ON COLUMN photos.original_filename IS \'Filename that was provided during curator upload, could make sense or completely missing semantical content\'');

@@ -1,16 +1,15 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
 use App\Model\ImportStages\Exceptions\MetadataStageException;
-use Imagick;
 use League\Pipeline\StageInterface;
-use Throwable;
 
 class MetadataStage extends BaseStage implements StageInterface
 {
-
-    protected function readDimensions(Imagick $imagick): Imagick
+    protected function readDimensions(\Imagick $imagick): \Imagick
     {
         $this->item->setWidth($imagick->getImageWidth());
         $this->item->setHeight($imagick->getImageHeight());
@@ -30,9 +29,8 @@ class MetadataStage extends BaseStage implements StageInterface
             unset($imagick);
 
             return $this->item;
-        } catch (Throwable $e) {
-            throw new MetadataStageException('problem with metadata detection: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            throw new MetadataStageException('problem with metadata detection: '.$e->getMessage());
         }
     }
-
 }

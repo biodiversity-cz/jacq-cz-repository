@@ -4,65 +4,80 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a funding reference with identifier, title, program and funder
+ * Represents a funding reference with identifier, title, program and funder.
  */
 class FundingReference implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?string $iri = null;
-    protected(set) ?string $localIdentifier = null;
-    protected(set) ?string $awardTitle = null;
-    protected(set) ?string $fundingProgram = null;
-    protected(set) ?Funder $funder = null;
+    public protected(set) ?string $iri = null;
+    public protected(set) ?string $localIdentifier = null;
+    public protected(set) ?string $awardTitle = null;
+    public protected(set) ?string $fundingProgram = null;
+    public protected(set) ?Funder $funder = null;
 
-    public function getIri(): ?string {
+    public function getIri(): ?string
+    {
         return $this->iri;
     }
 
-    public function getLocalIdentifier(): ?string {
+    public function getLocalIdentifier(): ?string
+    {
         return $this->localIdentifier;
     }
 
-    public function getAwardTitle(): ?string {
+    public function getAwardTitle(): ?string
+    {
         return $this->awardTitle;
     }
 
-    public function getFundingProgram(): ?string {
+    public function getFundingProgram(): ?string
+    {
         return $this->fundingProgram;
     }
 
-    public function getFunder(): ?Funder {
+    public function getFunder(): ?Funder
+    {
         return $this->funder;
     }
 
     // Setters
-    public function setIri(?string $iri): self {
+    public function setIri(?string $iri): self
+    {
         $this->iri = $iri;
+
         return $this;
     }
 
-    public function setLocalIdentifier(?string $localIdentifier): self {
+    public function setLocalIdentifier(?string $localIdentifier): self
+    {
         $this->localIdentifier = $localIdentifier;
+
         return $this;
     }
 
-    public function setAwardTitle(?string $awardTitle): self {
+    public function setAwardTitle(?string $awardTitle): self
+    {
         $this->awardTitle = $awardTitle;
+
         return $this;
     }
 
-    public function setFundingProgram(?string $fundingProgram): self {
+    public function setFundingProgram(?string $fundingProgram): self
+    {
         $this->fundingProgram = $fundingProgram;
+
         return $this;
     }
 
-    public function setFunder(?Funder $funder): self {
+    public function setFunder(?Funder $funder): self
+    {
         $this->funder = $funder;
+
         return $this;
     }
 
@@ -70,22 +85,22 @@ class FundingReference implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'funding_reference');
 
-        if ($this->getIri() !== null) {
+        if (null !== $this->getIri()) {
             $iriElement = $this->createElement($document, 'iri', $this->getIri());
             $element->appendChild($iriElement);
         }
 
-        if ($this->getLocalIdentifier() !== null) {
+        if (null !== $this->getLocalIdentifier()) {
             $localIdElement = $this->createElement($document, 'local_identifier', $this->getLocalIdentifier());
             $element->appendChild($localIdElement);
         }
 
-        if ($this->getAwardTitle() !== null) {
+        if (null !== $this->getAwardTitle()) {
             $titleElement = $this->createElement($document, 'award_title', $this->getAwardTitle());
             $element->appendChild($titleElement);
         }
 
-        if ($this->getFundingProgram() !== null) {
+        if (null !== $this->getFundingProgram()) {
             $programElement = $this->createElement($document, 'funding_program', $this->getFundingProgram());
             $element->appendChild($programElement);
         }

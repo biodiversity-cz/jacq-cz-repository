@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Services;
 
@@ -6,10 +8,9 @@ use App\Services\AppConfiguration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use Doctrine\ORM\EntityManagerInterface;
-use Mockery;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../bootstrap.php';
+require_once __DIR__.'/../../../bootstrap.php';
 
 test('AppConfiguration::getPlatform returns only valid values', function (): void {
     $validEnvs = ['test', 'development', 'production'];
@@ -41,16 +42,16 @@ test('AppConfiguration::isProduction returns true only for production', function
 });
 
 test('AppConfiguration::isSslDbConnection returns true if ssl is on', function (): void {
-    $result = Mockery::mock(Result::class);
+    $result = \Mockery::mock(Result::class);
     $result->shouldReceive('fetchOne')->once()->andReturn('on');
 
-    $connection = Mockery::mock(Connection::class);
+    $connection = \Mockery::mock(Connection::class);
     $connection->shouldReceive('executeQuery')
         ->with('SHOW ssl;')
         ->once()
         ->andReturn($result);
 
-    $entityManager = Mockery::mock(EntityManagerInterface::class);
+    $entityManager = \Mockery::mock(EntityManagerInterface::class);
     $entityManager->shouldReceive('getConnection')->andReturn($connection);
 
     $service = new class([], $entityManager) extends AppConfiguration {
@@ -61,16 +62,16 @@ test('AppConfiguration::isSslDbConnection returns true if ssl is on', function (
 });
 
 test('AppConfiguration::isSslDbConnection returns false if ssl is off', function (): void {
-    $result = Mockery::mock(Result::class);
+    $result = \Mockery::mock(Result::class);
     $result->shouldReceive('fetchOne')->once()->andReturn('off');
 
-    $connection = Mockery::mock(Connection::class);
+    $connection = \Mockery::mock(Connection::class);
     $connection->shouldReceive('executeQuery')
         ->with('SHOW ssl;')
         ->once()
         ->andReturn($result);
 
-    $entityManager = Mockery::mock(EntityManagerInterface::class);
+    $entityManager = \Mockery::mock(EntityManagerInterface::class);
     $entityManager->shouldReceive('getConnection')->andReturn($connection);
 
     $service = new class([], $entityManager) extends AppConfiguration {
@@ -79,7 +80,6 @@ test('AppConfiguration::isSslDbConnection returns false if ssl is off', function
 
     Assert::false($service->isSslDbConnection());
 });
-
 
 test('AppConfiguration::getVersion returns value from environment if set', function (): void {
     putenv(AppConfiguration::VERSION_VARIABLE.'=1.2.3');
@@ -97,9 +97,9 @@ test('AppConfiguration::getVersion returns fallback if env is not set', function
     Assert::same('unknown version', $service->getVersion());
 });
 
+function createAppConfiguration(array $config = []): AppConfiguration
+{
+    $em = \Mockery::mock(EntityManagerInterface::class);
 
-function createAppConfiguration(array $config = []): AppConfiguration {
-    $em = Mockery::mock(EntityManagerInterface::class);
     return new AppConfiguration($config, $em);
 }
-

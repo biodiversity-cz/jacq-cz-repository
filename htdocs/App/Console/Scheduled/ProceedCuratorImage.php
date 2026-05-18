@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Scheduled;
 
@@ -18,11 +20,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ProceedCuratorImage extends Command
 {
-
     public const int LIMIT = 4;
 
     /**
-     * Running as a CronJob - process images from curatorBucket to the repository waiting room
+     * Running as a CronJob - process images from curatorBucket to the repository waiting room.
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly RepositoryConfiguration $storageConfiguration, protected readonly S3Service $s3Service, protected readonly CuratorFacade $curatorFacade, ?string $name = null)
     {
@@ -38,52 +39,55 @@ class ProceedCuratorImage extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
-        for ($i = 0; $i < self::LIMIT; $i++) {
-            //mainPhoto
+        for ($i = 0; $i < self::LIMIT; ++$i) {
+            // mainPhoto
             try {
                 $photoProcessed = $this->proceedMainPhoto($output);
             } catch (ImportStageException $e) {
-                $output->writeln("\n" . $e->getMessage());
+                $output->writeln("\n".$e->getMessage());
+
                 return Command::FAILURE;
             }
-            if ($photoProcessed === null) {
+            if (null === $photoProcessed) {
                 continue;
             }
-            //multiply when needed
+            // multiply when needed
             if ($photoProcessed->herbarium->multipleBarcodeMultiplier && !empty($photoProcessed->multiplier?->barcodes)) {
                 try {
                     $this->proceedMultiplier($output, $photoProcessed);
                 } catch (ImportStageException $e) {
-                    $output->writeln("\n" . $e->getMessage());
+                    $output->writeln("\n".$e->getMessage());
+
                     return Command::FAILURE;
                 }
             }
-            //clean individual Photo run
+            // clean individual Photo run
             try {
                 $this->curatorFacade->importCleanupPipeline()->process($photoProcessed);
             } catch (\Throwable $e) {
-                $output->writeln("\n" . $e->getMessage());
+                $output->writeln("\n".$e->getMessage());
+
                 return Command::FAILURE;
             }
         }
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
 
     protected function proceedMainPhoto(OutputInterface $output): ?Photos
     {
-        $this->entityManager->getConnection()->beginTransaction(); //we are locking the selected row
+        $this->entityManager->getConnection()->beginTransaction(); // we are locking the selected row
         $photo = $this->getPhoto();
-        if ($photo === null) {
+        if (null === $photo) {
             $this->entityManager->getConnection()->rollBack();
 
             return null;
         }
 
         try {
-            $output->write("\n filename: s3://" . $photo->herbarium->bucket . '/' . $photo->originalFilename . "\n");
+            $output->write("\n filename: s3://".$photo->herbarium->bucket.'/'.$photo->originalFilename."\n");
             $photo = $this->prepareImportMessagesStorage($photo);
 
             $this->curatorFacade->importNewFilesPipeline()->process($photo);
@@ -93,14 +97,15 @@ class ProceedCuratorImage extends Command
         } catch (ImportStageException $e) {
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_ERROR));
             $photo->error->setMessage($e->getMessage());
-            $output->write("\n ERROR: " . $e->getMessage() . "\n");
-            //mainPhoto did not succeeded,
+            $output->write("\n ERROR: ".$e->getMessage()."\n");
+            // mainPhoto did not succeeded,
             $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
+
             return null;
         } catch (\Throwable $e) {
             $this->entityManager->getConnection()->rollBack();
-            $output->write("\n ERROR: " . $e->getMessage() . "\n");
+            $output->write("\n ERROR: ".$e->getMessage()."\n");
             throw new ImportStageException($e->getMessage());
         }
 
@@ -130,7 +135,7 @@ class ProceedCuratorImage extends Command
     {
         $photo->setLastEditAt();
 
-        //remove from potential previous run
+        // remove from potential previous run
         $photo->removeImportError();
         $photo->removeMultiplier();
 
@@ -147,17 +152,17 @@ class ProceedCuratorImage extends Command
 
         foreach ($newItems as $newItem) {
             try {
-                $output->write("\n multiply from ID " . $mainPhoto->id . " into ID " . $newItem->id . "\n");
+                $output->write("\n multiply from ID ".$mainPhoto->id.' into ID '.$newItem->id."\n");
                 $this->curatorFacade->importMultiplierPipeline()->process($newItem);
                 $newItem->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_OK));
                 $this->entityManager->remove($newItem->error);
                 $newItem->removeImportError();
             } catch (DuplicityStageException $e) {
                 $this->entityManager->remove($newItem);
-                $output->write("\n ERROR: " . $e->getMessage() . ", row deleted \n");
+                $output->write("\n ERROR: ".$e->getMessage().", row deleted \n");
             } catch (\Throwable $e) {
                 $this->entityManager->getConnection()->rollBack();
-                $output->write("\n ERROR: " . $e->getMessage() . "\n");
+                $output->write("\n ERROR: ".$e->getMessage()."\n");
                 throw new ImportStageException($e->getMessage());
             }
         }
@@ -167,5 +172,4 @@ class ProceedCuratorImage extends Command
 
         return $mainPhoto;
     }
-
 }

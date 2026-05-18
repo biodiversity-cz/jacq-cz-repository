@@ -14,7 +14,6 @@ use Contributte\Console\Application;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\DI\Container;
 use Nette\Security\User;
-use RuntimeException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Tester\Assert;
@@ -45,7 +44,6 @@ abstract class IntegrationTestCase extends TestCase
         $this->application = $this->container->getByType(Application::class);
         $this->application->setAutoExit(false);
         $this->solrClientService = $this->container->getByType(SolrClientService::class);
-
     }
 
     protected function provideLoggedCuratorUser(): User
@@ -55,6 +53,7 @@ abstract class IntegrationTestCase extends TestCase
             $this->user = $this->container->getByType(User::class);
             $this->user->login($identity);
         }
+
         return $this->user;
     }
 
@@ -81,9 +80,8 @@ abstract class IntegrationTestCase extends TestCase
 
     protected function uploadFiles(): void
     {
-
-        $sampleDir = __DIR__ . '/files/' . $this::DIR;
-        $tifFiles = glob($sampleDir . '/*.tif');
+        $sampleDir = __DIR__.'/files/'.$this::DIR;
+        $tifFiles = glob($sampleDir.'/*.tif');
 
         foreach ($tifFiles as $path) {
             $key = basename($path);
@@ -91,7 +89,6 @@ abstract class IntegrationTestCase extends TestCase
                 $this->s3Service->putTiffIfNotExists(self::BUCKET_HERBARIUM, $key, $path);
             }
         }
-
     }
 
     protected function expectAllImported(): void
@@ -99,9 +96,9 @@ abstract class IntegrationTestCase extends TestCase
         $waiting = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING]);
         Assert::count(count($this::SPECIMENS), $waiting, 'al images marked as waiting');
 
-        $rounds = ceil(count($this::SPECIMENS)/ProceedCuratorImage::LIMIT);
-        for ($i = 0; $i < $rounds; $i++) {
-            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true,], 'import images failed');
+        $rounds = ceil(count($this::SPECIMENS) / ProceedCuratorImage::LIMIT);
+        for ($i = 0; $i < $rounds; ++$i) {
+            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true], 'import images failed');
         }
 
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING, 'specimenId' => $this::SPECIMENS]);
@@ -118,9 +115,9 @@ abstract class IntegrationTestCase extends TestCase
         $waiting = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING]);
         Assert::count(count($this::SPECIMENS), $waiting, 'al images marked as waiting');
 
-        $rounds = ceil(count($this::SPECIMENS)/ProceedCuratorImage::LIMIT);
-        for ($i = 0; $i < $rounds; $i++) {
-            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true,], 'import images failed');
+        $rounds = ceil(count($this::SPECIMENS) / ProceedCuratorImage::LIMIT);
+        for ($i = 0; $i < $rounds; ++$i) {
+            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true], 'import images failed');
         }
 
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_ERROR]);
@@ -138,9 +135,8 @@ abstract class IntegrationTestCase extends TestCase
         $input = new ArrayInput($args);
         $output = new BufferedOutput();
         $exitCode = $this->application->run($input, $output);
-        if ($exitCode !== 0) {
-            throw new RuntimeException($errorMessage . "\n" . $output->fetch());
+        if (0 !== $exitCode) {
+            throw new \RuntimeException($errorMessage."\n".$output->fetch());
         }
     }
-
 }

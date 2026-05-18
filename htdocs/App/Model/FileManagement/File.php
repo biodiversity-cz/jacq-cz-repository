@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\FileManagement;
 
@@ -6,10 +8,9 @@ use Aws\Result;
 
 readonly class File
 {
-
-/** @deprecated
- * used only during migration
- */
+    /** @deprecated
+     * used only during migration
+     */
     public function __construct(protected(set) string $name, protected(set) Result $info, protected(set) bool $alreadyWaiting)
     {
     }
@@ -53,7 +54,7 @@ readonly class File
 
     public function isTypeOk(): bool
     {
-        return $this->info->get('ContentType') === FileInsideCuratorBucket::MIME_TYPE;
+        return FileInsideCuratorBucket::MIME_TYPE === $this->info->get('ContentType');
     }
 
     public function isAlreadyWaiting(): bool
@@ -65,5 +66,4 @@ readonly class File
     {
         return $this->isSizeOk() && $this->isTypeOk() && !$this->isAlreadyWaiting();
     }
-
 }

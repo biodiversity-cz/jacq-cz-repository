@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Grids\Front;
 
@@ -15,7 +17,6 @@ use Nette\Utils\Html;
 
 class FrontPhotosGrid extends Control
 {
-
     private Datagrid $grid;
 
     public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, protected DatabotsResultService $databotsService)
@@ -26,9 +27,10 @@ class FrontPhotosGrid extends Control
     protected function getHerbarium(): \App\Model\Database\Entity\Herbaria
     {
         $herbarium = $this->getPresenter()->herbarium;
-        if ($herbarium === null) {
+        if (null === $herbarium) {
             throw new \RuntimeException('Herbarium is not set in the presenter.');
         }
+
         return $herbarium;
     }
 
@@ -40,22 +42,20 @@ class FrontPhotosGrid extends Control
     public function render(): void
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/frontPhotosGrid.latte');
+        $template->setFile(__DIR__.'/frontPhotosGrid.latte');
 
         $template->render();
     }
-
 
     public function createComponentGrid(): Datagrid
     {
         $this->grid->setDataSource($this->defaultDatasource())->setDefaultSort(['id' => 'DESC'])->setRememberState(false);
 
-
         $this->grid->addColumnNumber('id', 'ID')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
                 $url = $this->presenter->link('Repository:image', ['id' => $item->id]);
-                $el->addHtml('<a href="' . $url . '">' . $item->id . '</a>');
+                $el->addHtml('<a href="'.$url.'">'.$item->id.'</a>');
 
                 return $el;
             });
@@ -63,8 +63,8 @@ class FrontPhotosGrid extends Control
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Repository:specimen',  $item->getFullSpecimenId());
-                $el->addHtml('<a href="' . $url . '">' . $item->getFullSpecimenId() . '</a>');
+                $url = $this->presenter->link('Repository:specimen', $item->getFullSpecimenId());
+                $el->addHtml('<a href="'.$url.'">'.$item->getFullSpecimenId().'</a>');
 
                 return $el;
             });
@@ -81,7 +81,6 @@ class FrontPhotosGrid extends Control
         $this->grid->addColumnNumber('height', 'height [px]');
         $this->grid->addColumnNumber('archiveFileSize', 'archiveFileSize [B]');
 
-
         return $this->grid;
     }
 
@@ -94,5 +93,4 @@ class FrontPhotosGrid extends Control
             ->setParameter('status', PhotosStatus::PUBLISHED)
             ->orderBy('p.id', 'DESC');
     }
-
 }

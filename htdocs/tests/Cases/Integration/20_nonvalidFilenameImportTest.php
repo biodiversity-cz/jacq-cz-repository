@@ -1,13 +1,13 @@
 <?php
-namespace Tests\Cases\Integration;
 
+namespace Tests\Cases\Integration;
 
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use Tester\Assert;
 
-require __DIR__ . '/../../bootstrap.integration.php';
+require __DIR__.'/../../bootstrap.integration.php';
 
 final class NonValidImportFilenameTest extends IntegrationTestCase
 {
@@ -16,9 +16,8 @@ final class NonValidImportFilenameTest extends IntegrationTestCase
 
     public function testRegisterNewFiles(): void
     {
-
         $this->checkBefore();
-//        $this->getUserEntity()->herbarium //tohle nějak nepersistuje, musí se vzít rovnou ta entita
+        //        $this->getUserEntity()->herbarium //tohle nějak nepersistuje, musí se vzít rovnou ta entita
         $this->em->getRepository(Herbaria::class)->find($this->provideLoggedCuratorUser()->getIdentity()->getCurrentHerbariumId())
             ->setFallbackFilename(true)
             ->setMultipleBarcodeMultiplier(false);
@@ -37,7 +36,6 @@ final class NonValidImportFilenameTest extends IntegrationTestCase
         $filesInCuratorBucket = $this->s3Service->listObjectsNamesOnly(self::BUCKET_HERBARIUM);
         Assert::count(0, $filesInCuratorBucket, 'curator bucket is empty again');
     }
-
 }
 
 new NonValidImportFilenameTest()->run();

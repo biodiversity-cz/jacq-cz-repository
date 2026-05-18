@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Api\PubV1;
 
@@ -16,13 +18,10 @@ use App\Services\EntityServices\PhotoService;
 use Nette\Http\IRequest;
 use Psr\Http\Message\ResponseInterface;
 
-
 #[Apitte\Path('/iiif')]
 #[Apitte\Tag('IIIF')]
 class IiifController extends BasePubV1Controller
 {
-
-
     public function __construct(protected readonly SpecimenFactory $specimenFactory, protected readonly ManifestFactory $manifestFactory, protected readonly AnnotationListFactory $annotationListFactory, protected readonly PhotoService $photoService, protected readonly ImageDownloadLogService $imageDownloadLogService, protected IRequest $httpRequest)
     {
     }
@@ -51,7 +50,6 @@ class IiifController extends BasePubV1Controller
         );
 
         return $response->writeJsonBody($manifest->toArray());
-
     }
 
     #[Apitte\OpenApi('summary: IIIF v2.1 and prior compatible Open Annotation of a photo')]
@@ -64,26 +62,25 @@ class IiifController extends BasePubV1Controller
         $photo = $this->photoService->getPublicPhoto($id);
 
         $annotationList = $this->annotationListFactory->createList($photo, $this->httpRequest->getUrl()->getAbsoluteUrl());
-        return $response->writeJsonBody($annotationList->toArray());
 
+        return $response->writeJsonBody($annotationList->toArray());
     }
 
-//    #[Apitte\OpenApi('summary: IIIF v3 compatible W3C Web Annotation of a photo - TODO')]
-//    #[Apitte\Path('/annotationPage/{photoId}')]
-//    #[Apitte\Method('GET')]
-//    public function annotationPage(ApiRequest $request, ApiResponse $response): ResponseInterface
-//    {
-//        $id = (int) $request->getParameter('photoId');
-//        $photo = $this->photoService->getPublicPhoto($id);
-//
-//        $annotationList = $this->annotationListFactory->createList($photo, $this->httpRequest->getUrl()->getAbsoluteUrl());
-//        return $response->writeJsonBody($annotationList->toArray());
-//
-//    }
+    //    #[Apitte\OpenApi('summary: IIIF v3 compatible W3C Web Annotation of a photo - TODO')]
+    //    #[Apitte\Path('/annotationPage/{photoId}')]
+    //    #[Apitte\Method('GET')]
+    //    public function annotationPage(ApiRequest $request, ApiResponse $response): ResponseInterface
+    //    {
+    //        $id = (int) $request->getParameter('photoId');
+    //        $photo = $this->photoService->getPublicPhoto($id);
+    //
+    //        $annotationList = $this->annotationListFactory->createList($photo, $this->httpRequest->getUrl()->getAbsoluteUrl());
+    //        return $response->writeJsonBody($annotationList->toArray());
+    //
+    //    }
 
     protected function getSpecimen(string $specimenFullId): Specimen
     {
-
         $specimen = $this->specimenFactory->create($specimenFullId);
 
         if (!$this->photoService->specimenHasPublicPhotos($specimen)) {
@@ -92,5 +89,4 @@ class IiifController extends BasePubV1Controller
 
         return $specimen;
     }
-
 }

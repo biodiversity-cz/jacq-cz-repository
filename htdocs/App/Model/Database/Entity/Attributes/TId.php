@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity\Attributes;
 
@@ -9,14 +11,12 @@ use Doctrine\ORM\Mapping\Id;
 
 trait TId
 {
-
     #[Column(type: Types::INTEGER, unique: true, nullable: false)]
     #[Id, GeneratedValue(strategy: 'IDENTITY')]
-    protected(set) ?int $id;
+    public protected(set) ?int $id;
 
     public function __clone()
     {
         $this->id = null;
     }
-
 }

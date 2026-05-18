@@ -26,15 +26,14 @@ final class Version20241022111943 extends AbstractMigration
         $this->addSql('ALTER TABLE herbaria ADD address TEXT DEFAULT NULL');
         $this->addSql('COMMENT ON COLUMN herbaria.fullname IS \'full name of the herbarium\'');
         $this->addSql('COMMENT ON COLUMN herbaria.address IS \'address of the institution/herbarium\'');
-
     }
 
     public function down(Schema $schema): void
     {
-       $this->addSql('ALTER TABLE front.contact DROP CONSTRAINT FK_F5ACD1ACDD127992');
+        $this->addSql('ALTER TABLE front.contact DROP CONSTRAINT FK_F5ACD1ACDD127992');
         $this->addSql('DROP TABLE front.contact');
         $this->addSql('ALTER TABLE herbaria DROP fullname');
         $this->addSql('ALTER TABLE herbaria DROP address');
         $this->addSql('DROP schema front');
-        }
+    }
 }

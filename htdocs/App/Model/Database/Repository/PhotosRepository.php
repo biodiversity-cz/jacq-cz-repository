@@ -1,8 +1,9 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Repository;
 
-use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Specimen\Specimen;
@@ -10,15 +11,15 @@ use Doctrine\ORM\QueryBuilder;
 use Nette\Security\User;
 
 /**
- * @method Photos|NULL find($id, ?int $lockMode = NULL, ?int $lockVersion = NULL)
- * @method Photos|NULL findOneBy(array $criteria, array $orderBy = NULL)
- * @method Photos[] findAll()
- * @method Photos[] findBy(array $criteria, array $orderBy = NULL, ?int $limit = NULL, ?int $offset = NULL)
+ * @method Photos|null find($id, ?int $lockMode = NULL, ?int $lockVersion = NULL)
+ * @method Photos|null findOneBy(array $criteria, array $orderBy = NULL)
+ * @method Photos[]    findAll()
+ * @method Photos[]    findBy(array $criteria, array $orderBy = NULL, ?int $limit = NULL, ?int $offset = NULL)
+ *
  * @extends AbstractRepository<Photos>
  */
 class PhotosRepository extends AbstractRepository
 {
-
     /**
      * if curator deletes a file in his bucket and the image i) is processed or ii) has Import error, then we have an "orphaned" row.
      *
@@ -48,12 +49,12 @@ class PhotosRepository extends AbstractRepository
 
     public function getAllPublishedPhotosDatasource(): QueryBuilder
     {
-        return $this->createQueryBuilder('p')->andWhere('p.status = :publicStatus')->setParameter('publicStatus' , PhotosStatus::PUBLISHED);
+        return $this->createQueryBuilder('p')->andWhere('p.status = :publicStatus')->setParameter('publicStatus', PhotosStatus::PUBLISHED);
     }
 
     public function getPublishablePhotosDatasource(User $user): QueryBuilder
     {
-        return $this->getDefaultDatasource($user)->andWhere('p.status = :status')->setParameter('status' , PhotosStatus::SPECIMEN_CONTROL_OK);
+        return $this->getDefaultDatasource($user)->andWhere('p.status = :status')->setParameter('status', PhotosStatus::SPECIMEN_CONTROL_OK);
     }
 
     /**
@@ -114,6 +115,7 @@ class PhotosRepository extends AbstractRepository
             ->setMaxResults(1);
 
         $photo = $qb->getQuery()->getOneOrNullResult();
+
         return $photo?->status;
     }
 
@@ -131,5 +133,4 @@ class PhotosRepository extends AbstractRepository
     {
         return $this->getEntityManager()->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_ERROR);
     }
-
 }

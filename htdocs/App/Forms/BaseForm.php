@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Forms;
 
@@ -7,7 +9,6 @@ use Nette\Forms\Controls\TextInput;
 
 class BaseForm extends BootstrapForm
 {
-
     public function addNumeric(string $name, ?string $label = null): TextInput
     {
         $input = self::addText($name, $label);
@@ -17,5 +18,4 @@ class BaseForm extends BootstrapForm
 
         return $input;
     }
-
 }

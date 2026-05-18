@@ -59,6 +59,7 @@
     "contributte/qa": "^0",
     "mockery/mockery": "^1",
     "nette/tester": "^2",
+    "friendsofphp/php-cs-fixer": "^3",
     "phpstan/phpstan": "^2",
     "symfony/thanks": "^1"
   },
@@ -83,5 +84,14 @@
 			"symfony/thanks": true,
 			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
-	}
+	},
+  "scripts": {
+    "fixer": "php-cs-fixer check",
+    "fixit": "php-cs-fixer fix",
+    "phpstan": "phpstan analyse --memory-limit=500M --level=7 src",
+    "check": [
+      "@phpstan",
+      "@fixer"
+    ]
+  }
 }

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -16,20 +18,17 @@ class PidStage extends BaseStage implements StageInterface
     {
         parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
     }
+
     public function __invoke(mixed $payload): mixed
     {
         $this->item = $payload;
         try {
-            /** @var Photos $payload */
+            /* @var Photos $payload */
             $payload->setPid($this->specimenIdService->generateArk($payload));
         } catch (\Throwable $exception) {
-            throw new PublishStageException('unable assign ARK (' . $exception->getMessage() . '): ' . $payload->id);
+            throw new PublishStageException('unable assign ARK ('.$exception->getMessage().'): '.$payload->id);
         }
 
         return $payload;
     }
-
-
-
-
 }

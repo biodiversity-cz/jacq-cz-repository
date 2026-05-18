@@ -1,20 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
-use App\Model\Database\Entity\Databot;
 use App\Model\Database\Entity\DatabotResult;
 use App\Model\Database\Entity\Herbaria;
-use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\ImportError;
+use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Model\Database\Entity\PhotosType;
-use App\Model\Database\Entity\UserRole;
-use App\Model\Database\Enums\DatabotRole;
 use Doctrine\Common\Collections\ArrayCollection;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__.'/../../../../../bootstrap.php';
 
 test('Photos entity getters and setters', function (): void {
     $photos = new Photos();

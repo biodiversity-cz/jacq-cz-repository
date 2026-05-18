@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Admin;
 
@@ -17,9 +19,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RefreshJp2 extends Command
 {
-
-    protected const string TEMPNAME = DIRECTORY_SEPARATOR . 'exif.tif';
-    protected const string TEMPNAME2 = DIRECTORY_SEPARATOR . 'exif.jp2';
+    protected const string TEMPNAME = DIRECTORY_SEPARATOR.'exif.tif';
+    protected const string TEMPNAME2 = DIRECTORY_SEPARATOR.'exif.jp2';
 
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorService, protected readonly TempDir $tempDir, protected readonly ImagickService $imageService, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service, ?string $name = null)
     {
@@ -59,7 +60,7 @@ class RefreshJp2 extends Command
     {
         $startTime = microtime(true);
         foreach ($this->getListOfPhotos() as $photo) {
-            $output->write("\n photoId: " . $photo->id . "\n");
+            $output->write("\n photoId: ".$photo->id."\n");
             $this->curatorService->getArchiveFile($photo, $this->tempFile());
 
             $imagick = $this->imageService->createImagick($this->tempFile());
@@ -78,9 +79,8 @@ class RefreshJp2 extends Command
             unlink($this->tempFile2());
         }
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
-
 }

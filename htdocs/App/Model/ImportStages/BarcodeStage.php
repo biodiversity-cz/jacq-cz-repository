@@ -1,11 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
 use App\Model\ImportStages\Exceptions\BarcodeStageException;
 use App\Services\SpecimenIdService;
 use League\Pipeline\StageInterface;
-use Throwable;
 
 class BarcodeStage extends BaseStage implements StageInterface
 {
@@ -16,14 +17,14 @@ class BarcodeStage extends BaseStage implements StageInterface
     {
         try {
             $this->item = $payload;
-            /**
+            /*
              * process detection only when have not manually inserted id
              */
-            if ($this->item->specimenId === null) {
+            if (null === $this->item->specimenId) {
                 $this->createContrastedImage();
                 $this->detectCodes();
 
-                /**
+                /*
                  * if no barcode detected, try again with larger image
                  */
                 if (empty($this->barcodes)) {
@@ -41,8 +42,8 @@ class BarcodeStage extends BaseStage implements StageInterface
             return $this->item;
         } catch (BarcodeStageException $e) {
             throw $e;
-        } catch (Throwable $e) {
-            throw new BarcodeStageException('problem with barcode processing: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            throw new BarcodeStageException('problem with barcode processing: '.$e->getMessage());
         } finally {
             $path = $this->getZbarThumbTempPath();
             if ($path && file_exists($path)) {
@@ -55,7 +56,7 @@ class BarcodeStage extends BaseStage implements StageInterface
     {
         $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
         $longerSideLenght = $this->repositoryConfiguration->getZbarImageSize() * $scaleFactor;
-        $imagick = $this->imagickService->resizeImage($imagick, (int)$longerSideLenght);
+        $imagick = $this->imagickService->resizeImage($imagick, (int) $longerSideLenght);
         $imagick->modulateImage(100, 0, 100);
         // adaptive threshold had worse results than unmodified image        * $imagick->adaptiveThresholdImage(150, 150, 1);
         $imagick->setImageFormat('png');
@@ -65,22 +66,22 @@ class BarcodeStage extends BaseStage implements StageInterface
     }
 
     /**
-     * use Zbar to detect Barcodes
+     * use Zbar to detect Barcodes.
      *
-     * @link https://manpages.ubuntu.com/manpages/jammy/man1/zbarimg.1.html
+     * @see https://manpages.ubuntu.com/manpages/jammy/man1/zbarimg.1.html
      */
     protected function detectCodes(): void
     {
         $output = [];
         $returnVar = 0;
-        $info = exec('zbarimg --quiet --raw ' . escapeshellarg($this->getZbarThumbTempPath()), $output, $returnVar);
+        $info = exec('zbarimg --quiet --raw '.escapeshellarg($this->getZbarThumbTempPath()), $output, $returnVar);
 
         switch ($returnVar) {
             case 1:
             case 2:
-                throw new BarcodeStageException('zbar script error: ' . $info);
+                throw new BarcodeStageException('zbar script error: '.$info);
             case 4:
-                //no barcode detected - but let's relax, here is only detection
+                // no barcode detected - but let's relax, here is only detection
         }
 
         $this->barcodes = $output;
@@ -114,11 +115,12 @@ class BarcodeStage extends BaseStage implements StageInterface
             $this->item->error->setBarcodes(implode($this->barcodes));
             throw new BarcodeStageException('Invalid or missing barcode');
         }
-        if (count($validCodes) === 1) {
+        if (1 === count($validCodes)) {
             $this->item->setSpecimenId($validCodes[0]);
+
             return;
         }
-        //multiple valid barcodes
+        // multiple valid barcodes
         if ($this->item->herbarium->multipleBarcodeMultiplier) {
             $this->item->setSpecimenId(array_shift($validCodes));
             $this->item->addMultiplier()->setBarcodes($validCodes);
@@ -130,7 +132,7 @@ class BarcodeStage extends BaseStage implements StageInterface
 
     protected function validateBarcode($barcode): ?string
     {
-        //TODO ? first and last character must be alfanumeric to prevent white char chaos?
+        // TODO ? first and last character must be alfanumeric to prevent white char chaos?
         $parts = [];
         if (!preg_match($this->item->herbarium->regexBarcode, $barcode, $parts)) {
             return null;
@@ -140,12 +142,11 @@ class BarcodeStage extends BaseStage implements StageInterface
             return null;
         }
 
-        if ($this->item->herbarium->strictBarcodeAcronymPrefix &&
-            strtoupper($parts['herbarium'] ?? '') !== $this->item->herbarium->acronym) {
+        if ($this->item->herbarium->strictBarcodeAcronymPrefix
+            && strtoupper($parts['herbarium'] ?? '') !== $this->item->herbarium->acronym) {
             return null;
         }
 
         return $specimenId;
     }
-
 }

@@ -4,305 +4,389 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a dataset with all its metadata components
+ * Represents a dataset with all its metadata components.
  */
 class Dataset implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?string $iri = null;
-    protected(set) ?MetadataIdentification $metadataIdentification = null;
-    protected(set) array $identifiers = [];
-    protected(set) ?string $version = null;
-    protected(set) ?string $title = null;
-    protected(set) array $alternateTitles = [];
-    protected(set) array $qualifiedRelations = [];
-    protected(set) ?int $publicationYear = null;
-    protected(set) array $timeReferences = [];
-    protected(set) ?ResourceType $resourceType = null;
-    protected(set) ?string $primaryLanguage = null;
-    protected(set) array $otherLanguages = [];
-    protected(set) ?TermsOfUse $termsOfUse = null;
-    protected(set) array $subjects = [];
-    protected(set) array $descriptions = [];
-    protected(set) array $locations = [];
-    protected(set) array $fundingReferences = [];
+    public protected(set) ?string $iri = null;
+    public protected(set) ?MetadataIdentification $metadataIdentification = null;
+    public protected(set) array $identifiers = [];
+    public protected(set) ?string $version = null;
+    public protected(set) ?string $title = null;
+    public protected(set) array $alternateTitles = [];
+    public protected(set) array $qualifiedRelations = [];
+    public protected(set) ?int $publicationYear = null;
+    public protected(set) array $timeReferences = [];
+    public protected(set) ?ResourceType $resourceType = null;
+    public protected(set) ?string $primaryLanguage = null;
+    public protected(set) array $otherLanguages = [];
+    public protected(set) ?TermsOfUse $termsOfUse = null;
+    public protected(set) array $subjects = [];
+    public protected(set) array $descriptions = [];
+    public protected(set) array $locations = [];
+    public protected(set) array $fundingReferences = [];
     /**
-     * the Funding structure is overcomplicated for herbaria purposes, allow storing XL fragment to create OAI-PMH in case of Funding
+     * the Funding structure is overcomplicated for herbaria purposes, allow storing XL fragment to create OAI-PMH in case of Funding.
      */
-    protected(set) ?string $fundingReferencesRaw = null;
-    protected(set) array $relatedResources = [];
-    protected(set) array $distributions = [];
-    protected(set) ?ValidationResult $validationResult = null;
-    protected(set) ?Provenance $provenance = null;
+    public protected(set) ?string $fundingReferencesRaw = null;
+    public protected(set) array $relatedResources = [];
+    public protected(set) array $distributions = [];
+    public protected(set) ?ValidationResult $validationResult = null;
+    public protected(set) ?Provenance $provenance = null;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
     // Getters
-    public function getIri(): ?string {
+    public function getIri(): ?string
+    {
         return $this->iri;
     }
 
-    public function getMetadataIdentification(): ?MetadataIdentification {
+    public function getMetadataIdentification(): ?MetadataIdentification
+    {
         return $this->metadataIdentification;
     }
 
-    public function getIdentifiers(): array {
+    public function getIdentifiers(): array
+    {
         return $this->identifiers;
     }
 
-    public function getVersion(): ?string {
+    public function getVersion(): ?string
+    {
         return $this->version;
     }
 
-    public function getTitle(): ?string {
+    public function getTitle(): ?string
+    {
         return $this->title;
     }
 
-    public function getAlternateTitles(): array {
+    public function getAlternateTitles(): array
+    {
         return $this->alternateTitles;
     }
 
-    public function getQualifiedRelations(): array {
+    public function getQualifiedRelations(): array
+    {
         return $this->qualifiedRelations;
     }
 
-    public function getPublicationYear(): ?int {
+    public function getPublicationYear(): ?int
+    {
         return $this->publicationYear;
     }
 
-    public function getTimeReferences(): array {
+    public function getTimeReferences(): array
+    {
         return $this->timeReferences;
     }
 
-    public function getResourceType(): ?ResourceType {
+    public function getResourceType(): ?ResourceType
+    {
         return $this->resourceType;
     }
 
-    public function getPrimaryLanguage(): ?string {
+    public function getPrimaryLanguage(): ?string
+    {
         return $this->primaryLanguage;
     }
 
-    public function getOtherLanguages(): array {
+    public function getOtherLanguages(): array
+    {
         return $this->otherLanguages;
     }
 
-    public function getTermsOfUse(): ?TermsOfUse {
+    public function getTermsOfUse(): ?TermsOfUse
+    {
         return $this->termsOfUse;
     }
 
-    public function getSubjects(): array {
+    public function getSubjects(): array
+    {
         return $this->subjects;
     }
 
-    public function getDescriptions(): array {
+    public function getDescriptions(): array
+    {
         return $this->descriptions;
     }
 
-    public function getLocations(): array {
+    public function getLocations(): array
+    {
         return $this->locations;
     }
 
-    public function getFundingReferences(): array {
+    public function getFundingReferences(): array
+    {
         return $this->fundingReferences;
     }
 
-    public function getRelatedResources(): array {
+    public function getRelatedResources(): array
+    {
         return $this->relatedResources;
     }
 
-    public function getDistributions(): array {
+    public function getDistributions(): array
+    {
         return $this->distributions;
     }
 
-    public function getValidationResult(): ?ValidationResult {
+    public function getValidationResult(): ?ValidationResult
+    {
         return $this->validationResult;
     }
 
-    public function getProvenance(): ?Provenance {
+    public function getProvenance(): ?Provenance
+    {
         return $this->provenance;
     }
 
     // Setters
-    public function setIri(?string $iri): self {
+    public function setIri(?string $iri): self
+    {
         $this->iri = $iri;
+
         return $this;
     }
 
-    public function setMetadataIdentification(?MetadataIdentification $metadataIdentification): self {
+    public function setMetadataIdentification(?MetadataIdentification $metadataIdentification): self
+    {
         $this->metadataIdentification = $metadataIdentification;
+
         return $this;
     }
 
-    public function setIdentifiers(array $identifiers): self {
+    public function setIdentifiers(array $identifiers): self
+    {
         $this->identifiers = $identifiers;
+
         return $this;
     }
 
-    public function addIdentifier(Identifier $identifier): self {
+    public function addIdentifier(Identifier $identifier): self
+    {
         $this->identifiers[] = $identifier;
+
         return $this;
     }
 
-    public function setVersion(?string $version): self {
+    public function setVersion(?string $version): self
+    {
         $this->version = $version;
+
         return $this;
     }
 
-    public function setTitle(?string $title): self {
+    public function setTitle(?string $title): self
+    {
         $this->title = $title;
+
         return $this;
     }
 
-    public function setAlternateTitles(array $alternateTitles): self {
+    public function setAlternateTitles(array $alternateTitles): self
+    {
         $this->alternateTitles = $alternateTitles;
+
         return $this;
     }
 
-    public function addAlternateTitle(AlternateTitle $alternateTitle): self {
+    public function addAlternateTitle(AlternateTitle $alternateTitle): self
+    {
         $this->alternateTitles[] = $alternateTitle;
+
         return $this;
     }
 
-    public function setQualifiedRelations(array $qualifiedRelations): self {
+    public function setQualifiedRelations(array $qualifiedRelations): self
+    {
         $this->qualifiedRelations = $qualifiedRelations;
+
         return $this;
     }
 
-    public function addQualifiedRelation(QualifiedRelation $qualifiedRelation): self {
+    public function addQualifiedRelation(QualifiedRelation $qualifiedRelation): self
+    {
         $this->qualifiedRelations[] = $qualifiedRelation;
+
         return $this;
     }
 
-    public function setPublicationYear(?int $publicationYear): self {
+    public function setPublicationYear(?int $publicationYear): self
+    {
         $this->publicationYear = $publicationYear;
+
         return $this;
     }
 
-    public function setTimeReferences(array $timeReferences): self {
+    public function setTimeReferences(array $timeReferences): self
+    {
         $this->timeReferences = $timeReferences;
+
         return $this;
     }
 
-    public function addTimeReference(TimeReference $timeReference): self {
+    public function addTimeReference(TimeReference $timeReference): self
+    {
         $this->timeReferences[] = $timeReference;
+
         return $this;
     }
 
-    public function setResourceType(?ResourceType $resourceType): self {
+    public function setResourceType(?ResourceType $resourceType): self
+    {
         $this->resourceType = $resourceType;
+
         return $this;
     }
 
-    public function setPrimaryLanguage(?string $primaryLanguage): self {
+    public function setPrimaryLanguage(?string $primaryLanguage): self
+    {
         $this->primaryLanguage = $primaryLanguage;
+
         return $this;
     }
 
-    public function setOtherLanguages(array $otherLanguages): self {
+    public function setOtherLanguages(array $otherLanguages): self
+    {
         $this->otherLanguages = $otherLanguages;
+
         return $this;
     }
 
-    public function addOtherLanguage(string $otherLanguage): self {
+    public function addOtherLanguage(string $otherLanguage): self
+    {
         $this->otherLanguages[] = $otherLanguage;
+
         return $this;
     }
 
-    public function setTermsOfUse(?TermsOfUse $termsOfUse): self {
+    public function setTermsOfUse(?TermsOfUse $termsOfUse): self
+    {
         $this->termsOfUse = $termsOfUse;
+
         return $this;
     }
 
-    public function setSubjects(array $subjects): self {
+    public function setSubjects(array $subjects): self
+    {
         $this->subjects = $subjects;
+
         return $this;
     }
 
-    public function addSubject(Subject $subject): self {
+    public function addSubject(Subject $subject): self
+    {
         $this->subjects[] = $subject;
+
         return $this;
     }
 
-    public function setDescriptions(array $descriptions): self {
+    public function setDescriptions(array $descriptions): self
+    {
         $this->descriptions = $descriptions;
+
         return $this;
     }
 
-    public function addDescription(Description $description): self {
+    public function addDescription(Description $description): self
+    {
         $this->descriptions[] = $description;
+
         return $this;
     }
 
-    public function setLocations(array $locations): self {
+    public function setLocations(array $locations): self
+    {
         $this->locations = $locations;
+
         return $this;
     }
 
-    public function addLocation(Location $location): self {
+    public function addLocation(Location $location): self
+    {
         $this->locations[] = $location;
+
         return $this;
     }
 
-    public function setFundingReferences(array $fundingReferences): self {
+    public function setFundingReferences(array $fundingReferences): self
+    {
         $this->fundingReferences = $fundingReferences;
+
         return $this;
     }
 
-    public function addFundingReference(FundingReference $fundingReference): self {
+    public function addFundingReference(FundingReference $fundingReference): self
+    {
         $this->fundingReferences[] = $fundingReference;
+
         return $this;
     }
 
-    public function setRawFundingReference(?string $fundingReference): self {
+    public function setRawFundingReference(?string $fundingReference): self
+    {
         $this->fundingReferencesRaw = $fundingReference;
+
         return $this;
     }
 
     public function getRawFundingReferences(): ?string
     {
         return $this->fundingReferencesRaw;
-
     }
 
-    public function setRelatedResources(array $relatedResources): self {
+    public function setRelatedResources(array $relatedResources): self
+    {
         $this->relatedResources = $relatedResources;
+
         return $this;
     }
 
-    public function addRelatedResource(RelatedResource $relatedResource): self {
+    public function addRelatedResource(RelatedResource $relatedResource): self
+    {
         $this->relatedResources[] = $relatedResource;
+
         return $this;
     }
 
-    public function setDistributions(array $distributions): self {
+    public function setDistributions(array $distributions): self
+    {
         $this->distributions = $distributions;
+
         return $this;
     }
 
-    public function addDistribution(Distribution $distribution): self {
+    public function addDistribution(Distribution $distribution): self
+    {
         $this->distributions[] = $distribution;
+
         return $this;
     }
 
-    public function setValidationResult(?ValidationResult $validationResult): self {
+    public function setValidationResult(?ValidationResult $validationResult): self
+    {
         $this->validationResult = $validationResult;
+
         return $this;
     }
 
-    public function setProvenance(?Provenance $provenance): self {
+    public function setProvenance(?Provenance $provenance): self
+    {
         $this->provenance = $provenance;
+
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         // Create the root element with namespaces
@@ -311,7 +395,7 @@ class Dataset implements XmlSerializable
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:gml', 'http://www.opengis.net/gml/3.2');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
-        if ($this->getIri() !== null) {
+        if (null !== $this->getIri()) {
             $iriElement = $this->createElement($document, 'iri', $this->getIri());
             $element->appendChild($iriElement);
         }
@@ -323,12 +407,12 @@ class Dataset implements XmlSerializable
             $element->appendChild($identifierElement);
         }
 
-        if ($this->version !== null) {
+        if (null !== $this->version) {
             $versionElement = $this->createElement($document, 'version', $this->version);
             $element->appendChild($versionElement);
         }
 
-        if ($this->getTitle() !== null) {
+        if (null !== $this->getTitle()) {
             $titleElement = $this->createElement($document, 'title', $this->getTitle());
             $element->appendChild($titleElement);
         }
@@ -343,7 +427,7 @@ class Dataset implements XmlSerializable
             $element->appendChild($qualifiedRelationElement);
         }
 
-        if ($this->getPublicationYear() !== null) {
+        if (null !== $this->getPublicationYear()) {
             $yearElement = $this->createElement($document, 'publication_year', (string) $this->getPublicationYear());
             $element->appendChild($yearElement);
         }
@@ -355,7 +439,7 @@ class Dataset implements XmlSerializable
 
         $this->appendChildIfNotNull($element, $this->getResourceType(), 'resource_type');
 
-        if ($this->getPrimaryLanguage() !== null) {
+        if (null !== $this->getPrimaryLanguage()) {
             $primaryLangElement = $this->createElement($document, 'primary_language');
             $iriElement = $this->createElement($document, 'iri', $this->getPrimaryLanguage());
             $primaryLangElement->appendChild($iriElement);
@@ -391,7 +475,7 @@ class Dataset implements XmlSerializable
             $element->appendChild($fundingElement);
         }
 
-        if(!empty($this->fundingReferencesRaw)){
+        if (!empty($this->fundingReferencesRaw)) {
             $fragment = $document->createDocumentFragment();
             $fragment->appendXML($this->getRawFundingReferences());
             $element->appendChild($fragment);
@@ -408,7 +492,7 @@ class Dataset implements XmlSerializable
         }
 
         // Add empty validation_result and provenance elements as placeholders
-        if ($this->getValidationResult() !== null) {
+        if (null !== $this->getValidationResult()) {
             $validationElement = $this->getValidationResult()->toXml($document, 'validation_result');
             $element->appendChild($validationElement);
         } else {
@@ -416,7 +500,7 @@ class Dataset implements XmlSerializable
             $element->appendChild($validationElement);
         }
 
-        if ($this->getProvenance() !== null) {
+        if (null !== $this->getProvenance()) {
             $provenanceElement = $this->getProvenance()->toXml($document, 'provenance');
             $element->appendChild($provenanceElement);
         } else {
@@ -428,7 +512,7 @@ class Dataset implements XmlSerializable
     }
 
     /**
-     * Convert the dataset to XML string
+     * Convert the dataset to XML string.
      *
      * @return string The XML representation
      */

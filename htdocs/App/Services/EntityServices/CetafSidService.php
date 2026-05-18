@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
@@ -12,12 +14,10 @@ class CetafSidService extends BaseEntityService
 
     public function getDefaultDatasource(User $user): QueryBuilder
     {
-
         return $this->getRepository()
             ->createQueryBuilder('p')
             ->andWhere('p.herbarium = :userHerbarium  OR :isAdmin = true')
             ->setParameter('userHerbarium', $user->getIdentity()->getCurrentHerbariumId())
             ->setParameter('isAdmin', $user->isInRole('ROLE_ADMIN'));
     }
-
 }

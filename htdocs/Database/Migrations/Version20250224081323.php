@@ -24,7 +24,7 @@ final class Version20250224081323 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN photos_type.name IS \'name of the type\'');
         $this->addSql('COMMENT ON COLUMN photos_type.description IS \'short description\'');
         $this->addSql('COMMENT ON COLUMN photos_type.color IS \'CSS color class for status visualisation\'');
-          $this->addSql('ALTER TABLE photos ADD type_id INT DEFAULT 1 NOT NULL');
+        $this->addSql('ALTER TABLE photos ADD type_id INT DEFAULT 1 NOT NULL');
         $this->addSql('COMMENT ON COLUMN photos.type_id IS \'Type of the photo\'');
         $this->addSql('ALTER TABLE photos ADD CONSTRAINT FK_876E0D9C54C8C93 FOREIGN KEY (type_id) REFERENCES photos_type (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('CREATE INDEX IDX_876E0D9C54C8C93 ON photos (type_id)');

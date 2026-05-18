@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\IIIF;
 
@@ -9,7 +11,6 @@ use App\Model\Specimen\Specimen;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use IIIF\PresentationAPI\Links\Service;
 use IIIF\PresentationAPI\Metadata\Metadata;
 use IIIF\PresentationAPI\Parameters\DCType;
@@ -26,7 +27,6 @@ use Nette\Application\LinkGenerator;
 
 class ManifestFactory
 {
-
     protected Specimen $specimen;
 
     protected string $selfReferencingLink;
@@ -50,7 +50,7 @@ class ManifestFactory
             ->addSequence($this->createSequence())
             ->addAttribution($specimen->herbarium->license->link);
 
-        if ($specimen->herbarium->logo !== null) {
+        if (null !== $specimen->herbarium->logo) {
             $manifest->addLogo((new Logo())->setID($specimen->herbarium->logo));
         }
 
@@ -81,7 +81,7 @@ class ManifestFactory
     protected function getFirstImage(): ?Photos
     {
         $photos = $this->photoService->getPublicPhotosOfSpecimen($this->specimen);
-        if (count($photos) !== 0) {
+        if (0 !== count($photos)) {
             return $photos[0];
         }
 
@@ -93,7 +93,7 @@ class ManifestFactory
         $sequence = new Sequence();
 
         $sequence
-            ->setID($this->selfReferencingLink . '#sequence-1')
+            ->setID($this->selfReferencingLink.'#sequence-1')
             ->setViewingDirection(ViewingDirection::LEFT_TO_RIGHT)
             ->addLabel('Current order');
 
@@ -116,9 +116,9 @@ class ManifestFactory
     {
         $canvas = new Canvas();
         $metadata = new Metadata();
-        $metadata->addLabelValue('Archive Master file (TIFF)', "<a href='" . $this->linkGenerator->link('Front:Repository:archiveImage', [$photo->id]) . "'>download original</a>");
+        $metadata->addLabelValue('Archive Master file (TIFF)', "<a href='".$this->linkGenerator->link('Front:Repository:archiveImage', [$photo->id])."'>download original</a>");
         $canvas
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo) . '#canvas')
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo).'#canvas')
             ->addLabel($photo->jp2Filename)
             ->setWidth($photo->width)
             ->setHeight($photo->height)
@@ -139,9 +139,9 @@ class ManifestFactory
         $annotationList = new AnnotationList();
         $annotationList
             ->setID($this->linkGenerator->link('Front:Iiif:annotationList', [$photo->id]));
+
         return $annotationList;
     }
-
 
     protected function createAnnotation(Photos $photo): Annotation
     {
@@ -156,11 +156,10 @@ class ManifestFactory
 
         $annotation = new Annotation();
         $annotation
-            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo) . '#image')
-            ->setOn($this->repositoryConfiguration->getImageServerInfoUrl($photo) . '#canvas')
+            ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo).'#image')
+            ->setOn($this->repositoryConfiguration->getImageServerInfoUrl($photo).'#canvas')
             ->setContent($content);
 
         return $annotation;
     }
-
 }

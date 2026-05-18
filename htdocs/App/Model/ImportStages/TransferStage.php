@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -12,7 +14,6 @@ use League\Pipeline\StageInterface;
 
 class TransferStage extends BaseStage implements StageInterface
 {
-
     public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService, protected readonly AppConfiguration $appConfiguration, protected readonly S3Service $s3Service)
     {
         parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
@@ -36,7 +37,7 @@ class TransferStage extends BaseStage implements StageInterface
                 $this->getMasterTempPath());
             $this->item->setArchiveFilename($this->repositoryConfiguration->createS3TifName($this->item));
         } catch (\Throwable $exception) {
-            throw new TransferStageException('tiff upload error (' . $exception->getMessage() . ')');
+            throw new TransferStageException('tiff upload error ('.$exception->getMessage().')');
         }
     }
 
@@ -49,8 +50,7 @@ class TransferStage extends BaseStage implements StageInterface
                 $this->getDatabotThumbTempPath());
             $this->item->setDatabotThumbFilename($this->repositoryConfiguration->createS3DatabotThumbName($this->item));
         } catch (\Throwable $exception) {
-            throw new TransferStageException('databot png upload error (' . $exception->getMessage() . ')');
+            throw new TransferStageException('databot png upload error ('.$exception->getMessage().')');
         }
     }
-
 }

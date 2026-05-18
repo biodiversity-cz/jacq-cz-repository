@@ -4,56 +4,59 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a distribution which can be either a data service or downloadable file
+ * Represents a distribution which can be either a data service or downloadable file.
  */
 class Distribution implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?DistributionDataService $distributionDataService = null;
-    protected(set) ?DistributionDownloadableFile $distributionDownloadableFile = null;
+    public protected(set) ?DistributionDataService $distributionDataService = null;
+    public protected(set) ?DistributionDownloadableFile $distributionDownloadableFile = null;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-
     // Getters
-    public function getDistributionDataService(): ?DistributionDataService {
+    public function getDistributionDataService(): ?DistributionDataService
+    {
         return $this->distributionDataService;
     }
 
-    public function getDistributionDownloadableFile(): ?DistributionDownloadableFile {
+    public function getDistributionDownloadableFile(): ?DistributionDownloadableFile
+    {
         return $this->distributionDownloadableFile;
     }
 
     // Setters
-    public function setDistributionDataService(?DistributionDataService $distributionDataService): self {
+    public function setDistributionDataService(?DistributionDataService $distributionDataService): self
+    {
         $this->distributionDataService = $distributionDataService;
+
         return $this;
     }
 
-    public function setDistributionDownloadableFile(?DistributionDownloadableFile $distributionDownloadableFile): self {
+    public function setDistributionDownloadableFile(?DistributionDownloadableFile $distributionDownloadableFile): self
+    {
         $this->distributionDownloadableFile = $distributionDownloadableFile;
+
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'distribution');
 
-        if ($this->getDistributionDataService() !== null) {
+        if (null !== $this->getDistributionDataService()) {
             $serviceElement = $this->getDistributionDataService()->toXml($document, 'distribution_data_service');
             $element->appendChild($serviceElement);
         }
 
-        if ($this->getDistributionDownloadableFile() !== null) {
+        if (null !== $this->getDistributionDownloadableFile()) {
             $fileElement = $this->getDistributionDownloadableFile()->toXml($document, 'distribution_downloadable_file');
             $element->appendChild($fileElement);
         }

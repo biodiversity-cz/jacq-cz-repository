@@ -1,28 +1,25 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Services\EntityServices;
 
-use App\Bootstrap;
-use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Maintenance;
-use App\Security\Identity;
-use App\Services\EntityServices\HerbariumService;
 use App\Services\EntityServices\MaintenanceService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Mockery;
-use Nette\Security\User;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../../bootstrap.php';
-
+require_once __DIR__.'/../../../../bootstrap.php';
 
 // Dummy entity pro test
-class DummyMaintenance extends Maintenance {}
+class DummyMaintenance extends Maintenance
+{
+}
 
 test('MaintenanceService: getValid returns repository result', function (): void {
-    $repositoryMock = Mockery::mock(\App\Model\Database\Repository\AbstractRepository::class);
-    $entityManagerMock = Mockery::mock(EntityManagerInterface::class);
+    $repositoryMock = \Mockery::mock(\App\Model\Database\Repository\AbstractRepository::class);
+    $entityManagerMock = \Mockery::mock(EntityManagerInterface::class);
 
     $entityManagerMock
         ->shouldReceive('getRepository')
@@ -45,5 +42,5 @@ test('MaintenanceService: getValid returns repository result', function (): void
 
 // Ukončení Mockery
 register_shutdown_function(function (): void {
-    Mockery::close();
+    \Mockery::close();
 });

@@ -1,13 +1,12 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\EntityServices;
 
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
-use App\Security\Identity;
 use App\Services\Exceptions\RiskOfUnpredictabilityException;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\EntityManagerInterface;
 use Nette\Security\User;
 
 class HerbariumService extends BaseEntityService
@@ -41,13 +40,14 @@ class HerbariumService extends BaseEntityService
     {
         $herbarium = $this->getCurrentUserHerbarium($user);
         $photosRepository = $this->entityManager->getRepository(Photos::class);
-        if (count($photosRepository->findUnprocessedPhotos($user)) > 0){
+        if (count($photosRepository->findUnprocessedPhotos($user)) > 0) {
             throw new RiskOfUnpredictabilityException('Change this setting is allowed only when having no unprocessed photos.');
         }
         if ($herbarium) {
             $herbarium->setFallbackFilename($value);
             $this->entityManager->flush();
         }
+
         return $this;
     }
 
@@ -55,13 +55,14 @@ class HerbariumService extends BaseEntityService
     {
         $herbarium = $this->getCurrentUserHerbarium($user);
         $photosRepository = $this->entityManager->getRepository(Photos::class);
-        if (count($photosRepository->findUnprocessedPhotos($user)) > 0){
+        if (count($photosRepository->findUnprocessedPhotos($user)) > 0) {
             throw new RiskOfUnpredictabilityException('Change this setting is allowed only when having no unprocessed photos.');
         }
         if ($herbarium) {
             $herbarium->setMultipleBarcodeMultiplier($value);
             $this->entityManager->flush();
         }
+
         return $this;
     }
 
@@ -69,13 +70,14 @@ class HerbariumService extends BaseEntityService
     {
         $herbarium = $this->getCurrentUserHerbarium($user);
         $photosRepository = $this->entityManager->getRepository(Photos::class);
-        if (count($photosRepository->findUnprocessedPhotos($user)) > 0){
+        if (count($photosRepository->findUnprocessedPhotos($user)) > 0) {
             throw new RiskOfUnpredictabilityException('Change this setting is allowed only when having no unprocessed photos.');
         }
         if ($herbarium) {
             $herbarium->setStrictBarcodeAcronymPrefix($value);
             $this->entityManager->flush();
         }
+
         return $this;
     }
 

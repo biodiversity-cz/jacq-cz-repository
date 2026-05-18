@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\Database\Entity;
 
@@ -12,26 +14,25 @@ use Doctrine\ORM\Mapping\Table;
 #[Table(name: 'maintenance', schema: 'front', options: ['comment' => 'Manually edited table with maintenance information.'])]
 class Maintenance
 {
-
     use TId;
 
     #[Column(nullable: false)]
-    protected(set) string $message = '';
+    public protected(set) string $message = '';
 
-    #[Column(nullable: false, options: ['default' => 'info','comment' => 'success | info | warning | danger = Bootstrap contextual classes'])]
-    protected(set) string $type = 'info';
+    #[Column(nullable: false, options: ['default' => 'info', 'comment' => 'success | info | warning | danger = Bootstrap contextual classes'])]
+    public protected(set) string $type = 'info';
 
     #[Column(type: 'datetime_immutable', nullable: true, options: ['comment' => 'The message will be hidden when expired'])]
-    protected(set) ?\DateTimeImmutable $expiresAt = null;
-
+    public protected(set) ?\DateTimeImmutable $expiresAt = null;
 
     public function setMessage(string $message): Maintenance
     {
         $this->message = $message;
+
         return $this;
     }
 
-    public function getType(string $prefix=''): string
+    public function getType(string $prefix = ''): string
     {
         return $prefix.$this->type;
     }
@@ -39,14 +40,14 @@ class Maintenance
     public function setType(string $type): Maintenance
     {
         $this->type = $type;
+
         return $this;
     }
 
     public function setExpiresAt(?\DateTimeImmutable $expiresAt): Maintenance
     {
         $this->expiresAt = $expiresAt;
+
         return $this;
     }
-
-
 }

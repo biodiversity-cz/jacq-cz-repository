@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -6,7 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class AppConfiguration
 {
-
     public const string VERSION_VARIABLE = 'GIT_TAG';
 
     /**
@@ -18,7 +19,7 @@ class AppConfiguration
 
     public function isProduction(): bool
     {
-        return $this->getPlatform() === 'production';
+        return 'production' === $this->getPlatform();
     }
 
     public function getPlatform(): ?string
@@ -32,7 +33,7 @@ class AppConfiguration
 
     public function getVersion(): string
     {
-        if (getenv(self::VERSION_VARIABLE) !== false) {
+        if (false !== getenv(self::VERSION_VARIABLE)) {
             return getenv(self::VERSION_VARIABLE);
         }
 
@@ -41,8 +42,9 @@ class AppConfiguration
 
     public function isSslDbConnection(): bool
     {
-        $result = $this->entityManager->getConnection()->executeQuery("SHOW ssl;")->fetchOne();
-        return ($result !== 'off');
+        $result = $this->entityManager->getConnection()->executeQuery('SHOW ssl;')->fetchOne();
+
+        return 'off' !== $result;
     }
 
     public function getDatabotBasePath(): string
@@ -54,5 +56,4 @@ class AppConfiguration
     {
         return $this->config['openid']['providers'][$provider];
     }
-
 }

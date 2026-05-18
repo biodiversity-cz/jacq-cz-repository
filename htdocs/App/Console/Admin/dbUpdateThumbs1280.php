@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Console\Admin;
 
@@ -13,8 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class dbUpdateThumbs1280 extends Command
 {
-
-
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected RepositoryConfiguration $repositoryConfiguration, ?string $name = null)
     {
         parent::__construct($name);
@@ -38,16 +38,16 @@ class dbUpdateThumbs1280 extends Command
         $startTime = microtime(true);
         $i = 0;
         foreach ($this->getListOfPhotos() as $photo) {
-            $i++;
+            ++$i;
             $photo->setDatabotThumbFilename($this->repositoryConfiguration->createS3DatabotThumbName($photo));
-            if ($i === 500) {
+            if (500 === $i) {
                 $i = 0;
                 $this->entityManager->flush();
             }
         }
         $this->entityManager->flush();
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", (microtime(true) - $startTime)));
+        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
 
         return Command::SUCCESS;
     }
@@ -57,5 +57,4 @@ class dbUpdateThumbs1280 extends Command
         $this->setName('admin:dbUpdate1280Thumbs');
         $this->setDescription('fix database content');
     }
-
 }

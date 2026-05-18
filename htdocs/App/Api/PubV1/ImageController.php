@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Api\PubV1;
 
@@ -17,13 +19,10 @@ use App\Services\S3Service;
 use Nette\Http\IRequest;
 use Psr\Http\Message\ResponseInterface;
 
-
 #[Apitte\Path('/images')]
 #[Apitte\Tag('Images')]
 class ImageController extends BasePubV1Controller
 {
-
-
     public function __construct(protected readonly SpecimenFactory $specimenFactory, protected readonly ManifestFactory $manifestFactory, protected readonly AnnotationListFactory $annotationListFactory, protected readonly PhotoService $photoService, protected readonly ImageDownloadLogService $imageDownloadLogService, protected IRequest $httpRequest, protected RepositoryConfiguration $repositoryConfiguration, protected S3Service $s3Service)
     {
     }
@@ -34,10 +33,10 @@ class ImageController extends BasePubV1Controller
     #[Apitte\Response(description: 'Success', code: '200')]
     public function archive(ApiRequest $request, ApiResponse $response): ResponseInterface
     {
-        $id = (int)  $request->getParameter('photoId');
+        $id = (int) $request->getParameter('photoId');
 
         $photo = $this->photoService->getPublicPhoto($id);
-        if ($photo === null) {
+        if (null === $photo) {
             throw new ClientErrorException('Image not found', 404);
         }
 
@@ -47,7 +46,6 @@ class ImageController extends BasePubV1Controller
             $photo,
             'archive'
         );
-
     }
 
     #[Apitte\OpenApi('summary: Download JP2 fullsize image')]
@@ -59,7 +57,7 @@ class ImageController extends BasePubV1Controller
         $id = (int) $request->getParameter('photoId');
 
         $photo = $this->photoService->getPublicPhoto($id);
-        if ($photo === null) {
+        if (null === $photo) {
             throw new ClientErrorException('Image not found', 404);
         }
 
@@ -69,8 +67,8 @@ class ImageController extends BasePubV1Controller
             $photo,
             'jp2'
         );
-
     }
+
     #[Apitte\OpenApi('summary: Download thumbnail for image')]
     #[Apitte\Path('/thumb/{photoId}')]
     #[Apitte\Method('GET')]
@@ -80,7 +78,7 @@ class ImageController extends BasePubV1Controller
         $id = (int) $request->getParameter('photoId');
 
         $photo = $this->photoService->getPublicPhoto($id);
-        if ($photo === null) {
+        if (null === $photo) {
             throw new ClientErrorException('Image not found', 404);
         }
 
@@ -90,7 +88,6 @@ class ImageController extends BasePubV1Controller
             $photo,
             'databot_thumb'
         );
-
     }
 
     protected function sendFile(ApiRequest $request, ApiResponse $response, Photos $photo, string $imageType): ResponseInterface
@@ -119,7 +116,6 @@ class ImageController extends BasePubV1Controller
             $request->getHeader('Referer')
         );
 
-
         $head = $this->s3Service->headObject($result['bucket'], $result['filename']);
         $stream = $this->s3Service->getPsrStreamOfObject($result['bucket'], $result['filename']);
 
@@ -129,9 +125,9 @@ class ImageController extends BasePubV1Controller
             ->withHeader('Content-Transfer-Encoding', 'binary')
             ->withHeader(
                 'Content-Disposition',
-                ('attachment')
-                . '; filename="' . basename($result['filename']) . '"'
-                . '; filename*=utf-8\'\'' . rawurlencode($result['filename'])
+                'attachment'
+                .'; filename="'.basename($result['filename']).'"'
+                .'; filename*=utf-8\'\''.rawurlencode($result['filename'])
             )
             ->withHeader('Expires', '0')
             ->withHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
@@ -139,5 +135,4 @@ class ImageController extends BasePubV1Controller
             ->withHeader('Content-Length', $stream->getSize())
             ->withBody($stream);
     }
-
 }

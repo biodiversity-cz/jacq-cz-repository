@@ -11,13 +11,10 @@ use App\Security\UserAuthenticator;
 use Database\Base\FixtureBase;
 use Doctrine\Persistence\ObjectManager;
 
-
 class FixtureUsers extends FixtureBase
 {
-
-
     /**
-     * Load data fixtures with the passed ObjectManager
+     * Load data fixtures with the passed ObjectManager.
      */
     public function load(ObjectManager $manager): void
     {
@@ -73,10 +70,8 @@ class FixtureUsers extends FixtureBase
         $manager->flush();
     }
 
-
     public function getOrder(): int
     {
         return 30;
     }
-
 }

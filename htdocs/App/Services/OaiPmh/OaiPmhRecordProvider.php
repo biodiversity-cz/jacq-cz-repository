@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services\OaiPmh;
 
@@ -8,13 +10,13 @@ use App\Services\EntityServices\PhotoService;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
- * Service providing records for OAI-PMH responses with memory efficiency
+ * Service providing records for OAI-PMH responses with memory efficiency.
  */
 final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
 {
     public function __construct(
         private readonly PhotoService $photoService,
-        private readonly HerbariumService $herbariumService
+        private readonly HerbariumService $herbariumService,
     ) {
     }
 
@@ -31,7 +33,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
         ?\DateTimeInterface $until = null,
         ?string $set = null,
         int $offset = 0,
-        int $limit = 100
+        int $limit = 100,
     ): \Iterator {
         $qb = $this->photoService->getAllPublishedPhotosDatasource();
 
@@ -41,18 +43,18 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
            ->addSelect('h', 'l');
 
         // Apply date filters on lastEdit field
-        if ($from !== null) {
+        if (null !== $from) {
             $qb->andWhere('p.lastEdit >= :from')
                ->setParameter('from', $from);
         }
 
-        if ($until !== null) {
+        if (null !== $until) {
             $qb->andWhere('p.lastEdit <= :until')
                ->setParameter('until', $until);
         }
 
         // Apply set filter (herbarium)
-        if ($set !== null) {
+        if (null !== $set) {
             $qb->andWhere('h.acronym = :set')
                ->setParameter('set', $set);
         }
@@ -75,7 +77,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
     {
         // Extract photo ID from OAI identifier
         $photoId = $this->extractPhotoIdFromIdentifier($identifier);
-        if ($photoId === null) {
+        if (null === $photoId) {
             return null;
         }
 
@@ -114,7 +116,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
     public function recordExists(string $identifier): bool
     {
         $photoId = $this->extractPhotoIdFromIdentifier($identifier);
-        if ($photoId === null) {
+        if (null === $photoId) {
             return false;
         }
 
@@ -127,7 +129,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
     }
 
     /**
-     * Create a memory-efficient iterator that processes records in batches
+     * Create a memory-efficient iterator that processes records in batches.
      */
     private function createMemoryEfficientIterator(Paginator $paginator): \Iterator
     {
@@ -139,7 +141,6 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
             $query = $paginator->getQuery();
             $query->setFirstResult($offset);
             $query->setMaxResults($batchSize);
-
 
             $iterator = $query->toIterable();
             $hasResults = false;
@@ -164,7 +165,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
 
     /**
      * Extract photo ID from OAI identifier
-     * Expected format: oai:domain.com:photo-{id}
+     * Expected format: oai:domain.com:photo-{id}.
      */
     private function extractPhotoIdFromIdentifier(string $identifier): ?int
     {
@@ -188,7 +189,7 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
     }
 
     /**
-     * Generate OAI identifier for a photo
+     * Generate OAI identifier for a photo.
      */
     public function generateIdentifier(Photos $photo, string $domain): string
     {

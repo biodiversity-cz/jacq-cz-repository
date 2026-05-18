@@ -20,7 +20,6 @@ final class Version20260115075124 extends AbstractMigration
         $this->addSql('ALTER TABLE cetaf.sid DROP verbatim_identification');
         $this->addSql('DROP INDEX cetaf.uniq_3eabd69195047906');
         $this->addSql('ALTER TABLE cetaf.sid DROP stable_uri');
-
     }
 
     public function down(Schema $schema): void
@@ -30,6 +29,5 @@ final class Version20260115075124 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX uniq_3eabd69195047906 ON cetaf.sid (stable_uri)');
         $this->addSql('DROP INDEX cetaf.uniq_herbarium_externalid');
         $this->addSql('ALTER TABLE cetaf.sid ADD verbatim_identification VARCHAR(255) DEFAULT NULL');
-
     }
 }

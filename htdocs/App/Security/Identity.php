@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Security;
 
@@ -14,13 +16,12 @@ class Identity extends SimpleIdentity
 
     public function __construct(User $userEntity)
     {
-
-        $this->herbariums = $userEntity->getHerbaria()->map(fn($h) => $h->id)->toArray();
+        $this->herbariums = $userEntity->getHerbaria()->map(fn ($h) => $h->id)->toArray();
 
         $currentHerbariumId = $userEntity->lastVisitedHerbarium?->id;
         $currentHerbariumAcronym = $userEntity->lastVisitedHerbarium?->acronym;
 
-        if ($currentHerbariumId !== null && in_array($currentHerbariumId, $this->herbariums)) {
+        if (null !== $currentHerbariumId && in_array($currentHerbariumId, $this->herbariums)) {
             $this->currentHerbariumId = $currentHerbariumId;
             $this->currentHerbariumAcronym = $currentHerbariumAcronym;
         }
@@ -28,13 +29,12 @@ class Identity extends SimpleIdentity
         parent::__construct($userEntity->id, $this->getUserRoles($userEntity), [
             'name' => $userEntity->getFullname(),
             'email' => $userEntity->email,
-            'username' => $userEntity->username
+            'username' => $userEntity->username,
         ]);
     }
 
-
     /**
-     * Get user roles as an array of role names
+     * Get user roles as an array of role names.
      */
     private function getUserRoles(User $userEntity): array
     {
@@ -55,7 +55,7 @@ class Identity extends SimpleIdentity
     }
 
     /**
-     * Get the current herbarium
+     * Get the current herbarium.
      */
     public function getCurrentHerbariumId(): ?int
     {
@@ -71,7 +71,4 @@ class Identity extends SimpleIdentity
     {
         return in_array($herbarium->id, $this->herbariums, true);
     }
-
-
-
 }

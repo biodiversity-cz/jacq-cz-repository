@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Api\PubV1;
 
@@ -9,5 +11,4 @@ use App\Api\BasePubController;
 #[Apitte\Id('v1')]
 abstract class BasePubV1Controller extends BasePubController
 {
-
 }

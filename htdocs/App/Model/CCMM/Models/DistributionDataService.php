@@ -4,92 +4,107 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
-use App\Model\CCMM\Traits\XmlSerializableTrait;
 use App\Model\CCMM\Enum\Language;
+use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a distribution data service
+ * Represents a distribution data service.
  */
 class DistributionDataService implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?string $iri = null;
-    protected(set) array $titles = [];
-    protected(set) ?AccessService $accessService = null;
-    protected(set) ?Specification $specification = null;
-    protected(set) ?Documentation $documentation = null;
-    protected(set) array $descriptions = [];
+    public protected(set) ?string $iri = null;
+    public protected(set) array $titles = [];
+    public protected(set) ?AccessService $accessService = null;
+    public protected(set) ?Specification $specification = null;
+    public protected(set) ?Documentation $documentation = null;
+    public protected(set) array $descriptions = [];
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-
     // Getters
-    public function getIri(): ?string {
+    public function getIri(): ?string
+    {
         return $this->iri;
     }
 
-    public function getAccessService(): ?AccessService {
+    public function getAccessService(): ?AccessService
+    {
         return $this->accessService;
     }
 
-    public function getSpecification(): ?Specification {
+    public function getSpecification(): ?Specification
+    {
         return $this->specification;
     }
 
-    public function getDocumentation(): ?Documentation {
+    public function getDocumentation(): ?Documentation
+    {
         return $this->documentation;
     }
 
-    public function getTitles(): array {
+    public function getTitles(): array
+    {
         return $this->titles;
     }
 
-    public function getDescriptions(): array {
+    public function getDescriptions(): array
+    {
         return $this->descriptions;
     }
 
     // Setters
-    public function setIri(?string $iri): self {
+    public function setIri(?string $iri): self
+    {
         $this->iri = $iri;
+
         return $this;
     }
 
-    public function addTitle(string $title, Language $lang = Language::CS): self {
+    public function addTitle(string $title, Language $lang = Language::CS): self
+    {
         $this->titles[$lang->value] = $title;
+
         return $this;
     }
 
-    public function setAccessService(?AccessService $accessService): self {
+    public function setAccessService(?AccessService $accessService): self
+    {
         $this->accessService = $accessService;
+
         return $this;
     }
 
-    public function setSpecification(?Specification $specification): self {
+    public function setSpecification(?Specification $specification): self
+    {
         $this->specification = $specification;
+
         return $this;
     }
 
-    public function setDocumentation(?Documentation $documentation): self {
+    public function setDocumentation(?Documentation $documentation): self
+    {
         $this->documentation = $documentation;
+
         return $this;
     }
 
-    public function addDescription(string $description, Language $lang = Language::CS): self {
+    public function addDescription(string $description, Language $lang = Language::CS): self
+    {
         $this->descriptions[$lang->value] = $description;
+
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'distribution_data_service');
 
-        if ($this->getIri() !== null) {
+        if (null !== $this->getIri()) {
             $iriElement = $this->createElement($document, 'iri', $this->getIri());
             $element->appendChild($iriElement);
         }

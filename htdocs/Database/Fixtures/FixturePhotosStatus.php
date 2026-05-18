@@ -8,16 +8,13 @@ use App\Model\Database\Entity\PhotosStatus;
 use Database\Base\FixtureBase;
 use Doctrine\Persistence\ObjectManager;
 
-
 class FixturePhotosStatus extends FixtureBase
 {
-
     /**
-     * Load data fixtures with the passed ObjectManager
+     * Load data fixtures with the passed ObjectManager.
      */
     public function load(ObjectManager $manager): void
     {
-
         $s1 = new PhotosStatus();
         $s1->setName('waiting before control')
             ->setColor('warning')
@@ -70,10 +67,8 @@ class FixturePhotosStatus extends FixtureBase
         $manager->flush();
     }
 
-
     public function getOrder(): int
     {
         return 40;
     }
-
 }

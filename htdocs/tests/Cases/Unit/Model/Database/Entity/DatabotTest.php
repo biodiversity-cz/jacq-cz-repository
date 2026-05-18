@@ -1,13 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Model\Database\Entity;
 
 use App\Model\Database\Entity\Databot;
-use App\Model\Database\Entity\UserRole;
 use App\Model\Database\Enums\DatabotRole;
 use Tester\Assert;
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__.'/../../../../../bootstrap.php';
 
 test('Databot entity getters, setters and traits', function (): void {
     $databot = new Databot();
@@ -16,7 +17,6 @@ test('Databot entity getters, setters and traits', function (): void {
     $refId = new \ReflectionProperty($databot, 'id');
 
     $refCreatedAt = new \ReflectionProperty($databot, 'createdAt');
-
 
     // nastavíme id, createdAt (předpoklad)
     $refId->setValue($databot, 42);
@@ -56,4 +56,3 @@ test('Databot entity getters, setters and traits', function (): void {
     $databot->setRole($role);
     Assert::same($role, $databot->role);
 });
-

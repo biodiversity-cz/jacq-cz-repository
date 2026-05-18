@@ -4,46 +4,49 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents an alternate title with title and alternate title type
+ * Represents an alternate title with title and alternate title type.
  */
 class AlternateTitle implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) Title $title;
-    protected(set) ?AlternateTitleType $alternateTitleType = null;
+    public protected(set) Title $title;
+    public protected(set) ?AlternateTitleType $alternateTitleType = null;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-
     // Getters
-    public function getTitle(): Title {
+    public function getTitle(): Title
+    {
         return $this->title;
     }
 
-    public function getAlternateTitleType(): ?AlternateTitleType {
+    public function getAlternateTitleType(): ?AlternateTitleType
+    {
         return $this->alternateTitleType;
     }
 
     // Setters
-    public function setTitle(Title $title): self {
+    public function setTitle(Title $title): self
+    {
         $this->title = $title;
+
         return $this;
     }
 
-    public function setAlternateTitleType(?AlternateTitleType $alternateTitleType): self {
+    public function setAlternateTitleType(?AlternateTitleType $alternateTitleType): self
+    {
         $this->alternateTitleType = $alternateTitleType;
+
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'alternate_title');

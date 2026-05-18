@@ -8,16 +8,13 @@ use App\Model\Database\Entity\PhotosType;
 use Database\Base\FixtureBase;
 use Doctrine\Persistence\ObjectManager;
 
-
 class FixturePhotosType extends FixtureBase
 {
-
     /**
-     * Load data fixtures with the passed ObjectManager
+     * Load data fixtures with the passed ObjectManager.
      */
     public function load(ObjectManager $manager): void
     {
-
         $t1 = new PhotosType();
         $t1->setName('preserved specimen')
             ->setDescription('Scan or photo of preserved herbarium specimen')
@@ -45,10 +42,8 @@ class FixturePhotosType extends FixtureBase
         $manager->flush();
     }
 
-
     public function getOrder(): int
     {
         return 60;
     }
-
 }

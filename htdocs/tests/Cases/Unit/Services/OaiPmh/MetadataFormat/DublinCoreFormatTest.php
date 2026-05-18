@@ -1,18 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Tests\Cases\Unit\Services\OaiPmh\MetadataFormat;
 
 use App\Bootstrap;
-use App\Model\Database\Entity\Photos;
-use App\Model\Database\Entity\Herbaria;
-use App\Model\Database\Entity\License;
 use App\Services\OaiPmh\MetadataFormat\DublinCoreFormat;
 use App\Services\RepositoryConfiguration;
-use Mockery;
 use Tester\Assert;
 use Tests\Toolkit\PhotoTestFactory;
 
-require_once __DIR__ . '/../../../../../bootstrap.php';
+require_once __DIR__.'/../../../../../bootstrap.php';
 
 test('DublinCoreFormat: getMetadataPrefix returns oai_dc', function (): void {
     $container = Bootstrap::boot()->createContainer();
@@ -25,7 +23,7 @@ test('DublinCoreFormat: getMetadataPrefix returns oai_dc', function (): void {
 test('DublinCoreFormat: getSchema returns correct URL', function (): void {
     $container = Bootstrap::boot()->createContainer();
     $repositoryConfig = $container->getByType(RepositoryConfiguration::class);
-     $format = new DublinCoreFormat($repositoryConfig);
+    $format = new DublinCoreFormat($repositoryConfig);
 
     Assert::same('http://www.openarchives.org/OAI/2.0/oai_dc.xsd', $format->getSchema());
 });
@@ -63,8 +61,6 @@ test('DublinCoreFormat: toXml creates valid DC structure', function (): void {
     Assert::same('http://purl.org/dc/elements/1.1/', $xml->getAttributeNS('http://www.w3.org/2000/xmlns/', 'dc'));
 });
 
-
-
 test('DublinCoreFormat: toXml handles empty optional fields gracefully', function (): void {
     $container = Bootstrap::boot()->createContainer();
     $repositoryConfig = $container->getByType(RepositoryConfiguration::class);
@@ -80,5 +76,5 @@ test('DublinCoreFormat: toXml handles empty optional fields gracefully', functio
 });
 
 register_shutdown_function(function (): void {
-    Mockery::close();
+    \Mockery::close();
 });

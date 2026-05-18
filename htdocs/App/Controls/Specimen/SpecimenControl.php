@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Controls\Specimen;
 
@@ -13,11 +15,8 @@ use Nette\Security\User;
 
 class SpecimenControl extends Control
 {
-
-
     public function __construct(private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsResultService $databotsService, private SpecimenFactory $specimenFactory, private SpecimenIdService $specimenIdService)
     {
-
     }
 
     public function create(): self
@@ -28,7 +27,7 @@ class SpecimenControl extends Control
     public function render(Photos $photo): void
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/specimen.latte');
+        $template->setFile(__DIR__.'/specimen.latte');
 
         $template->photo = $photo;
         $specimen = $this->specimenFactory->createFromInternalPart($this->user, $photo->specimenId);
@@ -37,6 +36,4 @@ class SpecimenControl extends Control
         $this->template->maxPhotoStatus = $this->photoService->getMaxPhotoStatusOfSpecimen($this->user, $specimen);
         $template->render();
     }
-
-
 }

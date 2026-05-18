@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Forms;
 
@@ -8,7 +10,6 @@ use Nette\Security\User;
 
 final readonly class ImportFormFactory
 {
-
     public function __construct(private FormFactory $formFactory, private CuratorFacade $curatorFacade, private User $user)
     {
     }
@@ -32,8 +33,7 @@ final readonly class ImportFormFactory
         try {
             $this->curatorFacade->registerNewFiles($this->user, $data);
         } catch (\Throwable $exception) {
-            $form->addError('An error occurred: ' . $exception->getMessage());
+            $form->addError('An error occurred: '.$exception->getMessage());
         }
     }
-
 }

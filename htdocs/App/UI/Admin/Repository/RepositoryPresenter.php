@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\UI\Admin\Repository;
 
@@ -24,7 +26,6 @@ use Nette\Http\Response;
 
 final class RepositoryPresenter extends SecuredPresenter
 {
-
     /** @inject */ public CuratorFacade $curatorFacade;
     /** @inject */ public ImportedPhotosGridFactory $importedPhotosGridFactory;
     /** @inject */ public PublishedPhotosGridFactory $publishedPhotosGrid;
@@ -39,14 +40,14 @@ final class RepositoryPresenter extends SecuredPresenter
 
     public function actionMarkPublishable()
     {
-        try{
+        try {
             $this->curatorFacade->markPublishable($this->user);
             $this->flashMessage('All available photos were marked as Waiting for Publishing and will be processed soon.', 'success');
-        }catch (\Exception $exception){
-            $this->flashMessage('Error in publishing: '. $exception->getMessage(), 'danger');
+        } catch (\Exception $exception) {
+            $this->flashMessage('Error in publishing: '.$exception->getMessage(), 'danger');
         }
 
-        $this->redirect("in-progress");
+        $this->redirect('in-progress');
     }
 
     public function renderInProgress(): void
@@ -59,6 +60,7 @@ final class RepositoryPresenter extends SecuredPresenter
     {
         $this->template->title = 'Published files';
     }
+
     protected function sendFile(string $bucket, string $filename)
     {
         if ($this->s3Service->objectExists($bucket, $filename)) {
@@ -69,7 +71,7 @@ final class RepositoryPresenter extends SecuredPresenter
                 $httpResponse->setHeader('Content-Type', $head['ContentType']);
                 $httpResponse->setHeader(
                     'Content-Disposition',
-                    "attachment; filename=\"" . basename($filename) . "\"; filename*=UTF-8''" . rawurlencode($filename)
+                    'attachment; filename="'.basename($filename)."\"; filename*=UTF-8''".rawurlencode($filename)
                 );
                 fpassthru($stream);
                 fclose($stream);
@@ -83,22 +85,22 @@ final class RepositoryPresenter extends SecuredPresenter
     }
 
     /**
-     * used for GET form from main menu to make nice URL
+     * used for GET form from main menu to make nice URL.
      */
     public function actionSearch(?string $numeric_part): void
     {
-        $this->redirect('specimen', ['id'=>$numeric_part]);
+        $this->redirect('specimen', ['id' => $numeric_part]);
     }
 
     public function renderSpecimen(?string $id = ''): void
     {
         try {
-            if ($id == null) {
+            if (null == $id) {
                 throw new SpecimenIdException();
             }
             $specimen = $this->specimenFactory->createFromInternalPart($this->user, $id);
             $images = $this->photoService->getAllPhotosOfSpecimen($this->user, $specimen);
-            if (count($images) === 0) {
+            if (0 === count($images)) {
                 throw new SpecimenIdException('Specimen not in evidence');
             }
         } catch (SpecimenIdException $exception) {
@@ -107,13 +109,12 @@ final class RepositoryPresenter extends SecuredPresenter
         }
 
         $this->template->images = $images;
-
     }
 
     public function renderPhoto(int $id): void
     {
         $photo = $this->photoService->getPhoto($this->user, $id);
-        if ($photo === null) {
+        if (null === $photo) {
             $this->error('The requested photo does not exists.');
         }
         $this->template->photo = $photo;
@@ -122,39 +123,36 @@ final class RepositoryPresenter extends SecuredPresenter
     public function actionDatabotThumbImage(int $id): void
     {
         $photo = $this->photoService->getPhoto($this->user, $id);
-        if ($photo === null) {
+        if (null === $photo) {
             $this->error('The requested photo does not exists.');
         }
 
         $this->sendFile($this->repositoryConfiguration->getDatabotThumbsBucket($photo), $photo->databotThumbFilename);
-
     }
 
     public function actionMasterImage(int $id): void
     {
         $photo = $this->photoService->getPhoto($this->user, $id);
-        if ($photo === null) {
+        if (null === $photo) {
             $this->error('The requested photo does not exists.');
         }
 
         $this->sendFile($this->repositoryConfiguration->getArchiveBucket($photo), $photo->archiveFilename);
-
     }
 
     public function actionJP2Image(int $id): void
     {
         $photo = $this->photoService->getPhoto($this->user, $id);
-        if ($photo === null) {
+        if (null === $photo) {
             $this->error('The requested photo does not exists.');
         }
 
         $this->sendFile($this->repositoryConfiguration->getImageServerBucket($photo), $photo->jp2Filename);
-
     }
 
     protected function createComponentDetail(): Multiplier
     {
-        return new Multiplier(fn($id) => $this->detailControlFactory->create((int)$id));
+        return new Multiplier(fn ($id) => $this->detailControlFactory->create((int) $id));
     }
 
     public function createComponentImportedGrid(): ImportedPhotosGrid
@@ -171,5 +169,4 @@ final class RepositoryPresenter extends SecuredPresenter
     {
         return $this->publishedPhotosGrid->create();
     }
-
 }

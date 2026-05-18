@@ -37,7 +37,6 @@ final class Version20250206084851 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-
         $this->addSql('ALTER TABLE herbaria DROP regex_barcode');
         $this->addSql('ALTER TABLE herbaria DROP regex_filename');
         $this->addSql('ALTER TABLE users ALTER lastedit_timestamp DROP DEFAULT');

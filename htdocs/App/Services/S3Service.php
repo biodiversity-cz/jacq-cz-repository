@@ -1,17 +1,16 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services;
 
 use App\Exceptions\S3Exception;
 use Aws\Result;
 use Aws\S3\S3Client;
-use DateTimeImmutable;
-use Iterator;
 use Psr\Http\Message\StreamInterface;
 
 readonly class S3Service
 {
-
     public function __construct(protected S3Client $s3)
     {
     }
@@ -91,7 +90,7 @@ readonly class S3Service
         return $this->s3->doesBucketExist($bucket);
     }
 
-    public function getObjectOriginalTimestamp(string $bucket, string $key): ?DateTimeImmutable
+    public function getObjectOriginalTimestamp(string $bucket, string $key): ?\DateTimeImmutable
     {
         $result = $this->s3->headObject([
             'Bucket' => $bucket,
@@ -99,7 +98,7 @@ readonly class S3Service
         ]);
         $data = $result->get('Metadata');
         if (isset($data['origin-date-iso8601'])) {
-            return new DateTimeImmutable($data['origin-date-iso8601']);
+            return new \DateTimeImmutable($data['origin-date-iso8601']);
         }
 
         return null;
@@ -150,7 +149,7 @@ readonly class S3Service
         return $objects;
     }
 
-    public function listObjects(string $bucket): Iterator
+    public function listObjects(string $bucket): \Iterator
     {
         return $this->s3->getIterator('ListObjects', [
             'Bucket' => $bucket,
@@ -174,5 +173,4 @@ readonly class S3Service
 
         return $result['Body'];
     }
-
 }

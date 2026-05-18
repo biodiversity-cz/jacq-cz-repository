@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Services;
 
@@ -19,21 +21,19 @@ final class SpecimenPidCallerService
     private array $handlers = [];
 
     public function __construct(
-        private readonly Client                 $client,
+        private readonly Client $client,
         private readonly EntityManagerInterface $em,
-    )
-    {
+    ) {
     }
 
     /**
      * @param Photos[] $entities
-     * @param int $concurrency
      */
     public function callAsync(array $entities, int $concurrency = 5): void
     {
         $requests = function ($entities) {
             foreach ($entities as $entity) {
-                /** @var Photos $entity */
+                /* @var Photos $entity */
                 yield new Request('GET', $entity->getSpecimenPidApiEndpoint());
             }
         };
@@ -50,10 +50,10 @@ final class SpecimenPidCallerService
 
             'rejected' => function ($reason, $index) use ($entities) {
                 $entity = $entities[$index];
-//                $response = ($reason instanceof RequestException && $reason->hasResponse())
-//                    ? $reason->getResponse()
-//                    : null;
-//                throw $reason;
+                //                $response = ($reason instanceof RequestException && $reason->hasResponse())
+                //                    ? $reason->getResponse()
+                //                    : null;
+                //                throw $reason;
                 $entity->setLastEditAt();
                 $this->em->persist($entity);
             },
@@ -65,9 +65,10 @@ final class SpecimenPidCallerService
 
     private function chooseHandler(Photos $entity): callable
     {
-        if ($entity->herbarium->externalDatabase->id === ExternalDatabase::JACQ) {
+        if (ExternalDatabase::JACQ === $entity->herbarium->externalDatabase->id) {
             return [$this, 'jacqHandler'];
         }
+
         return [$this, 'defaultHandler'];
     }
 
@@ -75,8 +76,8 @@ final class SpecimenPidCallerService
     {
         $status = $response?->getStatusCode();
         try {
-            if ($status === 200 && $response) {
-                $body = (string)$response->getBody();
+            if (200 === $status && $response) {
+                $body = (string) $response->getBody();
                 $data = json_decode($body, true);
 
                 $sid = $data['cetaf_sid'] ?? null;
@@ -92,7 +93,7 @@ final class SpecimenPidCallerService
     }
 
     /**
-     * For case one wanna store the final url where the specimen is resolved, let's store nice url that use internal db id of the CETAF SID
+     * For case one wanna store the final url where the specimen is resolved, let's store nice url that use internal db id of the CETAF SID.
      */
     private function folowRedirectUri(string $url): string
     {
@@ -108,7 +109,7 @@ final class SpecimenPidCallerService
 
         $location = $response->getHeaderLine('Location');
 
-        if ($location === '') {
+        if ('' === $location) {
             return '';
         }
 
@@ -119,18 +120,18 @@ final class SpecimenPidCallerService
         $baseUri = new Uri($url);
         $redirectUri = new Uri($location);
 
-        return (string)UriResolver::resolve($baseUri, $redirectUri);
+        return (string) UriResolver::resolve($baseUri, $redirectUri);
     }
 
     private function jacqHandler(Photos $entity, $response): void
     {
         $status = $response?->getStatusCode();
         try {
-            if ($status === 200 && $response) {
-                $body = (string)$response->getBody();
+            if (200 === $status && $response) {
+                $body = (string) $response->getBody();
                 $data = json_decode($body, true);
 
-                if ($data['jacq']['jacq:accessible'] === true) {
+                if (true === $data['jacq']['jacq:accessible']) {
                     $sid = $data['jacq']['jacq:stableIdentifier'] ?? null;
                     if (empty($sid)) {
                         throw new SpecimenIdException('Invalid CETAF endpoint response');
@@ -142,6 +143,5 @@ final class SpecimenPidCallerService
             }
         } catch (\Exception $e) {
         }
-
     }
 }

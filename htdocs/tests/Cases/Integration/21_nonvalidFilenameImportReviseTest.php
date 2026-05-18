@@ -2,12 +2,11 @@
 
 namespace Tests\Cases\Integration;
 
-
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 
-require __DIR__ . '/../../bootstrap.integration.php';
+require __DIR__.'/../../bootstrap.integration.php';
 
 final class NonValidImportFilenameReviseTest extends IntegrationTestCase
 {
@@ -24,15 +23,14 @@ final class NonValidImportFilenameReviseTest extends IntegrationTestCase
         $this->curatorFacade->registerNewFiles($this->provideLoggedCuratorUser(), ['photoType' => 1]);
         $this->expectAllError();
 
-        $i=0;
+        $i = 0;
         foreach ($this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_ERROR]) as $photo) {
-            $this->curatorFacade->reimportPhoto($this->provideLoggedCuratorUser(), $photo,  $this::SPECIMENS[$i++]);
+            $this->curatorFacade->reimportPhoto($this->provideLoggedCuratorUser(), $photo, $this::SPECIMENS[$i++]);
             $this->em->flush();
         }
 
         $this->expectAllImported();
     }
-
 }
 
 new NonValidImportFilenameReviseTest()->run();

@@ -4,56 +4,59 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\XmlSerializable;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
+use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents an access URL with IRI and label
+ * Represents an access URL with IRI and label.
  */
 class AccessUrl implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    protected(set) ?string $iri = null;
-    protected(set) ?string $label = null;
+    public protected(set) ?string $iri = null;
+    public protected(set) ?string $label = null;
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
-
     // Getters
-    public function getIri(): ?string {
+    public function getIri(): ?string
+    {
         return $this->Iri;
     }
 
-    public function getLabel(): ?string {
+    public function getLabel(): ?string
+    {
         return $this->Label;
     }
 
     // Setters
-    public function setIri(?string $iri): self {
+    public function setIri(?string $iri): self
+    {
         $this->Iri = $iri;
+
         return $this;
     }
 
-    public function setLabel(?string $label): self {
+    public function setLabel(?string $label): self
+    {
         $this->Label = $label;
+
         return $this;
     }
 
-/**
-     * @inheritDoc
-     */
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'access_url');
 
-        if ($this->getIri() !== null) {
+        if (null !== $this->getIri()) {
             $iriElement = $this->createElement($document, 'iri', $this->getIri());
             $element->appendChild($iriElement);
         }
 
-        if ($this->getLabel() !== null) {
+        if (null !== $this->getLabel()) {
             $labelElement = $this->createElement($document, 'label', $this->getLabel());
             $labelElement->setAttribute('xml:lang', 'cs');
             $element->appendChild($labelElement);

@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Model\ImportStages;
 
@@ -13,7 +15,6 @@ use Nette\Application\LinkGenerator;
 
 class DuplicityStage extends BaseStage implements StageInterface
 {
-
     public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService, protected readonly PhotoService $photoService, protected readonly LinkGenerator $linkGenerator, protected readonly S3Service $s3Service)
     {
         parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
@@ -46,5 +47,4 @@ class DuplicityStage extends BaseStage implements StageInterface
 
         return $payload;
     }
-
 }
