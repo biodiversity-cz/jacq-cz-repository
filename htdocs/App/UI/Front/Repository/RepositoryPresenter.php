@@ -115,9 +115,8 @@ final class RepositoryPresenter extends UnsecuredPresenter
 
     public function actionFormHelperSpecimen(?string $sid): void
     {
-            $this->redirect('specimen', ['sid'=>$sid]);
+        $this->redirect('specimen', ['sid' => $sid]);
     }
-
 
     public function renderSpecimen(?string $sid): void
     {

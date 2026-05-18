@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6febadb51f6a36555a09f05b2db74f50",
+    "content-hash": "4ed91fd7342fd805d0ac9daef817ebe5",
     "packages": [
         {
             "name": "68publishers/asset",
@@ -2249,22 +2249,22 @@
         },
         {
             "name": "jumbojett/openid-connect-php",
-            "version": "v1.0.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "f327e7eb0626d55ddb6abc7b7c9e6ad3af4e5d51"
+                "reference": "3067281"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/f327e7eb0626d55ddb6abc7b7c9e6ad3af4e5d51",
-                "reference": "f327e7eb0626d55ddb6abc7b7c9e6ad3af4e5d51",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/3067281",
+                "reference": "3067281",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "php": ">=7.0",
+                "php": ">=7.2",
                 "phpseclib/phpseclib": "^3.0.7"
             },
             "require-dev": {
@@ -2272,6 +2272,7 @@
                 "roave/security-advisories": "dev-latest",
                 "yoast/phpunit-polyfills": "^2.0"
             },
+            "default-branch": true,
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -2285,9 +2286,9 @@
             "description": "Bare-bones OpenID Connect client",
             "support": {
                 "issues": "https://github.com/jumbojett/OpenID-Connect-PHP/issues",
-                "source": "https://github.com/jumbojett/OpenID-Connect-PHP/tree/v1.0.2"
+                "source": "https://github.com/jumbojett/OpenID-Connect-PHP/tree/master"
             },
-            "time": "2024-09-13T07:08:11+00:00"
+            "time": "2026-04-02T18:54:51+00:00"
         },
         {
             "name": "latte/latte",
@@ -6805,12 +6806,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ublaboo/aws-sdk-nette-extension.git",
-                "reference": "0c2dfd5451ac3d9a9656fd632d30c858b6ce5467"
+                "reference": "0c2dfd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ublaboo/aws-sdk-nette-extension/zipball/0c2dfd5451ac3d9a9656fd632d30c858b6ce5467",
-                "reference": "0c2dfd5451ac3d9a9656fd632d30c858b6ce5467",
+                "url": "https://api.github.com/repos/ublaboo/aws-sdk-nette-extension/zipball/0c2dfd5",
+                "reference": "0c2dfd5",
                 "shasum": ""
             },
             "require": {
@@ -9149,13 +9150,14 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "jumbojett/openid-connect-php": 20,
         "ublaboo/aws-sdk-nette-extension": 20,
         "yale-web-technologies/iiif-manifest-generator": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">= 8.4",
+        "php": ">= 8.5",
         "ext-imagick": "*",
         "ext-intl": "*",
         "ext-exif": "*",
@@ -9166,7 +9168,7 @@
     },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.4",
+        "php": "8.5",
         "ext-imagick": "3",
         "ext-intl": "3",
         "ext-exif": "3",
