@@ -73,6 +73,12 @@ class Herbaria
     #[Column(type: Types::INTEGER, nullable: false, options: ['default' => 6, 'comment' => 'count of digits in HerbNr stored in JACQ, important for SID prediction and other "standard" representation of the HerbNr'])]
     public protected(set) int $digitsCount = 6;
 
+    #[Column(name: 'grsc_institution', unique: true, nullable: true, options: ['comment' => 'Global Registry of Scientific Collections (GRSciColl) institution ID used for IPT publishing'])]
+    public protected(set) ?string $GRSciCollInstitutionID = null;
+
+    #[Column(name: 'grsc_collection', unique: true, nullable: true, options: ['comment' => 'Global Registry of Scientific Collections (GRSciColl) collection ID used for IPT publishing'])]
+    public protected(set) ?string $GRSciCollCollectionID = null;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -183,5 +189,15 @@ class Herbaria
         $this->digitsCount = $digitsCount;
 
         return $this;
+    }
+
+    public function setGRSciCollInstitutionID(?string $GRSciCollInstitutionID): void
+    {
+        $this->GRSciCollInstitutionID = $GRSciCollInstitutionID;
+    }
+
+    public function setGRSciCollCollectionID(?string $GRSciCollCollectionID): void
+    {
+        $this->GRSciCollCollectionID = $GRSciCollCollectionID;
     }
 }
