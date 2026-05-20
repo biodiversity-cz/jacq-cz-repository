@@ -133,4 +133,14 @@ class PhotosRepository extends AbstractRepository
     {
         return $this->getEntityManager()->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_ERROR);
     }
+
+    public function countOfPublic(): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->andWhere('p.status = :status')
+            ->setParameter('status', PhotosStatus::PUBLISHED)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }
