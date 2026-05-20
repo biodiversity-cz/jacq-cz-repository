@@ -11,7 +11,6 @@ use App\Model\Database\Entity\Herbaria;
 use App\Model\Dto\ContactDto;
 use App\Model\Dto\HerbariaDto;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityNotFoundException;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
 use Nette\Http\IResponse;
@@ -34,7 +33,7 @@ class InstitutionController extends BasePubV1Controller
     #[Apitte\Response(description: 'Success', code: '200')]
     public function version(): array
     {
-        return $this->cache->load(self::CACHE_NAMESPACE.'/general', function () {
+        return $this->cache->load(sprintf('%s:list', self::CACHE_NAMESPACE), function () {
             $entities = $this->entityManager
                 ->getRepository(Herbaria::class)
                 ->findBy(
@@ -46,7 +45,7 @@ class InstitutionController extends BasePubV1Controller
                 static fn (Herbaria $herbarium) => HerbariaDto::fromEntity($herbarium),
                 $entities
             );
-        });
+        }, [Cache::Expire => '1 day']);
     }
 
     #[Apitte\OpenApi('summary: Get contact persons of the herbarium.')]
@@ -55,16 +54,19 @@ class InstitutionController extends BasePubV1Controller
     #[Apitte\Response(description: 'Success', code: '200')]
     public function contacts(ApiRequest $request): array
     {
-        try {
-            $herbarium = $this->entityManager
-                ->getRepository(Herbaria::class)->findOneBy(['id' => $request->getParameter('id')]);
-        } catch (EntityNotFoundException $e) {
-            throw ClientErrorException::create()->withMessage('Herbarium not found')->withCode(IResponse::S404_NotFound);
-        }
+        $id = (int) $request->getParameter('id');
 
-        return array_map(
-            static fn ($contact) => ContactDto::fromEntity($contact),
-            $herbarium->contacts->toArray()
-        );
+        return $this->cache->load(sprintf('%s:detail:%d', self::CACHE_NAMESPACE, $id), function () use ($id) {
+            $herbarium = $this->entityManager
+                ->getRepository(Herbaria::class)->findOneBy(['id' => $id]);
+            if (null === $herbarium) {
+                throw ClientErrorException::create()->withMessage('Herbarium not found')->withCode(IResponse::S404_NotFound);
+            }
+
+            return array_map(
+                static fn ($contact) => ContactDto::fromEntity($contact),
+                $herbarium->contacts->toArray()
+            );
+        }, [Cache::Expire => '1 day']);
     }
 }

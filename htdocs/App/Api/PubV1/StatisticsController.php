@@ -38,6 +38,6 @@ class StatisticsController extends BasePubV1Controller
                     ->getRepository(Photos::class)
                     ->countOfPublic(),
             ];
-        });
+        }, [Cache::Expire => '1 day']);
     }
 }
