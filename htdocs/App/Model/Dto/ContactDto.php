@@ -9,12 +9,11 @@ use App\Model\Database\Entity\Contact;
 final class ContactDto
 {
     public function __construct(
-        public int     $id,
-        public string  $name,
+        public int $id,
+        public string $name,
         public ?string $email,
-        public ?string $position
-    )
-    {
+        public ?string $position,
+    ) {
     }
 
     public static function fromEntity(Contact $contact): self
@@ -26,6 +25,4 @@ final class ContactDto
             position: $contact->description
         );
     }
-
-
 }

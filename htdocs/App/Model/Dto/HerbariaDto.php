@@ -9,15 +9,14 @@ use App\Model\Database\Entity\Herbaria;
 final class HerbariaDto
 {
     public function __construct(
-        public int     $id,
-        public string  $acronym,
+        public int $id,
+        public string $acronym,
         public ?string $logoUrl,
         public ?string $fullname,
         public ?string $address,
         public ?string $GRSCInstitution,
-        public ?string $GRSCCollection
-    )
-    {
+        public ?string $GRSCCollection,
+    ) {
     }
 
     public static function fromEntity(Herbaria $herbarium): self
@@ -32,6 +31,4 @@ final class HerbariaDto
             GRSCCollection: $herbarium->GRSciCollCollectionID
         );
     }
-
-
 }
