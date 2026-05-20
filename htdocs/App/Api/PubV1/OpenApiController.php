@@ -32,7 +32,7 @@ class OpenApiController extends BasePubV1Controller
         }
 
         return $response
-            ->withAddedHeader('Access-Control-Allow-Origin', '*')
+//            ->withAddedHeader('Access-Control-Allow-Origin', '*')
             ->writeJsonBody(
                 $this->schemaBuilder->build()->toArray()
             );
