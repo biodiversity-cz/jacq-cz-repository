@@ -9,4 +9,5 @@ enum DatabotRole: string
     case VALIDATOR = 'validator';
     case SCANNER = 'scanner';
     case EXPORTER = 'exporter';
+    case SYNCHRONIZER = 'synchronizer';
 }
