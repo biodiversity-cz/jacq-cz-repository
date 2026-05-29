@@ -79,7 +79,8 @@ class DatabotsResultService
             $identikit = $databotRecord->databot->name.' v'.$databotRecord->databot->version.' - '.$databotRecord->createdAt->format('j.n.Y H:i');
             $databot['name'] = $databotRecord->databot->name;
             $databot['version'] = $databotRecord->databot->version;
-            $databot['computedAt'] = $databotRecord->createdAt->format('j.n.Y H:i');
+            $databot['createdAt'] = $databotRecord->createdAt->format('j.n.Y H:i');
+            $databot['lastEditAt'] = $databotRecord->lastEdit->format('j.n.Y H:i');
             $databot['description'] = $databotRecord->databot->description;
             if ('ok' == $databotRecord->status->value) {
                 //                if(is_array($databotRecord->resultData)){
