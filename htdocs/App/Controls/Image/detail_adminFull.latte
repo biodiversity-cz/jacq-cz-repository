@@ -33,7 +33,7 @@
         class="badge bg-{$photo->type->color}">{$photo->type->name}</span></p>
     {if $photo->funding !== null}
     <p>Funding: <span
-        class="fst-italic">{$photo->funding?->fullname}</span></p>
+        class="fst-italic">{$photo->funding?->getFullname()}</span></p>
     {/if}
     <p><small class="text-muted">File created at
         {$photo->createdAt|localDate}</small></p>
