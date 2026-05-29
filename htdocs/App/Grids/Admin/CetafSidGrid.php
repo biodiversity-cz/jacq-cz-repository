@@ -63,6 +63,7 @@ class CetafSidGrid extends Control
         $this->grid->addColumnText('recordedBy', 'recordedBy');
         $this->grid->addColumnText('occurrenceRemarks', 'remarks');
         $this->grid->addColumnText('eventDate', 'eventDate');
+        $this->grid->addColumnText('verbatimEventDate', 'verbatimEventDate');
         $this->grid->addColumnText('locality', 'locality');
         $this->grid->addColumnText('verbatimElevation', 'elevation');
         $this->grid->addColumnText('previousIdentifications', 'previousIdentifications');

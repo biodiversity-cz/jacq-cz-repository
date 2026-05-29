@@ -20,7 +20,6 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 #[UniqueConstraint(
     name: 'uniq_herbarium_externalid',
     columns: ['herbarium', 'external_id_from_institution'])]
-
 class CetafSid
 {
     use TId;
@@ -122,6 +121,12 @@ class CetafSid
      */
     #[Column(nullable: true)]
     public protected(set) ?string $eventDate = null;
+
+    /**
+     * dwc:verbatimEventDate.
+     */
+    #[Column(nullable: true)]
+    public protected(set) ?string $verbatimEventDate = null;
 
     #[ManyToOne(targetEntity: Herbaria::class)]
     #[JoinColumn(name: 'herbarium', referencedColumnName: 'id', nullable: false, options: ['comment' => 'source institution'])]
@@ -239,6 +244,13 @@ class CetafSid
         return $this;
     }
 
+    public function setVerbatimEventDate(?string $verbatimEventDate): CetafSid
+    {
+        $this->verbatimEventDate = $verbatimEventDate;
+        return $this;
+    }
+
+
     public function setHerbarium(Herbaria $herbarium): CetafSid
     {
         $this->herbarium = $herbarium;
@@ -248,7 +260,7 @@ class CetafSid
 
     private function safeH($value): string
     {
-        return htmlspecialchars((string) $value, ENT_XML1);
+        return htmlspecialchars((string)$value, ENT_XML1);
     }
 
     private function xmlElement(string $tag, mixed $value): ?string
@@ -257,7 +269,7 @@ class CetafSid
             return null; // element nebude vytvořen
         }
 
-        return "    <{$tag}>".$this->safeH($value)."</{$tag}>";
+        return "    <{$tag}>" . $this->safeH($value) . "</{$tag}>";
     }
 
     private function formatDateIso(string|\DateTimeImmutable|null $date): ?string
@@ -316,6 +328,8 @@ class CetafSid
             $isoDate = $this->formatDateIso($this->eventDate);
             if (null !== $isoDate) {
                 $xml[] = $this->xmlElement('dwc:eventDate', $isoDate);
+            } else {
+                $xml[] = $this->xmlElement('dwc:verbatimEventDate', $this->verbatimEventDate);
             }
         }
 

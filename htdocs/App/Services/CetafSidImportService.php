@@ -17,7 +17,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class CetafSidImportService
 {
-    public const array expectedHeaders = ['id', 'basisOfRecord', 'occurrenceID', 'recordedBy', 'occurrenceRemarks', 'eventDate', 'locality', 'verbatimElevation', 'decimalLatitude', 'decimalLongitude', 'verbatimIdentification', 'identifiedBy', 'dateIdentified', 'scientificName'];
+    public const array expectedHeaders = ['id', 'basisOfRecord', 'occurrenceID', 'recordedBy', 'occurrenceRemarks', 'eventDate', 'locality', 'verbatimElevation', 'decimalLatitude', 'decimalLongitude', 'verbatimIdentification', 'identifiedBy', 'dateIdentified', 'scientificName', 'verbatimEventDate'];
 
     protected const int dataStartingRow = 2;
     public const array colNames = [
@@ -35,6 +35,7 @@ class CetafSidImportService
         'identifiedBy' => 11,
         'dateIdentified' => 12,
         'scientificName' => 13,
+        'verbatimEventDate' => 14
     ];
 
     public const string SESSION_SECTION = 'importCetaf';
@@ -125,6 +126,7 @@ class CetafSidImportService
     {
         $firstRow = $this->worksheet->rangeToArray('A1:'.$this->lastColumn().'1')[0];
         $headers = array_map('strtolower', $firstRow);
+
         $expectedHeaders = array_map('strtolower', self::expectedHeaders);
 
         if ($headers !== $expectedHeaders) {
@@ -177,6 +179,7 @@ class CetafSidImportService
             ->setRecordedBy($row[self::colNames['recordedBy']])
             ->setOccurrenceRemarks($row[self::colNames['occurrenceRemarks']])
             ->setEventDate($row[self::colNames['eventDate']])
+            ->setVerbatimEventDate($row[self::colNames['verbatimEventDate']])
             ->setLocality($row[self::colNames['locality']])
             ->setVerbatimElevation($row[self::colNames['verbatimElevation']])
             ->setIdentifiedBy($row[self::colNames['identifiedBy']])
