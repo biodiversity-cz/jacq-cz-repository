@@ -4,7 +4,7 @@
                 {if $photo->status->id === 3 || $photo->status->id === 4}
                 <img
                     src="{plink Repository:databotThumbImage $photo->id}"  class="img-fluid rounded-start"
-                      style="object-fit: cover; cursor:pointer;"
+                      style="object-fit: contain; cursor:pointer;"
                     data-bs-toggle="modal"
                     data-bs-target="#imageModal-{$photo->id}"
                 >

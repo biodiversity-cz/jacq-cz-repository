@@ -54,7 +54,7 @@
         {if $photo->error->duplicateTo}
         <div class="col-md-4">
             <h5>the NEW image being imported</h5>
-            <img src="{link :thumbnail $photo->id}" class="img-fluid"  style="height: 90vh; object-fit: cover; cursor:pointer;"
+            <img src="{link :thumbnail $photo->id}" class="img-fluid"  style="height: 90vh; object-fit: contain; cursor:pointer;"
                  data-bs-toggle="modal"
                  data-bs-target="#newImageModal">
             <div class="modal fade" id="newImageModal" tabindex="-1">
@@ -69,7 +69,7 @@
         </div>
         <div class="col-md-4">
             <h5>already EXISTING image in the repository <small>(<a n:href="Repository:photo $photo->error->duplicateTo->id">detail</a>)</small></h5>
-            <img src="{link Repository:databotThumbImage $photo->error->duplicateTo->id}" class="img-fluid"  style="height: 90vh; object-fit: cover; cursor:pointer;"
+            <img src="{link Repository:databotThumbImage $photo->error->duplicateTo->id}" class="img-fluid"  style="height: 90vh; object-fit: contain; cursor:pointer;"
                  data-bs-toggle="modal"
                  data-bs-target="#existingImageModal">
             <div class="modal fade" id="existingImageModal" tabindex="-1">
@@ -85,7 +85,7 @@
         {else}
         <div class="col-md-4">
             <h5>NEW image being imported</h5>
-            <img src="{link :thumbnail $photo->id}" class="img-fluid"  style="height: 90vh; object-fit: cover; cursor:pointer;"
+            <img src="{link :thumbnail $photo->id}" class="img-fluid"  style="height: 90vh; object-fit: contain; cursor:pointer;"
                  data-bs-toggle="modal"
                  data-bs-target="#imageModal">
             <div class="modal fade" id="imageModal" tabindex="-1">
