@@ -35,7 +35,7 @@ class CetafSidImportService
         'identifiedBy' => 11,
         'dateIdentified' => 12,
         'scientificName' => 13,
-        'verbatimEventDate' => 14
+        'verbatimEventDate' => 14,
     ];
 
     public const string SESSION_SECTION = 'importCetaf';

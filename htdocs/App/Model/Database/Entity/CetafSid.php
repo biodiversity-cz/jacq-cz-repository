@@ -247,9 +247,9 @@ class CetafSid
     public function setVerbatimEventDate(?string $verbatimEventDate): CetafSid
     {
         $this->verbatimEventDate = $verbatimEventDate;
+
         return $this;
     }
-
 
     public function setHerbarium(Herbaria $herbarium): CetafSid
     {
@@ -260,7 +260,7 @@ class CetafSid
 
     private function safeH($value): string
     {
-        return htmlspecialchars((string)$value, ENT_XML1);
+        return htmlspecialchars((string) $value, ENT_XML1);
     }
 
     private function xmlElement(string $tag, mixed $value): ?string
@@ -269,7 +269,7 @@ class CetafSid
             return null; // element nebude vytvořen
         }
 
-        return "    <{$tag}>" . $this->safeH($value) . "</{$tag}>";
+        return "    <{$tag}>".$this->safeH($value)."</{$tag}>";
     }
 
     private function formatDateIso(string|\DateTimeImmutable|null $date): ?string
