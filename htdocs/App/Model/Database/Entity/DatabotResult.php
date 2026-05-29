@@ -6,6 +6,7 @@ namespace App\Model\Database\Entity;
 
 use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
+use App\Model\Database\Entity\Attributes\TLastEditAt;
 use App\Model\Database\Enums\DatabotResultStatus;
 use App\Model\Database\Repository\DatabotResultRepository;
 use Doctrine\DBAL\Types\Types;
@@ -18,6 +19,7 @@ class DatabotResult
 {
     use TId;
     use TCreatedAt;
+    use TLastEditAt;
 
     #[ORM\ManyToOne(targetEntity: Databot::class)]
     #[ORM\JoinColumn(name: 'databot_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
