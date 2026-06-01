@@ -263,6 +263,14 @@ class CetafSid
         return htmlspecialchars((string) $value, ENT_XML1);
     }
 
+    /**
+     * the catalogue number is barcode without a herbarium acronym
+     */
+    public function getCatalogueNumber()
+    {
+        return trim(substr($this->barcode, strlen($this->herbarium->acronym)));
+    }
+
     private function xmlElement(string $tag, mixed $value): ?string
     {
         if (null === $value || '' === $value) {
@@ -297,30 +305,46 @@ class CetafSid
     /**
      *  RDF/XML according to the CSPP (CETAF Specimen Preview Profile).
      */
-    public function toRdfXml(string $uri): string
+    public function toRdfXml(string $rdfUri, string $sidUri): string
     {
         $xml = [];
-        $xml[] = '<?xml version="1.0" encoding="UTF-8"?>';
-        $xml[] = '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dwc="http://rs.tdwg.org/dwc/terms/">';
-        $xml[] = "  <rdf:Description rdf:about=\"{$uri}\">";
 
+        $xml[] = '<?xml version="1.0" encoding="UTF-8"?>';
+
+        $xml[] = '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/terms/" xmlns:dwc="http://rs.tdwg.org/dwc/terms/">';
+
+        //metadata
+        $xml[] = "  <rdf:Description rdf:about=\"{$rdfUri}\">";
+        $xml[] = '    <dc:subject rdf:resource="'.$sidUri.'"></dc:subject>';
+        $xml[] = $this->xmlElement ("dc:created", new \DateTimeImmutable()->format(DATE_ATOM));
+        $xml[] = '  </rdf:Description>';
+
+        $xml[] = "  <rdf:Description rdf:about=\"{$sidUri}\">";
         // povinné
-        $xml[] = $this->xmlElement('dcterms:title', $this->scientificName);
-        $xml[] = $this->xmlElement('dcterms:type', 'PreservedSpecimen');
+        $xml[] = $this->xmlElement('dc:title', $this->scientificName);
+        $xml[] = $this->xmlElement('dc:type', 'PreservedSpecimen');
 
         // volitelné
-        $xml[] = $this->xmlElement('dcterms:publisher', $this->herbarium?->address);
+        $xml[] = $this->xmlElement('dc:publisher', $this->herbarium?->address);
         $xml[] = $this->xmlElement('dwc:scientificName', $this->scientificName);
         $xml[] = $this->xmlElement('dwc:family', $this->family);
         $xml[] = $this->xmlElement('dwc:originalName', $this->previousIdentifications);
+        $xml[] = $this->xmlElement('dwc:previousIdentifications', $this->previousIdentifications);
         $xml[] = $this->xmlElement('dwc:recordNumber', $this->fieldNumber);
-        $xml[] = $this->xmlElement('dcterms:creator', $this->recordedBy);
+        $xml[] = $this->xmlElement('dc:creator', $this->recordedBy);
+        $xml[] = $this->xmlElement('dwc:recordedBy', $this->recordedBy);
+        $xml[] = $this->xmlElement('dwc:family', $this->family);
+        $xml[] = $this->xmlElement('dwc:countryCode', $this->countryCode);
+        $xml[] = $this->xmlElement('dwc:collectionCode', $this->herbarium->acronym);
+        $xml[] = $this->xmlElement('dwc:material_sample_id', $sidUri);
+        $xml[] = $this->xmlElement('dwc:catalogNumber', $this->getCatalogueNumber());
 
-        // koordináty
+        $xml[] = $this->xmlElement('dwc:locality', $this->locality);
         if (null !== $this->decimalLatitude && null !== $this->decimalLongitude) {
             $xml[] = "    <dwc:decimalLatitude>{$this->decimalLatitude}</dwc:decimalLatitude>";
             $xml[] = "    <dwc:decimalLongitude>{$this->decimalLongitude}</dwc:decimalLongitude>";
         }
+
 
         $xml[] = $this->xmlElement('dwc:countryCode', $this->countryCode);
 

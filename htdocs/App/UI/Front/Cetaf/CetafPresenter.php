@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Front\Cetaf;
 
+use App\Model\Database\Entity\CetafSid;
 use App\Services\EntityServices\CetafSidService;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\Responses\RedirectResponse;
@@ -66,12 +67,13 @@ final class CetafPresenter extends UnsecuredPresenter
      */
     public function actionData(int $id): void
     {
-        $spec = $this->cetafSidRepository->find($id);
-        if (!$spec) {
+        /** @var CetafSid $cetafSpecimen */
+        $cetafSpecimen = $this->cetafSidRepository->find($id);
+        if (!$cetafSpecimen) {
             $this->error('Specimen not found', 404);
         }
         $this->getHttpResponse()->setHeader('Content-Type', 'application/rdf+xml; charset=utf-8');
-        echo $spec->toRdfXml($this->link('//this'));
+        echo $cetafSpecimen->toRdfXml($this->link('//this'), $this->link('//:sid', ['id' => $cetafSpecimen->id]));
         $this->terminate();
     }
 }
