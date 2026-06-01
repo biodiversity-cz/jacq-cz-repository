@@ -7,6 +7,7 @@ namespace App\Api\PubV1;
 use Apitte\Core\Annotation\Controller as Apitte;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
+use App\Services\StatisticsService;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;
@@ -18,7 +19,7 @@ class StatisticsController extends BasePubV1Controller
     private Cache $cache;
     protected const string CACHE_NAMESPACE = 'statistics';
 
-    public function __construct(protected EntityManagerInterface $entityManager, protected Storage $storage)
+    public function __construct(protected EntityManagerInterface $entityManager, protected Storage $storage, protected StatisticsService $statisticsService)
     {
         $this->cache = new Cache($storage, self::CACHE_NAMESPACE);
     }
@@ -39,5 +40,14 @@ class StatisticsController extends BasePubV1Controller
                     ->countOfPublic(),
             ];
         }, [Cache::Expire => '1 day']);
+    }
+
+    #[Apitte\OpenApi('summary: List of herbaria and photos\' count per status.')]
+    #[Apitte\Path('/processing')]
+    #[Apitte\Method('GET')]
+    #[Apitte\Response(description: 'Success', code: '200')]
+    public function processing(): array
+    {
+        return $this->statisticsService->overviewOfProcessing();
     }
 }
