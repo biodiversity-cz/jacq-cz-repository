@@ -12,6 +12,7 @@ use App\Model\Database\Entity\CetafSid;
 use App\Model\Database\Entity\ExternalDatabase;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
+use App\Model\Database\Entity\PhotosStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\Application\LinkGenerator;
 
@@ -77,7 +78,9 @@ class MuseionController extends BasePubV1Controller
 
         $repository = $this->entityManager->getRepository(Photos::class);
 
-        foreach ($repository->getAllPublishedPhotosDatasource()->getQuery()->toIterable() as $item) {
+        foreach ($repository->getAllPublishedPhotosDatasource()
+                     ->andWhere('p.herbarium = :herbarium')->setParameter('herbarium', $herbarium)
+                     ->getQuery()->toIterable() as $item) {
             $url = $this->linkGenerator->link('//Front:Repository:databotThumbImage', ['id' => $item->id]);
             fputcsv($tmp, [
                 'PREDMET_PRIVATE',
