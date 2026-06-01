@@ -12,7 +12,6 @@ use App\Model\Database\Entity\CetafSid;
 use App\Model\Database\Entity\ExternalDatabase;
 use App\Model\Database\Entity\Herbaria;
 use App\Model\Database\Entity\Photos;
-use App\Model\Database\Entity\PhotosStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Nette\Application\LinkGenerator;
 
