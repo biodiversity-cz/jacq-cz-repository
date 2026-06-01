@@ -264,7 +264,7 @@ class CetafSid
     }
 
     /**
-     * the catalogue number is barcode without a herbarium acronym
+     * the catalogue number is barcode without a herbarium acronym.
      */
     public function getCatalogueNumber()
     {
@@ -313,10 +313,10 @@ class CetafSid
 
         $xml[] = '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/terms/" xmlns:dwc="http://rs.tdwg.org/dwc/terms/">';
 
-        //metadata
+        // metadata
         $xml[] = "  <rdf:Description rdf:about=\"{$rdfUri}\">";
         $xml[] = '    <dc:subject rdf:resource="'.$sidUri.'"></dc:subject>';
-        $xml[] = $this->xmlElement ("dc:created", new \DateTimeImmutable()->format(DATE_ATOM));
+        $xml[] = $this->xmlElement('dc:created', new \DateTimeImmutable()->format(DATE_ATOM));
         $xml[] = '  </rdf:Description>';
 
         $xml[] = "  <rdf:Description rdf:about=\"{$sidUri}\">";
@@ -344,7 +344,6 @@ class CetafSid
             $xml[] = "    <dwc:decimalLatitude>{$this->decimalLatitude}</dwc:decimalLatitude>";
             $xml[] = "    <dwc:decimalLongitude>{$this->decimalLongitude}</dwc:decimalLongitude>";
         }
-
 
         $xml[] = $this->xmlElement('dwc:countryCode', $this->countryCode);
 
