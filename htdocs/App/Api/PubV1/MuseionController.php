@@ -19,6 +19,7 @@ use Nette\Application\LinkGenerator;
 #[Apitte\Tag('Museion')]
 class MuseionController extends BasePubV1Controller
 {
+    public const string CSV_SEPARATOR = ';';
     public function __construct(protected EntityManagerInterface $entityManager, protected LinkGenerator $linkGenerator)
     {
     }
@@ -39,11 +40,11 @@ class MuseionController extends BasePubV1Controller
 
         $tmp = fopen('php://temp', 'r+');
         fwrite($tmp, "\xEF\xBB\xBF");
-        fputcsv($tmp, ['Sbírkový předmět', 'Číslo (JinaEvidence.cislo)', 'Název (JinaEvidence.nazev)', 'Poznámka (JinaEvidence.poznamka)'], "\t", '"', '"');
+        fputcsv($tmp, ['Sbírkový předmět', 'Číslo (JinaEvidence.cislo)', 'Název (JinaEvidence.nazev)', 'Poznámka (JinaEvidence.poznamka)'], self::CSV_SEPARATOR, '"', '"');
 
         foreach ($repository->findBy(['herbarium' => $herbarium]) as $item) {
             $url = $this->linkGenerator->link('//Front:Cetaf:sid', ['id' => $item->id]);
-            fputcsv($tmp, [$item->getCatalogueNumber(), $url, 'HerbBio', 'Odkaz do národního repozitáře'], "\t", '"', '"');
+            fputcsv($tmp, [$item->getCatalogueNumber(), $url, 'HerbBio', 'Odkaz do národního repozitáře'], self::CSV_SEPARATOR, '"', '"');
         }
 
         rewind($tmp);
@@ -73,7 +74,7 @@ class MuseionController extends BasePubV1Controller
         $tmp = fopen('php://temp', 'r+');
         fwrite($tmp, "\xEF\xBB\xBF");
         $header = ['Úloha', 'Číslo', 'Pořadí (KontextovyDokument.poradi)', 'Název (KontextovyDokument.nazev)', 'Typ dokumentu (KontextovyDokument.typDokumentu->TypDokumentu.nazev)', 'Soubor/URL (KontextovyDokument.url)', 'Náhled (KontextovyDokument.nahled)', 'Vodoznak', 'Tisk na pozici 1 (KontextovyDokument.tisk1)', 'Tisk na pozici 2 (KontextovyDokument.tisk2)', 'Poznámka (KontextovyDokument.poznamka)', 'Není digitalizován (KontextovyDokument.neDigitalni)', 'Umístění (KontextovyDokument.umisteni)', 'Publikovat (KontextovyDokument.publikace)', 'Použito v literární publikaci (KontextovyDokument.literatura->Literatura.nazev)', 'Literatura-slovy (KontextovyDokument.literaturaSlovy)', 'Licence Creative Commons (AutorskePravo.licenceCC)', 'Varianta licence CC (AutorskePravo.variantaCCLicence->VariantaCCLicence.oznaceni)', 'Autor (AutorskePravo.autor->Subjekt.kod)', 'Držitel licence (AutorskePravo.drzitelLicence->Subjekt.kod)', 'Typ licence (AutorskePravo.typLicence)', 'Časové omezení licence (AutorskePravo.casovaLicence)', 'Územní omezení licence (AutorskePravo.uzemniLicence)', 'Množstevní omezení licence (AutorskePravo.mnozstevniLicence)', 'Datum vypršení (AutorskePravo.datumVyprseni)', 'Poznámka (AutorskePravo.poznámka)'];
-        fputcsv($tmp, $header, "\t", '"', '"');
+        fputcsv($tmp, $header, self::CSV_SEPARATOR, '"', '"');
 
         $repository = $this->entityManager->getRepository(Photos::class);
 
@@ -108,7 +109,7 @@ class MuseionController extends BasePubV1Controller
                 '',
                 '',
                 'https://creativecommons.org/licenses/by/4.0/deed.en',
-            ], "\t", '"', '"');
+            ], self::CSV_SEPARATOR, '"', '"');
         }
 
         rewind($tmp);
