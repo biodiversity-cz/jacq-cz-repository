@@ -20,6 +20,7 @@ use Nette\Application\LinkGenerator;
 class MuseionController extends BasePubV1Controller
 {
     public const string CSV_SEPARATOR = ';';
+
     public function __construct(protected EntityManagerInterface $entityManager, protected LinkGenerator $linkGenerator)
     {
     }
