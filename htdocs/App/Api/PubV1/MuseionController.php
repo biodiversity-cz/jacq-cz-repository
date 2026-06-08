@@ -45,7 +45,7 @@ class MuseionController extends BasePubV1Controller
 
         foreach ($repository->findBy(['herbarium' => $herbarium]) as $item) {
             $url = $this->linkGenerator->link('//Front:Cetaf:sid', ['id' => $item->id]);
-            fputcsv($tmp, [$item->getCatalogueNumber(), $url, 'HerbBio', 'Odkaz do národního repozitáře'], self::CSV_SEPARATOR, '"', '"');
+            fputcsv($tmp, [$item->getCatalogueNumber(), $url, 'HerbBio', 'CETAF SID položky'], self::CSV_SEPARATOR, '"', '"');
         }
 
         rewind($tmp);
@@ -99,7 +99,7 @@ class MuseionController extends BasePubV1Controller
                 '',
                 '1',
                 '',
-                'náhled fotografie z repozitáře',
+                'Odkaz do národního repozitáře',
                 '1',
                 'BY',
                 '',
