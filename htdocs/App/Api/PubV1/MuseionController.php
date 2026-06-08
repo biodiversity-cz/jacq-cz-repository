@@ -82,7 +82,7 @@ class MuseionController extends BasePubV1Controller
         foreach ($repository->getAllPublishedPhotosDatasource()
                      ->andWhere('p.herbarium = :herbarium')->setParameter('herbarium', $herbarium)
                      ->getQuery()->toIterable() as $item) {
-            $url = $this->linkGenerator->link('//Front:Repository:databotThumbImage', ['id' => $item->id]);
+            $url = 'https://n2t.net/'.$item->pid;
             fputcsv($tmp, [
                 'PREDMET_PRIVATE',
                 $item->specimenId,
