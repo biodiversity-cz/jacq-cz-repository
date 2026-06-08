@@ -5,13 +5,21 @@ declare(strict_types=1);
 namespace App\Model\ImportStages;
 
 use App\Model\ImportStages\Exceptions\BarcodeStageException;
+use App\Services\ImagickService;
+use App\Services\RepositoryConfiguration;
 use App\Services\SpecimenIdService;
+use App\Services\TempDir;
 use League\Pipeline\StageInterface;
 
 class BarcodeStage extends BaseStage implements StageInterface
 {
     /** @var string [] */
     protected array $barcodes;
+
+    public function __construct(TempDir $tempDir, RepositoryConfiguration $repositoryConfiguration, ImagickService $imagickService, protected SpecimenIdService $specimenIdService)
+    {
+        parent::__construct($tempDir, $repositoryConfiguration, $imagickService);
+    }
 
     public function __invoke(mixed $payload): mixed
     {
@@ -93,19 +101,25 @@ class BarcodeStage extends BaseStage implements StageInterface
             throw new BarcodeStageException('No barcode detected');
         }
 
+        // check filename for barcode
         $parts = [];
         if (!preg_match($this->item->herbarium->regexFilename, $this->item->originalFilename, $parts)) {
             throw new BarcodeStageException('No barcode detected & invalid filename');
         }
 
-        $this->item->setSpecimenId($parts[SpecimenIdService::REGEX_SPECIMEN]);
+        $barcode = $parts[SpecimenIdService::REGEX_SPECIMEN];
+        if (empty($barcode) || !$this->specimenIdService->isValid($barcode)) {
+            throw new BarcodeStageException('No barcode detected & invalid filename');
+        }
+
+        $this->item->setSpecimenId($barcode);
     }
 
     protected function harvestCodes(): void
     {
         $validCodes = [];
         foreach ($this->barcodes as $code) {
-            $validCode = $this->validateBarcode($code);
+            $validCode = $this->validateOCRBarcode($code);
             if (!empty($validCode)) {
                 $validCodes[] = $validCode;
             }
@@ -130,9 +144,8 @@ class BarcodeStage extends BaseStage implements StageInterface
         }
     }
 
-    protected function validateBarcode($barcode): ?string
+    protected function validateOCRBarcode($barcode): ?string
     {
-        // TODO ? first and last character must be alfanumeric to prevent white char chaos?
         $parts = [];
         if (!preg_match($this->item->herbarium->regexBarcode, $barcode, $parts)) {
             return null;
@@ -144,6 +157,10 @@ class BarcodeStage extends BaseStage implements StageInterface
 
         if ($this->item->herbarium->strictBarcodeAcronymPrefix
             && strtoupper($parts['herbarium'] ?? '') !== $this->item->herbarium->acronym) {
+            return null;
+        }
+
+        if (!$this->specimenIdService->isValid($specimenId)) {
             return null;
         }
 

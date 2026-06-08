@@ -11,6 +11,7 @@ use App\Model\Database\Entity\Photos;
 use App\Services\EntityServices\PhotoService;
 use App\Services\RepositoryConfiguration;
 use App\Services\S3Service;
+use App\Services\SpecimenIdService;
 use App\UI\Base\SecuredPresenter;
 use Nette\Application\Responses\CallbackResponse;
 use Nette\Application\UI\Form;
@@ -31,6 +32,9 @@ final class ImportPresenter extends SecuredPresenter
 
     /** @inject */
     public S3Service $s3Service;
+
+    /** @inject */
+    public SpecimenIdService $specimenIdService;
 
     /** @inject */
     public ImportFormFactory $importFormFactory;
@@ -164,7 +168,10 @@ final class ImportPresenter extends SecuredPresenter
     {
         $form = $this->formFactory->forBackend();
         $form->addText('specimen', 'ID:')
-            ->setRequired('Please insert only number.');
+            ->setRequired('This field is required.')
+            ->addRule(function ($control) {
+                return $this->specimenIdService->isValid($control->getValue());
+            }, 'non valid specimen ID, check documentation');
         $form->addHidden('photoId', $this->photo->id);
         $form->addSubmit('submit', 'Import with this ID');
         $form->onSuccess[] = [$this, 'specimenIdFormSucceeded'];

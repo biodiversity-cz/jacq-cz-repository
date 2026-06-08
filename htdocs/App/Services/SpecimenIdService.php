@@ -104,4 +104,37 @@ class SpecimenIdService
 
         return '';
     }
+
+    /**
+     * checks elementary requirements for a valid specimen id - the concept is hardcoded, individual herbaria patterns have to follow this core concept.
+     */
+    public function isValid(string $value): bool
+    {
+        /*
+         * \S = jakýkoliv znak, který není whitespace
+         * ^\S uvnitř [] znamená negaci množiny
+         * tedy [^\S ] = znak, který není ne-whitespace a zároveň není obyčejná mezera
+         *
+         * --> libovolný whitespace kromě normální mezery (U+0020)
+         */
+        if (preg_match('/[^\S ]/u', $value)) {
+            return false;
+        }
+
+        // not on end/beginning
+        if ($value !== trim($value)) {
+            return false;
+        }
+
+        // no double spaces
+        if (preg_match('/ {2,}/', $value)) {
+            return false;
+        }
+        // no space between numbers
+        if (preg_match('/\d \d/', $value)) {
+            return false;
+        }
+
+        return true;
+    }
 }

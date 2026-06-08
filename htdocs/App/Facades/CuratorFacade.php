@@ -364,6 +364,9 @@ readonly class CuratorFacade
 
     public function reimportPhoto(User $user, Photos $photo, ?string $manualSpecimenId = null): CuratorFacade
     {
+        if (!$this->specimenIdService->isValid($manualSpecimenId)) {
+            throw new ServiceException('Specimen ID is not valid.');
+        }
         if ($this->herbariumService->getCurrentUserHerbarium($user) === $photo->herbarium) {
             if (null !== $photo->error) {
                 $this->entityManager->remove($photo->error);

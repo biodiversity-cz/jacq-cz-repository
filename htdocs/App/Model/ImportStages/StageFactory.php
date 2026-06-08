@@ -33,7 +33,7 @@ readonly class StageFactory
 
     public function createBarcodeStage(): BarcodeStage
     {
-        return new BarcodeStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService);
+        return new BarcodeStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->specimenIdService);
     }
 
     public function createMetadataStage(): MetadataStage

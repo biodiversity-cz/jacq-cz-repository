@@ -39,12 +39,52 @@ export default function importForm() {
         });
     });
 
+    if (document.getElementById("importRevision")) {
 
-    // //autorefresh page
-    // const element = document.getElementById('autorefresh');
-    // if (element) {
-    //     setInterval(function() {
-    //         location.reload();
-    //     }, 30000); // 20 000 ms = 20 sec
-    // }
+        function validateSpecimen(value) {
+            // pouze obyčejné mezery
+            if (/[\t\n\r\f\v\u00A0]/.test(value)) {
+                return 'Use standard space.';
+            }
+
+            // mezera na začátku nebo konci
+            if (value !== value.trim()) {
+                return 'Space on the begginning/end is not allowed.';
+            }
+
+            // více mezer za sebou
+            if (/  +/.test(value)) {
+                return 'Group of multiple spaces id not allowed.';
+            }
+
+            // mezera mezi číslicemi
+            if (/\d \d/.test(value)) {
+                return 'Space between digits is not allowed';
+            }
+
+            return null;
+        }
+
+         const submit = document.querySelector('input[type="submit"]');
+        const input = document.querySelector('input[name="specimen"]');
+        const error = document.getElementById('helpInline');
+
+        function updateValidation() {
+            const msg = validateSpecimen(input.value);
+
+            if (msg) {
+                error.textContent = msg;
+                submit.disabled = true;
+            } else {
+                error.textContent = '';
+                submit.disabled = false;
+            }
+        }
+
+        input.addEventListener('input', updateValidation);
+
+        // zvalidovat i výchozí hodnotu po načtení stránky
+        updateValidation();
+
+    }
 }
