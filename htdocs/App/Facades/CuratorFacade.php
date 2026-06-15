@@ -252,6 +252,7 @@ readonly class CuratorFacade
                     $filesToDelete = [
                         ['bucket' => $this->repositoryConfiguration->getArchiveBucket($lockedEntity), 'key' => $lockedEntity->archiveFilename],
                         ['bucket' => $this->repositoryConfiguration->getDatabotThumbsBucket($lockedEntity), 'key' => $lockedEntity->databotThumbFilename],
+                        ['bucket' => $this->repositoryConfiguration->getImageServerBucket($lockedEntity), 'key' => $lockedEntity->jp2Filename],
                     ];
                     break;
                 default:
@@ -266,11 +267,13 @@ readonly class CuratorFacade
             // Second: Delete files from S3 (outside transaction)
             // If this fails, the DB record is already gone and orphaned files can be cleaned up later
             foreach ($filesToDelete as $file) {
+                if (null === $file['key']) {
+                    continue;
+                }
                 $this->s3Service->deleteObject($file['bucket'], $file['key']);
             }
         } catch (\Throwable $e) {
             $this->entityManager->rollback();
-
             throw new ServiceException('Error in photo delete: '.$e->getMessage(), previous: $e);
         }
 

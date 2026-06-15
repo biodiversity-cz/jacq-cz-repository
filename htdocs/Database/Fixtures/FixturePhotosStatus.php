@@ -55,7 +55,13 @@ class FixturePhotosStatus extends FixtureBase
         $s7->setName('waiting for publishing')
             ->setColor('primary')
             ->setSuccession(6)
-            ->setDescription('');
+            ->setDescription('waiting for JP2 creation');
+
+        $s100 = new PhotosStatus();
+        $s100->setName('develop purpose')
+            ->setColor('danger')
+            ->setSuccession(100)
+            ->setDescription('deleting for admins');
 
         $manager->persist($s1);
         $manager->persist($s2);
@@ -64,6 +70,7 @@ class FixturePhotosStatus extends FixtureBase
         $manager->persist($s5);
         $manager->persist($s6);
         $manager->persist($s7);
+        $manager->persist($s100);
         $manager->flush();
     }
 

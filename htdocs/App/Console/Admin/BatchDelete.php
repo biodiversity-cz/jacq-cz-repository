@@ -7,9 +7,10 @@ namespace App\Console\Admin;
 use App\Facades\CuratorFacade;
 use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
+use App\Security\Identity;
+use App\Services\EntityServices\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
-use Nette\Security\SimpleIdentity;
 use Nette\Security\User;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,9 +21,9 @@ class BatchDelete extends Command
     /**
      * For development purpose only, let's delete images with status 100.
      */
-    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorFacade, protected User $user, ?string $name = null)
+    public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorFacade, protected User $user, protected readonly UserService $userService, ?string $name = null)
     {
-        exit; // disabled just for sure
+        //        exit; // disabled just for sure
         parent::__construct($name);
     }
 
@@ -44,8 +45,9 @@ class BatchDelete extends Command
         $startTime = microtime(true);
         $photos = $this->getPhotos();
         $output->writeln(count($photos).' files will be affected.');
+        $user = $this->userService->find(1);
         foreach ($photos as $photo) {
-            $this->user->login(new SimpleIdentity(1, ['curator'], ['name' => 'faker', 'herbarium' => $photo->herbarium->id]));
+            $this->user->login(new Identity($user));
             $this->curatorFacade->deletePhoto($this->user, $photo);
         }
 
