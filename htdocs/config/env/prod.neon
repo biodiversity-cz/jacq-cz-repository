@@ -13,7 +13,7 @@ parameters:
         recentBucketSuffix: ""
         imageServerBaseUrl: https://rais-iiif.dyn.cloud.e-infra.cz/iiif/
     databot:
-        basePath: http://127.0.0.1:5000
+        basePath: http://databot:5000
     solr:
         host: solr
         port: 8983
