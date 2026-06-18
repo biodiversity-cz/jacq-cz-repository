@@ -8,6 +8,7 @@ use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
 use App\Model\Database\Entity\Attributes\TOriginalFileAt;
+use App\Model\Database\Entity\Views\VoucherVisionTranscription;
 use App\Model\Database\Repository\PhotosRepository;
 use App\Services\Exceptions\RiskOfPidOverwritten;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -102,6 +103,9 @@ class Photos
 
     #[Column(nullable: true, options: ['comment' => 'MD5 hash of master archive file'])]
     public protected(set) ?string $archiveFileChecksum = null;
+
+    #[OneToOne(targetEntity: VoucherVisionTranscription::class, mappedBy: 'photo')]
+    public protected(set) ?VoucherVisionTranscription $transcription = null;
 
     public function __construct()
     {

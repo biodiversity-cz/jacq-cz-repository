@@ -96,6 +96,17 @@ class ImportedPhotosGrid extends Control
     {
         $this->grid->setDataSource($this->defaultDatasource($this->user))->setDefaultSort(['id' => 'DESC'])->setRememberState(false);
 
+        /*
+         * JOIN které by byly potřeba jen pro export
+         **/
+        //        $this->grid->onExport[] = function ($dataSource): mixed {
+        //            if ($dataSource instanceof QueryBuilder) {
+        //                $dataSource->leftJoin('p.herbarium', 'h')
+        //                    ->leftJoin('p.funding', 'f');
+        //            }
+        //            return $dataSource;
+        //        };
+
         $this->grid->addColumnNumber('id', 'ID')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
@@ -116,7 +127,9 @@ class ImportedPhotosGrid extends Control
 
                 return $el;
             })->setFilterSelect($this->curatorFacade->getPassedStatuses());
-        $this->grid->addColumnDateTime('createdAt', 'created at (FROM - TO)')->setRenderer(function (Photos $item) {return $item->createdAt->format('j. n. Y H:i'); })->setFilterDateRange('createdAt', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
+        $this->grid->addColumnDateTime('createdAt', 'created at (FROM - TO)')->setRenderer(function (Photos $item) {
+            return $item->createdAt->format('j. n. Y H:i');
+        })->setFilterDateRange('createdAt', 'User registered:')->setFormat('j. n. Y', 'd. m. yyyy');
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
@@ -184,12 +197,17 @@ class ImportedPhotosGrid extends Control
         $this->grid->addToolbarButton('exportAll', 'Export XLSX (all)')
             ->setClass('btn btn-xs btn-success')
             ->setIcon('file-excel')
-            ->setTitle('Export všech záznamů')
-        ;
+            ->setTitle('Export všech záznamů');
         $this->grid->addExportCallback('Export XLSX (filtered)', function ($data): void {
             $this->exportToXlsx($data);
         }, true)
             ->setClass('btn btn-xs btn-info')
+            ->setIcon('file-excel');
+
+        $this->grid->addExportCallback('Export VoucherVision for JACQ XLSX (filtered)', function ($data): void {
+            $this->exportVouvisToJACQXlsx($data);
+        }, true)
+            ->setClass('btn btn-xs btn-warning')
             ->setIcon('file-excel');
 
         return $this->grid;
@@ -198,6 +216,9 @@ class ImportedPhotosGrid extends Control
     protected function defaultDatasource(User $user): QueryBuilder
     {
         return $this->photoService->getDefaultDatasource($user)
+            ->leftJoin('p.transcription', 'transcription')
+            ->leftJoin('p.type', 'type')
+            ->leftJoin('p.status', 'status')
             ->andWhere('p.status IN (:status)')
             ->setParameter('status', PhotosStatus::PASSED)
             ->orderBy('p.id', 'DESC');
@@ -241,6 +262,112 @@ class ImportedPhotosGrid extends Control
         $this->presenter->sendResponse(new FileResponse(
             $filename,
             'export.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ));
+    }
+
+    private function exportVouvisToJACQXlsx(iterable $data): void
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'vouchervision_export_').'.xlsx';
+        $writer = new \XLSXWriter();
+
+        if (!empty($data)) {
+            $headers = [
+                'ID' => 'string',
+                'HerbNummer' => 'string',
+                'collectionID' => 'string',
+                'Collection' => 'string',
+                'status' => 'string',
+                'taxon' => 'string',
+                'Sammler' => 'string',
+                'series' => 'string',
+                'series_number' => 'string',
+                'Nummer' => 'string',
+                'alt_number' => 'string',
+                'Datum' => 'string',
+                'Datum2' => 'string',
+                'det' => 'string',
+                'typified' => 'string',
+                'typus' => 'string',
+                'taxon_alt' => 'string',
+                'nation_engl' => 'string',
+                'provinz' => 'string',
+                'Fundort' => 'string',
+                'Fundort_engl' => 'string',
+                'Habitat' => 'string',
+                'Habitus' => 'string',
+                'Bemerkungen' => 'string',
+                'coord_NS' => 'string',
+                'lat_degree' => 'string',
+                'lat_minute' => 'string',
+                'lat_second' => 'string',
+                'coord_WE' => 'string',
+                'long_degree' => 'string',
+                'long_minute' => 'string',
+                'long_second' => 'string',
+                'exactness' => 'string',
+                'quadrant' => 'string',
+                'quadrant_sub' => 'string',
+                'alt_min' => 'string',
+                'alt_max' => 'string',
+                'digital_image' => 'string',
+                'digital_image_obs' => 'string',
+                'observation' => 'string',
+            ];
+            $writer->writeSheetHeader('Export', $headers);
+
+            foreach ($data as $photo) {
+                if (null === $photo->transcription) {
+                    continue;
+                }
+
+                /** @var Photos $photo */
+                $row = [
+                    null,
+                    $photo->getSpecimenIdFixedWidth(),
+                    null,
+                    null,
+                    null,
+                    $photo->transcription->scientificName,
+                    $photo->transcription->recordedBy,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $photo->transcription->eventDate,
+                    null,
+                    $photo->transcription->identifiedBy,
+                    null,
+                    null,
+                    null,
+                    $photo->transcription->country,
+                    $photo->transcription->stateProvince,
+                    null,
+                    $photo->transcription->locality,
+                    null,
+                    null,
+                    $photo->transcription->occurrenceRemarks,
+                    ...$photo->transcription->getLatitudeDMS(),
+                    ...$photo->transcription->getLongitudeDMS(),
+                    null,
+                    null,
+                    null,
+                    $photo->transcription->minimumElevationInMeters,
+                    null,
+                    '1',
+                    null,
+                    null,
+                    (string) $photo->transcription,
+                ];
+                $writer->writeSheetRow('Export', $row);
+            }
+        }
+
+        $writer->writeToFile($filename);
+
+        $this->presenter->sendResponse(new FileResponse(
+            $filename,
+            'vouchervision_jacq_export.xlsx',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ));
     }
