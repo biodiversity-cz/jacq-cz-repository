@@ -92,7 +92,7 @@
                                     <th>{$file->name}</th>
                                     <td>{$file->getUploaded()}</td>
                                     <td>{$file->size|bytes:1} <small>({$file->size|number} bytes)</small></td>
-                                    <td title="Required type is {\App\Model\FileManagement\FileInsideCuratorBucket::EXTENSION}">
+                                    <td title="Required type is TIF">
                                         {$file->isTypeOK()|status}
                                     </td>
                                     <td title="Required size is between {\App\Model\FileManagement\FileInsideCuratorBucket::MIN_FILESIZE|bytes:1} and {\App\Model\FileManagement\FileInsideCuratorBucket::MAX_FILESIZE|bytes:1}">
@@ -190,7 +190,7 @@
                             <th>{$file->name}</th>
                             <td>{$file->getUploaded()}</td>
                             <td>{$file->size|bytes:1} <small>({$file->size|number} bytes)</small></td>
-                            <td title="Required type is {\App\Model\FileManagement\FileInsideCuratorBucket::EXTENSION}">
+                            <td title="Required type is TIF">
                                 {$file->isTypeOK()|status}
                             </td>
                             <td title="Required size is between {\App\Model\FileManagement\FileInsideCuratorBucket::MIN_FILESIZE|bytes:1} and {\App\Model\FileManagement\FileInsideCuratorBucket::MAX_FILESIZE|bytes:1}">

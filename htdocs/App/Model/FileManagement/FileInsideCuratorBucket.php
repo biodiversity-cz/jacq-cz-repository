@@ -11,7 +11,7 @@ class FileInsideCuratorBucket
     public const int MIN_FILESIZE = 5 * 1024 * 1024;
     public const int MAX_FILESIZE = 650 * 1024 * 1024;
 
-    public const string EXTENSION = 'tif';
+    public const array EXTENSION = ['tif', 'tiff'];
     public const string MIME_TYPE = 'image/tiff';
 
     protected bool $isEligibleForImport = false;
@@ -33,7 +33,11 @@ class FileInsideCuratorBucket
 
     public function isTypeOk(): bool
     {
-        return self::EXTENSION === pathinfo($this->name, PATHINFO_EXTENSION);
+        return in_array(
+            strtolower(pathinfo($this->name, PATHINFO_EXTENSION)),
+            self::EXTENSION,
+            true
+        );
     }
 
     public function isAlreadyWaiting(): bool
