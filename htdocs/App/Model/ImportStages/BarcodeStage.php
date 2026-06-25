@@ -82,7 +82,7 @@ class BarcodeStage extends BaseStage implements StageInterface
     {
         $output = [];
         $returnVar = 0;
-        $info = exec('zbarimg --quiet --raw '.escapeshellarg($this->getZbarThumbTempPath()), $output, $returnVar);
+        $info = exec('zbarimg -S*.disable -Scode128.enable -Scode39.enable --quiet --raw '.escapeshellarg($this->getZbarThumbTempPath()), $output, $returnVar);
 
         switch ($returnVar) {
             case 1:
