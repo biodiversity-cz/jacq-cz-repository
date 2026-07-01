@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v6
+                uses: actions/checkout@v7
                 with:
                     fetch-depth: 0
 
@@ -32,7 +32,7 @@ jobs:
                 run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
             -   name: Cache composer dependencies
-                uses: actions/cache@v5.0.5
+                uses: actions/cache@v6.1.0
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -51,7 +51,7 @@ jobs:
                 run: vendor/bin/tester -p phpdbg tests/Cases/Unit -s -C #vendor/bin/tester -s -p "$(which php)" --colors 1 tests/Cases/Unit
 
             -   name: Upload results to Codecov
-                uses: codecov/codecov-action@v6
+                uses: codecov/codecov-action@v7
                 with:
                     token: ${{ secrets.CODECOV_TOKEN }}
                     files: coverage.xml
