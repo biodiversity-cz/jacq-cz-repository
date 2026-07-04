@@ -41,12 +41,51 @@ class IiifController extends BasePubV1Controller
         $manifest = $this->manifestFactory->createManifest($specimen, $this->httpRequest->getUrl()->getAbsoluteUrl());
 
         // Log the request
+        $userAgent = $request->getHeaderLine('User-Agent');
+        $referer = $request->getHeaderLine('Referer');
+
         $this->imageDownloadLogService->logDownload(
             $this->photoService->getPublicPhotosOfSpecimen($specimen)[0]->id,
             'iiif_manifest',
             $this->httpRequest->getRemoteAddress(),
-            $request->getHeader('User-Agent')[0],
-            $request->getHeader('Referer')[0]
+            $userAgent,
+            $referer
+        );
+
+        return $response->writeJsonBody($manifest->toArray());
+    }
+
+    #[Apitte\OpenApi('summary: IIIF v2 manifest for a specimen ID')]
+    #[Apitte\Path('/manifest/by-sid')]
+    #[Apitte\RequestParameter(
+        name: 'sid',
+        type: 'string',
+        in: 'query',
+        required: true,
+        description: 'Persistent specimen SID, e.g. https://prc.jacq.org/PRC38'
+    )]
+    #[Apitte\Method('GET')]
+    #[Apitte\Response(description: 'Success', code: '200')]
+    public function manifestBySid(ApiRequest $request, ApiResponse $response): ResponseInterface
+    {
+        $sid = $request->getParameter('sid');
+        try {
+            $specimen = $this->getSpecimenBySid($sid);
+        } catch (\Exception $e) {
+            throw new ClientErrorException('Specimen not found', 404);
+        }
+        $manifest = $this->manifestFactory->createManifest($specimen, $this->httpRequest->getUrl()->getAbsoluteUrl());
+
+        // Log the request
+        $userAgent = $request->getHeaderLine('User-Agent');
+        $referer = $request->getHeaderLine('Referer');
+
+        $this->imageDownloadLogService->logDownload(
+            $this->photoService->getPublicPhotosOfSpecimen($specimen)[0]->id,
+            'iiif_manifest',
+            $this->httpRequest->getRemoteAddress(),
+            $userAgent,
+            $referer
         );
 
         return $response->writeJsonBody($manifest->toArray());
@@ -82,6 +121,17 @@ class IiifController extends BasePubV1Controller
     protected function getSpecimen(string $specimenFullId): Specimen
     {
         $specimen = $this->specimenFactory->create($specimenFullId);
+
+        if (!$this->photoService->specimenHasPublicPhotos($specimen)) {
+            throw new SpecimenIdException('Specimen has no public images', 404);
+        }
+
+        return $specimen;
+    }
+
+    protected function getSpecimenBySid(string $specimenSid): Specimen
+    {
+        $specimen = $this->specimenFactory->createFromSid($specimenSid);
 
         if (!$this->photoService->specimenHasPublicPhotos($specimen)) {
             throw new SpecimenIdException('Specimen has no public images', 404);
