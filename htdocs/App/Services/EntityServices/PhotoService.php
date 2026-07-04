@@ -134,7 +134,7 @@ class PhotoService extends BaseEntityService
      */
     public function findPotentialDuplicates(Photos $photo): array
     {
-        return $this->repository->findBy(['herbarium' => $photo->herbarium, 'specimenId' => $photo->specimenId, 'archiveFileSize' => $photo->archiveFileSize, 'status' => PhotosStatus::PASSED]);
+        return $this->repository->findBy(['herbarium' => $photo->herbarium, 'specimenId' => $photo->specimenId, 'archiveFileSize' => $photo->archiveFileSize, 'status' => PhotosStatus::DUPLICITY_CHECKABLE]);
     }
 
     /**
