@@ -70,6 +70,11 @@ class PhotosRepository extends AbstractRepository
         return $this->findOneBy(['id' => $id, 'status' => PhotosStatus::PUBLISHED]);
     }
 
+    public function getPublicPhotoBySpecimenSid(string $sid): ?Photos
+    {
+        return $this->findOneBy(['specimenPid' => $sid, 'status' => PhotosStatus::PUBLISHED]);
+    }
+
     public function getPhoto(User $user, int $id): ?Photos
     {
         $qb = $this->getDefaultDatasource($user)->andWhere('p.id = :id')->setParameter('id', $id);

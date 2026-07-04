@@ -27,6 +27,11 @@ class PhotoService extends BaseEntityService
         return $this->repository->getPublicPhotosOfSpecimen($specimen);
     }
 
+    public function getPublicPhotoBySpecimenSid(string $sid): ?Photos
+    {
+        return $this->repository->getPublicPhotoBySpecimenSid($sid);
+    }
+
     public function getDefaultDatasource(User $user): QueryBuilder
     {
         return $this->repository->getDefaultDatasource($user);
