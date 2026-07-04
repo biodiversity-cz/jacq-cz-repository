@@ -148,6 +148,9 @@ final class RepositoryPresenter extends UnsecuredPresenter
             }
             /** @var Photos $photo */
             $photo = $this->photoService->getPhoto($this->getUser(), $id);
+            if (null === $photo) {
+                throw new ImageIdException('Unknown image ID');
+            }
         } catch (ImageIdException $exception) {
             $this->flashMessage($exception->getMessage(), 'error');
             $this->redirect('Home:');
