@@ -108,7 +108,7 @@ readonly class CuratorFacade
     {
         $files = [];
         $unprocessedPhotos = $this->photoService->findUnprocessedPhotos($user);
-        $minFileSize = $this->herbariumService->getCurrentUserHerbarium($user)->minimalFileSize;
+        $minFileSize = $this->herbariumService->getCurrentUserHerbarium($user)->minimalFileSize * 1024 * 1024;
 
         foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium($user)->bucket) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {

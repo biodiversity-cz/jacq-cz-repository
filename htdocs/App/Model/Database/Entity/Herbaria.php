@@ -80,7 +80,7 @@ class Herbaria
     public protected(set) ?string $GRSciCollCollectionID = null;
 
     #[Column(type: Types::INTEGER, nullable: false, options: ['default' => 5, 'comment' => 'minimal filesize[MB] that is accepted during import control'])]
-    public protected(set) int $minimalFileSize = 6;
+    public protected(set) int $minimalFileSize;
 
     public function __construct()
     {
