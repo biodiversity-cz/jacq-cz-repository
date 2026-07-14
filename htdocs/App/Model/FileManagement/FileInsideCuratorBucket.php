@@ -8,7 +8,6 @@ use Aws\Api\DateTimeResult;
 
 class FileInsideCuratorBucket
 {
-    public const int MIN_FILESIZE = 5 * 1024 * 1024;
     public const int MAX_FILESIZE = 650 * 1024 * 1024;
 
     public const array EXTENSION = ['tif', 'tiff'];
@@ -16,7 +15,7 @@ class FileInsideCuratorBucket
 
     protected bool $isEligibleForImport = false;
 
-    public function __construct(public protected(set) readonly string $name, public protected(set) readonly int $size, public protected(set) readonly DateTimeResult $timestamp, public protected(set) readonly bool $alreadyWaiting, public protected(set) readonly bool $hasControlError, public protected(set) readonly ?int $rowId, public protected(set) readonly ?string $controlMsg)
+    public function __construct(public protected(set) readonly string $name, public protected(set) readonly int $size, public protected(set) readonly int $minFileSize, public protected(set) readonly DateTimeResult $timestamp, public protected(set) readonly bool $alreadyWaiting, public protected(set) readonly bool $hasControlError, public protected(set) readonly ?int $rowId, public protected(set) readonly ?string $controlMsg)
     {
         $this->isEligibleForImport = $this->isSizeOk() && $this->isTypeOk() && !$this->isAlreadyWaiting() && !$this->hasControlError();
     }
@@ -28,7 +27,7 @@ class FileInsideCuratorBucket
 
     public function isSizeOk(): bool
     {
-        return $this->size >= self::MIN_FILESIZE && $this->size <= self::MAX_FILESIZE;
+        return $this->size >= $this->minFileSize && $this->size <= self::MAX_FILESIZE;
     }
 
     public function isTypeOk(): bool
@@ -63,12 +62,5 @@ class FileInsideCuratorBucket
     public function hasPrecontrolError(): bool
     {
         return !$this->isSizeOk() || !$this->isTypeOk();
-    }
-
-    public function setIneligibleForImport(): self
-    {
-        $this->isEligibleForImport = false;
-
-        return $this;
     }
 }

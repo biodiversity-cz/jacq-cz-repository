@@ -79,6 +79,9 @@ class Herbaria
     #[Column(name: 'grsc_collection', unique: true, nullable: true, options: ['comment' => 'Global Registry of Scientific Collections (GRSciColl) collection ID used for IPT publishing'])]
     public protected(set) ?string $GRSciCollCollectionID = null;
 
+    #[Column(type: Types::INTEGER, nullable: false, options: ['default' => 5, 'comment' => 'minimal filesize[MB] that is accepted during import control'])]
+    public protected(set) int $minimalFileSize = 6;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -199,5 +202,12 @@ class Herbaria
     public function setGRSciCollCollectionID(?string $GRSciCollCollectionID): void
     {
         $this->GRSciCollCollectionID = $GRSciCollCollectionID;
+    }
+
+    public function setMinimalFileSize(int $minimalFileSize): Herbaria
+    {
+        $this->minimalFileSize = $minimalFileSize;
+
+        return $this;
     }
 }

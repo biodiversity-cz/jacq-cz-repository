@@ -39,6 +39,7 @@ final class HerbariumPresenter extends SecuredPresenter
                     'filenameFallbackSwitch' => $this->herbariumService->setFilenameFallback($this->user, (bool) $value),
                     'multiplierSwitch' => $this->herbariumService->setMultiplier($this->user, (bool) $value),
                     'strictAcronymPrefix' => $this->herbariumService->setStrictAcronymPrefix($this->user, (bool) $value),
+                    'minimalFileSize' => $this->herbariumService->setMinimalFileSize($this->user, (int) $value),
                 };
             }
         } catch (RiskOfUnpredictabilityException $exception) {

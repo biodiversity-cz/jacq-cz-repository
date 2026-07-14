@@ -108,14 +108,16 @@ readonly class CuratorFacade
     {
         $files = [];
         $unprocessedPhotos = $this->photoService->findUnprocessedPhotos($user);
+        $minFileSize = $this->herbariumService->getCurrentUserHerbarium($user)->minimalFileSize;
+
         foreach ($this->s3Service->listObjects($this->herbariumService->getCurrentUserHerbarium($user)->bucket) as $filename) {
             if (!isset($unprocessedPhotos[$filename['Key']])) {
-                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], false, false, null, null);
+                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $minFileSize, $filename['LastModified'], false, false, null, null);
             } else {
                 $entity = $unprocessedPhotos[$filename['Key']];
                 $alreadyWaiting = PhotosStatus::WAITING === $entity->status->id;
                 $hasControlError = PhotosStatus::IMAGE_CONTROL_ERROR === $entity->status->id;
-                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->id, $entity->error?->message);
+                $file = new FileInsideCuratorBucket($filename['Key'], (int) $filename['Size'], $minFileSize, $filename['LastModified'], $alreadyWaiting, $hasControlError, $entity->id, $entity->error?->message);
             }
 
             $files[] = $file;
