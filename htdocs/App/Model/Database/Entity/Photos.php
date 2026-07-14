@@ -207,6 +207,10 @@ class Photos
      */
     public function setExif(?array $exif): Photos
     {
+        // Sanitize UTF-8 encoding before JSON serialization
+        if (null !== $exif) {
+            $exif = $this->sanitizeArrayUtf8($exif, 'exif');
+        }
         $this->exif = $exif;
 
         return $this;
@@ -217,9 +221,44 @@ class Photos
      */
     public function setIdentify(?array $identify): Photos
     {
+        // Sanitize UTF-8 encoding before JSON serialization
+        if (null !== $identify) {
+            $identify = $this->sanitizeArrayUtf8($identify, 'identify');
+        }
         $this->identify = $identify;
 
         return $this;
+    }
+
+    /**
+     * Recursively sanitize string values in an array to ensure valid UTF-8 encoding.
+     * Invalid UTF-8 sequences are converted to valid UTF-8.
+     *
+     * @param mixed[] $array
+     * @return mixed[]
+     */
+    protected function sanitizeArrayUtf8(array $array, string $fieldName, string $path = ''): array
+    {
+        foreach ($array as $key => $value) {
+            $currentPath = $path ? "{$path}.{$key}" : (string) $key;
+
+            if (is_array($value)) {
+                $array[$key] = $this->sanitizeArrayUtf8($value, $fieldName, $currentPath);
+            } elseif (is_string($value)) {
+                if (!mb_check_encoding($value, 'UTF-8')) {
+                    // Convert from ISO-8859-1 (Latin-1) to UTF-8
+                    $converted = mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
+                    if (false !== $converted && mb_check_encoding($converted, 'UTF-8')) {
+                        $array[$key] = $converted;
+                    } else {
+                        // If conversion fails, remove invalid bytes
+                        $array[$key] = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $value);
+                    }
+                }
+            }
+        }
+
+        return $array;
     }
 
     public function addImportError(): ImportError
