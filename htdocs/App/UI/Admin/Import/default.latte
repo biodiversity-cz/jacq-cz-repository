@@ -95,7 +95,7 @@
                                     <td title="Required type is TIF">
                                         {$file->isTypeOK()|status}
                                     </td>
-                                    <td title="Required size is between {\App\Model\FileManagement\FileInsideCuratorBucket::MIN_FILESIZE|bytes:1} and {\App\Model\FileManagement\FileInsideCuratorBucket::MAX_FILESIZE|bytes:1}">
+                                    <td title="Required size is between {$herbarium->minimalFileSize} and {\App\Model\FileManagement\FileInsideCuratorBucket::MAX_FILESIZE|bytes:1}">
                                         {$file->isSizeOK()|status}
                                     </td>
                                 </tr>
@@ -193,7 +193,7 @@
                             <td title="Required type is TIF">
                                 {$file->isTypeOK()|status}
                             </td>
-                            <td title="Required size is between {\App\Model\FileManagement\FileInsideCuratorBucket::MIN_FILESIZE|bytes:1} and {\App\Model\FileManagement\FileInsideCuratorBucket::MAX_FILESIZE|bytes:1}">
+                            <td title="Required size is between {$herbarium->minimalFileSize} and {\App\Model\FileManagement\FileInsideCuratorBucket::MAX_FILESIZE|bytes:1}">
                                 {$file->isSizeOK()|status}
                             </td>
                             <td>
