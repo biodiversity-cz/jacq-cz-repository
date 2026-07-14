@@ -10,6 +10,7 @@ use App\Model\Database\Entity\Herbaria;
 use App\Model\Specimen\Specimen;
 use App\Model\Specimen\SpecimenFactory;
 use App\Services\EntityServices\HerbariumService;
+use App\Services\EntityServices\PhotoService;
 use App\Services\SpecimenIdService;
 use Nette\Security\User;
 use Tester\Assert;
@@ -20,8 +21,9 @@ test('SpecimenFactory throws exception for empty id', function (): void {
     $herbariumService = \Mockery::mock(HerbariumService::class);
     $container = Bootstrap::boot()->createContainer();
     $specimenIdService = $container->getByType(SpecimenIdService::class);
+    $photoService = $container->getByType(PhotoService::class);
 
-    $factory = new SpecimenFactory($herbariumService, $specimenIdService);
+    $factory = new SpecimenFactory($herbariumService, $specimenIdService, $photoService);
 
     Assert::exception(function () use ($factory) {
         $factory->create('');
@@ -40,8 +42,11 @@ test('SpecimenFactory::create builds specimen from full id', function (): void {
         ->andReturn('123');
 
     $herbariumService = \Mockery::mock(HerbariumService::class);
+    $container = Bootstrap::boot()->createContainer();
 
-    $factory = new SpecimenFactory($herbariumService, $specimenIdService);
+    $photoService = $container->getByType(PhotoService::class);
+
+    $factory = new SpecimenFactory($herbariumService, $specimenIdService, $photoService);
     $specimen = $factory->create('PR-000123');
 
     Assert::type(Specimen::class, $specimen);
@@ -60,7 +65,11 @@ test('SpecimenFactory::createFromInternalPart builds specimen for current user h
 
     $specimenIdService = \Mockery::mock(SpecimenIdService::class);
 
-    $factory = new SpecimenFactory($herbariumService, $specimenIdService);
+    $container = Bootstrap::boot()->createContainer();
+
+    $photoService = $container->getByType(PhotoService::class);
+
+    $factory = new SpecimenFactory($herbariumService, $specimenIdService, $photoService);
     $specimen = $factory->createFromInternalPart($user, '999');
 
     Assert::type(Specimen::class, $specimen);
