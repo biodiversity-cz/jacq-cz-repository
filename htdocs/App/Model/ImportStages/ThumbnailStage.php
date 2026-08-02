@@ -35,12 +35,14 @@ class ThumbnailStage extends BaseStage implements StageInterface
         try {
             $this->item = $payload;
             $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
+            $imagick->stripImage();
             $this->createThumbnail($imagick);
             $imagick->clear();
             unset($imagick);
 
             $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
             $imagick = $this->createThumbnailDatabot($imagick);
+            $imagick->stripImage();
             $imagick->writeImage($this->getDatabotThumbTempPath());
             $imagick->clear();
             unset($imagick);

@@ -27,6 +27,7 @@ class ConvertStage extends BaseStage implements StageInterface
     {
         $imagick = $this->imagickService->createImagick($this->getMasterTempPath());
         $imagick->setImageFormat('tiff');
+        $imagick->stripImage();
         $imagick->writeImage($this->getMasterSinglePageTempPath());
         $imagick->clear();
         unset($imagick);

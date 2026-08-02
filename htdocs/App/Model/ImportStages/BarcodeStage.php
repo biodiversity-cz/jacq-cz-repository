@@ -67,6 +67,7 @@ class BarcodeStage extends BaseStage implements StageInterface
         $imagick = $this->imagickService->resizeImage($imagick, (int) $longerSideLenght);
         $imagick->modulateImage(100, 0, 100);
         // adaptive threshold had worse results than unmodified image        * $imagick->adaptiveThresholdImage(150, 150, 1);
+        $imagick->stripImage();
         $imagick->setImageFormat('png');
         $imagick->writeImage($this->getZbarThumbTempPath());
         $imagick->clear();
