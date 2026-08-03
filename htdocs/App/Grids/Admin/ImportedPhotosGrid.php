@@ -48,9 +48,9 @@ class ImportedPhotosGrid extends Control
             $photo = $this->photoService->getPhoto($this->user, $id);
             $this->curatorFacade->deletePhoto($this->user, $photo);
         } catch (ServiceException $exception) {
-            $this->presenter->flashMessage($exception->getMessage(), 'danger');
+            $this->getPresenter()->flashMessage($exception->getMessage(), 'danger');
         } catch (Exception $e) {
-            $this->presenter->flashMessage('It is not possible to delete the photo now, it has some unresolved "duplicateTo" relationship.', 'danger');
+            $this->getPresenter()->flashMessage('It is not possible to delete the photo now, it has some unresolved "duplicateTo" relationship.', 'danger');
         }
 
         $this->redirect('this');
@@ -62,9 +62,9 @@ class ImportedPhotosGrid extends Control
             $photo = $this->photoService->getPhoto($this->user, $id);
             $this->curatorFacade->addEmbargoPhoto($this->user, $photo);
         } catch (ServiceException $exception) {
-            $this->presenter->flashMessage($exception->getMessage(), 'danger');
+            $this->getPresenter()->flashMessage($exception->getMessage(), 'danger');
         } catch (Exception $e) {
-            $this->presenter->flashMessage('It is not possible to put the emabrgo to the photo now', 'danger');
+            $this->getPresenter()->flashMessage('It is not possible to put the emabrgo to the photo now', 'danger');
         }
 
         $this->redirect('this');
@@ -76,9 +76,9 @@ class ImportedPhotosGrid extends Control
             $photo = $this->photoService->getPhoto($this->user, $id);
             $this->curatorFacade->dropEmbargoPhoto($this->user, $photo);
         } catch (ServiceException $exception) {
-            $this->presenter->flashMessage($exception->getMessage(), 'danger');
+            $this->getPresenter()->flashMessage($exception->getMessage(), 'danger');
         } catch (Exception $e) {
-            $this->presenter->flashMessage('It is not possible to put the emabrgo to the photo now', 'danger');
+            $this->getPresenter()->flashMessage('It is not possible to put the emabrgo to the photo now', 'danger');
         }
 
         $this->redirect('this');
@@ -110,7 +110,7 @@ class ImportedPhotosGrid extends Control
         $this->grid->addColumnNumber('id', 'ID')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Repository:photo', ['id' => $item->id]);
+                $url = $this->getPresenter()->link('Repository:photo', ['id' => $item->id]);
                 $el->addHtml('<a href="'.$url.'">'.$item->id.'</a>');
 
                 return $el;
@@ -133,7 +133,7 @@ class ImportedPhotosGrid extends Control
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Repository:specimen', $item->specimenId);
+                $url = $this->getPresenter()->link('Repository:specimen', $item->specimenId);
                 $el->addHtml('<a href="'.$url.'">'.$item->getFullSpecimenId().'</a>');
 
                 return $el;
@@ -259,7 +259,7 @@ class ImportedPhotosGrid extends Control
 
         $writer->writeToFile($filename);
 
-        $this->presenter->sendResponse(new FileResponse(
+        $this->getPresenter()->sendResponse(new FileResponse(
             $filename,
             'export.xlsx',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -365,7 +365,7 @@ class ImportedPhotosGrid extends Control
 
         $writer->writeToFile($filename);
 
-        $this->presenter->sendResponse(new FileResponse(
+        $this->getPresenter()->sendResponse(new FileResponse(
             $filename,
             'vouchervision_jacq_export.xlsx',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

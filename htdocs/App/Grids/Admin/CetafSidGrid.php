@@ -51,7 +51,7 @@ class CetafSidGrid extends Control
         $this->grid->addColumnNumber('id', 'repoID')
             ->setRenderer(function (CetafSid $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link(':Front:Cetaf:object', ['id' => $item->id]);
+                $url = $this->getPresenter()->link(':Front:Cetaf:object', ['id' => $item->id]);
                 $el->addHtml('<a href="'.$url.'">'.$item->id.'</a>');
 
                 return $el;
@@ -120,7 +120,7 @@ class CetafSidGrid extends Control
 
         $writer->writeToFile($filename);
 
-        $this->presenter->sendResponse(new FileResponse(
+        $this->getPresenter()->sendResponse(new FileResponse(
             $filename,
             'export.xlsx',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

@@ -43,7 +43,7 @@
     "contributte/apitte": "^0",
     "contributte/console": "^0",
     "contributte/console-extra": "^0",
-    "contributte/forms-bootstrap": "^0",
+    "contributte/forms-bootstrap": "^0.9.x-dev",
     "guzzlehttp/guzzle": "^7",
     "league/pipeline": "^1",
     "ublaboo/aws-sdk-nette-extension": "dev-master#0c2dfd5",
