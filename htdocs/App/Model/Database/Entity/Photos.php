@@ -235,6 +235,7 @@ class Photos
      * Invalid UTF-8 sequences are converted to valid UTF-8.
      *
      * @param mixed[] $array
+     *
      * @return mixed[]
      */
     protected function sanitizeArrayUtf8(array $array, string $fieldName, string $path = ''): array
