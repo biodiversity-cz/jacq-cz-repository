@@ -54,7 +54,7 @@ class PublishedPhotosGrid extends Control
         $this->grid->addColumnNumber('id', 'ID')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Repository:photo', ['id' => $item->id]);
+                $url = $this->getPresenter()->link('Repository:photo', ['id' => $item->id]);
                 $el->addHtml('<a href="'.$url.'">'.$item->id.'</a>');
 
                 return $el;
@@ -64,7 +64,7 @@ class PublishedPhotosGrid extends Control
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Repository:specimen', $item->specimenId);
+                $url = $this->getPresenter()->link('Repository:specimen', $item->specimenId);
                 $el->addHtml('<a href="'.$url.'">'.$item->getFullSpecimenId().'</a>');
 
                 return $el;
@@ -149,7 +149,7 @@ class PublishedPhotosGrid extends Control
 
         $writer->writeToFile($filename);
 
-        $this->presenter->sendResponse(new FileResponse(
+        $this->getPresenter()->sendResponse(new FileResponse(
             $filename,
             'export.xlsx',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'

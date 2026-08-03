@@ -54,7 +54,7 @@ class FrontPhotosGrid extends Control
         $this->grid->addColumnNumber('id', 'ID')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Repository:image', ['id' => $item->id]);
+                $url = $this->getPresenter()->link('Repository:image', ['id' => $item->id]);
                 $el->addHtml('<a href="'.$url.'">'.$item->id.'</a>');
 
                 return $el;
@@ -63,7 +63,7 @@ class FrontPhotosGrid extends Control
         $this->grid->addColumnNumber('specimen_id', 'Specimen')
             ->setRenderer(function (Photos $item) {
                 $el = Html::el(null);
-                $url = $this->presenter->link('Repository:specimen', $item->getFullSpecimenId());
+                $url = $this->getPresenter()->link('Repository:specimen', $item->getFullSpecimenId());
                 $el->addHtml('<a href="'.$url.'">'.$item->getFullSpecimenId().'</a>');
 
                 return $el;

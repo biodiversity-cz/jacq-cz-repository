@@ -24,20 +24,22 @@ final class RouterFactory
 
     protected static function buildAdmin(RouteList $router): RouteList
     {
-        $router[] = $list = new RouteList('Admin');
-        $list[] = new Route('admin/repository/specimen[/<id .+>]', 'Repository:specimen');
-        $list[] = new Route('admin/<presenter>/<action>[/<id>]', 'Home:default');
+        $list = new RouteList('Admin');
+        $router->add($list);
+        $list->addRoute('admin/repository/specimen[/<id .+>]', 'Repository:specimen');
+        $list->addRoute('admin/<presenter>/<action>[/<id>]', 'Home:default');
 
         return $router;
     }
 
     protected static function buildFront(RouteList $router): RouteList
     {
-        $router[] = $list = new RouteList('Front');
-        $list[] = new Route('ark[/<value .+>]', 'Ark:default');
-        $list[] = new Route('iiif/manifest[/<id .+>]', 'Iiif:manifest');
-        $list[] = new Route('repository/specimen[/<sid .+>]', 'Repository:specimen');
-        $list[] = new Route('<presenter>/<action>[/<id>]', 'Home:default');
+        $list = new RouteList('Front');
+        $router->add($list);
+        $list->addRoute('ark[/<value .+>]', 'Ark:default');
+        $list->addRoute('iiif/manifest[/<id .+>]', 'Iiif:manifest');
+        $list->addRoute('repository/specimen[/<sid .+>]', 'Repository:specimen');
+        $list->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
 
         return $router;
     }

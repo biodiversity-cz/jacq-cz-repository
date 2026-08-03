@@ -13,11 +13,7 @@ use Nette\Application\AbortException;
 
 final class SignPresenter extends UnsecuredPresenter
 {
-    /**
-     * @persistent
-     *
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingAnyTypeHint
-     */
+    #[Nette\Application\Attributes\Persistent]
     public $backlink;
 
     /** @inject  */ public FormFactory $formFactory;
