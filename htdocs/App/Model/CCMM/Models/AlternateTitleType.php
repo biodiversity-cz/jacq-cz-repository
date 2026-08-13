@@ -18,8 +18,8 @@ class AlternateTitleType implements XmlSerializable
      * @param Title[] $labels
      */
     public function __construct(
-        protected(set) ?string $iri = null,
-        protected(set) array $labels = [],
+        public protected(set) ?string $iri = null,
+        public protected(set) array $labels = [],
     ) {
     }
 

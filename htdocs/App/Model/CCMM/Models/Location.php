@@ -18,11 +18,11 @@ class Location implements XmlSerializable
      * @param RelatedObject[] $relatedObjects
      */
     public function __construct(
-        protected(set) ?BoundingBox $boundingBox = null,
-        protected(set) ?string $name = null,
-        protected(set) ?Geometry $geometry = null,
-        protected(set) array $relatedObjects = [],
-        protected(set) ?RelationType $relationType = null,
+        public protected(set) ?BoundingBox $boundingBox = null,
+        public protected(set) ?string $name = null,
+        public protected(set) ?Geometry $geometry = null,
+        public protected(set) array $relatedObjects = [],
+        public protected(set) ?RelationType $relationType = null,
     ) {
     }
 

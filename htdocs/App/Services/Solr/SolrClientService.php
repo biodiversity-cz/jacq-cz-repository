@@ -14,7 +14,7 @@ use Solarium\Core\Query\DocumentInterface;
 final readonly class SolrClientService
 {
     public function __construct(
-        protected(set) Client $client,
+        public private(set) Client $client,
         private EntityManagerInterface $entityManager,
     ) {
     }
