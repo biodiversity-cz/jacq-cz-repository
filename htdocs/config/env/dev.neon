@@ -7,7 +7,7 @@ parameters:
         host: curator-db
         user: jacq
         password: jacq
-        dbname: jacq_dev
+        dbname: herbarium
     storage:
         archiveBucketPrefix: test-archive
         jp2BucketPrefix: test-iiif

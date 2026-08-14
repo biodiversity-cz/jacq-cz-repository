@@ -17,6 +17,9 @@ nettrine.dbal:
             password: %database.password%
             dbname: %database.dbname%
             port: %database.port%
+            # in case Doctrine throws an exception about missing serverVersion
+            # uncomment the following line and provide the correct version
+            # serverVersion: '17.0'
     types:
         databots.enum_databot_result_status: App\Model\Database\Enums\EnumDatabotStatusType
         databots.enum_databot_role: App\Model\Database\Enums\EnumDatabotRoleType
