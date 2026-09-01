@@ -17,10 +17,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PublishPhoto extends Command
 {
-    public const int LIMIT = 4;
+    public const int LIMIT = 40;
 
     /**
-     * Running as a CronJob - process images from curatorBucket to the repository waiting room, cleans expired Embargo.
+     * Continuously publishes photos from the repository waiting room.
+     * Sleeps when there are no photos to process and exits after processing LIMIT photos.
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly CuratorFacade $curatorFacade, ?string $name = null)
     {
@@ -36,19 +37,43 @@ class PublishPhoto extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
-        for ($i = 0; $i < self::LIMIT; ++$i) {
-            try {
-                $this->proceedPhoto($output);
-            } catch (ImportStageException $e) {
-                $output->writeln("\n".$e->getMessage());
+        $processed = 0;
+        while ($processed < self::LIMIT) {
 
+            try {
+                $photo = $this->proceedPhoto($output);
+
+                if (!$photo) {
+                    $output->writeln('Nothing to process, sleeping 30 seconds...');
+                    sleep(30);
+                    continue;
+                }
+                ++$processed;
+
+            } catch (ImportStageException $e) {
+                $output->writeln("\n" . $e->getMessage());
+                $output->writeln(sprintf(
+                    "\nProcessed: %d images\nExecution time: %.2f sec",
+                    $processed,
+                    microtime(true) - $startTime
+                ));
                 return Command::FAILURE;
+            }
+            if (memory_get_usage(true) > 2024 * 1024 * 1024) {
+                $output->writeln("\nMemory limit reached.");
+
+                break;
             }
         }
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
+        $output->writeln(sprintf(
+            "\nProcessed: %d images\nExecution time: %.2f sec",
+            $processed,
+            microtime(true) - $startTime
+        ));
 
         return Command::SUCCESS;
+
     }
 
     protected function proceedPhoto(OutputInterface $output): ?Photos
@@ -66,16 +91,15 @@ class PublishPhoto extends Command
                 ->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::PUBLISHED))
                 ->setLastEditAt();
             $this->curatorFacade->publishPhotoPipeline()->process($photo);
+            $this->entityManager->flush();
+            $this->entityManager->getConnection()->commit();
+            return $photo;
         } catch (\Throwable $e) {
             $this->entityManager->getConnection()->rollBack();
-            $output->write("\n ERROR: ".$e->getMessage()."\n");
+            $output->write("\n ERROR: " . $e->getMessage() . "\n");
             throw new ImportStageException($e->getMessage());
         }
 
-        $this->entityManager->flush();
-        $this->entityManager->getConnection()->commit();
-
-        return $photo;
     }
 
     protected function getPhoto(): ?Photos
