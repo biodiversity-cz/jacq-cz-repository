@@ -27,6 +27,9 @@
     "@symfony/webpack-encore": "^6",
     "webpack-notifier": "^1"
   },
+  "overrides": {
+    "webpack": "~5.109.2"
+  },
   "scripts": {
     "dev": "encore dev",
     "watch": "encore dev --watch",

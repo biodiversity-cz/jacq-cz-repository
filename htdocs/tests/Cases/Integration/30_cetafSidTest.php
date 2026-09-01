@@ -36,7 +36,7 @@ final class CetafSidTest extends IntegrationTestCase
                     UPDATE photos
                     SET lastedit_timestamp = lastedit_timestamp - INTERVAL '1 day'
                 ");
-        $this->runCommand(['command' => 'curator:resolveSpecimenPid', '--no-interaction' => true], 'sid resolve broken');
+        $this->runCommand(['command' => 'curator:resolveSpecimenPid', '--no-interaction' => true, '--once' => true], 'sid resolve broken');
 
         Assert::count(4, $servicePhotos->findBy(['status' => PhotosStatus::SPECIMEN_CONTROL_OK]), 'moved to specimen_control_ok using CETAF sids');
     }

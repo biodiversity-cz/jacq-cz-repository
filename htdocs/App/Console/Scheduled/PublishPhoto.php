@@ -13,6 +13,7 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PublishPhoto extends Command
@@ -32,31 +33,42 @@ class PublishPhoto extends Command
     {
         $this->setName('curator:publishPhoto');
         $this->setDescription(sprintf('create JP2 for photo and mark it as published'));
+        $this->addOption(
+            'once',
+            null,
+            InputOption::VALUE_NONE,
+            'Process available and exit' // used in integration tests
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
         $processed = 0;
-        while ($processed < self::LIMIT) {
+        $once = $input->getOption('once');
 
+        while ($processed < self::LIMIT) {
             try {
                 $photo = $this->proceedPhoto($output);
 
                 if (!$photo) {
+                    if ($once) {
+                        break;
+                    }
+
                     $output->writeln('Nothing to process, sleeping 30 seconds...');
                     sleep(30);
                     continue;
                 }
                 ++$processed;
-
             } catch (ImportStageException $e) {
-                $output->writeln("\n" . $e->getMessage());
+                $output->writeln("\n".$e->getMessage());
                 $output->writeln(sprintf(
                     "\nProcessed: %d images\nExecution time: %.2f sec",
                     $processed,
                     microtime(true) - $startTime
                 ));
+
                 return Command::FAILURE;
             }
             if (memory_get_usage(true) > 2024 * 1024 * 1024) {
@@ -73,7 +85,6 @@ class PublishPhoto extends Command
         ));
 
         return Command::SUCCESS;
-
     }
 
     protected function proceedPhoto(OutputInterface $output): ?Photos
@@ -93,13 +104,13 @@ class PublishPhoto extends Command
             $this->curatorFacade->publishPhotoPipeline()->process($photo);
             $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
+
             return $photo;
         } catch (\Throwable $e) {
             $this->entityManager->getConnection()->rollBack();
-            $output->write("\n ERROR: " . $e->getMessage() . "\n");
+            $output->write("\n ERROR: ".$e->getMessage()."\n");
             throw new ImportStageException($e->getMessage());
         }
-
     }
 
     protected function getPhoto(): ?Photos

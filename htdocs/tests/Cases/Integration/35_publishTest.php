@@ -67,7 +67,7 @@ final class PublishTest extends IntegrationTestCase
         $_ = $servicePhotos->findBy(['status' => PhotosStatus::WAITING_FOR_PUBLISHING]);
         Assert::count(2, $_, 'publishing problem');
 
-        $this->runCommand(['command' => 'curator:publishPhoto', '--no-interaction' => true], 'publish images failed');
+        $this->runCommand(['command' => 'curator:publishPhoto', '--no-interaction' => true, '--once' => true], 'publish images failed');
 
         $_ = $servicePhotos->findBy(['status' => PhotosStatus::WAITING_FOR_PUBLISHING]);
         Assert::count(0, $_, 'publishing problem');

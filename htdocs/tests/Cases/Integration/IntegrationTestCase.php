@@ -98,7 +98,7 @@ abstract class IntegrationTestCase extends TestCase
 
         $rounds = ceil(count($this::SPECIMENS) / ProceedCuratorImage::LIMIT);
         for ($i = 0; $i < $rounds; ++$i) {
-            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true], 'import images failed');
+            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true, '--once' => true], 'import images failed');
         }
 
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING, 'specimenId' => $this::SPECIMENS]);
@@ -115,9 +115,9 @@ abstract class IntegrationTestCase extends TestCase
         $waiting = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::WAITING]);
         Assert::count(count($this::SPECIMENS), $waiting, 'al images marked as waiting');
 
-        $rounds = ceil(count($this::SPECIMENS) / ProceedCuratorImage::LIMIT);
+        $rounds = count($this::SPECIMENS);
         for ($i = 0; $i < $rounds; ++$i) {
-            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true], 'import images failed');
+            $this->runCommand(['command' => 'curator:importImage', '--no-interaction' => true, '--once' => true], 'import images failed');
         }
 
         $waitingAfterImport = $this->em->getRepository(Photos::class)->findBy(['status' => PhotosStatus::IMAGE_CONTROL_ERROR]);

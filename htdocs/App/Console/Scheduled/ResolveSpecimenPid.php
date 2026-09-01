@@ -11,14 +11,15 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ResolveSpecimenPid extends Command
 {
-    public const int LIMIT = 4;
+    public const int LIMIT = 400;
 
     /**
-     * Running as a CronJob - process images from curatorBucket to the repository waiting room, cleans expired Embargo.
+     * check if a specimen PID exists in an external database and updates photo status to SPECIMEN_CONTROL_OK, cleans expired Embargo.
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly SpecimenPidCallerService $pidCallerService, protected readonly CuratorFacade $curatorFacade, ?string $name = null)
     {
@@ -29,21 +30,48 @@ class ResolveSpecimenPid extends Command
     {
         $this->setName('curator:resolveSpecimenPid');
         $this->setDescription(sprintf('check if specimen PID exists and updates photo status to SPECIMEN_CONTROL_OK, cleans expired Embargo'));
+        $this->addOption(
+            'once',
+            null,
+            InputOption::VALUE_NONE,
+            'Process available and exit' // used in integration tests
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->curatorFacade->expireEmbargo();
-
         $startTime = microtime(true);
-        try {
-            $this->pidCallerService->callAsync($this->getPhotos(), 3);
-        } catch (\Throwable $e) {
-            $output->writeln("\n".$e->getMessage());
+        $cycles = 0;
+        $once = $input->getOption('once');
 
-            return Command::FAILURE;
+        while ($cycles < self::LIMIT) {
+            ++$cycles;
+            try {
+                $this->curatorFacade->expireEmbargo();
+                $this->pidCallerService->callAsync($this->getPhotos(), 3);
+                if ($once) {
+                    break;
+                }
+            } catch (\Throwable $e) {
+                $output->writeln("\n".$e->getMessage());
+
+                return Command::FAILURE;
+            }
+
+            if (memory_get_usage(true) > 150 * 1024 * 1024) {
+                $output->writeln("\nMemory limit reached.");
+
+                break;
+            }
+
+            sleep(30);
         }
-        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
+
+        $output->writeln(sprintf(
+            "\nProcessed: %d cycles\nExecution time: %.2f sec",
+            $cycles,
+            microtime(true) - $startTime
+        ));
 
         return Command::SUCCESS;
     }

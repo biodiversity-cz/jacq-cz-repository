@@ -16,14 +16,16 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ProceedCuratorImage extends Command
 {
-    public const int LIMIT = 4;
+    public const int LIMIT = 40;
 
     /**
-     * Running as a CronJob - process images from curatorBucket to the repository waiting room.
+     * Continuously imports photos from the curators' buckets.
+     * Sleeps when there are no photos to process and exits after processing LIMIT photos.
      */
     public function __construct(protected readonly EntityManagerInterface $entityManager, protected readonly RepositoryConfiguration $storageConfiguration, protected readonly S3Service $s3Service, protected readonly CuratorFacade $curatorFacade, ?string $name = null)
     {
@@ -33,16 +35,35 @@ class ProceedCuratorImage extends Command
     protected function configure(): void
     {
         $this->setName('curator:importImage');
-        $this->setDescription(sprintf('take %c image(s) from curator bucket and proceed import', self::LIMIT));
+        $this->setDescription('take image from curator bucket and proceed import');
+        $this->addOption(
+            'once',
+            null,
+            InputOption::VALUE_NONE,
+            'Process available and exit' // used in integration tests
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
-        for ($i = 0; $i < self::LIMIT; ++$i) {
+        $once = $input->getOption('once');
+        $processed = 0;
+
+        while ($processed < self::LIMIT) {
             // mainPhoto
             try {
-                $photoProcessed = $this->proceedMainPhoto($output);
+                $photo = $photoProcessed = $this->proceedMainPhoto($output);
+                if (!$photo) {
+                    if ($once) {
+                        break;
+                    }
+
+                    $output->writeln('Nothing to process, sleeping 30 seconds...');
+                    sleep(30);
+                    continue;
+                }
+                ++$processed;
             } catch (ImportStageException $e) {
                 $output->writeln("\n".$e->getMessage());
 
@@ -69,9 +90,19 @@ class ProceedCuratorImage extends Command
 
                 return Command::FAILURE;
             }
+
+            if (memory_get_usage(true) > 4024 * 1024 * 1024) {
+                $output->writeln("\nMemory limit reached.");
+
+                break;
+            }
         }
 
-        $output->writeln(sprintf("\n Execution time: %.2f sec", microtime(true) - $startTime));
+        $output->writeln(sprintf(
+            "\nProcessed: %d images\nExecution time: %.2f sec",
+            $processed,
+            microtime(true) - $startTime
+        ));
 
         return Command::SUCCESS;
     }
@@ -94,6 +125,8 @@ class ProceedCuratorImage extends Command
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_OK));
             $this->entityManager->remove($photo->error);
             $photo->removeImportError();
+            $this->entityManager->flush();
+            $this->entityManager->getConnection()->commit();
         } catch (ImportStageException $e) {
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_ERROR));
             $photo->error->setMessage($e->getMessage());
@@ -108,9 +141,6 @@ class ProceedCuratorImage extends Command
             $output->write("\n ERROR: ".$e->getMessage()."\n");
             throw new ImportStageException($e->getMessage());
         }
-
-        $this->entityManager->flush();
-        $this->entityManager->getConnection()->commit();
 
         return $photo;
     }
