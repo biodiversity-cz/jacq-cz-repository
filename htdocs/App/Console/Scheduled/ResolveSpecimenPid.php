@@ -11,6 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ResolveSpecimenPid extends Command
@@ -29,17 +30,28 @@ class ResolveSpecimenPid extends Command
     {
         $this->setName('curator:resolveSpecimenPid');
         $this->setDescription(sprintf('check if specimen PID exists and updates photo status to SPECIMEN_CONTROL_OK, cleans expired Embargo'));
+        $this->addOption(
+            'once',
+            null,
+            InputOption::VALUE_NONE,
+            'Process available and exit' // used in integration tests
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
         $cycles = 0;
+        $once = $input->getOption('once');
+
         while ($cycles < self::LIMIT) {
             ++$cycles;
             try {
                 $this->curatorFacade->expireEmbargo();
                 $this->pidCallerService->callAsync($this->getPhotos(), 3);
+                if ($once) {
+                    break;
+                }
             } catch (\Throwable $e) {
                 $output->writeln("\n".$e->getMessage());
 

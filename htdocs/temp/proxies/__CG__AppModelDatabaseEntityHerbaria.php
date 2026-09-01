@@ -22,6 +22,8 @@ class Herbaria extends \App\Model\Database\Entity\Herbaria implements \Doctrine\
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
+        'GRSciCollCollectionID' => [parent::class, 'GRSciCollCollectionID', null, 8196],
+        'GRSciCollInstitutionID' => [parent::class, 'GRSciCollInstitutionID', null, 8196],
         'acronym' => [parent::class, 'acronym', null, 8196],
         'address' => [parent::class, 'address', null, 8196],
         'bucket' => [parent::class, 'bucket', null, 8196],
@@ -33,6 +35,7 @@ class Herbaria extends \App\Model\Database\Entity\Herbaria implements \Doctrine\
         'id' => [parent::class, 'id', null, 8196],
         'license' => [parent::class, 'license', null, 8196],
         'logo' => [parent::class, 'logo', null, 8196],
+        'minimalFileSize' => [parent::class, 'minimalFileSize', null, 8196],
         'multipleBarcodeMultiplier' => [parent::class, 'multipleBarcodeMultiplier', null, 8196],
         'photos' => [parent::class, 'photos', null, 8196],
         'regexBarcode' => [parent::class, 'regexBarcode', null, 8196],

@@ -16,6 +16,7 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ProceedCuratorImage extends Command
@@ -35,17 +36,29 @@ class ProceedCuratorImage extends Command
     {
         $this->setName('curator:importImage');
         $this->setDescription('take image from curator bucket and proceed import');
+        $this->addOption(
+            'once',
+            null,
+            InputOption::VALUE_NONE,
+            'Process available and exit' // used in integration tests
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
+        $once = $input->getOption('once');
         $processed = 0;
+
         while ($processed < self::LIMIT) {
             // mainPhoto
             try {
                 $photo = $photoProcessed = $this->proceedMainPhoto($output);
                 if (!$photo) {
+                    if ($once) {
+                        break;
+                    }
+
                     $output->writeln('Nothing to process, sleeping 30 seconds...');
                     sleep(30);
                     continue;

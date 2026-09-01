@@ -13,6 +13,7 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class PublishPhoto extends Command
@@ -32,17 +33,29 @@ class PublishPhoto extends Command
     {
         $this->setName('curator:publishPhoto');
         $this->setDescription(sprintf('create JP2 for photo and mark it as published'));
+        $this->addOption(
+            'once',
+            null,
+            InputOption::VALUE_NONE,
+            'Process available and exit' // used in integration tests
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $startTime = microtime(true);
         $processed = 0;
+        $once = $input->getOption('once');
+
         while ($processed < self::LIMIT) {
             try {
                 $photo = $this->proceedPhoto($output);
 
                 if (!$photo) {
+                    if ($once) {
+                        break;
+                    }
+
                     $output->writeln('Nothing to process, sleeping 30 seconds...');
                     sleep(30);
                     continue;
