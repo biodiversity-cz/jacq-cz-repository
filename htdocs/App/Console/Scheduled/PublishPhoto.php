@@ -39,7 +39,6 @@ class PublishPhoto extends Command
         $startTime = microtime(true);
         $processed = 0;
         while ($processed < self::LIMIT) {
-
             try {
                 $photo = $this->proceedPhoto($output);
 
@@ -49,14 +48,14 @@ class PublishPhoto extends Command
                     continue;
                 }
                 ++$processed;
-
             } catch (ImportStageException $e) {
-                $output->writeln("\n" . $e->getMessage());
+                $output->writeln("\n".$e->getMessage());
                 $output->writeln(sprintf(
                     "\nProcessed: %d images\nExecution time: %.2f sec",
                     $processed,
                     microtime(true) - $startTime
                 ));
+
                 return Command::FAILURE;
             }
             if (memory_get_usage(true) > 2024 * 1024 * 1024) {
@@ -73,7 +72,6 @@ class PublishPhoto extends Command
         ));
 
         return Command::SUCCESS;
-
     }
 
     protected function proceedPhoto(OutputInterface $output): ?Photos
@@ -93,13 +91,13 @@ class PublishPhoto extends Command
             $this->curatorFacade->publishPhotoPipeline()->process($photo);
             $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
+
             return $photo;
         } catch (\Throwable $e) {
             $this->entityManager->getConnection()->rollBack();
-            $output->write("\n ERROR: " . $e->getMessage() . "\n");
+            $output->write("\n ERROR: ".$e->getMessage()."\n");
             throw new ImportStageException($e->getMessage());
         }
-
     }
 
     protected function getPhoto(): ?Photos
