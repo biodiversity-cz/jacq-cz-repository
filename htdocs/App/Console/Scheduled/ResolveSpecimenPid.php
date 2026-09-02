@@ -41,12 +41,11 @@ class ResolveSpecimenPid extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        //TODO
-//        pcntl_async_signals(true);
-//
-//        pcntl_signal(SIGTERM, function () {
-//            $this->stopping = true;
-//        });
+        pcntl_async_signals(true);
+
+        pcntl_signal(SIGTERM, function () {
+            $this->stopping = true;
+        });
 
         $startTime = microtime(true);
         $cycles = 0;

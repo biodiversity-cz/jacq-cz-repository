@@ -53,7 +53,8 @@
     "68publishers/asset": "^3",
     "68publishers/webpack-encore-bundle": "^3",
     "mk-j/php_xlsxwriter": "^0",
-    "jumbojett/openid-connect-php": "dev-master#3067281"
+    "jumbojett/openid-connect-php": "dev-master#3067281",
+    "ext-pcntl": "*"
   },
 	"require-dev": {
     "contributte/qa": "^0",
@@ -79,7 +80,7 @@
       "ext-exif": "3",
       "ext-zip": "3",
       "ext-gd": "3",
-      "ext-pcntl": "*"
+      "ext-pcntl": "3"
     },
 		"allow-plugins": {
 			"symfony/thanks": true,
