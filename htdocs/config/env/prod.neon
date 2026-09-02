@@ -6,7 +6,7 @@ parameters:
     database:
         host: pgsql-pooler-lb-rw
         dbname: herbarium
-        user: herbarium_app
+        user: %env.DB_USER%
         password: %env.DB_PASSWORD%
     storage:
         archiveBucketPrefix: archive
