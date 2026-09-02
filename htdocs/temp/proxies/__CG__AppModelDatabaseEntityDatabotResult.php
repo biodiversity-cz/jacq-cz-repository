@@ -25,6 +25,7 @@ class DatabotResult extends \App\Model\Database\Entity\DatabotResult implements 
         'createdAt' => [parent::class, 'createdAt', null, 8196],
         'databot' => [parent::class, 'databot', null, 8196],
         'id' => [parent::class, 'id', null, 8196],
+        'lastEdit' => [parent::class, 'lastEdit', null, 8196],
         'message' => [parent::class, 'message', null, 8196],
         'photo' => [parent::class, 'photo', null, 8196],
         'resultData' => [parent::class, 'resultData', null, 8196],
