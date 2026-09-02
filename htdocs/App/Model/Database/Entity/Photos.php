@@ -14,7 +14,6 @@ use App\Services\Exceptions\RiskOfPidOverwritten;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Order;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -95,8 +94,6 @@ class Photos
     public protected(set) ?ImportMultiplier $multiplier = null;
     #[OneToMany(targetEntity: DatabotResult::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
     public protected(set) Collection $databotResults;
-    #[OneToMany(targetEntity: SpecimenMetadata::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    public protected(set) Collection $specimenMetadata;
 
     #[Column(name: 'embargo_timeout', type: Types::DATETIME_MUTABLE, nullable: true)]
     public protected(set) ?\DateTime $embargoTimeout = null;
@@ -110,7 +107,6 @@ class Photos
     public function __construct()
     {
         $this->databotResults = new ArrayCollection();
-        $this->specimenMetadata = new ArrayCollection();
     }
 
     public function setArchiveFilename(string $archiveFilename): Photos
@@ -328,21 +324,6 @@ class Photos
     public function isPublic(): bool
     {
         return in_array($this->status->id, [PhotosStatus::PUBLISHED], true);
-    }
-
-    public function getLatestSpecimenMetadata(): ?SpecimenMetadata
-    {
-        $metadata = $this->getSpecimenMetadata();
-
-        return $metadata->first() ?: null;
-    }
-
-    public function getSpecimenMetadata(): Collection
-    {
-        $criteria = Criteria::create()
-            ->orderBy(['timestamp' => Order::Descending]);
-
-        return $this->specimenMetadata->matching($criteria);
     }
 
     public function setFunding(?Funding $funding): Photos

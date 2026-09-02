@@ -24,6 +24,8 @@ build:
 	NETTE_DEBUG=1 bin/console orm:schema-tool:drop --force --full-database
 	NETTE_DEBUG=1 bin/console migrations:migrate --dry-run
 	NETTE_DEBUG=1 bin/console migrations:migrate --no-interaction
+#production has different db owner and app user
+	NETTE_DEBUG=1 DB_USER="$DB_OWNER_USER" DB_PASSWORD="$DB_OWNER_PASSWORD" bin/console migrations:migrate --no-interaction
 	NETTE_DEBUG=1 bin/console migrations:migrate first --no-interaction # revert to empty db
 #	NETTE_DEBUG=1 bin/console migrations:migrate Database\\Migrations\\Version1
 	NETTE_DEBUG=1 bin/console doctrine:fixtures:load # --purge=truncate

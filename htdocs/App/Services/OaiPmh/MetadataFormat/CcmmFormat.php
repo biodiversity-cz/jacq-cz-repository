@@ -28,24 +28,25 @@ final class CcmmFormat implements MetadataFormatInterface
 
     public function getMetadataPrefix(): string
     {
-        return 'ccmm';
+        return 'ccmm-xml';
     }
 
     public function getSchema(): string
     {
-        return 'https://techlib.github.io/CCMM/dataset/schema.xsd';
+        return 'https://model.ccmm.cz/research-data/dataset/schema.xsd';
     }
 
     public function getMetadataNamespace(): string
     {
-        return 'https://github.com/techlib/CCMM';
+        return 'https://schema.ccmm.cz/research-data/1.1';
     }
 
     public function getFormatName(): string
     {
-        return 'Czech Core Metadata Model';
+        return 'Czech Core Metadata Model v1.1';
     }
 
+    // TODO pokud geometrii, tak jako WKT ve WGS84 aby to NMA mohl dobře zpracovávat
     public function toXml(mixed $item, string $oaiIdentifier): \DOMElement
     {
         if (!$item instanceof Photos) {
