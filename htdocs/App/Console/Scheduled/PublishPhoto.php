@@ -19,6 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class PublishPhoto extends Command
 {
     public const int LIMIT = 40;
+    protected bool $stopping = false;
 
     /**
      * Continuously publishes photos from the repository waiting room.
@@ -43,11 +44,17 @@ class PublishPhoto extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        //TODO
+//        pcntl_async_signals(true);
+//
+//        pcntl_signal(SIGTERM, function () {
+//            $this->stopping = true;
+//        });
         $startTime = microtime(true);
         $processed = 0;
         $once = $input->getOption('once');
 
-        while ($processed < self::LIMIT) {
+        while (!$this->stopping && $processed < self::LIMIT) {
             try {
                 $photo = $this->proceedPhoto($output);
 

@@ -78,7 +78,8 @@
       "ext-intl": "3",
       "ext-exif": "3",
       "ext-zip": "3",
-      "ext-gd": "3"
+      "ext-gd": "3",
+      "ext-pcntl": "*"
     },
 		"allow-plugins": {
 			"symfony/thanks": true,
