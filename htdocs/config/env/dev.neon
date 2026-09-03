@@ -5,8 +5,8 @@ parameters:
     environment: development
     database:
         host: curator-db
-        user: jacq
-        password: jacq
+        user: herbarium_app
+        password: herbarium_app
         dbname: herbarium
     storage:
         archiveBucketPrefix: test-archive
