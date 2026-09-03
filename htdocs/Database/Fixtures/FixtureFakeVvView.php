@@ -40,15 +40,15 @@ class FixtureFakeVvView extends FixtureBase
         $manager->getConnection()->executeQuery($sql);
         $sql = '
         ALTER TABLE databots.vv_transcription
-            OWNER TO jacq;
+            OWNER TO herbarium_app;
         ';
         $manager->getConnection()->executeQuery($sql);
         $sql = '
-        GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE databots.vv_transcription TO databot;
+        GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE databots.vv_transcription TO herbarium_databot;
         ';
         $manager->getConnection()->executeQuery($sql);
         $sql = '
-        GRANT ALL ON TABLE databots.vv_transcription TO jacq;
+        GRANT ALL ON TABLE databots.vv_transcription TO herbarium_app;
 
         ';
         $manager->getConnection()->executeQuery($sql);

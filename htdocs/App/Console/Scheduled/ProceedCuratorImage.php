@@ -22,6 +22,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ProceedCuratorImage extends Command
 {
     public const int LIMIT = 40;
+    protected bool $stopping = false;
 
     /**
      * Continuously imports photos from the curators' buckets.
@@ -46,11 +47,17 @@ class ProceedCuratorImage extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        pcntl_async_signals(true);
+
+        pcntl_signal(SIGTERM, function () {
+            $this->stopping = true;
+        });
+
         $startTime = microtime(true);
         $once = $input->getOption('once');
         $processed = 0;
 
-        while ($processed < self::LIMIT) {
+        while (!$this->stopping && $processed < self::LIMIT) {
             // mainPhoto
             try {
                 $photo = $photoProcessed = $this->proceedMainPhoto($output);

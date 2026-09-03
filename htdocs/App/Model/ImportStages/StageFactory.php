@@ -88,6 +88,6 @@ readonly class StageFactory
 
     public function createSolrStage(): SolrStage
     {
-        return new SolrStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->solrClientService);
+        return new SolrStage($this->tempDir, $this->repositoryConfiguration, $this->imagickService, $this->solrClientService, $this->entityManager);
     }
 }

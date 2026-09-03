@@ -8,13 +8,13 @@ code_management:
 
 tests: #Integration tests have to be run in a single thread
 	clear && vendor/bin/tester -s -c /usr/local/etc/php/php.ini \
-		-d "extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" -d "extension=zip" -d "extension=intl" \
+		-d "extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" -d "extension=zip" -d "extension=intl" -d "extension=pcntl" \
  		--colors 1 -j 1 tests
 	clear && vendor/bin/tester -s -c /usr/local/etc/php/php.ini -d \
-		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" -d "extension=zip" -d "extension=intl" \
+		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" -d "extension=zip" -d "extension=intl" -d "extension=pcntl" \
 		--colors 1 -j 1 tests --coverage tests/coverage.html --coverage-src App  # HTML report
 	clear && vendor/bin/tester -s -c /usr/local/etc/php/php.ini -d \
-		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" -d "extension=zip" -d "extension=intl" \
+		"extension=pdo_pgsql" -d "zend_extension=xdebug.so" -d "extension=imagick" -d "xdebug.mode=debug,coverage" -d "extension=zip" -d "extension=intl" -d "extension=pcntl" \
 		--colors 1 -j 1 tests --coverage coverage.xml --coverage-src App # Clover XML report
 
 build:

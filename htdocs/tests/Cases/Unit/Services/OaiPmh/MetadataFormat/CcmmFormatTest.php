@@ -16,7 +16,7 @@ test('CcmmFormat: getMetadataPrefix returns ccmm', function (): void {
     $linkGenerator = $container->getByType(LinkGenerator::class);
     $format = new CcmmFormat($linkGenerator);
 
-    Assert::same('ccmm', $format->getMetadataPrefix());
+    Assert::same('ccmm-xml', $format->getMetadataPrefix());
 });
 
 test('CcmmFormat: getSchema returns placeholder URL', function (): void {
@@ -24,7 +24,7 @@ test('CcmmFormat: getSchema returns placeholder URL', function (): void {
     $linkGenerator = $container->getByType(LinkGenerator::class);
     $format = new CcmmFormat($linkGenerator);
 
-    Assert::same('https://techlib.github.io/CCMM/dataset/schema.xsd', $format->getSchema());
+    Assert::same('https://model.ccmm.cz/research-data/dataset/schema.xsd', $format->getSchema());
 });
 
 test('CcmmFormat: getMetadataNamespace returns placeholder namespace', function (): void {
@@ -32,7 +32,7 @@ test('CcmmFormat: getMetadataNamespace returns placeholder namespace', function 
     $linkGenerator = $container->getByType(LinkGenerator::class);
     $format = new CcmmFormat($linkGenerator);
 
-    Assert::same('https://github.com/techlib/CCMM', $format->getMetadataNamespace());
+    Assert::same('https://schema.ccmm.cz/research-data/1.1', $format->getMetadataNamespace());
 });
 
 test('CcmmFormat: getFormatName returns descriptive name', function (): void {
@@ -40,7 +40,7 @@ test('CcmmFormat: getFormatName returns descriptive name', function (): void {
     $linkGenerator = $container->getByType(LinkGenerator::class);
     $format = new CcmmFormat($linkGenerator);
 
-    Assert::same('Czech Core Metadata Model', $format->getFormatName());
+    Assert::same('Czech Core Metadata Model v1.1', $format->getFormatName());
 });
 
 register_shutdown_function(function (): void {

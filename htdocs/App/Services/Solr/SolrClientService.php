@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Services\Solr;
 
-use App\Model\Database\Entity\Databot;
-use App\Model\Database\Entity\Photos;
-use App\Model\Database\Repository\DatabotRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Solarium\Client;
 use Solarium\Core\Query\DocumentInterface;
@@ -68,56 +65,47 @@ final readonly class SolrClientService
         dump($request->getRawData());  // payload
     }
 
-    private function prepareIngest(Photos $photo, DocumentInterface $document): ?DocumentInterface
+    private function prepareIngest(array $photo, DocumentInterface $document): ?DocumentInterface
     {
-        $cetafDatabot = $this->entityManager->getRepository(Databot::class)->getByName(DatabotRepository::CETAF);
-        if (null === $cetafDatabot) {
-            return null;
-        }
-        $cetafJson = $photo->getDatabotOkResultById($cetafDatabot)?->resultData ?? null;
+        $document->setField('id', (string) $photo['pid']);
 
-        if (null === $cetafJson) {
-            return null;
-        }
-        $document->setField('id', (string) $photo->pid);
+        $date = $this->normalizeDwCEventDate($photo['resultData']['http://rs.tdwg.org/dwc/terms/eventDate'] ?? null);
 
-        $date = $this->normalizeDwCEventDate($cetafJson['http://rs.tdwg.org/dwc/terms/eventDate'] ?? null);
-
-        $document->setField('title', $cetafJson['http://purl.org/dc/terms/title'] ?? null);
+        $document->setField('title', $photo['resultData']['http://purl.org/dc/terms/title'] ?? null);
         $document->setField('basis_of_record', 'PreservedSpecimen');
-        $document->setField('herbarium_acronym', strtoupper($photo->herbarium->acronym));
+        $document->setField('herbarium_acronym', strtoupper($photo['acronym']));
 
         $document->setField('description', 'Photo of a herbarium specimen');
-        $document->setField('locality', $cetafJson['http://rs.tdwg.org/dwc/terms/locality'] ?? null);
+        $document->setField('locality', $photo['resultData']['http://rs.tdwg.org/dwc/terms/locality'] ?? null);
 
         // people
-        $document->setField('creator', $cetafJson['http://purl.org/dc/terms/creator'] ?? null);
-        $document->setField('recorded_by', $cetafJson['http://rs.tdwg.org/dwc/terms/recordedBy'] ?? null);
+        $document->setField('creator', $photo['resultData']['http://purl.org/dc/terms/creator'] ?? null);
+        $document->setField('recorded_by', $photo['resultData']['http://rs.tdwg.org/dwc/terms/recordedBy'] ?? null);
 
         // taxonomy
-        $document->setField('scientific_name', $cetafJson['http://rs.tdwg.org/dwc/terms/scientificName'] ?? null);
-        $document->setField('genus', $cetafJson['http://rs.tdwg.org/dwc/terms/genus'] ?? null);
-        $document->setField('family', $cetafJson['http://rs.tdwg.org/dwc/terms/family'] ?? null);
-        $document->setField('specific_epithet', $cetafJson['http://rs.tdwg.org/dwc/terms/specificEpithet'] ?? null);
+        $document->setField('scientific_name', $photo['resultData']['http://rs.tdwg.org/dwc/terms/scientificName'] ?? null);
+        $document->setField('genus', $photo['resultData']['http://rs.tdwg.org/dwc/terms/genus'] ?? null);
+        $document->setField('family', $photo['resultData']['http://rs.tdwg.org/dwc/terms/family'] ?? null);
+        $document->setField('specific_epithet', $photo['resultData']['http://rs.tdwg.org/dwc/terms/specificEpithet'] ?? null);
 
         // geo
-        $document->setField('country', $cetafJson['http://rs.tdwg.org/dwc/terms/country'] ?? null);
-        $document->setField('country_code', $cetafJson['http://rs.tdwg.org/dwc/terms/countryCode'] ?? null);
+        $document->setField('country', $photo['resultData']['http://rs.tdwg.org/dwc/terms/country'] ?? null);
+        $document->setField('country_code', $photo['resultData']['http://rs.tdwg.org/dwc/terms/countryCode'] ?? null);
 
         // dates
         $document->setField('event_date_from', $date['from'] ?? null);
         $document->setField('event_date_to', $date['to'] ?? null);
-        $document->setField('event_date_raw', $cetafJson['http://rs.tdwg.org/dwc/terms/eventDate'] ?? null);
-        $document->setField('created', $cetafJson['dc:created'] ?? null);
+        $document->setField('event_date_raw', $photo['resultData']['http://rs.tdwg.org/dwc/terms/eventDate'] ?? null);
+        $document->setField('created', $photo['resultData']['dc:created'] ?? null);
 
         // identifiers
-        $document->setField('catalog_number', $cetafJson['http://rs.tdwg.org/dwc/terms/catalogNumber'] ?? null);
-        $document->setField('collection_code', $cetafJson['http://rs.tdwg.org/dwc/terms/collectionCode'] ?? null);
+        $document->setField('catalog_number', $photo['resultData']['http://rs.tdwg.org/dwc/terms/catalogNumber'] ?? null);
+        $document->setField('collection_code', $photo['resultData']['http://rs.tdwg.org/dwc/terms/collectionCode'] ?? null);
 
         // misc
-        $document->setField('material_sample_id', $cetafJson['http://rs.tdwg.org/dwc/terms/materialSampleID'] ?? null);
+        $document->setField('material_sample_id', $photo['resultData']['http://rs.tdwg.org/dwc/terms/materialSampleID'] ?? null);
 
-        $document->setField('previous_identifications', $cetafJson['http://rs.tdwg.org/dwc/terms/previousIdentifications'] ?? null);
+        $document->setField('previous_identifications', $photo['resultData']['http://rs.tdwg.org/dwc/terms/previousIdentifications'] ?? null);
 
         return $document;
     }

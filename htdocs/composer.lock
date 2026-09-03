@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "326b687d0501f00290e690d023b025b4",
+    "content-hash": "ab49647de747200a8765d96ade6d34fd",
     "packages": [
         {
             "name": "68publishers/asset",
@@ -201,16 +201,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.394.5",
+            "version": "3.394.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "12c80170a12c9e9e5d9057bff4d197979631624f"
+                "reference": "40a8717706fd789cd3e8c72a2e8e93ee4455b391"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/12c80170a12c9e9e5d9057bff4d197979631624f",
-                "reference": "12c80170a12c9e9e5d9057bff4d197979631624f",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/40a8717706fd789cd3e8c72a2e8e93ee4455b391",
+                "reference": "40a8717706fd789cd3e8c72a2e8e93ee4455b391",
                 "shasum": ""
             },
             "require": {
@@ -292,9 +292,9 @@
             "support": {
                 "forum": "https://github.com/aws/aws-sdk-php/discussions",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.394.5"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.394.7"
             },
-            "time": "2026-08-31T22:10:11+00:00"
+            "time": "2026-09-02T18:07:40+00:00"
         },
         {
             "name": "composer/pcre",
@@ -9200,7 +9200,8 @@
         "ext-zip": "*",
         "ext-dom": "*",
         "ext-xmlwriter": "*",
-        "ext-gd": "*"
+        "ext-gd": "*",
+        "ext-pcntl": "*"
     },
     "platform-dev": {},
     "platform-overrides": {
@@ -9209,7 +9210,8 @@
         "ext-intl": "3",
         "ext-exif": "3",
         "ext-zip": "3",
-        "ext-gd": "3"
+        "ext-gd": "3",
+        "ext-pcntl": "3"
     },
     "plugin-api-version": "2.9.0"
 }

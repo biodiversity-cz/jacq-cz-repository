@@ -113,30 +113,30 @@ IS \'Register databot. Return TRUE if a databot is successfully registered and a
             END
             $$;
         ");
-        $this->addSql('GRANT USAGE ON SCHEMA public TO databot');
-        $this->addSql('GRANT SELECT ON public.photos TO databot');
-        $this->addSql('GRANT SELECT ON public.photos_status TO databot');
+        $this->addSql('GRANT USAGE ON SCHEMA public TO herbarium_databot');
+        $this->addSql('GRANT SELECT ON public.photos TO herbarium_databot');
+        $this->addSql('GRANT SELECT ON public.photos_status TO herbarium_databot');
 
         // schéma databots (plná práva)
-        $this->addSql('GRANT USAGE ON SCHEMA databots TO databot');
-        $this->addSql('GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA databots TO databot');
-        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO databot');
+        $this->addSql('GRANT USAGE ON SCHEMA databots TO herbarium_databot');
+        $this->addSql('GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA databots TO herbarium_databot');
+        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO herbarium_databot');
 
-        $this->addSql('GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA databots TO databot');
-        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO databot');
+        $this->addSql('GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA databots TO herbarium_databot');
+        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT USAGE, SELECT, UPDATE ON SEQUENCES TO herbarium_databot');
 
-        $this->addSql('GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA databots TO databot');
-        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT EXECUTE ON FUNCTIONS TO databot');
+        $this->addSql('GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA databots TO herbarium_databot');
+        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA databots GRANT EXECUTE ON FUNCTIONS TO herbarium_databot');
 
         // přidání práv na typy (enumy atd.)
-        $this->addSql('GRANT USAGE ON TYPE databots.enum_databot_role TO databot');
-        $this->addSql('GRANT USAGE ON TYPE databots.enum_databot_result_status TO databot');
+        $this->addSql('GRANT USAGE ON TYPE databots.enum_databot_role TO herbarium_databot');
+        $this->addSql('GRANT USAGE ON TYPE databots.enum_databot_result_status TO herbarium_databot');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('REVOKE USAGE ON TYPE databots.enum_databot_role FROM databot');
-        $this->addSql('REVOKE USAGE ON TYPE databots.enum_databot_result_status FROM databot');
+        $this->addSql('REVOKE USAGE ON TYPE databots.enum_databot_role FROM herbarium_databot');
+        $this->addSql('REVOKE USAGE ON TYPE databots.enum_databot_result_status FROM herbarium_databot');
 
         // odebrání práv na funkce, sekvence, tabulky
         $this->addSql('REVOKE EXECUTE ON ALL FUNCTIONS IN SCHEMA databots FROM databot');

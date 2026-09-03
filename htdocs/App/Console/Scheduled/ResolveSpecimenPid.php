@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ResolveSpecimenPid extends Command
 {
     public const int LIMIT = 400;
+    protected bool $stopping = false;
 
     /**
      * check if a specimen PID exists in an external database and updates photo status to SPECIMEN_CONTROL_OK, cleans expired Embargo.
@@ -40,11 +41,17 @@ class ResolveSpecimenPid extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        pcntl_async_signals(true);
+
+        pcntl_signal(SIGTERM, function () {
+            $this->stopping = true;
+        });
+
         $startTime = microtime(true);
         $cycles = 0;
         $once = $input->getOption('once');
 
-        while ($cycles < self::LIMIT) {
+        while (!$this->stopping && $cycles < self::LIMIT) {
             ++$cycles;
             try {
                 $this->curatorFacade->expireEmbargo();
