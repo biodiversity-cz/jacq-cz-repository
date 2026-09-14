@@ -121,11 +121,20 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>feature</th>
-                    <th></th>
+
                 </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <td>
+                        <label class="form-check-label" for="alwaysTrailingZeros" title="Add trailing zero even for non-digit herbNr">Always trailing zeros</label>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="alwaysTrailingZeros" {if $herbarium->alwaysTrailingZeros}checked{/if} disabled>
+                        </div>
+                    </td>
+                </tr>
                 <tr>
                     <td>
                         <label class="form-check-label" for="filenameFallbackSwitch">Filename fallback</label>

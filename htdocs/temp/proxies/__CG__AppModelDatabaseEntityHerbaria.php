@@ -26,6 +26,7 @@ class Herbaria extends \App\Model\Database\Entity\Herbaria implements \Doctrine\
         'GRSciCollInstitutionID' => [parent::class, 'GRSciCollInstitutionID', null, 8196],
         'acronym' => [parent::class, 'acronym', null, 8196],
         'address' => [parent::class, 'address', null, 8196],
+        'alwaysTrailingZeros' => [parent::class, 'alwaysTrailingZeros', null, 8196],
         'bucket' => [parent::class, 'bucket', null, 8196],
         'contacts' => [parent::class, 'contacts', null, 8196],
         'digitsCount' => [parent::class, 'digitsCount', null, 8196],

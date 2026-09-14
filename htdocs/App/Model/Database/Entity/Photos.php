@@ -170,10 +170,18 @@ class Photos
         return $this;
     }
 
+    /**
+     * duplicate code with \App\Model\Specimen\Specimen::getStandardizedId.
+     */
     public function getSpecimenIdFixedWidth(): string
     {
-        if (ctype_digit($this->specimenId)) {
-            return sprintf('%0'.$this->herbarium->digitsCount.'d', $this->specimenId);
+        if (ctype_digit($this->specimenId) || $this->herbarium->alwaysTrailingZeros) {
+            return str_pad(
+                $this->specimenId,
+                $this->herbarium->digitsCount,
+                '0',
+                STR_PAD_LEFT
+            );
         }
 
         return $this->specimenId;
