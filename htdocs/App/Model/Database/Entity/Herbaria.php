@@ -82,6 +82,9 @@ class Herbaria
     #[Column(type: Types::INTEGER, nullable: false, options: ['default' => 5, 'comment' => 'minimal filesize[MB] that is accepted during import control'])]
     public protected(set) int $minimalFileSize;
 
+    #[Column(unique: false, nullable: false, options: ['comment' => 'Add trailing zeros even in case of no-strictly-digits herbNr', 'default' => false])]
+    public protected(set) bool $alwaysTrailingZeros = false;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -207,6 +210,13 @@ class Herbaria
     public function setMinimalFileSize(int $minimalFileSize): Herbaria
     {
         $this->minimalFileSize = $minimalFileSize;
+
+        return $this;
+    }
+
+    public function setAlwaysTrailingZeros(bool $alwaysTrailingZeros): Herbaria
+    {
+        $this->alwaysTrailingZeros = $alwaysTrailingZeros;
 
         return $this;
     }
