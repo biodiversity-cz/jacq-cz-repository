@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\UI\Front\OaiPmh;
 
+use App\Model\Database\Entity\Photos;
 use App\Services\AppConfiguration;
 use App\Services\OaiPmh\MetadataFormat\CcmmFormat;
 use App\Services\OaiPmh\MetadataFormat\DublinCoreFormat;
@@ -47,7 +48,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
     public function actionDefault(?string $verb = null): void
     {
-        $this->getHttpResponse()->setContentType('application/xml', 'utf-8');
+        $this->getHttpResponse()->setContentType('text/xml', 'utf-8');
         $this->getHttpResponse()->setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         $this->getHttpResponse()->setHeader('Pragma', 'no-cache');
         $this->getHttpResponse()->setHeader('Expires', '0');
@@ -248,12 +249,13 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
     private function writeRecordElement(
         \XMLWriter $writer,
-        \App\Model\Database\Entity\Photos $photo,
+        Photos $photo,
         MetadataFormatInterface $format,
         bool $includeMetadata,
     ): void {
-        $writer->startElement('record');
-
+        if ($includeMetadata) {
+            $writer->startElement('record');
+        }
         // Header
         $writer->startElement('header');
 
@@ -266,7 +268,6 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
         $writer->endElement(); // header
 
-        // Metadata (jen pokud includeMetadata = true)
         if ($includeMetadata) {
             $writer->startElement('metadata');
 
@@ -283,8 +284,9 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
             $writer->endElement(); // metadata
         }
-
-        $writer->endElement(); // record
+        if ($includeMetadata) {
+            $writer->endElement(); // record
+        }
     }
 
     private function createXMLWriter(string $verb): \XMLWriter
