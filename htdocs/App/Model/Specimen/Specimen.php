@@ -13,7 +13,7 @@ class Specimen
     public protected(set) string $id;
 
     /**
-     * duplicate code with \App\Model\Database\Entity\Photos::getSpecimenIdFixedWidth
+     * duplicate code with \App\Model\Database\Entity\Photos::getSpecimenIdFixedWidth.
      */
     public function getStandardizedId(): string
     {

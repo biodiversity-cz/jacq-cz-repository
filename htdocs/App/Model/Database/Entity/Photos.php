@@ -171,7 +171,7 @@ class Photos
     }
 
     /**
-     * duplicate code with \App\Model\Specimen\Specimen::getStandardizedId
+     * duplicate code with \App\Model\Specimen\Specimen::getStandardizedId.
      */
     public function getSpecimenIdFixedWidth(): string
     {
