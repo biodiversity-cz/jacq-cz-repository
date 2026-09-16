@@ -14,6 +14,7 @@ use App\Model\CCMM\Models\Documentation;
 use App\Model\CCMM\Models\DownloadUrl;
 use App\Model\CCMM\Models\Format;
 use App\Model\CCMM\Models\MediaType;
+use App\Model\CCMM\Models\ResourceType;
 use App\Model\Database\Entity\Photos;
 use Nette\Application\LinkGenerator;
 
@@ -60,6 +61,7 @@ final class CcmmFormat implements MetadataFormatInterface
             $dataset->addDistribution($distribution);
         }
 
+        $dataset->setResourceType($this->getResourceType());
         $dataset->setRawFundingReference($this->addFunding($item));
 
         return $dataset->toXml($doc);
@@ -132,6 +134,16 @@ final class CcmmFormat implements MetadataFormatInterface
         $items[] = $distribution;
 
         return $items;
+    }
+
+    private function getResourceType(): ResourceType
+    {
+        $element = new ResourceType();
+        $element->setIri('http://purl.org/coar/resource_type/c_ecc8')
+            ->addLabel('datová sada', Language::CS)
+            ->addLabel('dataset', Language::EN) ;
+
+        return $element;
     }
 
     private function addFunding(Photos $photo): ?string
