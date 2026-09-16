@@ -215,6 +215,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             $writer->writeElement('resumptionToken');
         }
         $writer->endElement();
+
         return $writer;
     }
 

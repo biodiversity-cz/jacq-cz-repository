@@ -141,7 +141,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $element = new ResourceType();
         $element->setIri('http://purl.org/coar/resource_type/c_ecc8')
             ->addLabel('datová sada', Language::CS)
-            ->addLabel('dataset', Language::EN) ;
+            ->addLabel('dataset', Language::EN);
 
         return $element;
     }
