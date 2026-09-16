@@ -58,7 +58,7 @@ class ImportCetafForm
         $form = $this->factory->forBackend();
 
         $form->addUpload('table', 'DwC XLSX file')
-            ->addRule(Form::MaxFileSize, 'error.size', 1024 * 1024 * 11 / 10)
+            ->addRule(Form::MaxFileSize, 'error.size', (int) (1024 * 1024 * 11 / 10))
             ->setRequired('missingFile')
             ->setHtmlAttribute('class', 'form-control-file');
 

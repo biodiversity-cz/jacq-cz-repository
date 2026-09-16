@@ -197,7 +197,6 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
             $this->writeRecordElement($writer, $photo, $format, $includeMetadata);
         }
-        $writer->endElement();
 
         // Add resumption token if needed
         if ($hasMore) {
@@ -215,6 +214,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             // Empty resumption token to indicate end of list
             $writer->writeElement('resumptionToken');
         }
+        $writer->endElement();
 
         return $writer;
     }
