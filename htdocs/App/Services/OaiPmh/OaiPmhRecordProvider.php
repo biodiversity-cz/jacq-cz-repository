@@ -7,6 +7,7 @@ namespace App\Services\OaiPmh;
 use App\Model\Database\Entity\Photos;
 use App\Services\EntityServices\HerbariumService;
 use App\Services\EntityServices\PhotoService;
+use App\UI\Front\OaiPmh\OaiPmhPresenter;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
@@ -15,9 +16,10 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
 {
     public function __construct(
-        private readonly PhotoService $photoService,
+        private readonly PhotoService     $photoService,
         private readonly HerbariumService $herbariumService,
-    ) {
+    )
+    {
     }
 
     public function getTotalRecordsCount(): int
@@ -25,47 +27,48 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
         $qb = $this->photoService->getAllPublishedPhotosDatasource()
             ->select('COUNT(p.id)');
 
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        return (int)$qb->getQuery()->getSingleScalarResult();
     }
 
     public function getRecords(
         ?\DateTimeInterface $from = null,
         ?\DateTimeInterface $until = null,
-        ?string $set = null,
-        int $offset = 0,
-        int $limit = 100,
-    ): \Iterator {
+        ?string             $set = null,
+        int                 $offset = 0,
+        int                 $limit = 100,
+    ): \Iterator
+    {
         $qb = $this->photoService->getAllPublishedPhotosDatasource();
 
         // Add joins for related data needed for metadata
         $qb->leftJoin('p.herbarium', 'h')
-           ->leftJoin('h.license', 'l')
-           ->addSelect('h', 'l');
+            ->leftJoin('h.license', 'l')
+            ->addSelect('h', 'l');
 
         // Apply date filters on lastEdit field
         if (null !== $from) {
             $qb->andWhere('p.lastEdit >= :from')
-               ->setParameter('from', $from);
+                ->setParameter('from', $from);
         }
 
         if (null !== $until) {
             $qb->andWhere('p.lastEdit <= :until')
-               ->setParameter('until', $until);
+                ->setParameter('until', $until);
         }
 
         // Apply set filter (herbarium)
         if (null !== $set) {
             $qb->andWhere('h.acronym = :set')
-               ->setParameter('set', $set);
+                ->setParameter('set', $set);
         }
 
         // Order by lastEdit for consistent pagination
         $qb->orderBy('p.lastEdit', 'ASC')
-           ->addOrderBy('p.id', 'ASC');
+            ->addOrderBy('p.id', 'ASC');
 
         // Apply pagination
         $qb->setFirstResult($offset)
-           ->setMaxResults($limit);
+            ->setMaxResults($limit);
 
         // Use Doctrine Paginator for memory efficiency
         $paginator = new Paginator($qb, false);
@@ -76,17 +79,17 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
     public function getRecord(string $identifier): ?Photos
     {
         // Extract photo ID from OAI identifier
-        $photoId = $this->extractPhotoIdFromIdentifier($identifier);
+        $photoId = $this->extractPhotoPidFromIdentifier($identifier);
         if (null === $photoId) {
             return null;
         }
 
         $qb = $this->photoService->getAllPublishedPhotosDatasource();
         $qb->leftJoin('p.herbarium', 'h')
-           ->leftJoin('h.license', 'l')
-           ->addSelect('h', 'l')
-           ->andWhere('p.id = :id')
-           ->setParameter('id', $photoId);
+            ->leftJoin('h.license', 'l')
+            ->addSelect('h', 'l')
+            ->andWhere('p.pid = :id')
+            ->setParameter('id', $photoId);
 
         return $qb->getQuery()->getOneOrNullResult();
     }
@@ -111,21 +114,6 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
         $result = $qb->getQuery()->getSingleScalarResult();
 
         return $result ? new \DateTimeImmutable($result) : null;
-    }
-
-    public function recordExists(string $identifier): bool
-    {
-        $photoId = $this->extractPhotoIdFromIdentifier($identifier);
-        if (null === $photoId) {
-            return false;
-        }
-
-        $qb = $this->photoService->getAllPublishedPhotosDatasource();
-        $qb->select('COUNT(p.id)')
-           ->andWhere('p.id = :id')
-           ->setParameter('id', $photoId);
-
-        return (int) $qb->getQuery()->getSingleScalarResult() > 0;
     }
 
     /**
@@ -167,32 +155,20 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
      * Extract photo ID from OAI identifier
      * Expected format: oai:domain.com:photo-{id}.
      */
-    private function extractPhotoIdFromIdentifier(string $identifier): ?int
+    private function extractPhotoPidFromIdentifier(string $identifier): ?string
     {
-        if (!str_starts_with($identifier, 'oai:')) {
-            return null;
-        }
+        $prefix = sprintf('oai:%s:', OaiPmhPresenter::REPOSITORY_DOMAIN);
+        return str_starts_with($identifier, $prefix)
+            ? substr($identifier, strlen($prefix))
+            : $identifier;
 
-        $parts = explode(':', $identifier);
-        if (count($parts) < 3) {
-            return null;
-        }
-
-        $localId = end($parts);
-        if (!str_starts_with($localId, 'photo-')) {
-            return null;
-        }
-
-        $id = substr($localId, 6); // Remove 'photo-' prefix
-
-        return is_numeric($id) ? (int) $id : null;
     }
 
     /**
      * Generate OAI identifier for a photo.
      */
-    public function generateIdentifier(Photos $photo, string $domain): string
+    public function generateIdentifier(Photos $photo): string
     {
-        return sprintf('oai:%s:photo-%d', $domain, $photo->id);
+        return sprintf('oai:%s:%s', OaiPmhPresenter::REPOSITORY_DOMAIN, $photo->pid);
     }
 }

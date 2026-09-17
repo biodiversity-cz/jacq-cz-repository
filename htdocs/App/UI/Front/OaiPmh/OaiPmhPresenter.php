@@ -21,9 +21,9 @@ use Nette\Application\BadRequestException;
 final class OaiPmhPresenter extends UnsecuredPresenter
 {
     private const string OAI_PMH_VERSION = '2.0';
-    private const string ADMIN_EMAIL = 'novotp@natur.cuni.cz'; // TODO: Make configurable
+    private const string ADMIN_EMAIL = 'novotp@natur.cuni.cz';
     private const string REPOSITORY_NAME = 'herbarium.biodiversity.cz';
-    private const string REPOSITORY_DOMAIN = 'herbarium.biodiversity.cz'; // TODO: Make configurable
+    public const string REPOSITORY_DOMAIN = 'herbarium.biodiversity.cz';
 
     private const int DEFAULT_PAGE_SIZE = 100;
     private const int MAX_PAGE_SIZE = 1000;
@@ -36,7 +36,6 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         private readonly OaiPmhRecordProviderInterface $recordProvider,
         private readonly DublinCoreFormat $dublinCoreFormat,
         private readonly CcmmFormat $ccmmFormat,
-        private readonly RepositoryConfiguration $repositoryConfiguration,
     ) {
         parent::__construct($appConfiguration);
 
@@ -259,7 +258,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         // Header
         $writer->startElement('header');
 
-        $identifier = $this->recordProvider->generateIdentifier($photo, self::REPOSITORY_DOMAIN);
+        $identifier = $this->recordProvider->generateIdentifier($photo);
         $writer->writeElement('identifier', $identifier);
         $writer->writeElement('datestamp', $photo->lastEdit->format('Y-m-d\TH:i:s\Z'));
 
