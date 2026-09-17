@@ -32,13 +32,12 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     private array $metadataFormats;
 
     public function __construct(
-        AppConfiguration                               $appConfiguration,
+        AppConfiguration $appConfiguration,
         private readonly OaiPmhRecordProviderInterface $recordProvider,
-        private readonly DublinCoreFormat              $dublinCoreFormat,
-        private readonly CcmmFormat                    $ccmmFormat,
-        private readonly RepositoryConfiguration       $repositoryConfiguration,
-    )
-    {
+        private readonly DublinCoreFormat $dublinCoreFormat,
+        private readonly CcmmFormat $ccmmFormat,
+        private readonly RepositoryConfiguration $repositoryConfiguration,
+    ) {
         parent::__construct($appConfiguration);
 
         $this->metadataFormats = [
@@ -62,7 +61,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
                 'ListRecords' => $this->verbListRecords(),
                 'GetRecord' => $this->verbGetRecord(),
                 null => throw new BadRequestException('Missing verb parameter', 400),
-                default => throw new BadRequestException('Illegal verb: ' . $verb, 400),
+                default => throw new BadRequestException('Illegal verb: '.$verb, 400),
             };
             $writer->endElement(); // OAI-PMH
             $writer->endDocument();
@@ -206,9 +205,9 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
             $writer->startElement('resumptionToken');
             $writer->text($newToken);
-            $writer->writeAttribute('cursor', (string)$offset);
+            $writer->writeAttribute('cursor', (string) $offset);
             if ($totalRecords > 0) {
-                $writer->writeAttribute('completeListSize', (string)$totalRecords);
+                $writer->writeAttribute('completeListSize', (string) $totalRecords);
             }
             $writer->endElement();
         } elseif ($resumptionToken) {
@@ -249,12 +248,11 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     }
 
     private function writeRecordElement(
-        \XMLWriter              $writer,
-        Photos                  $photo,
+        \XMLWriter $writer,
+        Photos $photo,
         MetadataFormatInterface $format,
-        bool                    $includeMetadata,
-    ): void
-    {
+        bool $includeMetadata,
+    ): void {
         if ($includeMetadata) {
             $writer->startElement('record');
         }
@@ -316,7 +314,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         }
         foreach ($this->getHttpRequest()->getQuery() as $param => $value) {
             if ('verb' !== $param && null !== $value && '' !== $value) {
-                $writer->writeAttribute($param, (string)$value);
+                $writer->writeAttribute($param, (string) $value);
             }
         }
         $writer->text($this->getBaseUrl());
@@ -340,7 +338,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     {
         $request = $this->getHttpRequest();
 
-        return $request->getUrl()->getBaseUrl() . 'oai-pmh';
+        return $request->getUrl()->getBaseUrl().'oai-pmh';
     }
 
     private function parseDate(string $date): \DateTimeInterface
@@ -355,7 +353,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             }
         }
 
-        throw new BadRequestException('Invalid date format: ' . $date, 400);
+        throw new BadRequestException('Invalid date format: '.$date, 400);
     }
 
     private function parseResumptionToken(
@@ -364,8 +362,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         ?string $from,
         ?string $until,
         ?string $set,
-    ): array
-    {
+    ): array {
         if ($token) {
             $decoded = base64_decode($token, true);
             if (false === $decoded) {
@@ -391,14 +388,13 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     }
 
     private function createResumptionToken(
-        int     $offset,
-        int     $total,
-        string  $metadataPrefix,
+        int $offset,
+        int $total,
+        string $metadataPrefix,
         ?string $from,
         ?string $until,
         ?string $set,
-    ): string
-    {
+    ): string {
         $data = [
             'offset' => $offset,
             'total' => $total,

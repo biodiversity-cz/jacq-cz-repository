@@ -15,7 +15,7 @@ class TimeReference implements XmlSerializable
     use XmlSerializableTrait;
 
     /**
-     * for easy flow the temporal_representation is not modeled and created inside both time variants manually
+     * for easy flow the temporal_representation is not modeled and created inside both time variants manually.
      */
     public protected(set) ?TimeInstant $timeInstant = null;
     public protected(set) ?TimeInterval $timeInterval = null;
@@ -39,10 +39,9 @@ class TimeReference implements XmlSerializable
     public function setDateType(?DateType $dateType): TimeReference
     {
         $this->dateType = $dateType;
+
         return $this;
     }
-
-
 
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {

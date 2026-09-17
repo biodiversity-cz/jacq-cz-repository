@@ -174,10 +174,10 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setIri('http://purl.org/coar/access_right/c_abf2')
             ->addLabel('open access', Language::EN)
             ->addLabel('otevřený přístup', Language::CS);
-        $person = ($photo->herbarium->contacts->matching(
+        $person = $photo->herbarium->contacts->matching(
             Criteria::create()->orderBy(['surname' => Order::Ascending])
         )
-            ->first());
+            ->first();
         $address = new Address()
             ->setFullAddress($photo->herbarium->address);
         $contactPoint = new ContactPoint()
@@ -208,8 +208,10 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/10000/10600/10611')
             ->setTitle($title)
             ->setSubjectScheme($subjectScheme);
+
         return [$element];
     }
+
     /**
      * @return TimeReference[]
      */
@@ -230,7 +232,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $dateType = new DateType()
             ->setIri('https://vocabs.ccmm.cz/TimeReference/en/page/Updated')
             ->addLabel('Date Updated', Language::EN)
-            ->addLabel('Datum aktualizace', Language::CS);;
+            ->addLabel('Datum aktualizace', Language::CS);
         $updated->setDateType($dateType);
 
         return [$issued, $updated];
@@ -242,7 +244,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $scheme = new IdentifierScheme();
         $scheme->setIri('https://n2t.net/')
             ->addLabel('ARK');
-        $element->setIri('https://n2t.net/' . $photo->pid)
+        $element->setIri('https://n2t.net/'.$photo->pid)
             ->setValue($photo->pid)
             ->setScheme($scheme);
 
