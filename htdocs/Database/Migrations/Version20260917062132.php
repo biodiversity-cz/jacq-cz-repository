@@ -16,11 +16,11 @@ final class Version20260917062132 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-               $this->addSql('ALTER TABLE photos ADD issued_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
+        $this->addSql('ALTER TABLE photos ADD issued_at TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
-          $this->addSql('ALTER TABLE photos DROP issued_at');
+        $this->addSql('ALTER TABLE photos DROP issued_at');
     }
 }

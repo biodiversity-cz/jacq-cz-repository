@@ -21,18 +21,6 @@ class QualifiedRelation implements XmlSerializable
     {
     }
 
-    // Getters
-    public function getRole(): ?Role
-    {
-        return $this->role;
-    }
-
-    public function getRelation(): ?XmlSerializable
-    {
-        return $this->relation;
-    }
-
-    // Setters
     public function setRole(?Role $role): self
     {
         $this->role = $role;
@@ -57,7 +45,7 @@ class QualifiedRelation implements XmlSerializable
             $element->appendChild($relationElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->getRole());
+        $this->appendChildIfNotNull($element, $this->role);
 
         return $element;
     }

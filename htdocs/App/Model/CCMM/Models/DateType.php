@@ -16,4 +16,3 @@ class DateType extends IriLabelsBase
         return 'date_type';
     }
 }
-

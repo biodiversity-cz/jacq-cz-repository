@@ -40,7 +40,6 @@ class Dataset implements XmlSerializable
     public protected(set) ?ValidationResult $validationResult = null;
     public protected(set) ?Provenance $provenance = null;
 
-
     public function setIri(?string $iri): self
     {
         $this->iri = $iri;

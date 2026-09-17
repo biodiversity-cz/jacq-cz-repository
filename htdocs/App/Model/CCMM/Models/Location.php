@@ -22,7 +22,6 @@ class Location implements XmlSerializable
         public protected(set) ?string $name = null,
         public protected(set) ?Geometry $geometry = null,
         public protected(set) array $relatedObjects = [],
-        public protected(set) ?RelationType $relationType = null,
     ) {
     }
 

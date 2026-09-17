@@ -43,6 +43,7 @@ class TimeInstant implements XmlSerializable
         }
 
         $parentElement->appendChild($element);
+
         return $parentElement;
     }
 }

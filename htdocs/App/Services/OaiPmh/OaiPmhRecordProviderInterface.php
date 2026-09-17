@@ -52,9 +52,4 @@ interface OaiPmhRecordProviderInterface
      * Get the earliest datestamp in the repository.
      */
     public function getEarliestDatestamp(): ?\DateTimeInterface;
-
-    /**
-     * Check if a record exists by identifier.
-     */
-    public function recordExists(string $identifier): bool;
 }

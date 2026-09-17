@@ -21,7 +21,10 @@ use App\Model\CCMM\Models\Identifier;
 use App\Model\CCMM\Models\IdentifierScheme;
 use App\Model\CCMM\Models\License;
 use App\Model\CCMM\Models\MediaType;
+use App\Model\CCMM\Models\QualifiedRelation;
+use App\Model\CCMM\Models\Relation;
 use App\Model\CCMM\Models\ResourceType;
+use App\Model\CCMM\Models\Role;
 use App\Model\CCMM\Models\Subject;
 use App\Model\CCMM\Models\SubjectScheme;
 use App\Model\CCMM\Models\TermsOfUse;
@@ -84,7 +87,8 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setTimeReferences($this->getDates($item))
             ->setPublicationYear($item->issuedAt?->format('Y'))
             ->setTermsOfUse($this->getLicence($item))
-            ->setSubjects($this->getSubject());
+            ->setSubjects($this->getSubject())
+            ->setQualifiedRelations($this->getQualifiedRelations($item));
 
         return $dataset->toXml($doc);
     }
@@ -174,10 +178,10 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setIri('http://purl.org/coar/access_right/c_abf2')
             ->addLabel('open access', Language::EN)
             ->addLabel('otevřený přístup', Language::CS);
-        $person = ($photo->herbarium->contacts->matching(
+        $person = $photo->herbarium->contacts->matching(
             Criteria::create()->orderBy(['surname' => Order::Ascending])
         )
-            ->first());
+            ->first();
         $address = new Address()
             ->setFullAddress($photo->herbarium->address);
         $contactPoint = new ContactPoint()
@@ -195,6 +199,28 @@ final class CcmmFormat implements MetadataFormatInterface
     }
 
     /**
+     * @return QualifiedRelation[]
+     */
+    private function getQualifiedRelations(Photos $photo): array
+    {
+        $creatorRole = new Role()
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Creator');
+        $creatorRelation = new Relation();
+        $creator = new QualifiedRelation()
+            ->setRole($creatorRole)
+            ->setRelation($creatorRelation);
+
+        $publisherRole = new Role()
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Publisher');
+        $publisherRelation = new Relation();
+        $publisher = new QualifiedRelation()
+            ->setRole($publisherRole)
+            ->setRelation($publisherRelation);
+
+        return [$creator, $publisher];
+    }
+
+    /**
      * @return Subject[]
      */
     private function getSubject(): array
@@ -208,8 +234,10 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/10000/10600/10611')
             ->setTitle($title)
             ->setSubjectScheme($subjectScheme);
+
         return [$element];
     }
+
     /**
      * @return TimeReference[]
      */
@@ -230,7 +258,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $dateType = new DateType()
             ->setIri('https://vocabs.ccmm.cz/TimeReference/en/page/Updated')
             ->addLabel('Date Updated', Language::EN)
-            ->addLabel('Datum aktualizace', Language::CS);;
+            ->addLabel('Datum aktualizace', Language::CS);
         $updated->setDateType($dateType);
 
         return [$issued, $updated];
@@ -240,9 +268,9 @@ final class CcmmFormat implements MetadataFormatInterface
     {
         $element = new Identifier();
         $scheme = new IdentifierScheme();
-        $scheme->setIri('https://n2t.net/')
+        $scheme->setIri('https://n2t.net/.info/ark')
             ->addLabel('ARK');
-        $element->setIri('https://n2t.net/' . $photo->pid)
+        $element->setIri('https://n2t.net/'.$photo->pid)
             ->setValue($photo->pid)
             ->setScheme($scheme);
 

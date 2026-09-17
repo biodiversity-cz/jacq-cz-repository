@@ -78,6 +78,7 @@ class TimeInterval implements XmlSerializable
         $this->appendChildIfNotNull($element, $this->getDateType(), 'date_type');
 
         $parentElement->appendChild($element);
+
         return $parentElement;
     }
 }

@@ -10,7 +10,6 @@ use App\Services\OaiPmh\MetadataFormat\CcmmFormat;
 use App\Services\OaiPmh\MetadataFormat\DublinCoreFormat;
 use App\Services\OaiPmh\MetadataFormat\MetadataFormatInterface;
 use App\Services\OaiPmh\OaiPmhRecordProviderInterface;
-use App\Services\RepositoryConfiguration;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\AbortException;
 use Nette\Application\BadRequestException;
@@ -21,9 +20,10 @@ use Nette\Application\BadRequestException;
 final class OaiPmhPresenter extends UnsecuredPresenter
 {
     private const string OAI_PMH_VERSION = '2.0';
-    private const string ADMIN_EMAIL = 'novotp@natur.cuni.cz'; // TODO: Make configurable
-    private const string REPOSITORY_NAME = 'herbarium.biodiversity.cz';
-    private const string REPOSITORY_DOMAIN = 'herbarium.biodiversity.cz'; // TODO: Make configurable
+    private const string ADMIN_EMAIL = 'novotp@natur.cuni.cz';
+    private const string REPOSITORY_NAME = 'Herbarium (Plant and Fungal) Photo Collections';
+    public const string REPOSITORY_DOMAIN = 'herbarium.biodiversity.cz';
+    public const string EARLIEST_DATESTAMP = '2024-01-01T00:00:00Z';
 
     private const int DEFAULT_PAGE_SIZE = 100;
     private const int MAX_PAGE_SIZE = 1000;
@@ -32,13 +32,11 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     private array $metadataFormats;
 
     public function __construct(
-        AppConfiguration                               $appConfiguration,
+        AppConfiguration $appConfiguration,
         private readonly OaiPmhRecordProviderInterface $recordProvider,
-        private readonly DublinCoreFormat              $dublinCoreFormat,
-        private readonly CcmmFormat                    $ccmmFormat,
-        private readonly RepositoryConfiguration       $repositoryConfiguration,
-    )
-    {
+        private readonly DublinCoreFormat $dublinCoreFormat,
+        private readonly CcmmFormat $ccmmFormat,
+    ) {
         parent::__construct($appConfiguration);
 
         $this->metadataFormats = [
@@ -62,7 +60,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
                 'ListRecords' => $this->verbListRecords(),
                 'GetRecord' => $this->verbGetRecord(),
                 null => throw new BadRequestException('Missing verb parameter', 400),
-                default => throw new BadRequestException('Illegal verb: ' . $verb, 400),
+                default => throw new BadRequestException('Illegal verb: '.$verb, 400),
             };
             $writer->endElement(); // OAI-PMH
             $writer->endDocument();
@@ -98,12 +96,44 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $writer->writeElement('protocolVersion', self::OAI_PMH_VERSION);
         $writer->writeElement('adminEmail', self::ADMIN_EMAIL);
         $writer->writeElement('earliestDatestamp',
-            $this->recordProvider->getEarliestDatestamp()?->format('Y-m-d\TH:i:s\Z') ?? '1970-01-01T00:00:00Z');
-        $writer->writeElement('deletedRecord', 'no');
+            $this->recordProvider->getEarliestDatestamp()?->format(DATE_ATOM) ?? self::EARLIEST_DATESTAMP);
+        $writer->writeElement('deletedRecord', 'persistent');
         $writer->writeElement('granularity', 'YYYY-MM-DDThh:mm:ssZ');
+        $this->getGeneralDescriptions($writer);
+
         $writer->endElement();
 
         return $writer;
+    }
+
+    private function getGeneralDescriptions(\XMLWriter $writer): void
+    {
+        $writer->startElement('description');
+
+        $writer->startElementNS(
+            null,
+            'oai-identifier',
+            'http://www.openarchives.org/OAI/2.0/oai-identifier'
+        );
+
+        $writer->writeAttributeNS(
+            'xsi',
+            'schemaLocation',
+            'http://www.w3.org/2001/XMLSchema-instance',
+            'http://www.openarchives.org/OAI/2.0/oai-identifier '.
+            'http://www.openarchives.org/OAI/2.0/oai-identifier.xsd'
+        );
+
+        $writer->writeElement('scheme', 'oai');
+        $writer->writeElement('repositoryIdentifier', self::REPOSITORY_DOMAIN);
+        $writer->writeElement('delimiter', ':');
+        $writer->writeElement(
+            'sampleIdentifier',
+            'oai:'.self::REPOSITORY_DOMAIN.':ark:/12661/nrp1HERB/PR/207734/37900'
+        );
+
+        $writer->endElement(); // oai-identifier
+        $writer->endElement(); // description
     }
 
     private function verbListMetadataFormats(): \XMLWriter
@@ -206,9 +236,9 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
             $writer->startElement('resumptionToken');
             $writer->text($newToken);
-            $writer->writeAttribute('cursor', (string)$offset);
+            $writer->writeAttribute('cursor', (string) $offset);
             if ($totalRecords > 0) {
-                $writer->writeAttribute('completeListSize', (string)$totalRecords);
+                $writer->writeAttribute('completeListSize', (string) $totalRecords);
             }
             $writer->endElement();
         } elseif ($resumptionToken) {
@@ -249,19 +279,18 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     }
 
     private function writeRecordElement(
-        \XMLWriter              $writer,
-        Photos                  $photo,
+        \XMLWriter $writer,
+        Photos $photo,
         MetadataFormatInterface $format,
-        bool                    $includeMetadata,
-    ): void
-    {
+        bool $includeMetadata,
+    ): void {
         if ($includeMetadata) {
             $writer->startElement('record');
         }
         // Header
         $writer->startElement('header');
 
-        $identifier = $this->recordProvider->generateIdentifier($photo, self::REPOSITORY_DOMAIN);
+        $identifier = $this->recordProvider->generateIdentifier($photo);
         $writer->writeElement('identifier', $identifier);
         $writer->writeElement('datestamp', $photo->lastEdit->format('Y-m-d\TH:i:s\Z'));
 
@@ -316,7 +345,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         }
         foreach ($this->getHttpRequest()->getQuery() as $param => $value) {
             if ('verb' !== $param && null !== $value && '' !== $value) {
-                $writer->writeAttribute($param, (string)$value);
+                $writer->writeAttribute($param, (string) $value);
             }
         }
         $writer->text($this->getBaseUrl());
@@ -340,7 +369,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     {
         $request = $this->getHttpRequest();
 
-        return $request->getUrl()->getBaseUrl() . 'oai-pmh';
+        return $request->getUrl()->getBaseUrl().'oai-pmh';
     }
 
     private function parseDate(string $date): \DateTimeInterface
@@ -355,7 +384,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             }
         }
 
-        throw new BadRequestException('Invalid date format: ' . $date, 400);
+        throw new BadRequestException('Invalid date format: '.$date, 400);
     }
 
     private function parseResumptionToken(
@@ -364,8 +393,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         ?string $from,
         ?string $until,
         ?string $set,
-    ): array
-    {
+    ): array {
         if ($token) {
             $decoded = base64_decode($token, true);
             if (false === $decoded) {
@@ -391,14 +419,13 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     }
 
     private function createResumptionToken(
-        int     $offset,
-        int     $total,
-        string  $metadataPrefix,
+        int $offset,
+        int $total,
+        string $metadataPrefix,
         ?string $from,
         ?string $until,
         ?string $set,
-    ): string
-    {
+    ): string {
         $data = [
             'offset' => $offset,
             'total' => $total,
