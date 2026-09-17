@@ -6,6 +6,7 @@ namespace App\Model\Database\Entity;
 
 use App\Model\Database\Entity\Attributes\TCreatedAt;
 use App\Model\Database\Entity\Attributes\TId;
+use App\Model\Database\Entity\Attributes\TIssuedAt;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
 use App\Model\Database\Entity\Attributes\TOriginalFileAt;
 use App\Model\Database\Entity\Views\VoucherVisionTranscription;
@@ -31,6 +32,7 @@ class Photos
     use TCreatedAt;
     use TLastEditAt;
     use TOriginalFileAt;
+    use TIssuedAt;
 
     #[Column(unique: true, nullable: true, options: ['comment' => 'Filename of Archive Master TIF file'])]
     public protected(set) ?string $archiveFilename = null;

@@ -24,6 +24,16 @@ class FixtureContact extends FixtureBase
             ->setHerbarium($manager->getRepository(Herbaria::class)->findOneBy(['acronym' => 'PRC']));
 
         $manager->persist($c1);
+
+        $c2 = new Contact();
+        $c2->setName('Jenda')
+            ->setSurname('benda')
+            ->setEmail('kk@natur.cuni.cz')
+            ->setDescription('head of herbarium')
+            ->setHerbarium($manager->getRepository(Herbaria::class)->findOneBy(['acronym' => 'TEST']));
+
+        $manager->persist($c2);
+
         $manager->flush();
     }
 

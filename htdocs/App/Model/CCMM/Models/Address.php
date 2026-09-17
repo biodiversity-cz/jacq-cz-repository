@@ -16,17 +16,6 @@ class Address implements XmlSerializable
 
     public protected(set) ?string $fullAddress = null;
 
-    public function __construct()
-    {
-    }
-
-    // Getters
-    public function getFullAddress(): ?string
-    {
-        return $this->fullAddress;
-    }
-
-    // Setters
     public function setFullAddress(?string $fullAddress): self
     {
         $this->fullAddress = $fullAddress;
@@ -38,8 +27,8 @@ class Address implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'address');
 
-        if (null !== $this->getFullAddress()) {
-            $fullAddressElement = $this->createElement($document, 'full_address', $this->getFullAddress());
+        if (null !== $this->fullAddress) {
+            $fullAddressElement = $this->createElement($document, 'full_address', $this->fullAddress);
             $element->appendChild($fullAddressElement);
         }
 

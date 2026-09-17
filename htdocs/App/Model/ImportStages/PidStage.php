@@ -24,7 +24,9 @@ class PidStage extends BaseStage implements StageInterface
         $this->item = $payload;
         try {
             /* @var Photos $payload */
-            $payload->setPid($this->specimenIdService->generateArk($payload));
+            $payload
+                ->setPid($this->specimenIdService->generateArk($payload))
+                ->setIssuedAt();
         } catch (\Throwable $exception) {
             throw new PublishStageException('unable assign ARK ('.$exception->getMessage().'): '.$payload->id);
         }

@@ -14,25 +14,14 @@ class TimeReference implements XmlSerializable
 {
     use XmlSerializableTrait;
 
+    /**
+     * for easy flow the temporal_representation is not modeled and created inside both time variants manually
+     */
     public protected(set) ?TimeInstant $timeInstant = null;
     public protected(set) ?TimeInterval $timeInterval = null;
 
-    public function __construct()
-    {
-    }
+    public protected(set) ?DateType $dateType = null;
 
-    // Getters
-    public function getTimeInstant(): ?TimeInstant
-    {
-        return $this->timeInstant;
-    }
-
-    public function getTimeInterval(): ?TimeInterval
-    {
-        return $this->timeInterval;
-    }
-
-    // Setters
     public function setTimeInstant(?TimeInstant $timeInstant): self
     {
         $this->timeInstant = $timeInstant;
@@ -47,18 +36,31 @@ class TimeReference implements XmlSerializable
         return $this;
     }
 
+    public function setDateType(?DateType $dateType): TimeReference
+    {
+        $this->dateType = $dateType;
+        return $this;
+    }
+
+
+
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'time_reference');
 
-        if (null !== $this->getTimeInstant()) {
-            $timeInstantElement = $this->getTimeInstant()->toXml($document, 'time_instant');
+        if (null !== $this->timeInstant) {
+            $timeInstantElement = $this->timeInstant->toXml($document);
             $element->appendChild($timeInstantElement);
         }
 
-        if (null !== $this->getTimeInterval()) {
-            $timeIntervalElement = $this->getTimeInterval()->toXml($document, 'time_interval');
+        if (null !== $this->timeInterval) {
+            $timeIntervalElement = $this->timeInterval->toXml($document);
             $element->appendChild($timeIntervalElement);
+        }
+
+        if (null !== $this->dateType) {
+            $dateTypeElement = $this->dateType->toXml($document);
+            $element->appendChild($dateTypeElement);
         }
 
         return $element;

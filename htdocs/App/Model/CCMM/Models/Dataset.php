@@ -21,7 +21,7 @@ class Dataset implements XmlSerializable
     public protected(set) ?string $title = null;
     public protected(set) array $alternateTitles = [];
     public protected(set) array $qualifiedRelations = [];
-    public protected(set) ?int $publicationYear = null;
+    public protected(set) ?string $publicationYear = null;
     public protected(set) array $timeReferences = [];
     public protected(set) ?ResourceType $resourceType = null;
     public protected(set) ?string $primaryLanguage = null;
@@ -40,117 +40,7 @@ class Dataset implements XmlSerializable
     public protected(set) ?ValidationResult $validationResult = null;
     public protected(set) ?Provenance $provenance = null;
 
-    public function __construct()
-    {
-    }
 
-    // Getters
-    public function getIri(): ?string
-    {
-        return $this->iri;
-    }
-
-    public function getMetadataIdentification(): ?MetadataIdentification
-    {
-        return $this->metadataIdentification;
-    }
-
-    public function getIdentifiers(): array
-    {
-        return $this->identifiers;
-    }
-
-    public function getVersion(): ?string
-    {
-        return $this->version;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function getAlternateTitles(): array
-    {
-        return $this->alternateTitles;
-    }
-
-    public function getQualifiedRelations(): array
-    {
-        return $this->qualifiedRelations;
-    }
-
-    public function getPublicationYear(): ?int
-    {
-        return $this->publicationYear;
-    }
-
-    public function getTimeReferences(): array
-    {
-        return $this->timeReferences;
-    }
-
-    public function getResourceType(): ?ResourceType
-    {
-        return $this->resourceType;
-    }
-
-    public function getPrimaryLanguage(): ?string
-    {
-        return $this->primaryLanguage;
-    }
-
-    public function getOtherLanguages(): array
-    {
-        return $this->otherLanguages;
-    }
-
-    public function getTermsOfUse(): ?TermsOfUse
-    {
-        return $this->termsOfUse;
-    }
-
-    public function getSubjects(): array
-    {
-        return $this->subjects;
-    }
-
-    public function getDescriptions(): array
-    {
-        return $this->descriptions;
-    }
-
-    public function getLocations(): array
-    {
-        return $this->locations;
-    }
-
-    public function getFundingReferences(): array
-    {
-        return $this->fundingReferences;
-    }
-
-    public function getRelatedResources(): array
-    {
-        return $this->relatedResources;
-    }
-
-    public function getDistributions(): array
-    {
-        return $this->distributions;
-    }
-
-    public function getValidationResult(): ?ValidationResult
-    {
-        return $this->validationResult;
-    }
-
-    public function getProvenance(): ?Provenance
-    {
-        return $this->provenance;
-    }
-
-    // Setters
     public function setIri(?string $iri): self
     {
         $this->iri = $iri;
@@ -221,7 +111,7 @@ class Dataset implements XmlSerializable
         return $this;
     }
 
-    public function setPublicationYear(?int $publicationYear): self
+    public function setPublicationYear(?string $publicationYear): self
     {
         $this->publicationYear = $publicationYear;
 
@@ -395,14 +285,14 @@ class Dataset implements XmlSerializable
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:gml', 'http://www.opengis.net/gml/3.2');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
-        if (null !== $this->getIri()) {
-            $iriElement = $this->createElement($document, 'iri', $this->getIri());
+        if (null !== $this->iri) {
+            $iriElement = $this->createElement($document, 'iri', $this->iri);
             $element->appendChild($iriElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->getMetadataIdentification(), 'metadata_identification');
+        $this->appendChildIfNotNull($element, $this->metadataIdentification, 'metadata_identification');
 
-        foreach ($this->getIdentifiers() as $identifier) {
+        foreach ($this->identifiers as $identifier) {
             $identifierElement = $identifier->toXml($document);
             $element->appendChild($identifierElement);
         }
@@ -412,65 +302,65 @@ class Dataset implements XmlSerializable
             $element->appendChild($versionElement);
         }
 
-        if (null !== $this->getTitle()) {
-            $titleElement = $this->createElement($document, 'title', $this->getTitle());
+        if (null !== $this->title) {
+            $titleElement = $this->createElement($document, 'title', $this->title);
             $element->appendChild($titleElement);
         }
 
-        foreach ($this->getAlternateTitles() as $alternateTitle) {
+        foreach ($this->alternateTitles as $alternateTitle) {
             $altTitleElement = $alternateTitle->toXml($document);
             $element->appendChild($altTitleElement);
         }
 
-        foreach ($this->getQualifiedRelations() as $qualifiedRelation) {
+        foreach ($this->qualifiedRelations as $qualifiedRelation) {
             $qualifiedRelationElement = $qualifiedRelation->toXml($document);
             $element->appendChild($qualifiedRelationElement);
         }
 
-        if (null !== $this->getPublicationYear()) {
-            $yearElement = $this->createElement($document, 'publication_year', (string) $this->getPublicationYear());
+        if (null !== $this->publicationYear) {
+            $yearElement = $this->createElement($document, 'publication_year', $this->publicationYear);
             $element->appendChild($yearElement);
         }
 
-        foreach ($this->getTimeReferences() as $timeReference) {
+        foreach ($this->timeReferences as $timeReference) {
             $timeRefElement = $timeReference->toXml($document);
             $element->appendChild($timeRefElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->getResourceType(), 'resource_type');
+        $this->appendChildIfNotNull($element, $this->resourceType, 'resource_type');
 
-        if (null !== $this->getPrimaryLanguage()) {
+        if (null !== $this->primaryLanguage) {
             $primaryLangElement = $this->createElement($document, 'primary_language');
-            $iriElement = $this->createElement($document, 'iri', $this->getPrimaryLanguage());
+            $iriElement = $this->createElement($document, 'iri', $this->primaryLanguage);
             $primaryLangElement->appendChild($iriElement);
             $element->appendChild($primaryLangElement);
         }
 
-        foreach ($this->getOtherLanguages() as $otherLanguage) {
+        foreach ($this->otherLanguages as $otherLanguage) {
             $otherLangElement = $this->createElement($document, 'other_language');
             $iriElement = $this->createElement($document, 'iri', $otherLanguage);
             $otherLangElement->appendChild($iriElement);
             $element->appendChild($otherLangElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->getTermsOfUse(), 'terms_of_use');
+        $this->appendChildIfNotNull($element, $this->termsOfUse, 'terms_of_use');
 
-        foreach ($this->getSubjects() as $subject) {
+        foreach ($this->subjects as $subject) {
             $subjectElement = $subject->toXml($document);
             $element->appendChild($subjectElement);
         }
 
-        foreach ($this->getDescriptions() as $description) {
+        foreach ($this->descriptions as $description) {
             $descriptionElement = $description->toXml($document);
             $element->appendChild($descriptionElement);
         }
 
-        foreach ($this->getLocations() as $location) {
+        foreach ($this->locations as $location) {
             $locationElement = $location->toXml($document);
             $element->appendChild($locationElement);
         }
 
-        foreach ($this->getFundingReferences() as $fundingReference) {
+        foreach ($this->fundingReferences as $fundingReference) {
             $fundingElement = $fundingReference->toXml($document);
             $element->appendChild($fundingElement);
         }
@@ -481,27 +371,27 @@ class Dataset implements XmlSerializable
             $element->appendChild($fragment);
         }
 
-        foreach ($this->getRelatedResources() as $relatedResource) {
+        foreach ($this->relatedResources as $relatedResource) {
             $relatedElement = $relatedResource->toXml($document);
             $element->appendChild($relatedElement);
         }
 
-        foreach ($this->getDistributions() as $distribution) {
+        foreach ($this->distributions as $distribution) {
             $distributionElement = $distribution->toXml($document);
             $element->appendChild($distributionElement);
         }
 
         // Add empty validation_result and provenance elements as placeholders
-        if (null !== $this->getValidationResult()) {
-            $validationElement = $this->getValidationResult()->toXml($document, 'validation_result');
+        if (null !== $this->validationResult) {
+            $validationElement = $this->validationResult->toXml($document, 'validation_result');
             $element->appendChild($validationElement);
         } else {
             $validationElement = $this->createElement($document, 'validation_result');
             $element->appendChild($validationElement);
         }
 
-        if (null !== $this->getProvenance()) {
-            $provenanceElement = $this->getProvenance()->toXml($document, 'provenance');
+        if (null !== $this->provenance) {
+            $provenanceElement = $this->provenance->toXml($document, 'provenance');
             $element->appendChild($provenanceElement);
         } else {
             $provenanceElement = $this->createElement($document, 'provenance');
