@@ -23,7 +23,6 @@ use App\Model\CCMM\Models\License;
 use App\Model\CCMM\Models\MediaType;
 use App\Model\CCMM\Models\QualifiedRelation;
 use App\Model\CCMM\Models\Relation;
-use App\Model\CCMM\Models\RelationType;
 use App\Model\CCMM\Models\ResourceType;
 use App\Model\CCMM\Models\Role;
 use App\Model\CCMM\Models\Subject;
@@ -217,6 +216,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $publisher = new QualifiedRelation()
             ->setRole($publisherRole)
             ->setRelation($publisherRelation);
+
         return [$creator, $publisher];
     }
 

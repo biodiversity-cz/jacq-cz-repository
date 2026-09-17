@@ -13,7 +13,6 @@ use App\Services\OaiPmh\OaiPmhRecordProviderInterface;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\AbortException;
 use Nette\Application\BadRequestException;
-use PhpOffice\PhpSpreadsheet\Shared\XMLWriter;
 
 /**
  * OAI-PMH v2.0 presenter implementing all mandatory verbs.
@@ -121,7 +120,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             'xsi',
             'schemaLocation',
             'http://www.w3.org/2001/XMLSchema-instance',
-            'http://www.openarchives.org/OAI/2.0/oai-identifier ' .
+            'http://www.openarchives.org/OAI/2.0/oai-identifier '.
             'http://www.openarchives.org/OAI/2.0/oai-identifier.xsd'
         );
 
