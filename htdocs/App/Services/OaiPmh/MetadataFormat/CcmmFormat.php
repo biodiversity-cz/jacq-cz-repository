@@ -268,7 +268,7 @@ final class CcmmFormat implements MetadataFormatInterface
     {
         $element = new Identifier();
         $scheme = new IdentifierScheme();
-        $scheme->setIri('https://n2t.net/')
+        $scheme->setIri('https://n2t.net/.info/ark')
             ->addLabel('ARK');
         $element->setIri('https://n2t.net/'.$photo->pid)
             ->setValue($photo->pid)
