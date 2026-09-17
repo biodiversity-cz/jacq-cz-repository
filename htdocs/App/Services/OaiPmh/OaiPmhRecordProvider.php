@@ -16,10 +16,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
 {
     public function __construct(
-        private readonly PhotoService     $photoService,
+        private readonly PhotoService $photoService,
         private readonly HerbariumService $herbariumService,
-    )
-    {
+    ) {
     }
 
     public function getTotalRecordsCount(): int
@@ -27,17 +26,16 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
         $qb = $this->photoService->getAllPublishedPhotosDatasource()
             ->select('COUNT(p.id)');
 
-        return (int)$qb->getQuery()->getSingleScalarResult();
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function getRecords(
         ?\DateTimeInterface $from = null,
         ?\DateTimeInterface $until = null,
-        ?string             $set = null,
-        int                 $offset = 0,
-        int                 $limit = 100,
-    ): \Iterator
-    {
+        ?string $set = null,
+        int $offset = 0,
+        int $limit = 100,
+    ): \Iterator {
         $qb = $this->photoService->getAllPublishedPhotosDatasource();
 
         // Add joins for related data needed for metadata
@@ -158,10 +156,10 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
     private function extractPhotoPidFromIdentifier(string $identifier): ?string
     {
         $prefix = sprintf('oai:%s:', OaiPmhPresenter::REPOSITORY_DOMAIN);
+
         return str_starts_with($identifier, $prefix)
             ? substr($identifier, strlen($prefix))
             : $identifier;
-
     }
 
     /**

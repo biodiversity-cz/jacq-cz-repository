@@ -21,7 +21,11 @@ use App\Model\CCMM\Models\Identifier;
 use App\Model\CCMM\Models\IdentifierScheme;
 use App\Model\CCMM\Models\License;
 use App\Model\CCMM\Models\MediaType;
+use App\Model\CCMM\Models\QualifiedRelation;
+use App\Model\CCMM\Models\Relation;
+use App\Model\CCMM\Models\RelationType;
 use App\Model\CCMM\Models\ResourceType;
+use App\Model\CCMM\Models\Role;
 use App\Model\CCMM\Models\Subject;
 use App\Model\CCMM\Models\SubjectScheme;
 use App\Model\CCMM\Models\TermsOfUse;
@@ -84,7 +88,8 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setTimeReferences($this->getDates($item))
             ->setPublicationYear($item->issuedAt?->format('Y'))
             ->setTermsOfUse($this->getLicence($item))
-            ->setSubjects($this->getSubject());
+            ->setSubjects($this->getSubject())
+            ->setQualifiedRelations($this->getQualifiedRelations($item));
 
         return $dataset->toXml($doc);
     }
@@ -192,6 +197,27 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setLicense($license);
 
         return $element;
+    }
+
+    /**
+     * @return QualifiedRelation[]
+     */
+    private function getQualifiedRelations(Photos $photo): array
+    {
+        $creatorRole = new Role()
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Creator');
+        $creatorRelation = new Relation();
+        $creator = new QualifiedRelation()
+            ->setRole($creatorRole)
+            ->setRelation($creatorRelation);
+
+        $publisherRole = new Role()
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Publisher');
+        $publisherRelation = new Relation();
+        $publisher = new QualifiedRelation()
+            ->setRole($publisherRole)
+            ->setRelation($publisherRelation);
+        return [$creator, $publisher];
     }
 
     /**

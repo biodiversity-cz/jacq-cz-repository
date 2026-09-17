@@ -52,5 +52,4 @@ interface OaiPmhRecordProviderInterface
      * Get the earliest datestamp in the repository.
      */
     public function getEarliestDatestamp(): ?\DateTimeInterface;
-
 }
