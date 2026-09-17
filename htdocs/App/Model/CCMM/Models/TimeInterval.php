@@ -62,6 +62,7 @@ class TimeInterval implements XmlSerializable
 
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
+        $parentElement = $this->createElement($document, $elementName ?? 'temporal_representation');
         $element = $this->createElement($document, $elementName ?? 'time_interval');
 
         if (null !== $this->getBeginningTimeInstant()) {
@@ -76,6 +77,7 @@ class TimeInterval implements XmlSerializable
 
         $this->appendChildIfNotNull($element, $this->getDateType(), 'date_type');
 
-        return $element;
+        $parentElement->appendChild($element);
+        return $parentElement;
     }
 }

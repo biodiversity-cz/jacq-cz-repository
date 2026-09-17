@@ -26,6 +26,7 @@ class FixtureHerbaria extends FixtureBase
             ->setMultipleBarcodeMultiplier(false)
             ->setLicense($license)
             ->setDigitsCount(6)
+            ->setAddress('Benátská 2, Prague')
             ->setRegexBarcode('/^(?<herbarium>test)[\s\-–_](?<specimenId>\d+)$/i')
             ->setRegexFilename('/^(?<herbarium>test)_(?<specimenId>\d+)(?<supplement>[_\-a-z]*)\.(?<extension>tif)$/i')
             ->setExternalDatabase($externalDb)

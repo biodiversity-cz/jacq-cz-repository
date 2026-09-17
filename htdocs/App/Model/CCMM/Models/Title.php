@@ -4,35 +4,20 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
+use App\Model\CCMM\Enum\Language;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
 use App\Model\CCMM\XmlSerializable;
 
 /**
- * Represents a title with optional language attribute.
+ * Represents a title with language attribute.
  */
 class Title implements XmlSerializable
 {
     use XmlSerializableTrait;
 
     public protected(set) string $title;
-    public protected(set) ?string $language = null;
+    public protected(set) Language $language = Language::CS;
 
-    public function __construct()
-    {
-    }
-
-    // Getters
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function getLanguage(): ?string
-    {
-        return $this->language;
-    }
-
-    // Setters
     public function setTitle(string $title): self
     {
         $this->title = $title;
@@ -40,7 +25,7 @@ class Title implements XmlSerializable
         return $this;
     }
 
-    public function setLanguage(?string $language): self
+    public function setLanguage(Language $language): self
     {
         $this->language = $language;
 
@@ -49,11 +34,8 @@ class Title implements XmlSerializable
 
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
-        $element = $this->createElement($document, $elementName ?? 'title', $this->getTitle());
-
-        if (null !== $this->getLanguage()) {
-            $element->setAttribute('xml:lang', $this->getLanguage());
-        }
+        $element = $this->createElement($document, $elementName ?? 'title', $this->title);
+        $element->setAttribute('xml:lang', $this->language->value);
 
         return $element;
     }

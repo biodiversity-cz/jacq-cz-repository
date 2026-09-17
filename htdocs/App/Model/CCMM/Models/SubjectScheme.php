@@ -17,22 +17,6 @@ class SubjectScheme implements XmlSerializable
     public protected(set) ?string $iri = null;
     public protected(set) ?string $label = null;
 
-    public function __construct()
-    {
-    }
-
-    // Getters
-    public function getIri(): ?string
-    {
-        return $this->iri;
-    }
-
-    public function getLabel(): ?string
-    {
-        return $this->label;
-    }
-
-    // Setters
     public function setIri(?string $iri): self
     {
         $this->iri = $iri;
@@ -51,13 +35,13 @@ class SubjectScheme implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'subject_scheme');
 
-        if (null !== $this->getIri()) {
-            $iriElement = $this->createElement($document, 'iri', $this->getIri());
+        if (null !== $this->iri) {
+            $iriElement = $this->createElement($document, 'iri', $this->iri);
             $element->appendChild($iriElement);
         }
 
-        if (null !== $this->getLabel()) {
-            $labelElement = $this->createElement($document, 'label', $this->getLabel());
+        if (null !== $this->label) {
+            $labelElement = $this->createElement($document, 'label', $this->label);
             $labelElement->setAttribute('xml:lang', 'en');
             $element->appendChild($labelElement);
         }

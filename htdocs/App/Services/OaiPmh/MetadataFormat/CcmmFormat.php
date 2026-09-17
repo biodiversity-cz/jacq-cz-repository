@@ -5,17 +5,32 @@ declare(strict_types=1);
 namespace App\Services\OaiPmh\MetadataFormat;
 
 use App\Model\CCMM\Enum\Language;
+use App\Model\CCMM\Models\AccessRights;
+use App\Model\CCMM\Models\Address;
 use App\Model\CCMM\Models\Checksum;
+use App\Model\CCMM\Models\ContactPoint;
 use App\Model\CCMM\Models\Dataset;
+use App\Model\CCMM\Models\DateType;
 use App\Model\CCMM\Models\Distribution;
 use App\Model\CCMM\Models\DistributionDataService;
 use App\Model\CCMM\Models\DistributionDownloadableFile;
 use App\Model\CCMM\Models\Documentation;
 use App\Model\CCMM\Models\DownloadUrl;
 use App\Model\CCMM\Models\Format;
+use App\Model\CCMM\Models\Identifier;
+use App\Model\CCMM\Models\IdentifierScheme;
+use App\Model\CCMM\Models\License;
 use App\Model\CCMM\Models\MediaType;
 use App\Model\CCMM\Models\ResourceType;
+use App\Model\CCMM\Models\Subject;
+use App\Model\CCMM\Models\SubjectScheme;
+use App\Model\CCMM\Models\TermsOfUse;
+use App\Model\CCMM\Models\TimeInstant;
+use App\Model\CCMM\Models\TimeReference;
+use App\Model\CCMM\Models\Title;
 use App\Model\Database\Entity\Photos;
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Nette\Application\LinkGenerator;
 
 /**
@@ -63,6 +78,13 @@ final class CcmmFormat implements MetadataFormatInterface
 
         $dataset->setResourceType($this->getResourceType());
         $dataset->setRawFundingReference($this->addFunding($item));
+        $dataset->addIdentifier($this->getIdentifier($item));
+        $dataset
+            ->setTitle('Image associated with a preserved herbarium specimen or related material')
+            ->setTimeReferences($this->getDates($item))
+            ->setPublicationYear($item->issuedAt?->format('Y'))
+            ->setTermsOfUse($this->getLicence($item))
+            ->setSubjects($this->getSubject());
 
         return $dataset->toXml($doc);
     }
@@ -142,6 +164,87 @@ final class CcmmFormat implements MetadataFormatInterface
         $element->setIri('http://purl.org/coar/resource_type/c_ecc8')
             ->addLabel('nepohyblivý obraz', Language::CS)
             ->addLabel('still image', Language::EN);
+
+        return $element;
+    }
+
+    private function getLicence(Photos $photo): TermsOfUse
+    {
+        $accesRights = new AccessRights()
+            ->setIri('http://purl.org/coar/access_right/c_abf2')
+            ->addLabel('open access', Language::EN)
+            ->addLabel('otevřený přístup', Language::CS);
+        $person = ($photo->herbarium->contacts->matching(
+            Criteria::create()->orderBy(['surname' => Order::Ascending])
+        )
+            ->first());
+        $address = new Address()
+            ->setFullAddress($photo->herbarium->address);
+        $contactPoint = new ContactPoint()
+            ->setEmail($person->email)
+            ->setAddress($address);
+        $license = new License()
+            ->setIri('https://creativecommons.org/licenses/by/4.0/')
+            ->addLabel('Attribution 4.0 International', Language::EN);
+        $element = new TermsOfUse()
+            ->setAccessRights($accesRights)
+            ->setContactPoint($contactPoint)
+            ->setLicense($license);
+
+        return $element;
+    }
+
+    /**
+     * @return Subject[]
+     */
+    private function getSubject(): array
+    {
+        $title = new Title()
+        ->setTitle('Plant sciences, botany')
+        ->setLanguage(Language::EN);
+        $subjectScheme = new SubjectScheme()
+        ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/');
+        $element = new Subject()
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/10000/10600/10611')
+            ->setTitle($title)
+            ->setSubjectScheme($subjectScheme);
+        return [$element];
+    }
+    /**
+     * @return TimeReference[]
+     */
+    private function getDates(Photos $photo): array
+    {
+        $issued = new TimeReference();
+        $time = new TimeInstant()->setDateTime($photo->lastEdit);
+        $issued->setTimeInstant($time);
+        $dateType = new DateType()
+            ->setIri('https://vocabs.ccmm.cz/TimeReference/en/page/Issued')
+            ->addLabel('Date Issued', Language::EN)
+            ->addLabel('Datum vydání', Language::CS);
+        $issued->setDateType($dateType);
+
+        $updated = new TimeReference();
+        $time = new TimeInstant()->setDateTime($photo->lastEdit);
+        $updated->setTimeInstant($time);
+        $dateType = new DateType()
+            ->setIri('https://vocabs.ccmm.cz/TimeReference/en/page/Updated')
+            ->addLabel('Date Updated', Language::EN)
+            ->addLabel('Datum aktualizace', Language::CS);;
+        $updated->setDateType($dateType);
+
+        return [$issued, $updated];
+    }
+
+    private function getIdentifier(Photos $photo): Identifier
+    {
+        $element = new Identifier();
+        $scheme = new IdentifierScheme();
+        $scheme->setIri('https://n2t.net/')
+            ->addLabel('ARK');
+        $element->setIri('https://n2t.net/' . $photo->pid)
+            ->setValue($photo->pid)
+            ->setScheme($scheme);
 
         return $element;
     }

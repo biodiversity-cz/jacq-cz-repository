@@ -14,68 +14,35 @@ class TimeInstant implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    public protected(set) ?string $dateTime = null;
-    public protected(set) ?string $date = null;
-    public protected(set) ?DateType $dateType = null;
+    public protected(set) ?\DateTime $dateTime = null;
 
     public function __construct()
     {
     }
 
-    // Getters
-    public function getDateTime(): ?string
+    public function getDateTime(): ?\DateTime
     {
-        return $this->DateTime;
+        return $this->dateTime;
     }
 
-    public function getDate(): ?string
+    public function setDateTime(?\DateTime $dateTime): self
     {
-        return $this->Date;
-    }
-
-    public function getDateType(): ?DateType
-    {
-        return $this->DateType;
-    }
-
-    // Setters
-    public function setDateTime(?string $dateTime): self
-    {
-        $this->DateTime = $dateTime;
-
-        return $this;
-    }
-
-    public function setDate(?string $date): self
-    {
-        $this->Date = $date;
-
-        return $this;
-    }
-
-    public function setDateType(?DateType $dateType): self
-    {
-        $this->DateType = $dateType;
+        $this->dateTime = $dateTime;
 
         return $this;
     }
 
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
+        $parentElement = $this->createElement($document, $elementName ?? 'temporal_representation');
         $element = $this->createElement($document, $elementName ?? 'time_instant');
 
         if (null !== $this->getDateTime()) {
-            $dateTimeElement = $this->createElement($document, 'date_time', $this->getDateTime());
+            $dateTimeElement = $this->createElement($document, 'date_time', $this->getDateTime()->format(DATE_ATOM));
             $element->appendChild($dateTimeElement);
         }
 
-        if (null !== $this->getDate()) {
-            $dateElement = $this->createElement($document, 'date', $this->getDate());
-            $element->appendChild($dateElement);
-        }
-
-        $this->appendChildIfNotNull($element, $this->getDateType(), 'date_type');
-
-        return $element;
+        $parentElement->appendChild($element);
+        return $parentElement;
     }
 }

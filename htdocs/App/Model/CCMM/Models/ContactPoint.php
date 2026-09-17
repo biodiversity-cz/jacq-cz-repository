@@ -18,27 +18,11 @@ class ContactPoint implements XmlSerializable
     public protected(set) ?string $phone = null;
     public protected(set) ?Address $address = null;
 
-    public function __construct()
-    {
-    }
-
-    // Getters
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function getPhone(): ?string
-    {
-        return $this->phone;
-    }
-
     public function getAddress(): ?Address
     {
         return $this->address;
     }
 
-    // Setters
     public function setEmail(?string $email): self
     {
         $this->email = $email;
@@ -69,12 +53,12 @@ class ContactPoint implements XmlSerializable
             $element->appendChild($emailElement);
         }
 
-        if (null !== $this->getPhone()) {
-            $phoneElement = $this->createElement($document, 'phone', $this->getPhone());
+        if (null !== $this->phone) {
+            $phoneElement = $this->createElement($document, 'phone', $this->phone);
             $element->appendChild($phoneElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->getAddress());
+        $this->appendChildIfNotNull($element, $this->address);
 
         return $element;
     }
