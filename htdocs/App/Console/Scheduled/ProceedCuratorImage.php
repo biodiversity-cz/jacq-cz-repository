@@ -60,8 +60,8 @@ class ProceedCuratorImage extends Command
         while (!$this->stopping && $processed < self::LIMIT) {
             // mainPhoto
             try {
-                $photo = $photoProcessed = $this->proceedMainPhoto($output);
-                if (!$photo) {
+                $photoProcessed = $this->proceedMainPhoto($output);
+                if (null === $photoProcessed) {
                     if ($once) {
                         break;
                     }
@@ -75,9 +75,6 @@ class ProceedCuratorImage extends Command
                 $output->writeln("\n".$e->getMessage());
 
                 return Command::FAILURE;
-            }
-            if (null === $photoProcessed) {
-                continue;
             }
             // multiply when needed
             if ($photoProcessed->herbarium->multipleBarcodeMultiplier && !empty($photoProcessed->multiplier?->barcodes)) {
@@ -130,7 +127,6 @@ class ProceedCuratorImage extends Command
 
             $this->curatorFacade->importNewFilesPipeline()->process($photo);
             $photo->setStatus($this->entityManager->getReference(PhotosStatus::class, PhotosStatus::IMAGE_CONTROL_OK));
-            $this->entityManager->remove($photo->error);
             $photo->removeImportError();
             $this->entityManager->flush();
             $this->entityManager->getConnection()->commit();
@@ -176,8 +172,8 @@ class ProceedCuratorImage extends Command
         $photo->removeImportError();
         $photo->removeMultiplier();
 
+        // to be ready for writing
         $photo->addImportError()->setMessage('');
-        $this->entityManager->persist($photo);
 
         return $photo;
     }

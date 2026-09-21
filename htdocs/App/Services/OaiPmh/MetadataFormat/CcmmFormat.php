@@ -22,7 +22,9 @@ use App\Model\CCMM\Models\IdentifierScheme;
 use App\Model\CCMM\Models\License;
 use App\Model\CCMM\Models\MediaType;
 use App\Model\CCMM\Models\QualifiedRelation;
+use App\Model\CCMM\Models\RelatedResource;
 use App\Model\CCMM\Models\Relation;
+use App\Model\CCMM\Models\ResourceRelationType;
 use App\Model\CCMM\Models\ResourceType;
 use App\Model\CCMM\Models\Role;
 use App\Model\CCMM\Models\Subject;
@@ -83,14 +85,37 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataset->setRawFundingReference($this->addFunding($item));
         $dataset->addIdentifier($this->getIdentifier($item));
         $dataset
-            ->setTitle('Image associated with a preserved herbarium specimen or related material')
+            ->setTitle('Image associated with a preserved herbarium specimen '.$item->getFullSpecimenId())
             ->setTimeReferences($this->getDates($item))
             ->setPublicationYear($item->issuedAt?->format('Y'))
             ->setTermsOfUse($this->getLicence($item))
             ->setSubjects($this->getSubject())
-            ->setQualifiedRelations($this->getQualifiedRelations($item));
+            ->setQualifiedRelations($this->getQualifiedRelations($item))
+            ->setRelatedResources($this->addRelatedResources($item));
 
         return $dataset->toXml($doc);
+    }
+
+    /**
+     * @return RelatedResource[]
+     */
+    private function addRelatedResources(Photos $photo): array
+    {
+        $resourceType = new ResourceType()
+            ->setIri('http://purl.org/coar/resource_type/S7R1-K5P0')
+            ->addLabel('physical sample', Language::EN);
+        $relationType = new ResourceRelationType()
+            ->setIri('documents')
+            ->addLabel('documents', Language::EN)
+            ->addLabel('dokumentuje (co)', Language::CS);
+        $specimen = new RelatedResource()
+            ->setIri($photo->specimenPid)
+            ->setTitle('Digital representation of the physical specimen')
+            ->setResourceUrl($photo->specimenPid)
+            ->setResourceType($resourceType)
+            ->setResourceRelationType($relationType);
+
+        return [$specimen];
     }
 
     /**
@@ -204,14 +229,18 @@ final class CcmmFormat implements MetadataFormatInterface
     private function getQualifiedRelations(Photos $photo): array
     {
         $creatorRole = new Role()
-            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Creator');
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Creator')
+            ->addLabel('Creator', Language::EN)
+            ->addLabel('Autor', Language::CS);
         $creatorRelation = new Relation();
         $creator = new QualifiedRelation()
             ->setRole($creatorRole)
             ->setRelation($creatorRelation);
 
         $publisherRole = new Role()
-            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Publisher');
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Publisher')
+            ->addLabel('Publisher', Language::EN)
+            ->addLabel('Vydavatel', Language::CS);
         $publisherRelation = new Relation();
         $publisher = new QualifiedRelation()
             ->setRole($publisherRole)
@@ -226,10 +255,10 @@ final class CcmmFormat implements MetadataFormatInterface
     private function getSubject(): array
     {
         $title = new Title()
-        ->setTitle('Plant sciences, botany')
-        ->setLanguage(Language::EN);
+            ->setTitle('Plant sciences, botany')
+            ->setLanguage(Language::EN);
         $subjectScheme = new SubjectScheme()
-        ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/');
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/');
         $element = new Subject()
             ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/10000/10600/10611')
             ->setTitle($title)

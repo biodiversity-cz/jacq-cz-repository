@@ -60,9 +60,8 @@ final class OaiPmhRecordProvider implements OaiPmhRecordProviderInterface
                 ->setParameter('set', $set);
         }
 
-        // Order by lastEdit for consistent pagination
-        $qb->orderBy('p.lastEdit', 'ASC')
-            ->addOrderBy('p.id', 'ASC');
+        // Order by for consistent pagination
+        $qb->orderBy('p.id', 'ASC');
 
         // Apply pagination
         $qb->setFirstResult($offset)
