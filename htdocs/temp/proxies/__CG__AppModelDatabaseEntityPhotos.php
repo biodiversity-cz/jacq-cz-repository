@@ -38,6 +38,7 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
         'herbarium' => [parent::class, 'herbarium', null, 8196],
         'id' => [parent::class, 'id', null, 8196],
         'identify' => [parent::class, 'identify', null, 8196],
+        'issuedAt' => [parent::class, 'issuedAt', null, 8196],
         'jp2Filename' => [parent::class, 'jp2Filename', null, 8196],
         'lastEdit' => [parent::class, 'lastEdit', null, 8196],
         'multiplier' => [parent::class, 'multiplier', null, 8196],

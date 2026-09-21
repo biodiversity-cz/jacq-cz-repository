@@ -90,7 +90,7 @@ class Photos
     public protected(set) ?string $pid = null;
     #[Column(type: Types::TEXT, length: 1000, unique: false, nullable: true, options: ['comment' => 'Persistent ID of external specimen entity to which this photo belongs'])]
     public protected(set) ?string $specimenPid = null;
-    #[OneToOne(targetEntity: ImportError::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
+    #[OneToOne(targetEntity: ImportError::class, mappedBy: 'photo', cascade: ['persist', 'remove'], orphanRemoval: true)]
     public protected(set) ?ImportError $error = null;
     #[OneToOne(targetEntity: ImportMultiplier::class, mappedBy: 'photo', cascade: ['persist', 'remove'])]
     public protected(set) ?ImportMultiplier $multiplier = null;
@@ -280,9 +280,7 @@ class Photos
 
     public function removeImportError(): void
     {
-        if (null !== $this->error) {
-            $this->error = null;
-        }
+        $this->error = null;
     }
 
     public function addMultiplier(): ImportMultiplier

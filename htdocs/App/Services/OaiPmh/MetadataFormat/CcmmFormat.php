@@ -85,13 +85,14 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataset->setRawFundingReference($this->addFunding($item));
         $dataset->addIdentifier($this->getIdentifier($item));
         $dataset
-            ->setTitle('Image associated with a preserved herbarium specimen ' . $item->getFullSpecimenId())
+            ->setTitle('Image associated with a preserved herbarium specimen '.$item->getFullSpecimenId())
             ->setTimeReferences($this->getDates($item))
             ->setPublicationYear($item->issuedAt?->format('Y'))
             ->setTermsOfUse($this->getLicence($item))
             ->setSubjects($this->getSubject())
             ->setQualifiedRelations($this->getQualifiedRelations($item))
             ->setRelatedResources($this->addRelatedResources($item));
+
         return $dataset->toXml($doc);
     }
 
@@ -100,7 +101,6 @@ final class CcmmFormat implements MetadataFormatInterface
      */
     private function addRelatedResources(Photos $photo): array
     {
-
         $resourceType = new ResourceType()
             ->setIri('http://purl.org/coar/resource_type/S7R1-K5P0')
             ->addLabel('physical sample', Language::EN);
@@ -299,7 +299,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $scheme = new IdentifierScheme();
         $scheme->setIri('https://n2t.net/.info/ark')
             ->addLabel('ARK');
-        $element->setIri('https://n2t.net/' . $photo->pid)
+        $element->setIri('https://n2t.net/'.$photo->pid)
             ->setValue($photo->pid)
             ->setScheme($scheme);
 

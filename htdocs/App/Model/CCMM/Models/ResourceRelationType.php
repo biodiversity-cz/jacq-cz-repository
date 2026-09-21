@@ -16,4 +16,3 @@ class ResourceRelationType extends IriLabelsBase
         return 'resource_relation_type';
     }
 }
-
