@@ -127,11 +127,19 @@
                 <tbody>
                 <tr>
                     <td>
-                        <label class="form-check-label" for="alwaysTrailingZeros" title="Add trailing zero even for non-digit herbNr">Always trailing zeros</label>
+                        <label class="form-check-label" for="digitsCount" title="Trailing zeros settings, required length of the specimenID">specimenID digitsCount</label>
+                    </td>
+                    <td>
+                        <input class="form-control settings" id="digitsCount" value="{$herbarium->digitsCount}" type="number" disabled>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="form-check-label" for="digitsCountOnSubstring" title="Add trailing zeros to mixed characters IDs where digits on the beginning of the id only are accounted in the digitsCount">use digitsCount only for substring</label>
                     </td>
                     <td>
                         <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="alwaysTrailingZeros" {if $herbarium->alwaysTrailingZeros}checked{/if} disabled>
+                            <input class="form-check-input" type="checkbox" role="switch" id="digitsCountOnSubstring" {if $herbarium->digitsCountOnSubstring}checked{/if} disabled>
                         </div>
                     </td>
                 </tr>

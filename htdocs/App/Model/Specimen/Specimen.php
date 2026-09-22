@@ -13,17 +13,25 @@ class Specimen
     public protected(set) string $id;
 
     /**
-     * duplicate code with \App\Model\Database\Entity\Photos::getSpecimenIdFixedWidth.
+     * duplicate code logic with \App\Model\Database\Entity\Photos::getSpecimenIdFixedWidth.
      */
     public function getStandardizedId(): string
     {
-        if (ctype_digit($this->id) || $this->herbarium->alwaysTrailingZeros) {
-            return $this->herbarium->acronym.'-'.str_pad(
-                $this->id,
-                $this->herbarium->digitsCount,
-                '0',
-                STR_PAD_LEFT
-            );
+        if (
+            ctype_digit($this->id) || $this->herbarium->digitsCountOnSubstring
+        ) {
+            if (preg_match('/^\d+/', $this->id, $matches)) {
+                $numericPart = $matches[0];
+
+                if (strlen($numericPart) < $this->herbarium->digitsCount) {
+                    return $this->herbarium->acronym.'-'.str_pad(
+                            $numericPart,
+                            $this->herbarium->digitsCount,
+                            '0',
+                            STR_PAD_LEFT
+                        ) . substr($this->id, strlen($numericPart));
+                }
+            }
         }
 
         return $this->herbarium->acronym.'-'.$this->id;

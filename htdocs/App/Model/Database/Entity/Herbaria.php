@@ -82,8 +82,8 @@ class Herbaria
     #[Column(type: Types::INTEGER, nullable: false, options: ['default' => 5, 'comment' => 'minimal filesize[MB] that is accepted during import control'])]
     public protected(set) int $minimalFileSize;
 
-    #[Column(unique: false, nullable: false, options: ['comment' => 'Add trailing zeros even in case of no-strictly-digits herbNr', 'default' => false])]
-    public protected(set) bool $alwaysTrailingZeros = false;
+    #[Column(unique: false, nullable: false, options: ['comment' => 'Digits count is applied on a substring of the specimenId', 'default' => false])]
+    public protected(set) bool $digitsCountOnSubstring = false;
 
     public function __construct()
     {
@@ -214,9 +214,9 @@ class Herbaria
         return $this;
     }
 
-    public function setAlwaysTrailingZeros(bool $alwaysTrailingZeros): Herbaria
+    public function setDigitsCountOnSubstring(bool $digitsCountOnSubstring): Herbaria
     {
-        $this->alwaysTrailingZeros = $alwaysTrailingZeros;
+        $this->digitsCountOnSubstring = $digitsCountOnSubstring;
 
         return $this;
     }
