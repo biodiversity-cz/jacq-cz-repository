@@ -177,13 +177,21 @@ class Photos
      */
     public function getSpecimenIdFixedWidth(): string
     {
-        if (ctype_digit($this->specimenId) || $this->herbarium->alwaysTrailingZeros) {
-            return str_pad(
-                $this->specimenId,
-                $this->herbarium->digitsCount,
-                '0',
-                STR_PAD_LEFT
-            );
+        if (
+            ctype_digit($this->specimenId) || $this->herbarium->digitsCountOnSubstring
+        ) {
+            if (preg_match('/^\d+/', $this->specimenId, $matches)) {
+                $numericPart = $matches[0];
+
+                if (strlen($numericPart) < $this->herbarium->digitsCount) {
+                    return str_pad(
+                            $numericPart,
+                            $this->herbarium->digitsCount,
+                            '0',
+                            STR_PAD_LEFT
+                        ) . substr($this->specimenId, strlen($numericPart));
+                }
+            }
         }
 
         return $this->specimenId;
