@@ -127,7 +127,15 @@
                 <tbody>
                 <tr>
                     <td>
-                        <label class="form-check-label" for="digitsCountOnSubstring" title="Add trailing zeros to mixed characters IDs where digits on the beginning of the id only are accounted in the digitsCount">use DigitsCount on ID substring</label>
+                        <label class="form-check-label" for="digitsCount" title="Trailing zeros settings, required length of the specimenID">specimenID digitsCount</label>
+                    </td>
+                    <td>
+                        <input class="form-control settings" id="digitsCount" value="{$herbarium->digitsCount}" type="number" disabled>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="form-check-label" for="digitsCountOnSubstring" title="Add trailing zeros to mixed characters IDs where digits on the beginning of the id only are accounted in the digitsCount">use digitsCount only for substring</label>
                     </td>
                     <td>
                         <div class="form-check form-switch">
