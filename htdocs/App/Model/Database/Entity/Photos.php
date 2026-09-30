@@ -185,11 +185,11 @@ class Photos
 
                 if (strlen($numericPart) < $this->herbarium->digitsCount) {
                     return str_pad(
-                            $numericPart,
-                            $this->herbarium->digitsCount,
-                            '0',
-                            STR_PAD_LEFT
-                        ) . substr($this->specimenId, strlen($numericPart));
+                        $numericPart,
+                        $this->herbarium->digitsCount,
+                        '0',
+                        STR_PAD_LEFT
+                    ).substr($this->specimenId, strlen($numericPart));
                 }
             }
         }
