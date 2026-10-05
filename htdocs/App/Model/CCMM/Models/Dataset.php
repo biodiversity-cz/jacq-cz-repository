@@ -19,6 +19,7 @@ class Dataset implements XmlSerializable
     public protected(set) array $identifiers = [];
     public protected(set) ?string $version = null;
     public protected(set) ?string $title = null;
+    public protected(set) ?string $keyword = null;
     public protected(set) array $alternateTitles = [];
     public protected(set) array $qualifiedRelations = [];
     public protected(set) ?string $publicationYear = null;
@@ -78,6 +79,13 @@ class Dataset implements XmlSerializable
     public function setTitle(?string $title): self
     {
         $this->title = $title;
+
+        return $this;
+    }
+
+    public function setKeyword(?string $keyword): Dataset
+    {
+        $this->keyword = $keyword;
 
         return $this;
     }
@@ -304,6 +312,11 @@ class Dataset implements XmlSerializable
         if (null !== $this->title) {
             $titleElement = $this->createElement($document, 'title', $this->title);
             $element->appendChild($titleElement);
+        }
+
+        if (null !== $this->keyword) {
+            $keywordElement = $this->createElement($document, 'keyword', $this->keyword);
+            $element->appendChild($keywordElement);
         }
 
         foreach ($this->alternateTitles as $alternateTitle) {

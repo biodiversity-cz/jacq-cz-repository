@@ -11,6 +11,8 @@ use App\Model\CCMM\Models\Checksum;
 use App\Model\CCMM\Models\ContactPoint;
 use App\Model\CCMM\Models\Dataset;
 use App\Model\CCMM\Models\DateType;
+use App\Model\CCMM\Models\Description;
+use App\Model\CCMM\Models\DescriptionType;
 use App\Model\CCMM\Models\Distribution;
 use App\Model\CCMM\Models\DistributionDataService;
 use App\Model\CCMM\Models\DistributionDownloadableFile;
@@ -77,6 +79,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $doc = new \DOMDocument('1.0', 'UTF-8');
 
         $dataset = new Dataset();
+
         foreach ($this->addDistributions($item) as $distribution) {
             $dataset->addDistribution($distribution);
         }
@@ -85,6 +88,8 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataset->setRawFundingReference($this->addFunding($item));
         $dataset->addIdentifier($this->getIdentifier($item));
         $dataset
+            ->setKeyword($item->cetafHarvest?->title)
+            ->setDescriptions($this->addDescriptions($item))
             ->setTitle('Image associated with a preserved herbarium specimen '.$item->getFullSpecimenId())
             ->setTimeReferences($this->getDates($item))
             ->setPublicationYear($item->issuedAt?->format('Y'))
@@ -97,6 +102,29 @@ final class CcmmFormat implements MetadataFormatInterface
     }
 
     /**
+     * @return Description[]
+     */
+    private function addDescriptions(Photos $photo): array
+    {
+        $descriptionType = new DescriptionType()
+            ->setIri('https://w3id.org/tib/datacite/vocab/descriptionType/Abstract')
+            ->addLabel('abstract', Language::EN);
+        $description = new Description()
+            ->setDescriptionType($descriptionType);
+        if (null !== $photo->cetafHarvest) {
+            $description->setDescriptionText($photo->cetafHarvest?->title.
+                ' '.$photo->cetafHarvest?->locality.
+                ' '.$photo->cetafHarvest?->eventDate.
+                ' [Botanical description of material sample harvested from '.$photo->specimenPid.
+                '; last updated on '.$photo->cetafHarvest?->lastEdit->format('Y-m-d').']');
+        } else {
+            $description->setDescriptionText('Photo documenting herbarium specimen '.$photo->specimenPid.'.');
+        }
+
+        return [$description];
+    }
+
+    /**
      * @return RelatedResource[]
      */
     private function addRelatedResources(Photos $photo): array
@@ -105,7 +133,7 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setIri('http://purl.org/coar/resource_type/S7R1-K5P0')
             ->addLabel('physical sample', Language::EN);
         $relationType = new ResourceRelationType()
-            ->setIri('documents')
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/RelationType/Documents')
             ->addLabel('documents', Language::EN)
             ->addLabel('dokumentuje (co)', Language::CS);
         $specimen = new RelatedResource()
