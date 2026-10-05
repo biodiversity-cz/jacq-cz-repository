@@ -28,7 +28,7 @@
                         <a class="nav-link {if $presenter->isLinkCurrent('Report:')}active{/if}"
                            n:href="Report:">Reports</a>
                     </li>
-                    {if $herbarium->externalDatabase->id === \App\Model\Database\Entity\ExternalDatabase::INTERNAL}
+                    {if isset($herbarium) && $herbarium->externalDatabase->id === \App\Model\Database\Entity\ExternalDatabase::INTERNAL}
                     <li class="nav-item">
                         <a class="nav-link {if $presenter->isLinkCurrent('Cetaf:')}active{/if}"
                            n:href="Cetaf:">CETAF SID</a>

@@ -1,6 +1,63 @@
 {block content}
+<style>
+    .registration-info {
+        max-width: 900px;
+        margin: 5rem auto;
+        padding: 3rem 2rem;
+        text-align: center;
+        background: #f8f9fa;
+        border-radius: 0.75rem;
+    }
+
+    .registration-info .emoji {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .registration-info h2 {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .registration-info p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        margin-bottom: 1.25rem;
+    }
+
+    .registration-info footer {
+        margin-top: 2rem;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+</style>
+
 <div class="container">
-    <h2>Newly registered user</h2>
-    <p>Thank you for signing in the repository. As devoted for institutional herbaria, it cannot be used for individual users - more info in the <a href="https://biodiversity-cz.github.io/herbarium-documentation/">documentation</a>.</p>
-    <p>In case you are eligible to provide images from your institution herbarium, please ask the main curator (see<a n:href=":Front:Home:contact"> Contacts</a> who is in charge) to assign your account to it.</p>
+    <div class="registration-info">
+        <div class="emoji"><img src="{$basePath}/logo/biodiversity_cz.svg" alt="Biodiversity.cz" height="200"></div>
+
+        <h2>Welcome to the Herbarium Collections Repository!</h2>
+
+        <p>
+            Thank you for registering with the repository.
+        </p>
+
+        <p>
+            This repository is intended for institutional herbaria and
+            cannot be used by individual users.
+            Please see the
+            <a href="https://biodiversity-cz.github.io/herbarium-documentation/">
+                documentation
+            </a>
+            for more information.
+        </p>
+
+        <p>
+            If you are eligible to provide images from your institution's
+            herbarium, please ask the main curator of your institution
+            (see <a n:href=":Front:Home:contact">Contacts</a> to find out
+            who is in charge) to assign your account to the appropriate herbarium.
+        </p>
+
+    </div>
 </div>

@@ -40,7 +40,7 @@ abstract class SecuredPresenter extends BasePresenter
         } else {
             // Handle users without herbarium (new OpenID users)
             // Redirect to a page where they can select/request a herbarium
-            if (!$this->presenter->isLinkCurrent(':Admin:Herbarium:request')) {
+            if (!$this->getPresenter()->isLinkCurrent(':Admin:Herbarium:request')) {
                 $this->redirect(':Admin:Herbarium:request');
             }
         }
