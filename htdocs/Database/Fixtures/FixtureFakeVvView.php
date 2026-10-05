@@ -34,7 +34,9 @@ class FixtureFakeVvView extends FixtureBase
             'genus_value' AS genus,
             'scientificName_value' AS scientific_name,
             'specificEpithet_value' AS specific_epithet,
-            'scientificNameAuthorship_value' AS scientific_name_authorship
+            'scientificNameAuthorship_value' AS scientific_name_authorship,
+            'handwritten' AS handwritten,
+            'typus' AS typus
            FROM photos p;
         ";
         $manager->getConnection()->executeQuery($sql);

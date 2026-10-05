@@ -11,6 +11,7 @@ use App\Model\Database\Entity\PhotosStatus;
 use App\Services\DatabotsResultService;
 use App\Services\EntityServices\PhotoService;
 use App\Services\Exceptions\ServiceException;
+use App\Services\VoucherVisionService;
 use Contributte\Datagrid\Column\Action\Confirmation\StringConfirmation;
 use Contributte\Datagrid\Datagrid;
 use Doctrine\ORM\QueryBuilder;
@@ -24,7 +25,7 @@ class ImportedPhotosGrid extends Control
 {
     private Datagrid $grid;
 
-    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsResultService $databotsService)
+    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsResultService $databotsService, protected VoucherVisionService $voucherVisionService)
     {
         $this->grid = $this->gridFactory->createBaseDatagrid();
     }
@@ -190,10 +191,6 @@ class ImportedPhotosGrid extends Control
                 return PhotosStatus::EMBARGO === $item->status->id;
             });
 
-        $this->grid->addExportCsvFiltered('Csv export (filtered)', 'curator_imported.csv')
-            ->setTitle('Csv export (filtered)')
-            ->setIcon('file-csv');
-
         $this->grid->addToolbarButton('exportAll', 'Export XLSX (all)')
             ->setClass('btn btn-xs btn-success')
             ->setIcon('file-excel')
@@ -233,6 +230,7 @@ class ImportedPhotosGrid extends Control
             $headers = ['id' => 'integer',
                 'processed at' => 'datetime',
                 'specimen' => 'string',
+                'specimenPID' => 'string',
                 'original filename' => 'string',
                 'type' => 'string',
                 'width' => 'integer',
@@ -247,6 +245,7 @@ class ImportedPhotosGrid extends Control
                     $photo->id,
                     $photo->createdAt->format('Y-m-d H:i:s'),
                     $photo->getFullSpecimenId(),
+                    $photo->specimenPid,
                     $photo->originalFilename,
                     $photo->type->name,
                     $photo->width,
@@ -269,100 +268,7 @@ class ImportedPhotosGrid extends Control
     private function exportVouvisToJACQXlsx(iterable $data): void
     {
         $filename = tempnam(sys_get_temp_dir(), 'vouchervision_export_').'.xlsx';
-        $writer = new \XLSXWriter();
-
-        if (!empty($data)) {
-            $headers = [
-                'ID' => 'string',
-                'HerbNummer' => 'string',
-                'collectionID' => 'string',
-                'Collection' => 'string',
-                'status' => 'string',
-                'taxon' => 'string',
-                'Sammler' => 'string',
-                'series' => 'string',
-                'series_number' => 'string',
-                'Nummer' => 'string',
-                'alt_number' => 'string',
-                'Datum' => 'string',
-                'Datum2' => 'string',
-                'det' => 'string',
-                'typified' => 'string',
-                'typus' => 'string',
-                'taxon_alt' => 'string',
-                'nation_engl' => 'string',
-                'provinz' => 'string',
-                'Fundort' => 'string',
-                'Fundort_engl' => 'string',
-                'Habitat' => 'string',
-                'Habitus' => 'string',
-                'Bemerkungen' => 'string',
-                'coord_NS' => 'string',
-                'lat_degree' => 'string',
-                'lat_minute' => 'string',
-                'lat_second' => 'string',
-                'coord_WE' => 'string',
-                'long_degree' => 'string',
-                'long_minute' => 'string',
-                'long_second' => 'string',
-                'exactness' => 'string',
-                'quadrant' => 'string',
-                'quadrant_sub' => 'string',
-                'alt_min' => 'string',
-                'alt_max' => 'string',
-                'digital_image' => 'string',
-                'digital_image_obs' => 'string',
-                'observation' => 'string',
-            ];
-            $writer->writeSheetHeader('Export', $headers);
-
-            foreach ($data as $photo) {
-                if (null === $photo->transcription) {
-                    continue;
-                }
-
-                /** @var Photos $photo */
-                $row = [
-                    null,
-                    $photo->getSpecimenIdFixedWidth(),
-                    null,
-                    null,
-                    null,
-                    $photo->transcription->scientificName,
-                    $photo->transcription->recordedBy,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $photo->transcription->eventDate,
-                    null,
-                    $photo->transcription->identifiedBy,
-                    null,
-                    null,
-                    null,
-                    $photo->transcription->country,
-                    $photo->transcription->stateProvince,
-                    null,
-                    $photo->transcription->locality,
-                    null,
-                    null,
-                    $photo->transcription->occurrenceRemarks,
-                    ...$photo->transcription->getLatitudeDMS(),
-                    ...$photo->transcription->getLongitudeDMS(),
-                    null,
-                    null,
-                    null,
-                    $photo->transcription->minimumElevationInMeters,
-                    null,
-                    '1',
-                    null,
-                    null,
-                    (string) $photo->transcription,
-                ];
-                $writer->writeSheetRow('Export', $row);
-            }
-        }
-
+        $writer = $this->voucherVisionService->prepareExcel($data);
         $writer->writeToFile($filename);
 
         $this->getPresenter()->sendResponse(new FileResponse(

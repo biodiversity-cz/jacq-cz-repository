@@ -168,7 +168,6 @@ IS \'Register databot. Return TRUE if a databot is successfully registered and a
         $this->addSql('GRANT pg_read_all_data TO backup WITH INHERIT OPTION, SET OPTION;');
         $this->addSql('GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO herbarium');
 
-
         $this->addSql('grant usage on schema public to herbarium_app;');
         $this->addSql('grant usage on schema databots to herbarium_app;');
         $this->addSql('grant select, insert, update, delete on all tables in schema databots to herbarium_app;');

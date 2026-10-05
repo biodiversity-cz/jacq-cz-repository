@@ -10,6 +10,7 @@ use App\Model\Database\Entity\Photos;
 use App\Model\Database\Entity\PhotosStatus;
 use App\Services\DatabotsResultService;
 use App\Services\EntityServices\PhotoService;
+use App\Services\VoucherVisionService;
 use Contributte\Datagrid\Datagrid;
 use Doctrine\ORM\QueryBuilder;
 use Nette\Application\Responses\FileResponse;
@@ -21,7 +22,7 @@ class PublishedPhotosGrid extends Control
 {
     private Datagrid $grid;
 
-    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsResultService $databotsService)
+    public function __construct(protected readonly PhotoService $photoService, protected readonly BaseGridFactory $gridFactory, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsResultService $databotsService, protected VoucherVisionService $voucherVisionService)
     {
         $this->grid = $this->gridFactory->createBaseDatagrid();
     }
@@ -88,10 +89,6 @@ class PublishedPhotosGrid extends Control
         //                return $this->databotsService->getQualityEvaluation($item);
         //            });
 
-        $this->grid->addExportCsvFiltered('Csv export (filtered)', 'curator_imported.csv')
-            ->setTitle('Csv export (filtered)')
-            ->setIcon('file-csv');
-
         $this->grid->addToolbarButton('exportAll', 'Export XLSX (all)')
             ->setClass('btn btn-xs btn-success')
             ->setIcon('file-excel')
@@ -101,6 +98,12 @@ class PublishedPhotosGrid extends Control
             $this->exportToXlsx($data);
         }, true)
             ->setClass('btn btn-xs btn-info')
+            ->setIcon('file-excel');
+
+        $this->grid->addExportCallback('Export VoucherVision for JACQ XLSX (filtered)', function ($data): void {
+            $this->exportVouvisToJACQXlsx($data);
+        }, true)
+            ->setClass('btn btn-xs btn-warning')
             ->setIcon('file-excel');
 
         return $this->grid;
@@ -123,6 +126,7 @@ class PublishedPhotosGrid extends Control
             $headers = ['id' => 'integer',
                 'processed at' => 'datetime',
                 'specimen' => 'string',
+                'specimenPID' => 'string',
                 'original filename' => 'string',
                 'type' => 'string',
                 'width' => 'integer',
@@ -137,6 +141,7 @@ class PublishedPhotosGrid extends Control
                     $photo->id,
                     $photo->createdAt->format('Y-m-d H:i:s'),
                     $photo->getFullSpecimenId(),
+                    $photo->specimenPid,
                     $photo->originalFilename,
                     $photo->type->name,
                     $photo->width,
@@ -152,6 +157,19 @@ class PublishedPhotosGrid extends Control
         $this->getPresenter()->sendResponse(new FileResponse(
             $filename,
             'export.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ));
+    }
+
+    private function exportVouvisToJACQXlsx(iterable $data): void
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'vouchervision_export_').'.xlsx';
+        $writer = $this->voucherVisionService->prepareExcel($data);
+        $writer->writeToFile($filename);
+
+        $this->getPresenter()->sendResponse(new FileResponse(
+            $filename,
+            'vouchervision_jacq_export.xlsx',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ));
     }
