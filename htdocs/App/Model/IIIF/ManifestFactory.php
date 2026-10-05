@@ -116,7 +116,7 @@ class ManifestFactory
     {
         $canvas = new Canvas();
         $metadata = new Metadata();
-        $metadata->addLabelValue('Archive Master file (TIFF)', "<a href='".$this->linkGenerator->link('Front:Repository:archiveImage', [$photo->id])."'>download original</a>");
+        $metadata->addLabelValue('Archive Master file (TIFF)', '<a href="'.$this->linkGenerator->link('Front:Repository:archiveImage', [$photo->id]).'">download original</a>');
         $canvas
             ->setID($this->repositoryConfiguration->getImageServerInfoUrl($photo).'#canvas')
             ->addLabel($photo->jp2Filename)

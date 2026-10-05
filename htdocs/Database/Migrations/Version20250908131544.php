@@ -106,13 +106,75 @@ IS \'Register databot. Return TRUE if a databot is successfully registered and a
                 IF NOT EXISTS (
                     SELECT 1
                     FROM pg_roles
-                    WHERE rolname = 'databot'
+                    WHERE rolname = 'herbarium_databot'
                 ) THEN
-                    CREATE ROLE databot LOGIN PASSWORD 'databot';
+                    CREATE ROLE herbarium_databot LOGIN PASSWORD 'herbarium_databot';
                 END IF;
             END
             $$;
         ");
+        $this->addSql("
+        DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1
+                    FROM pg_roles
+                    WHERE rolname = 'herbarium_app'
+                ) THEN
+                    CREATE ROLE herbarium_app LOGIN PASSWORD 'herbarium_app';
+                END IF;
+            END
+            $$;
+        ");
+        $this->addSql("
+        DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1
+                    FROM pg_roles
+                    WHERE rolname = 'herbarium_ipt'
+                ) THEN
+                    CREATE ROLE herbarium_ipt LOGIN PASSWORD 'herbarium_ipt';
+                END IF;
+            END
+            $$;
+        ");
+        $this->addSql("
+        DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1
+                    FROM pg_roles
+                    WHERE rolname = 'api'
+                ) THEN
+                    CREATE ROLE api LOGIN PASSWORD 'api';
+                END IF;
+            END
+            $$;
+        ");
+        $this->addSql("
+        DO $$
+            BEGIN
+                IF NOT EXISTS (
+                    SELECT 1
+                    FROM pg_roles
+                    WHERE rolname = 'backup'
+                ) THEN
+                    CREATE ROLE backup LOGIN PASSWORD 'backup';
+                END IF;
+            END
+            $$;
+        ");
+        $this->addSql('GRANT pg_read_all_data TO backup WITH INHERIT OPTION, SET OPTION;');
+        $this->addSql('GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO herbarium');
+
+        $this->addSql('grant usage on schema public to herbarium_app;');
+        $this->addSql('grant usage on schema databots to herbarium_app;');
+        $this->addSql('grant select, insert, update, delete on all tables in schema databots to herbarium_app;');
+        $this->addSql('GRANT ALL ON SCHEMA public TO  herbarium_app;');
+        $this->addSql('grant select, insert, update, delete on all tables in schema public to herbarium_app;');
+        $this->addSql('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO herbarium_app');
+
         $this->addSql('GRANT USAGE ON SCHEMA public TO herbarium_databot');
         $this->addSql('GRANT SELECT ON public.photos TO herbarium_databot');
         $this->addSql('GRANT SELECT ON public.photos_status TO herbarium_databot');

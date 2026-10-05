@@ -25,11 +25,11 @@ class Specimen
 
                 if (strlen($numericPart) < $this->herbarium->digitsCount) {
                     return $this->herbarium->acronym.'-'.str_pad(
-                            $numericPart,
-                            $this->herbarium->digitsCount,
-                            '0',
-                            STR_PAD_LEFT
-                        ) . substr($this->id, strlen($numericPart));
+                        $numericPart,
+                        $this->herbarium->digitsCount,
+                        '0',
+                        STR_PAD_LEFT
+                    ).substr($this->id, strlen($numericPart));
                 }
             }
         }
