@@ -67,7 +67,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             echo $writer->outputMemory();
             $this->terminate();
         } catch (BadRequestException $e) {
-            //            $this->error($e->getMessage());
+            //                        $this->error($e->getMessage());
             $writer = $this->createErrorResponse($e->getMessage(),
                 $this->mapHttpCodeToOaiError($e->getCode()));
             $writer->endElement(); // OAI-PMH
@@ -77,7 +77,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         } catch (AbortException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            //             throw $e;
+            throw $e;
             $writer = $this->createErrorResponse('Internal repository error', 'badArgument');
             $writer->endElement(); // OAI-PMH
             $writer->endDocument();
@@ -96,7 +96,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $writer->writeElement('protocolVersion', self::OAI_PMH_VERSION);
         $writer->writeElement('adminEmail', self::ADMIN_EMAIL);
         $writer->writeElement('earliestDatestamp',
-            $this->recordProvider->getEarliestDatestamp()?->format(DATE_ATOM) ?? self::EARLIEST_DATESTAMP);
+            $this->recordProvider->getEarliestDatestamp()?->setTimezone(new \DateTimeZone('UTC'))->format(DATE_ATOM) ?? self::EARLIEST_DATESTAMP);
         $writer->writeElement('deletedRecord', 'persistent');
         $writer->writeElement('granularity', 'YYYY-MM-DDThh:mm:ssZ');
         $this->getGeneralDescriptions($writer);
@@ -143,7 +143,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $writer->startElement('ListMetadataFormats');
         foreach ($this->metadataFormats as $format) {
             $writer->startElement('metadataFormat');
-            $writer->writeElement('metadataPrefix', $format->getName());
+            $writer->writeElement('metadataPrefix', $format->getFormatName());
             $writer->writeElement('schema', $format->getSchema());
             $writer->writeElement('metadataNamespace', $format->getMetadataNamespace());
             $writer->endElement();
@@ -292,7 +292,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
         $identifier = $this->recordProvider->generateIdentifier($photo);
         $writer->writeElement('identifier', $identifier);
-        $writer->writeElement('datestamp', $photo->lastEdit->format('Y-m-d\TH:i:s\Z'));
+        $writer->writeElement('datestamp', $photo->lastEdit->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s\Z'));
 
         // Set specs
         $writer->writeElement('setSpec', $photo->herbarium->acronym);
@@ -336,7 +336,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         );
 
         // responseDate
-        $writer->writeElement('responseDate', new \DateTimeImmutable()->format('Y-m-d\TH:i:s\Z'));
+        $writer->writeElement('responseDate', new \DateTimeImmutable()->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s\Z'));
 
         // request element
         $writer->startElement('request');

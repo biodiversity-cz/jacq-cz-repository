@@ -6,6 +6,7 @@ namespace App\Model\CCMM\Models;
 
 use App\Model\CCMM\Traits\XmlSerializableTrait;
 use App\Model\CCMM\XmlSerializable;
+use App\Services\OaiPmh\MetadataFormat\CcmmFormat;
 
 /**
  * Represents a dataset with all its metadata components.
@@ -19,7 +20,7 @@ class Dataset implements XmlSerializable
     public protected(set) array $identifiers = [];
     public protected(set) ?string $version = null;
     public protected(set) ?string $title = null;
-    public protected(set) ?string $keyword = null;
+    public protected(set) ?Keyword $keyword = null;
     public protected(set) array $alternateTitles = [];
     public protected(set) array $qualifiedRelations = [];
     public protected(set) ?string $publicationYear = null;
@@ -83,7 +84,7 @@ class Dataset implements XmlSerializable
         return $this;
     }
 
-    public function setKeyword(?string $keyword): Dataset
+    public function setKeyword(?Keyword $keyword): Dataset
     {
         $this->keyword = $keyword;
 
@@ -111,7 +112,7 @@ class Dataset implements XmlSerializable
         return $this;
     }
 
-    public function addQualifiedRelation(QualifiedRelation $qualifiedRelation): self
+    public function addQualifiedRelation(QualifiedAttribution $qualifiedRelation): self
     {
         $this->qualifiedRelations[] = $qualifiedRelation;
 
@@ -287,8 +288,8 @@ class Dataset implements XmlSerializable
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         // Create the root element with namespaces
-        $element = $document->createElementNS('https://schema.ccmm.cz/research-data/1.0', 'ccmm:dataset');
-        $element->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation', 'https://schema.ccmm.cz/research-data/1.0 https://raw.githubusercontent.com/techlib/CCMM/refs/heads/main/dataset/schema.xsd');
+        $element = $document->createElementNS(CcmmFormat::XML_SCHEMA, 'ccmm:dataset');
+        $element->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation', CcmmFormat::XML_NAMESPACE.' https://raw.githubusercontent.com/techlib/CCMM/refs/heads/main/dataset/schema.xsd');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:gml', 'http://www.opengis.net/gml/3.2');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
@@ -315,7 +316,7 @@ class Dataset implements XmlSerializable
         }
 
         if (null !== $this->keyword) {
-            $keywordElement = $this->createElement($document, 'keyword', $this->keyword);
+            $keywordElement = $this->keyword->toXml($document);
             $element->appendChild($keywordElement);
         }
 

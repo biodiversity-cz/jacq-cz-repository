@@ -14,15 +14,10 @@ class Description implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    public protected(set) ?string $descriptionText = null;
+    public protected(set) ?DescriptionText $descriptionText = null;
     public protected(set) ?DescriptionType $descriptionType = null;
 
-    public function __construct()
-    {
-    }
-
-    // Getters
-    public function getDescriptionText(): ?string
+    public function getDescriptionText(): ?DescriptionText
     {
         return $this->descriptionText;
     }
@@ -32,8 +27,7 @@ class Description implements XmlSerializable
         return $this->descriptionType;
     }
 
-    // Setters
-    public function setDescriptionText(?string $descriptionText): self
+    public function setDescriptionText(?DescriptionText $descriptionText): self
     {
         $this->descriptionText = $descriptionText;
 
@@ -52,7 +46,7 @@ class Description implements XmlSerializable
         $element = $this->createElement($document, $elementName ?? 'description');
 
         if (null !== $this->getDescriptionText()) {
-            $textElement = $this->createElement($document, 'description_text', $this->getDescriptionText());
+            $textElement = $this->getDescriptionText()->toXml($document);
             $element->appendChild($textElement);
         }
 
