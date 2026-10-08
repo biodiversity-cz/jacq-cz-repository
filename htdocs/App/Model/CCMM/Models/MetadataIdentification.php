@@ -15,7 +15,7 @@ class MetadataIdentification implements XmlSerializable
     use XmlSerializableTrait;
 
     /**
-     * @param QualifiedRelation[] $qualifiedRelations
+     * @param QualifiedAttribution[] $qualifiedRelations
      */
     public function __construct(
         public ?string $iri = null,

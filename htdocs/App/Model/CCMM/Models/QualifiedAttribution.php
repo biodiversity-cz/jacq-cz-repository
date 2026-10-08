@@ -10,7 +10,7 @@ use App\Model\CCMM\XmlSerializable;
 /**
  * Represents a qualified relation with a relation (person or organization) and role.
  */
-class QualifiedRelation implements XmlSerializable
+class QualifiedAttribution implements XmlSerializable
 {
     use XmlSerializableTrait;
 
@@ -37,7 +37,7 @@ class QualifiedRelation implements XmlSerializable
 
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
-        $element = $this->createElement($document, $elementName ?? 'qualified_relation');
+        $element = $this->createElement($document, $elementName ?? 'qualified_attribution');
 
         if (null !== $this->relation) {
             $relationElement = $document->createElement('relation');

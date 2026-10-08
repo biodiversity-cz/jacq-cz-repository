@@ -38,7 +38,7 @@ class TimeInstant implements XmlSerializable
         $element = $this->createElement($document, $elementName ?? 'time_instant');
 
         if (null !== $this->getDateTime()) {
-            $dateTimeElement = $this->createElement($document, 'date_time', $this->getDateTime()->format(DATE_ATOM));
+            $dateTimeElement = $this->createElement($document, 'date_time', $this->getDateTime()->setTimezone(new \DateTimeZone('UTC'))->format(DATE_ATOM));
             $element->appendChild($dateTimeElement);
         }
 

@@ -12,6 +12,7 @@ use App\Model\CCMM\Models\ContactPoint;
 use App\Model\CCMM\Models\Dataset;
 use App\Model\CCMM\Models\DateType;
 use App\Model\CCMM\Models\Description;
+use App\Model\CCMM\Models\DescriptionText;
 use App\Model\CCMM\Models\DescriptionType;
 use App\Model\CCMM\Models\Distribution;
 use App\Model\CCMM\Models\DistributionDataService;
@@ -21,9 +22,10 @@ use App\Model\CCMM\Models\DownloadUrl;
 use App\Model\CCMM\Models\Format;
 use App\Model\CCMM\Models\Identifier;
 use App\Model\CCMM\Models\IdentifierScheme;
+use App\Model\CCMM\Models\Keyword;
 use App\Model\CCMM\Models\License;
 use App\Model\CCMM\Models\MediaType;
-use App\Model\CCMM\Models\QualifiedRelation;
+use App\Model\CCMM\Models\QualifiedAttribution;
 use App\Model\CCMM\Models\RelatedResource;
 use App\Model\CCMM\Models\Relation;
 use App\Model\CCMM\Models\ResourceRelationType;
@@ -45,6 +47,10 @@ use Nette\Application\LinkGenerator;
  */
 final class CcmmFormat implements MetadataFormatInterface
 {
+    public const string XML_SCHEMA = 'https://model.ccmm.cz/research-data/dataset/schema.xsd';
+    public const string XML_NAMESPACE = 'https://schema.ccmm.cz/research-data/2.0';
+    public const string NAME = 'Czech Core Metadata Model v2.0';
+
     public function __construct(private LinkGenerator $linkGenerator)
     {
     }
@@ -56,17 +62,17 @@ final class CcmmFormat implements MetadataFormatInterface
 
     public function getSchema(): string
     {
-        return 'https://model.ccmm.cz/research-data/dataset/schema.xsd';
+        return self::XML_SCHEMA;
     }
 
     public function getMetadataNamespace(): string
     {
-        return 'https://schema.ccmm.cz/research-data/1.1';
+        return self::XML_NAMESPACE;
     }
 
     public function getFormatName(): string
     {
-        return 'Czech Core Metadata Model v1.1';
+        return self::NAME;
     }
 
     // TODO pokud geometrii, tak jako WKT ve WGS84 aby to NMA mohl dobře zpracovávat
@@ -88,7 +94,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataset->setRawFundingReference($this->addFunding($item));
         $dataset->addIdentifier($this->getIdentifier($item));
         $dataset
-            ->setKeyword($item->cetafHarvest?->title)
+            ->setKeyword(new Keyword($item->cetafHarvest?->title, Language::LA))
             ->setDescriptions($this->addDescriptions($item))
             ->setTitle('Image associated with a preserved herbarium specimen '.$item->getFullSpecimenId())
             ->setTimeReferences($this->getDates($item))
@@ -112,14 +118,15 @@ final class CcmmFormat implements MetadataFormatInterface
         $description = new Description()
             ->setDescriptionType($descriptionType);
         if (null !== $photo->cetafHarvest) {
-            $description->setDescriptionText($photo->cetafHarvest?->title.
+            $text = $photo->cetafHarvest?->title.
                 ' '.$photo->cetafHarvest?->locality.
                 ' '.$photo->cetafHarvest?->eventDate.
                 ' [Botanical description of material sample harvested from '.$photo->specimenPid.
-                '; last updated on '.$photo->cetafHarvest?->lastEdit->format('Y-m-d').']');
+                '; last updated on '.$photo->cetafHarvest?->lastEdit->format('Y-m-d').']';
         } else {
-            $description->setDescriptionText('Photo documenting herbarium specimen '.$photo->specimenPid.'.');
+            $text = 'Photo documenting herbarium specimen '.$photo->specimenPid.'.';
         }
+        $description->setDescriptionText(new DescriptionText($text, Language::EN));
 
         return [$description];
     }
@@ -252,7 +259,7 @@ final class CcmmFormat implements MetadataFormatInterface
     }
 
     /**
-     * @return QualifiedRelation[]
+     * @return QualifiedAttribution[]
      */
     private function getQualifiedRelations(Photos $photo): array
     {
@@ -261,7 +268,7 @@ final class CcmmFormat implements MetadataFormatInterface
             ->addLabel('Creator', Language::EN)
             ->addLabel('Autor', Language::CS);
         $creatorRelation = new Relation();
-        $creator = new QualifiedRelation()
+        $creator = new QualifiedAttribution()
             ->setRole($creatorRole)
             ->setRelation($creatorRelation);
 
@@ -270,7 +277,7 @@ final class CcmmFormat implements MetadataFormatInterface
             ->addLabel('Publisher', Language::EN)
             ->addLabel('Vydavatel', Language::CS);
         $publisherRelation = new Relation();
-        $publisher = new QualifiedRelation()
+        $publisher = new QualifiedAttribution()
             ->setRole($publisherRole)
             ->setRelation($publisherRelation);
 
