@@ -6,6 +6,7 @@ namespace App\Model\CCMM\Models;
 
 use App\Model\CCMM\Traits\XmlSerializableTrait;
 use App\Model\CCMM\XmlSerializable;
+use App\UI\Front\OaiPmh\OaiPmhPresenter;
 
 /**
  * Represents a time instant with date/time and date type.
@@ -38,7 +39,7 @@ class TimeInstant implements XmlSerializable
         $element = $this->createElement($document, $elementName ?? 'time_instant');
 
         if (null !== $this->getDateTime()) {
-            $dateTimeElement = $this->createElement($document, 'date_time', $this->getDateTime()->setTimezone(new \DateTimeZone('UTC'))->format(DATE_ATOM));
+            $dateTimeElement = $this->createElement($document, 'date_time', $this->getDateTime()->setTimezone(new \DateTimeZone('UTC'))->format(OaiPmhPresenter::TIME_FORMAT));
             $element->appendChild($dateTimeElement);
         }
 

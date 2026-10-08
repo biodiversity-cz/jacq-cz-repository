@@ -25,6 +25,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     public const string REPOSITORY_DOMAIN = 'herbarium.biodiversity.cz';
     public const string EARLIEST_DATESTAMP = '2024-01-01T00:00:00Z';
 
+    public const string TIME_FORMAT = 'Y-m-d\TH:i:s\Z';
     private const int DEFAULT_PAGE_SIZE = 100;
     private const int MAX_PAGE_SIZE = 1000;
 
@@ -96,7 +97,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $writer->writeElement('protocolVersion', self::OAI_PMH_VERSION);
         $writer->writeElement('adminEmail', self::ADMIN_EMAIL);
         $writer->writeElement('earliestDatestamp',
-            $this->recordProvider->getEarliestDatestamp()?->setTimezone(new \DateTimeZone('UTC'))->format(DATE_ATOM) ?? self::EARLIEST_DATESTAMP);
+            $this->recordProvider->getEarliestDatestamp()?->setTimezone(new \DateTimeZone('UTC'))->format(OaiPmhPresenter::TIME_FORMAT) ?? self::EARLIEST_DATESTAMP);
         $writer->writeElement('deletedRecord', 'persistent');
         $writer->writeElement('granularity', 'YYYY-MM-DDThh:mm:ssZ');
         $this->getGeneralDescriptions($writer);
@@ -143,7 +144,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $writer->startElement('ListMetadataFormats');
         foreach ($this->metadataFormats as $format) {
             $writer->startElement('metadataFormat');
-            $writer->writeElement('metadataPrefix', $format->getFormatName());
+            $writer->writeElement('metadataPrefix', $format->getMetadataPrefix());
             $writer->writeElement('schema', $format->getSchema());
             $writer->writeElement('metadataNamespace', $format->getMetadataNamespace());
             $writer->endElement();
@@ -292,7 +293,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
         $identifier = $this->recordProvider->generateIdentifier($photo);
         $writer->writeElement('identifier', $identifier);
-        $writer->writeElement('datestamp', $photo->lastEdit->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s\Z'));
+        $writer->writeElement('datestamp', $photo->lastEdit->setTimezone(new \DateTimeZone('UTC'))->format(OaiPmhPresenter::TIME_FORMAT));
 
         // Set specs
         $writer->writeElement('setSpec', $photo->herbarium->acronym);
@@ -336,7 +337,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         );
 
         // responseDate
-        $writer->writeElement('responseDate', new \DateTimeImmutable()->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s\Z'));
+        $writer->writeElement('responseDate', new \DateTimeImmutable()->setTimezone(new \DateTimeZone('UTC'))->format(OaiPmhPresenter::TIME_FORMAT));
 
         // request element
         $writer->startElement('request');
