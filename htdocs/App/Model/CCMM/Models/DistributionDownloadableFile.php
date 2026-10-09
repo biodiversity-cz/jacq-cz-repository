@@ -83,9 +83,9 @@ class DistributionDownloadableFile implements XmlSerializable
         return $this;
     }
 
-    public function addTitle(string $title, Language $lang = Language::CS): self
+    public function addTitle(string $title): self
     {
-        $this->titles[$lang->value] = $title;
+        $this->titles[] = $title;
 
         return $this;
     }
@@ -151,7 +151,6 @@ class DistributionDownloadableFile implements XmlSerializable
         if (!empty($this->getTitles())) {
             foreach ($this->getTitles() as $lang => $text) {
                 $titleElement = $this->createElement($document, 'title', $text);
-                $titleElement->setAttribute('xml:lang', $lang);
                 $element->appendChild($titleElement);
             }
         }

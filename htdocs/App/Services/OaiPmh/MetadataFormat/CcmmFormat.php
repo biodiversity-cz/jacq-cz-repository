@@ -15,9 +15,7 @@ use App\Model\CCMM\Models\Description;
 use App\Model\CCMM\Models\DescriptionText;
 use App\Model\CCMM\Models\DescriptionType;
 use App\Model\CCMM\Models\Distribution;
-use App\Model\CCMM\Models\DistributionDataService;
 use App\Model\CCMM\Models\DistributionDownloadableFile;
-use App\Model\CCMM\Models\Documentation;
 use App\Model\CCMM\Models\DownloadUrl;
 use App\Model\CCMM\Models\Format;
 use App\Model\CCMM\Models\Identifier;
@@ -36,7 +34,6 @@ use App\Model\CCMM\Models\SubjectScheme;
 use App\Model\CCMM\Models\TermsOfUse;
 use App\Model\CCMM\Models\TimeInstant;
 use App\Model\CCMM\Models\TimeReference;
-use App\Model\CCMM\Models\Title;
 use App\Model\Database\Entity\Photos;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Order;
@@ -96,7 +93,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataset
             ->setKeyword(new Keyword($item->cetafHarvest?->title, Language::LA))
             ->setDescriptions($this->addDescriptions($item))
-            ->setTitle('Image associated with a preserved herbarium specimen '.$item->getFullSpecimenId())
+            ->setTitle('Image associated with a preserved herbarium specimen ' . $item->getFullSpecimenId())
             ->setTimeReferences($this->getDates($item))
             ->setPublicationYear($item->issuedAt?->format('Y'))
             ->setTermsOfUse($this->getLicence($item))
@@ -118,13 +115,13 @@ final class CcmmFormat implements MetadataFormatInterface
         $description = new Description()
             ->setDescriptionType($descriptionType);
         if (null !== $photo->cetafHarvest) {
-            $text = $photo->cetafHarvest?->title.
-                ' '.$photo->cetafHarvest?->locality.
-                ' '.$photo->cetafHarvest?->eventDate.
-                ' [Botanical description of material sample harvested from '.$photo->specimenPid.
-                '; last updated on '.$photo->cetafHarvest?->lastEdit->format('Y-m-d').']';
+            $text = $photo->cetafHarvest?->title .
+                ' ' . $photo->cetafHarvest?->locality .
+                ' ' . $photo->cetafHarvest?->eventDate .
+                ' [Botanical description of material sample harvested from ' . $photo->specimenPid .
+                '; last updated on ' . $photo->cetafHarvest?->lastEdit->format('Y-m-d') . ']';
         } else {
-            $text = 'Photo documenting herbarium specimen '.$photo->specimenPid.'.';
+            $text = 'Photo documenting herbarium specimen ' . $photo->specimenPid . '.';
         }
         $description->setDescriptionText(new DescriptionText($text, Language::EN));
 
@@ -153,71 +150,87 @@ final class CcmmFormat implements MetadataFormatInterface
         return [$specimen];
     }
 
+    private function buildIndividualDistribution(array $data): Distribution
+    {
+
+        $dataDownload = new DistributionDownloadableFile()
+            ->setDownloadUrl(new DownloadUrl()->setIri($data['iri']))
+            ->setFormat($data['format'])
+            ->setMediaType($data['mediaType'])
+            ->addTitle('original data');
+        if (isset($data['checksum'])) {
+            $dataDownload->setChecksum($data['checksum']);
+        }
+        if (isset($data['byteSize'])) {
+            $dataDownload->setByteSize($data['byteSize']);
+        }
+
+        $distribution = new Distribution();
+        $distribution->setDistributionDownloadableFile($dataDownload);
+        return $distribution;
+    }
+
     /**
      * @return Distribution[]
      */
     private function addDistributions(Photos $photo): array
     {
-        $items = [];
+        $formatTif = new Format()
+            ->addLabel('TIFF', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
+        $mediaTypeTif = new MediaType()
+            ->addLabel('TIFF', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
+        $formatJP2 = new Format()
+            ->addLabel('JPEG 2000', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/JPEG2000');
+        $mediaTypeJP2 = new MediaType()
+            ->addLabel('JPEG 2000', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/JPEG2000');
+        $formatPng = new Format()
+            ->addLabel('PNG', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/PNG');
+        $mediaTypePng = new MediaType()
+            ->addLabel('PNG', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/PNG');
 
-        // Databot thumbnails
-        $dataService = new DistributionDataService();
-        $documentation = new Documentation();
-        $documentation
-            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-thumb');
-        $dataService
-            ->setIri($this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->id]))
-            ->addTitle('1280px thumbnail', Language::EN)
-            ->addDescription('Serves image as thumbnail suitable for AI processing with longer side equal to 1280px', Language::EN)
-            ->setDocumentation($documentation);
-
-        $distribution = new Distribution();
-        $distribution->setDistributionDataService($dataService);
-        $items[] = $distribution;
-
-        // JPEG2000 fullsize
-        $dataService = new DistributionDataService();
-        $documentation = new Documentation();
-        $documentation
-            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-jp2');
-        $dataService
-            ->setIri($this->linkGenerator->link('Front:Repository:Jp2Image', [$photo->id]))
-            ->addTitle('JPEG 2000', Language::EN)
-            ->addDescription('Serves full size image in JPEG 2000 format.', Language::EN)
-            ->setDocumentation($documentation);
-
-        $distribution = new Distribution();
-        $distribution->setDistributionDataService($dataService);
-        $items[] = $distribution;
-
-        // TIFF Master
-        $dataDownload = new DistributionDownloadableFile();
-        $checksum = new Checksum()
+        $checksumMaster = new Checksum()
             ->setChecksumValue($photo->archiveFileChecksum)
             ->setAlgorithm('md5');
-        $format = new Format()
-            ->addLabel('TIFF')
-            ->addLabel('TIFF', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
-        $mediaType = new MediaType()
-            ->addLabel('TIFF')
-            ->addLabel('TIFF', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
-        $downloadUrl = new DownloadUrl()->setIri($this->linkGenerator->link('Front:Repository:ArchiveImage', [$photo->id]))->addLabel('original data', Language::EN);
-        $documentation = new Documentation();
-        $documentation
-            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-master-file');
-        $dataDownload
-            ->setDownloadUrl($downloadUrl)
-            ->setFormat($format)
-            ->setByteSize($photo->archiveFileSize)
-            ->setChecksum($checksum)
-            ->setMediaType($mediaType)
-            ->addTitle('original data', Language::EN);
 
-        $distribution = new Distribution();
-        $distribution->setDistributionDownloadableFile($dataDownload);
-        $items[] = $distribution;
+        $data = [
+            'master' => [
+                'iri' => $this->linkGenerator->link('Front:Repository:ArchiveImage', [$photo->id]),
+                'title' => 'original data',
+                'description' => '',
+                'documentation' => 'https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-master-file',
+                'checksum' => $checksumMaster,
+                'format' => $formatTif,
+                'mediaType' => $mediaTypeTif,
+                'byteSize' => $photo->archiveFileSize,
+            ],
+            'jpeg2000' => [
+                'iri' => $this->linkGenerator->link('Front:Repository:Jp2Image', [$photo->id]),
+                'title' => 'JPEG 2000',
+                'description' => 'Serves full size image in JPEG 2000 format.',
+                'documentation' => 'https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-jp2',
+                'format' => $formatJP2,
+                'mediaType' => $mediaTypeJP2,
+                'byteSize' => $photo->JP2FileSize
+            ],
+            'thumb' => [
+                'iri' => $this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->id]),
+                'title' => '1280px thumbnail',
+                'description' => 'Serves image as thumbnail suitable for AI processing with longer side equal to 1280px',
+                'documentation' => 'https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-thumb',
+                'format' => $formatPng,
+                'mediaType' => $mediaTypePng
+            ]
+        ];
+
+        foreach ($data as $item) {
+            $items[] = $this->buildIndividualDistribution($item);
+        }
 
         return $items;
     }
@@ -289,15 +302,10 @@ final class CcmmFormat implements MetadataFormatInterface
      */
     private function getSubject(): array
     {
-        $title = new Title()
-            ->setTitle('Plant sciences, botany')
-            ->setLanguage(Language::EN);
-        $subjectScheme = new SubjectScheme()
-            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/');
-        $element = new Subject()
-            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/10000/10600/10611')
-            ->setTitle($title)
-            ->setSubjectScheme($subjectScheme);
+
+        $element = new Subject(new SubjectScheme()
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/'))
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/10000/10600/10611');
 
         return [$element];
     }
@@ -334,7 +342,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $scheme = new IdentifierScheme();
         $scheme->setIri('https://n2t.net/.info/ark')
             ->addLabel('ARK');
-        $element->setIri('https://n2t.net/'.$photo->pid)
+        $element->setIri('https://n2t.net/' . $photo->pid)
             ->setValue($photo->pid)
             ->setScheme($scheme);
 

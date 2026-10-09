@@ -78,7 +78,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         } catch (AbortException $e) {
             throw $e;
         } catch (\Throwable $e) {
-            throw $e;
+//            throw $e;
             $writer = $this->createErrorResponse('Internal repository error', 'badArgument');
             $writer->endElement(); // OAI-PMH
             $writer->endDocument();
