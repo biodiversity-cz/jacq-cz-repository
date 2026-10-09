@@ -6,9 +6,8 @@ namespace App\Services\OaiPmh\MetadataFormat;
 
 use App\Model\CCMM\Enum\Language;
 use App\Model\CCMM\Models\AccessRights;
-use App\Model\CCMM\Models\Address;
 use App\Model\CCMM\Models\Checksum;
-use App\Model\CCMM\Models\ContactPoint;
+use App\Model\CCMM\Models\ConformsToStandard;
 use App\Model\CCMM\Models\Dataset;
 use App\Model\CCMM\Models\DateType;
 use App\Model\CCMM\Models\Description;
@@ -21,22 +20,24 @@ use App\Model\CCMM\Models\Format;
 use App\Model\CCMM\Models\Identifier;
 use App\Model\CCMM\Models\IdentifierScheme;
 use App\Model\CCMM\Models\Keyword;
-use App\Model\CCMM\Models\License;
+use App\Model\CCMM\Models\Licence;
+use App\Model\CCMM\Models\Location;
 use App\Model\CCMM\Models\MediaType;
+use App\Model\CCMM\Models\MetadataIdentification;
+use App\Model\CCMM\Models\OriginalRepository;
 use App\Model\CCMM\Models\QualifiedAttribution;
 use App\Model\CCMM\Models\RelatedResource;
 use App\Model\CCMM\Models\Relation;
+use App\Model\CCMM\Models\RelationType;
 use App\Model\CCMM\Models\ResourceRelationType;
 use App\Model\CCMM\Models\ResourceType;
+use App\Model\CCMM\Models\Rights;
 use App\Model\CCMM\Models\Role;
 use App\Model\CCMM\Models\Subject;
 use App\Model\CCMM\Models\SubjectScheme;
-use App\Model\CCMM\Models\TermsOfUse;
 use App\Model\CCMM\Models\TimeInstant;
 use App\Model\CCMM\Models\TimeReference;
 use App\Model\Database\Entity\Photos;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Order;
 use Nette\Application\LinkGenerator;
 
 /**
@@ -81,7 +82,7 @@ final class CcmmFormat implements MetadataFormatInterface
 
         $doc = new \DOMDocument('1.0', 'UTF-8');
 
-        $dataset = new Dataset();
+        $dataset = new Dataset('https://n2t.net/' . $item->pid);
 
         foreach ($this->addDistributions($item) as $distribution) {
             $dataset->addDistribution($distribution);
@@ -96,12 +97,31 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setTitle('Image associated with a preserved herbarium specimen ' . $item->getFullSpecimenId())
             ->setTimeReferences($this->getDates($item))
             ->setPublicationYear($item->issuedAt?->format('Y'))
-            ->setTermsOfUse($this->getLicence($item))
             ->setSubjects($this->getSubject())
             ->setQualifiedRelations($this->getQualifiedRelations($item))
-            ->setRelatedResources($this->addRelatedResources($item));
+            ->setRelatedResources($this->addRelatedResources($item))
+            ->setMetadataIdentification($this->getMetadataIdentification($item))
+            ->setAccessRights($this->getAccessRights());
 
         return $dataset->toXml($doc);
+    }
+
+
+    private function getMetadataIdentification(Photos $photo): MetadataIdentification
+    {
+        $qa = new QualifiedAttribution();
+        $cs = new ConformsToStandard()->setIri(CcmmFormat::XML_NAMESPACE)->addLabel('Czech Core Metadata Model for Research Data 2.0.0', Language::EN);
+        $or = new OriginalRepository()
+            ->setIri($this->linkGenerator->link('Front:Home:'))
+            ->addLabel('Původní repozitář', Language::CS)
+            ->setDescription('')
+            ->setQualifiedAttributions([$qa]);
+        $item = new MetadataIdentification()->setQualifiedAttributions([$qa])
+            ->setDateCreated($photo->issuedAt)
+            ->setDateUpdated($photo->lastEdit)
+            ->setConformsToStandard($cs)
+            ->setOriginalRepository($or);
+        return $item;
     }
 
     /**
@@ -154,16 +174,15 @@ final class CcmmFormat implements MetadataFormatInterface
     {
 
         $dataDownload = new DistributionDownloadableFile()
+            ->setAccessUrl('https://biodiversity-cz.github.io/herbarium-documentation/')
             ->setDownloadUrl(new DownloadUrl()->setIri($data['iri']))
             ->setFormat($data['format'])
             ->setMediaType($data['mediaType'])
-            ->addTitle('original data');
-        if (isset($data['checksum'])) {
-            $dataDownload->setChecksum($data['checksum']);
-        }
-        if (isset($data['byteSize'])) {
-            $dataDownload->setByteSize($data['byteSize']);
-        }
+            ->addTitle('original data')
+            ->setChecksum($data['checksum'] ?? null)
+            ->setByteSize($data['byteSize'])
+            ->setAccessRights($this->getRights())
+            ->setLicense($this->getLicence());
 
         $distribution = new Distribution();
         $distribution->setDistributionDownloadableFile($dataDownload);
@@ -196,7 +215,7 @@ final class CcmmFormat implements MetadataFormatInterface
 
         $checksumMaster = new Checksum()
             ->setChecksumValue($photo->archiveFileChecksum)
-            ->setAlgorithm('md5');
+            ->setAlgorithm('http://spdx.org/rdf/terms#checksumAlgorithm_md5');
 
         $data = [
             'master' => [
@@ -224,7 +243,8 @@ final class CcmmFormat implements MetadataFormatInterface
                 'description' => 'Serves image as thumbnail suitable for AI processing with longer side equal to 1280px',
                 'documentation' => 'https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-thumb',
                 'format' => $formatPng,
-                'mediaType' => $mediaTypePng
+                'mediaType' => $mediaTypePng,
+                'byteSize' => (int)($photo->JP2FileSize / 100), //TODO fake - but in CCMM is mandatory
             ]
         ];
 
@@ -245,30 +265,47 @@ final class CcmmFormat implements MetadataFormatInterface
         return $element;
     }
 
-    private function getLicence(Photos $photo): TermsOfUse
+    /**
+     * @return Location[]
+     */
+    private function getLocation(Photos $photo): array
+    {
+        // TODO - cETAF harvest does not include coordinates - should we harvest elsewhere..?
+        $location = new Location(new RelationType()
+            ->setIri('̈́https://vocabs.repo.cz/LocationRelation/en/page/Refers')
+            ->addLabel('Refers to the location', Language::EN)
+            ->addLabel('Týká se lokace', Language::CS));
+
+        return [$location];
+    }
+
+    private function getLicence(): Licence
+    {
+        $license = new Licence()
+            ->setIri('https://creativecommons.org/licenses/by/4.0/');
+        // ->addLabel('Attribution 4.0 International', Language::EN);
+
+        return $license;
+    }
+
+    private function getAccessRights(): AccessRights
     {
         $accesRights = new AccessRights()
             ->setIri('http://purl.org/coar/access_right/c_abf2')
             ->addLabel('open access', Language::EN)
             ->addLabel('otevřený přístup', Language::CS);
-        $person = $photo->herbarium->contacts->matching(
-            Criteria::create()->orderBy(['surname' => Order::Ascending])
-        )
-            ->first();
-        $address = new Address()
-            ->setFullAddress($photo->herbarium->address);
-        $contactPoint = new ContactPoint()
-            ->setEmail($person->email)
-            ->setAddress($address);
-        $license = new License()
-            ->setIri('https://creativecommons.org/licenses/by/4.0/')
-            ->addLabel('Attribution 4.0 International', Language::EN);
-        $element = new TermsOfUse()
-            ->setAccessRights($accesRights)
-            ->setContactPoint($contactPoint)
-            ->setLicense($license);
 
-        return $element;
+        return $accesRights;
+    }
+
+    private function getRights(): Rights
+    {
+        $accesRights = new Rights()
+            ->setIri('http://purl.org/coar/access_right/c_abf2')
+            ->addLabel('open access', Language::EN)
+            ->addLabel('otevřený přístup', Language::CS);
+
+        return $accesRights;
     }
 
     /**
@@ -303,8 +340,13 @@ final class CcmmFormat implements MetadataFormatInterface
     private function getSubject(): array
     {
 
-        $element = new Subject(new SubjectScheme()
-            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/'))
+        $element = new Subject(
+            new SubjectScheme()
+            ->setLabel('OECD FORD Subject Category (Frascati)', Language::EN)
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/')
+        )
+            ->addLabel('Plant sciences, botany', Language::EN)
+            ->setClassificationCode('10611')
             ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/10000/10600/10611');
 
         return [$element];

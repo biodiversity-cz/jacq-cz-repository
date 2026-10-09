@@ -7,12 +7,12 @@ namespace App\Model\CCMM\Models;
 use App\Model\CCMM\Models\Base\IriLabelsBase;
 
 /**
- * Represents a conforms to standard with IRI and label.
+ * Represents a resource type with IRI and labels.
  */
-class ConformsToStandard extends IriLabelsBase
+class RelationType extends IriLabelsBase
 {
     public static function elementName(): string
     {
-        return 'conforms_to_standard';
+        return 'relation_type';
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
+use App\Model\CCMM\Enum\Language;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
 use App\Model\CCMM\XmlSerializable;
 
@@ -16,6 +17,7 @@ class Subject implements XmlSerializable
 
     public protected(set) ?string $iri = null;
     public protected(set) ?string $classificationCode = null;
+    public protected(set) array $labels = [];
 
     public function __construct(public protected(set) SubjectScheme $subjectScheme)
     {
@@ -24,6 +26,13 @@ class Subject implements XmlSerializable
     public function setIri(?string $iri): self
     {
         $this->iri = $iri;
+
+        return $this;
+    }
+
+    public function addLabel(string $label, Language $lang = Language::CS): self
+    {
+        $this->labels[$lang->value] = $label;
 
         return $this;
     }
@@ -43,6 +52,14 @@ class Subject implements XmlSerializable
         if (null !== $this->iri) {
             $iriElement = $this->createElement($document, 'iri', $this->iri);
             $element->appendChild($iriElement);
+        }
+
+        if (!empty($this->labels)) {
+            foreach ($this->labels as $lang => $text) {
+                $labelElement = $this->createElement($document, 'label', $text);
+                $labelElement->setAttribute('xml:lang', $lang);
+                $element->appendChild($labelElement);
+            }
         }
 
         if (null !== $this->classificationCode) {

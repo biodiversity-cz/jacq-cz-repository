@@ -7,12 +7,12 @@ namespace App\Model\CCMM\Models;
 use App\Model\CCMM\Models\Base\IriLabelsBase;
 
 /**
- * Represents a license with IRI and label.
+ * Represents access rights with IRI and label.
  */
-class License extends IriLabelsBase
+class Rights extends IriLabelsBase
 {
     public static function elementName(): string
     {
-        return 'license';
+        return 'rights';
     }
 }

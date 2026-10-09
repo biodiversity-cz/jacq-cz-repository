@@ -17,22 +17,6 @@ class Checksum implements XmlSerializable
     public protected(set) ?string $checksumValue = null;
     public protected(set) ?string $algorithm = null;
 
-    public function __construct()
-    {
-    }
-
-    // Getters
-    public function getChecksumValue(): ?string
-    {
-        return $this->checksumValue;
-    }
-
-    public function getAlgorithm(): ?string
-    {
-        return $this->algorithm;
-    }
-
-    // Setters
     public function setChecksumValue(?string $checksumValue): self
     {
         $this->checksumValue = $checksumValue;
@@ -51,13 +35,15 @@ class Checksum implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'checksum');
 
-        if (null !== $this->getChecksumValue()) {
-            $valueElement = $this->createElement($document, 'checksum_value', $this->getChecksumValue());
+        if (null !== $this->checksumValue) {
+            $valueElement = $this->createElement($document, 'checksum_value', $this->checksumValue);
             $element->appendChild($valueElement);
         }
 
-        if (null !== $this->getAlgorithm()) {
-            $algorithmElement = $this->createElement($document, 'algorithm', $this->getAlgorithm());
+        if (null !== $this->algorithm) {
+            $algorithmElement = $this->createElement($document, 'algorithm');
+            $algorithmIriElement = $this->createElement($document, 'iri', $this->algorithm);
+            $algorithmElement->appendChild($algorithmIriElement);
             $element->appendChild($algorithmElement);
         }
 

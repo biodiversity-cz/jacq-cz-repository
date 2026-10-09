@@ -18,6 +18,7 @@ class Location implements XmlSerializable
      * @param RelatedObject[] $relatedObjects
      */
     public function __construct(
+        public protected(set) RelationType $relation,
         public protected(set) ?BoundingBox $boundingBox = null,
         public protected(set) ?string $name = null,
         public protected(set) ?Geometry $geometry = null,
@@ -29,16 +30,16 @@ class Location implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'location');
 
-        $this->appendChildIfNotNull($element, $this->getBoundingBox(), 'bounding_box');
-        $this->appendChildIfNotNull($element, $this->getGeometry());
-        $this->appendChildIfNotNull($element, $this->getRelationType(), 'relation_type');
+        $this->appendChildIfNotNull($element, $this->boundingBox, 'bounding_box');
+        $this->appendChildIfNotNull($element, $this->geometry);
+        $this->appendChildIfNotNull($element, $this->relation, 'relation_type');
 
         if (null !== $this->name) {
             $nameElement = $this->createElement($document, 'name', $this->name);
             $element->appendChild($nameElement);
         }
 
-        foreach ($this->getRelatedObjects() as $relatedObject) {
+        foreach ($this->relatedObjects as $relatedObject) {
             $relatedElement = $relatedObject->toXml($document, 'related_object');
             $element->appendChild($relatedElement);
         }

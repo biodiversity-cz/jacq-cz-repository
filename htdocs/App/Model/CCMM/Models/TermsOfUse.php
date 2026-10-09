@@ -14,45 +14,19 @@ class TermsOfUse implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    public protected(set) ?AccessRights $accessRights = null;
-    public protected(set) ?License $license = null;
+    public protected(set) ?Rights $accessRights = null;
+    public protected(set) ?Licence $license = null;
     public protected(set) ?string $description = null;
     public protected(set) ?ContactPoint $contactPoint = null;
 
-    public function __construct()
-    {
-    }
-
-    // Getters
-    public function getAccessRights(): ?AccessRights
-    {
-        return $this->accessRights;
-    }
-
-    public function getLicense(): ?License
-    {
-        return $this->license;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getContactPoint(): ?ContactPoint
-    {
-        return $this->contactPoint;
-    }
-
-    // Setters
-    public function setAccessRights(?AccessRights $accessRights): self
+    public function setAccessRights(?Rights $accessRights): self
     {
         $this->accessRights = $accessRights;
 
         return $this;
     }
 
-    public function setLicense(?License $license): self
+    public function setLicense(?Licence $license): self
     {
         $this->license = $license;
 
@@ -77,9 +51,9 @@ class TermsOfUse implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'terms_of_use');
 
-        $this->appendChildIfNotNull($element, $this->getAccessRights(), 'access_rights');
+        $this->appendChildIfNotNull($element, $this->accessRights, 'access_rights');
         $this->appendChildIfNotNull($element, $this->license);
-        $this->appendChildIfNotNull($element, $this->getContactPoint());
+        $this->appendChildIfNotNull($element, $this->contactPoint);
 
         if (null !== $this->description) {
             $descElement = $this->createElement($document, 'description', $this->description);
