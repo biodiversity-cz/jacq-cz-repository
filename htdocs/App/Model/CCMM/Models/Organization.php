@@ -18,22 +18,6 @@ class Organization implements XmlSerializable
     public protected(set) ?Identifier $identifier = null;
     public protected(set) ?string $name = null;
 
-    public function __construct()
-    {
-    }
-
-    // Getters
-    public function getIri(): ?string
-    {
-        return $this->iri;
-    }
-
-    public function getIdentifier(): ?Identifier
-    {
-        return $this->identifier;
-    }
-
-    // Setters
     public function setIri(?string $iri): self
     {
         $this->iri = $iri;
@@ -59,12 +43,12 @@ class Organization implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'organization');
 
-        if (null !== $this->getIri()) {
-            $iriElement = $this->createElement($document, 'iri', $this->getIri());
+        if (null !== $this->iri) {
+            $iriElement = $this->createElement($document, 'iri', $this->iri);
             $element->appendChild($iriElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->getIdentifier());
+        $this->appendChildIfNotNull($element, $this->identifier);
 
         if (null !== $this->name) {
             $nameElement = $this->createElement($document, 'name', $this->name);

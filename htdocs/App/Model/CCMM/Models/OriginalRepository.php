@@ -10,12 +10,11 @@ use App\Model\CCMM\Models\Base\IriLabelsBase;
 /**
  * Represents an original repository with IRI.
  */
-class OriginalRepository extends IriLabelsBase {
-
-    public protected(set) ?string $iri = null;
-    public protected(set) array $labels = [];
+class OriginalRepository extends IriLabelsBase
+{
     public protected(set) string $description;
-    public protected(set)  array $qualifiedAttributions = [];
+    public protected(set) array $qualifiedAttributions = [];
+
     public static function elementName(): string
     {
         return 'original_repository';
@@ -24,6 +23,7 @@ class OriginalRepository extends IriLabelsBase {
     public function setDescription(string $description): OriginalRepository
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -44,9 +44,9 @@ class OriginalRepository extends IriLabelsBase {
     public function setQualifiedAttributions(array $qualifiedAttributions): OriginalRepository
     {
         $this->qualifiedAttributions = $qualifiedAttributions;
+
         return $this;
     }
-
 
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {

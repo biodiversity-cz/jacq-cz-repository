@@ -20,7 +20,6 @@ abstract class IriBase implements XmlSerializable
 
     abstract public static function elementName(): string;
 
-
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? static::elementName());

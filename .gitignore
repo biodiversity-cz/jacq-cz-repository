@@ -1,2 +1,4 @@
 node_modules
-test.xml
+docs/test.xml
+docs/ccmm_merged.xsd
+docs/.venv

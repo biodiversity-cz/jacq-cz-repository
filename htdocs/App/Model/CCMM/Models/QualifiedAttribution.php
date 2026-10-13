@@ -15,11 +15,7 @@ class QualifiedAttribution implements XmlSerializable
     use XmlSerializableTrait;
 
     public protected(set) ?Role $role = null;
-    public protected(set) ?XmlSerializable $relation = null;
-
-    public function __construct()
-    {
-    }
+    public protected(set) ?AttributedAgent $attributedAgent = null;
 
     public function setRole(?Role $role): self
     {
@@ -28,9 +24,9 @@ class QualifiedAttribution implements XmlSerializable
         return $this;
     }
 
-    public function setRelation(?XmlSerializable $relation): self
+    public function setAttributedAgent(?AttributedAgent $attributedAgent): self
     {
-        $this->relation = $relation;
+        $this->attributedAgent = $attributedAgent;
 
         return $this;
     }
@@ -39,12 +35,7 @@ class QualifiedAttribution implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'qualified_attribution');
 
-        if (null !== $this->relation) {
-            $relationElement = $document->createElement('relation');
-            $relationElement->appendChild($this->relation->toXml($document));
-            $element->appendChild($relationElement);
-        }
-
+        $this->appendChildIfNotNull($element, $this->attributedAgent);
         $this->appendChildIfNotNull($element, $this->role);
 
         return $element;

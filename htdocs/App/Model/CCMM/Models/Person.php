@@ -15,12 +15,12 @@ class Person implements XmlSerializable
     use XmlSerializableTrait;
 
     public function __construct(
-        public ?Identifier $identifier = null,
-        public ?string $name = null,
-        public ?string $givenName = null,
-        public ?string $familyName = null,
-        public ?ContactPoint $contactPoint = null,
-        public ?Organization $affiliation = null,
+        public protected(set) ?Identifier $identifier = null,
+        public protected(set) ?string $name = null,
+        public protected(set) ?string $givenName = null,
+        public protected(set) ?string $familyName = null,
+        public protected(set) ?ContactPoint $contactPoint = null,
+        public protected(set) ?Organization $affiliation = null,
     ) {
     }
 
@@ -28,22 +28,22 @@ class Person implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'person');
 
-        $this->appendChildIfNotNull($element, $this->getIdentifier());
-        $this->appendChildIfNotNull($element, $this->getContactPoint());
-        $this->appendChildIfNotNull($element, $this->getAffiliation());
+        $this->appendChildIfNotNull($element, $this->identifier);
+        $this->appendChildIfNotNull($element, $this->contactPoint);
+        $this->appendChildIfNotNull($element, $this->affiliation);
 
         if (null !== $this->name) {
             $nameElement = $this->createElement($document, 'name', $this->name);
             $element->appendChild($nameElement);
         }
 
-        if (null !== $this->getGivenName()) {
-            $givenNameElement = $this->createElement($document, 'given_name', $this->getGivenName());
+        if (null !== $this->givenName) {
+            $givenNameElement = $this->createElement($document, 'given_name', $this->givenName);
             $element->appendChild($givenNameElement);
         }
 
-        if (null !== $this->getFamilyName()) {
-            $familyNameElement = $this->createElement($document, 'family_name', $this->getFamilyName());
+        if (null !== $this->familyName) {
+            $familyNameElement = $this->createElement($document, 'family_name', $this->familyName);
             $element->appendChild($familyNameElement);
         }
 

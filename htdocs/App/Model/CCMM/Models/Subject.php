@@ -44,7 +44,6 @@ class Subject implements XmlSerializable
         return $this;
     }
 
-
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'subject');
@@ -68,7 +67,6 @@ class Subject implements XmlSerializable
         }
 
         $element->appendChild($this->subjectScheme->toXml($document));
-
 
         return $element;
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\Enum\Language;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
 use App\Model\CCMM\XmlSerializable;
 
@@ -93,15 +92,16 @@ class DistributionDownloadableFile implements XmlSerializable
     public function setLicense(?Licence $license): DistributionDownloadableFile
     {
         $this->license = $license;
+
         return $this;
     }
 
     public function setAccessRights(?Rights $accessRights): DistributionDownloadableFile
     {
         $this->accessRights = $accessRights;
+
         return $this;
     }
-
 
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
@@ -125,7 +125,6 @@ class DistributionDownloadableFile implements XmlSerializable
         $this->appendChildIfNotNull($element, $this->downloadUrl, 'download_url');
         $this->appendChildIfNotNull($element, $this->conformsToSchema, 'conforms_to_schema');
         $this->appendChildIfNotNull($element, $this->format);
-
 
         $this->appendChildIfNotNull($element, $this->mediaType, 'media_type');
 
