@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
-use App\Model\CCMM\Enum\Language;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
 use App\Model\CCMM\XmlSerializable;
 
@@ -17,65 +16,16 @@ class DistributionDownloadableFile implements XmlSerializable
 
     public protected(set) ?string $iri = null;
     public protected(set) array $titles = [];
-    public protected(set) ?AccessUrl $accessUrl = null;
     public protected(set) ?DownloadUrl $downloadUrl = null;
+    public protected(set) ?string $accessUrl = null;
     public protected(set) ?ConformsToSchema $conformsToSchema = null;
     public protected(set) ?Format $format = null;
     public protected(set) ?MediaType $mediaType = null;
     public protected(set) ?int $byteSize = null;
     public protected(set) ?Checksum $checksum = null;
+    public protected(set) ?Licence $license = null;
+    public protected(set) ?Rights $accessRights = null;
 
-    public function __construct()
-    {
-    }
-
-    // Getters
-    public function getIri(): ?string
-    {
-        return $this->iri;
-    }
-
-    public function getTitles(): array
-    {
-        return $this->titles;
-    }
-
-    public function getAccessUrl(): ?AccessUrl
-    {
-        return $this->accessUrl;
-    }
-
-    public function getDownloadUrl(): ?DownloadUrl
-    {
-        return $this->downloadUrl;
-    }
-
-    public function getConformsToSchema(): ?ConformsToSchema
-    {
-        return $this->conformsToSchema;
-    }
-
-    public function getFormat(): ?Format
-    {
-        return $this->format;
-    }
-
-    public function getMediaType(): ?MediaType
-    {
-        return $this->mediaType;
-    }
-
-    public function getByteSize(): ?int
-    {
-        return $this->byteSize;
-    }
-
-    public function getChecksum(): ?Checksum
-    {
-        return $this->checksum;
-    }
-
-    // Setters
     public function setIri(?string $iri): self
     {
         $this->iri = $iri;
@@ -83,14 +33,14 @@ class DistributionDownloadableFile implements XmlSerializable
         return $this;
     }
 
-    public function addTitle(string $title, Language $lang = Language::CS): self
+    public function addTitle(string $title): self
     {
-        $this->titles[$lang->value] = $title;
+        $this->titles[] = $title;
 
         return $this;
     }
 
-    public function setAccessUrl(?AccessUrl $accessUrl): self
+    public function setAccessUrl(?string $accessUrl): self
     {
         $this->accessUrl = $accessUrl;
 
@@ -139,35 +89,53 @@ class DistributionDownloadableFile implements XmlSerializable
         return $this;
     }
 
+    public function setLicense(?Licence $license): DistributionDownloadableFile
+    {
+        $this->license = $license;
+
+        return $this;
+    }
+
+    public function setAccessRights(?Rights $accessRights): DistributionDownloadableFile
+    {
+        $this->accessRights = $accessRights;
+
+        return $this;
+    }
+
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'distribution_downloadable_file');
 
-        if (null !== $this->getIri()) {
-            $iriElement = $this->createElement($document, 'iri', $this->getIri());
+        if (null !== $this->iri) {
+            $iriElement = $this->createElement($document, 'iri', $this->iri);
             $element->appendChild($iriElement);
         }
 
-        if (!empty($this->getTitles())) {
-            foreach ($this->getTitles() as $lang => $text) {
+        if (!empty($this->titles)) {
+            foreach ($this->titles as $text) {
                 $titleElement = $this->createElement($document, 'title', $text);
-                $titleElement->setAttribute('xml:lang', $lang);
                 $element->appendChild($titleElement);
             }
         }
 
-        $this->appendChildIfNotNull($element, $this->getAccessUrl(), 'access_url');
-        $this->appendChildIfNotNull($element, $this->getDownloadUrl(), 'download_url');
-        $this->appendChildIfNotNull($element, $this->getConformsToSchema(), 'conforms_to_schema');
-        $this->appendChildIfNotNull($element, $this->getFormat());
-        $this->appendChildIfNotNull($element, $this->getMediaType(), 'media_type');
+        $accessUrlElement = $this->createElement($document, 'access_url', $this->accessUrl);
+        $element->appendChild($accessUrlElement);
 
-        if (null !== $this->getByteSize()) {
-            $sizeElement = $this->createElement($document, 'byte_size', (string) $this->getByteSize());
+        $this->appendChildIfNotNull($element, $this->downloadUrl, 'download_url');
+        $this->appendChildIfNotNull($element, $this->conformsToSchema, 'conforms_to_schema');
+        $this->appendChildIfNotNull($element, $this->format);
+
+        $this->appendChildIfNotNull($element, $this->mediaType, 'media_type');
+
+        if (null !== $this->byteSize) {
+            $sizeElement = $this->createElement($document, 'byte_size', (string) $this->byteSize);
             $element->appendChild($sizeElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->getChecksum());
+        $this->appendChildIfNotNull($element, $this->checksum);
+        $this->appendChildIfNotNull($element, $this->accessRights);
+        $this->appendChildIfNotNull($element, $this->license);
 
         return $element;
     }

@@ -30,7 +30,10 @@ class FixtureHerbaria extends FixtureBase
             ->setRegexBarcode('/^(?<herbarium>test)[\s\-–_](?<specimenId>\d+)$/i')
             ->setRegexFilename('/^(?<herbarium>test)_(?<specimenId>\d+)(?<supplement>[_\-a-z]*)\.(?<extension>tif)$/i')
             ->setExternalDatabase($externalDb)
-            ->setMinimalFileSize(5);
+            ->setMinimalFileSize(5)
+            ->setFullname('Testovací herbář')
+            ->setGRSciCollCollectionID('GRSciCollInstitutinUIID')
+            ->setGRSciCollInstitutionID('GRSciCollCollection-UUID');
 
         $herbariumPrc = new Herbaria()
             ->setAcronym('PRC')

@@ -6,40 +6,39 @@ namespace App\Services\OaiPmh\MetadataFormat;
 
 use App\Model\CCMM\Enum\Language;
 use App\Model\CCMM\Models\AccessRights;
-use App\Model\CCMM\Models\Address;
+use App\Model\CCMM\Models\AttributedAgent;
 use App\Model\CCMM\Models\Checksum;
-use App\Model\CCMM\Models\ContactPoint;
+use App\Model\CCMM\Models\ConformsToStandard;
 use App\Model\CCMM\Models\Dataset;
 use App\Model\CCMM\Models\DateType;
 use App\Model\CCMM\Models\Description;
 use App\Model\CCMM\Models\DescriptionText;
 use App\Model\CCMM\Models\DescriptionType;
 use App\Model\CCMM\Models\Distribution;
-use App\Model\CCMM\Models\DistributionDataService;
 use App\Model\CCMM\Models\DistributionDownloadableFile;
-use App\Model\CCMM\Models\Documentation;
 use App\Model\CCMM\Models\DownloadUrl;
 use App\Model\CCMM\Models\Format;
 use App\Model\CCMM\Models\Identifier;
 use App\Model\CCMM\Models\IdentifierScheme;
 use App\Model\CCMM\Models\Keyword;
-use App\Model\CCMM\Models\License;
+use App\Model\CCMM\Models\Licence;
+use App\Model\CCMM\Models\Location;
 use App\Model\CCMM\Models\MediaType;
+use App\Model\CCMM\Models\MetadataIdentification;
+use App\Model\CCMM\Models\Organization;
+use App\Model\CCMM\Models\OriginalRepository;
 use App\Model\CCMM\Models\QualifiedAttribution;
 use App\Model\CCMM\Models\RelatedResource;
-use App\Model\CCMM\Models\Relation;
+use App\Model\CCMM\Models\RelationType;
 use App\Model\CCMM\Models\ResourceRelationType;
 use App\Model\CCMM\Models\ResourceType;
+use App\Model\CCMM\Models\Rights;
 use App\Model\CCMM\Models\Role;
 use App\Model\CCMM\Models\Subject;
 use App\Model\CCMM\Models\SubjectScheme;
-use App\Model\CCMM\Models\TermsOfUse;
 use App\Model\CCMM\Models\TimeInstant;
 use App\Model\CCMM\Models\TimeReference;
-use App\Model\CCMM\Models\Title;
 use App\Model\Database\Entity\Photos;
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Order;
 use Nette\Application\LinkGenerator;
 
 /**
@@ -84,7 +83,7 @@ final class CcmmFormat implements MetadataFormatInterface
 
         $doc = new \DOMDocument('1.0', 'UTF-8');
 
-        $dataset = new Dataset();
+        $dataset = new Dataset('https://n2t.net/'.$item->pid);
 
         foreach ($this->addDistributions($item) as $distribution) {
             $dataset->addDistribution($distribution);
@@ -99,12 +98,80 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setTitle('Image associated with a preserved herbarium specimen '.$item->getFullSpecimenId())
             ->setTimeReferences($this->getDates($item))
             ->setPublicationYear($item->issuedAt?->format('Y'))
-            ->setTermsOfUse($this->getLicence($item))
             ->setSubjects($this->getSubject())
             ->setQualifiedRelations($this->getQualifiedRelations($item))
-            ->setRelatedResources($this->addRelatedResources($item));
+            ->setRelatedResources($this->addRelatedResources($item))
+            ->setMetadataIdentification($this->getMetadataIdentification($item))
+            ->setAccessRights($this->getAccessRights());
 
         return $dataset->toXml($doc);
+    }
+
+    private function getHerbariumAttributedAgent(Photos $photo, bool $asCreator = false): QualifiedAttribution
+    {
+        $herbariumID = new Identifier();
+        $scheme = new IdentifierScheme();
+        $scheme->setIri('https://scientific-collections.gbif.org/institution/')
+            ->addLabel('GRSciColl');
+        $herbariumID->setIri('https://scientific-collections.gbif.org/institution/'.$photo->herbarium->GRSciCollInstitutionID)
+            ->setValue($photo->herbarium->GRSciCollInstitutionID)
+            ->setScheme($scheme);
+
+        $herbarium = new Organization()->setIri($photo->herbarium->GRSciCollCollectionID)->setName($photo->herbarium->fullname)->setIdentifier($herbariumID);
+        $qa = new QualifiedAttribution();
+        if ($asCreator) {
+            $qa->setRole(new Role()
+                ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Contributor/Creator')
+                ->addLabel('Creator', Language::EN)
+                ->addLabel('Autor', Language::CS));
+        } else {
+            $qa->setRole(new Role()
+                ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Contributor/DataManager')
+                ->addLabel('Data Manager', Language::EN)
+                ->addLabel('Manažer dat', Language::CS));
+        }
+
+        $qa->setAttributedAgent(new AttributedAgent()->setOrganization($herbarium));
+
+        return $qa;
+    }
+
+    private function getOriginalRepositoryAttributedAgent(): QualifiedAttribution
+    {
+        $cuniID = new Identifier();
+        $scheme = new IdentifierScheme();
+        $scheme->setIri('https://ror.org/')
+            ->addLabel('ROR');
+        $cuniID->setIri('https://ror.org/024d6js02')
+            ->setValue('024d6js02')
+            ->setScheme($scheme);
+
+        $publisher = new Organization()->setName('Charles University')->setIdentifier($cuniID);
+        $qa = new QualifiedAttribution();
+        $qa->setRole(new Role()
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Publisher')
+            ->addLabel('Publisher', Language::EN)
+            ->addLabel('Vydavatel', Language::CS));
+        $qa->setAttributedAgent(new AttributedAgent()->setOrganization($publisher));
+
+        return $qa;
+    }
+
+    private function getMetadataIdentification(Photos $photo): MetadataIdentification
+    {
+        $cs = new ConformsToStandard()->setIri(CcmmFormat::XML_NAMESPACE)->addLabel('Czech Core Metadata Model for Research Data 2.0.0', Language::EN);
+        $or = new OriginalRepository()
+            ->setIri($this->linkGenerator->link('Front:Home:'))
+            ->addLabel('Původní repozitář', Language::CS)
+            ->setDescription('')
+            ->setQualifiedAttributions([$this->getOriginalRepositoryAttributedAgent()]);
+        $item = new MetadataIdentification()->setQualifiedAttributions([$this->getHerbariumAttributedAgent($photo)])
+            ->setDateCreated($photo->issuedAt)
+            ->setDateUpdated($photo->lastEdit)
+            ->setConformsToStandard($cs)
+            ->setOriginalRepository($or);
+
+        return $item;
     }
 
     /**
@@ -153,71 +220,87 @@ final class CcmmFormat implements MetadataFormatInterface
         return [$specimen];
     }
 
+    private function buildIndividualDistribution(array $data): Distribution
+    {
+        $dataDownload = new DistributionDownloadableFile()
+            ->setAccessUrl('https://biodiversity-cz.github.io/herbarium-documentation/')
+            ->setDownloadUrl(new DownloadUrl()->setIri($data['iri']))
+            ->setFormat($data['format'])
+            ->setMediaType($data['mediaType'])
+            ->addTitle('original data')
+            ->setChecksum($data['checksum'] ?? null)
+            ->setByteSize($data['byteSize'])
+            ->setAccessRights($this->getRights())
+            ->setLicense($this->getLicence());
+
+        $distribution = new Distribution();
+        $distribution->setDistributionDownloadableFile($dataDownload);
+
+        return $distribution;
+    }
+
     /**
      * @return Distribution[]
      */
     private function addDistributions(Photos $photo): array
     {
-        $items = [];
+        $formatTif = new Format()
+            ->addLabel('TIFF', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
+        $mediaTypeTif = new MediaType()
+            ->addLabel('TIFF', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
+        $formatJP2 = new Format()
+            ->addLabel('JPEG 2000', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/JPEG2000');
+        $mediaTypeJP2 = new MediaType()
+            ->addLabel('JPEG 2000', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/JPEG2000');
+        $formatPng = new Format()
+            ->addLabel('PNG', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/PNG');
+        $mediaTypePng = new MediaType()
+            ->addLabel('PNG', Language::EN)
+            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/PNG');
 
-        // Databot thumbnails
-        $dataService = new DistributionDataService();
-        $documentation = new Documentation();
-        $documentation
-            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-thumb');
-        $dataService
-            ->setIri($this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->id]))
-            ->addTitle('1280px thumbnail', Language::EN)
-            ->addDescription('Serves image as thumbnail suitable for AI processing with longer side equal to 1280px', Language::EN)
-            ->setDocumentation($documentation);
-
-        $distribution = new Distribution();
-        $distribution->setDistributionDataService($dataService);
-        $items[] = $distribution;
-
-        // JPEG2000 fullsize
-        $dataService = new DistributionDataService();
-        $documentation = new Documentation();
-        $documentation
-            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-jp2');
-        $dataService
-            ->setIri($this->linkGenerator->link('Front:Repository:Jp2Image', [$photo->id]))
-            ->addTitle('JPEG 2000', Language::EN)
-            ->addDescription('Serves full size image in JPEG 2000 format.', Language::EN)
-            ->setDocumentation($documentation);
-
-        $distribution = new Distribution();
-        $distribution->setDistributionDataService($dataService);
-        $items[] = $distribution;
-
-        // TIFF Master
-        $dataDownload = new DistributionDownloadableFile();
-        $checksum = new Checksum()
+        $checksumMaster = new Checksum()
             ->setChecksumValue($photo->archiveFileChecksum)
-            ->setAlgorithm('md5');
-        $format = new Format()
-            ->addLabel('TIFF')
-            ->addLabel('TIFF', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
-        $mediaType = new MediaType()
-            ->addLabel('TIFF')
-            ->addLabel('TIFF', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
-        $downloadUrl = new DownloadUrl()->setIri($this->linkGenerator->link('Front:Repository:ArchiveImage', [$photo->id]))->addLabel('original data', Language::EN);
-        $documentation = new Documentation();
-        $documentation
-            ->setIri('https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-master-file');
-        $dataDownload
-            ->setDownloadUrl($downloadUrl)
-            ->setFormat($format)
-            ->setByteSize($photo->archiveFileSize)
-            ->setChecksum($checksum)
-            ->setMediaType($mediaType)
-            ->addTitle('original data', Language::EN);
+            ->setAlgorithm('http://spdx.org/rdf/terms#checksumAlgorithm_md5');
 
-        $distribution = new Distribution();
-        $distribution->setDistributionDownloadableFile($dataDownload);
-        $items[] = $distribution;
+        $data = [
+            'master' => [
+                'iri' => $this->linkGenerator->link('Front:Repository:ArchiveImage', [$photo->id]),
+                'title' => 'original data',
+                'description' => '',
+                'documentation' => 'https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-master-file',
+                'checksum' => $checksumMaster,
+                'format' => $formatTif,
+                'mediaType' => $mediaTypeTif,
+                'byteSize' => $photo->archiveFileSize,
+            ],
+            'jpeg2000' => [
+                'iri' => $this->linkGenerator->link('Front:Repository:Jp2Image', [$photo->id]),
+                'title' => 'JPEG 2000',
+                'description' => 'Serves full size image in JPEG 2000 format.',
+                'documentation' => 'https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-jp2',
+                'format' => $formatJP2,
+                'mediaType' => $mediaTypeJP2,
+                'byteSize' => $photo->JP2FileSize,
+            ],
+            'thumb' => [
+                'iri' => $this->linkGenerator->link('Front:Repository:DatabotThumbImage', [$photo->id]),
+                'title' => '1280px thumbnail',
+                'description' => 'Serves image as thumbnail suitable for AI processing with longer side equal to 1280px',
+                'documentation' => 'https://biodiversity-cz.github.io/herbarium-documentation/docs/services/download.html#service-thumb',
+                'format' => $formatPng,
+                'mediaType' => $mediaTypePng,
+                'byteSize' => (int) ($photo->JP2FileSize / 100), // TODO fake - but in CCMM is mandatory
+            ],
+        ];
+
+        foreach ($data as $item) {
+            $items[] = $this->buildIndividualDistribution($item);
+        }
 
         return $items;
     }
@@ -232,30 +315,47 @@ final class CcmmFormat implements MetadataFormatInterface
         return $element;
     }
 
-    private function getLicence(Photos $photo): TermsOfUse
+    /**
+     * @return Location[]
+     */
+    private function getLocation(Photos $photo): array
+    {
+        // TODO - cETAF harvest does not include coordinates - should we harvest elsewhere..?
+        $location = new Location(new RelationType()
+            ->setIri('̈́https://vocabs.repo.cz/LocationRelation/en/page/Refers')
+            ->addLabel('Refers to the location', Language::EN)
+            ->addLabel('Týká se lokace', Language::CS));
+
+        return [$location];
+    }
+
+    private function getLicence(): Licence
+    {
+        $license = new Licence()
+            ->setIri('https://creativecommons.org/licenses/by/4.0/');
+        // ->addLabel('Attribution 4.0 International', Language::EN);
+
+        return $license;
+    }
+
+    private function getAccessRights(): AccessRights
     {
         $accesRights = new AccessRights()
             ->setIri('http://purl.org/coar/access_right/c_abf2')
             ->addLabel('open access', Language::EN)
             ->addLabel('otevřený přístup', Language::CS);
-        $person = $photo->herbarium->contacts->matching(
-            Criteria::create()->orderBy(['surname' => Order::Ascending])
-        )
-            ->first();
-        $address = new Address()
-            ->setFullAddress($photo->herbarium->address);
-        $contactPoint = new ContactPoint()
-            ->setEmail($person->email)
-            ->setAddress($address);
-        $license = new License()
-            ->setIri('https://creativecommons.org/licenses/by/4.0/')
-            ->addLabel('Attribution 4.0 International', Language::EN);
-        $element = new TermsOfUse()
-            ->setAccessRights($accesRights)
-            ->setContactPoint($contactPoint)
-            ->setLicense($license);
 
-        return $element;
+        return $accesRights;
+    }
+
+    private function getRights(): Rights
+    {
+        $accesRights = new Rights()
+            ->setIri('http://purl.org/coar/access_right/c_abf2')
+            ->addLabel('open access', Language::EN)
+            ->addLabel('otevřený přístup', Language::CS);
+
+        return $accesRights;
     }
 
     /**
@@ -263,23 +363,8 @@ final class CcmmFormat implements MetadataFormatInterface
      */
     private function getQualifiedRelations(Photos $photo): array
     {
-        $creatorRole = new Role()
-            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Creator')
-            ->addLabel('Creator', Language::EN)
-            ->addLabel('Autor', Language::CS);
-        $creatorRelation = new Relation();
-        $creator = new QualifiedAttribution()
-            ->setRole($creatorRole)
-            ->setRelation($creatorRelation);
-
-        $publisherRole = new Role()
-            ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Publisher')
-            ->addLabel('Publisher', Language::EN)
-            ->addLabel('Vydavatel', Language::CS);
-        $publisherRelation = new Relation();
-        $publisher = new QualifiedAttribution()
-            ->setRole($publisherRole)
-            ->setRelation($publisherRelation);
+        $creator = $this->getHerbariumAttributedAgent($photo, true);
+        $publisher = $this->getOriginalRepositoryAttributedAgent();
 
         return [$creator, $publisher];
     }
@@ -289,15 +374,14 @@ final class CcmmFormat implements MetadataFormatInterface
      */
     private function getSubject(): array
     {
-        $title = new Title()
-            ->setTitle('Plant sciences, botany')
-            ->setLanguage(Language::EN);
-        $subjectScheme = new SubjectScheme()
-            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/');
-        $element = new Subject()
-            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/10000/10600/10611')
-            ->setTitle($title)
-            ->setSubjectScheme($subjectScheme);
+        $element = new Subject(
+            new SubjectScheme()
+            ->setLabel('OECD FORD Subject Category (Frascati)', Language::EN)
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/')
+        )
+            ->addLabel('Plant sciences, botany', Language::EN)
+            ->setClassificationCode('10611')
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/SubjectCategory/10000/10600/10611');
 
         return [$element];
     }

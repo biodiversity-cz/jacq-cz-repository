@@ -20,16 +20,6 @@ abstract class IriLabelsBase implements XmlSerializable
 
     abstract public static function elementName(): string;
 
-    public function getIri(): ?string
-    {
-        return $this->iri;
-    }
-
-    public function getLabels(): array
-    {
-        return $this->labels;
-    }
-
     public function setIri(?string $iri): self
     {
         $this->iri = $iri;
@@ -48,13 +38,13 @@ abstract class IriLabelsBase implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? static::elementName());
 
-        if (null !== $this->getIri()) {
-            $iriElement = $this->createElement($document, 'iri', $this->getIri());
+        if (null !== $this->iri) {
+            $iriElement = $this->createElement($document, 'iri', $this->iri);
             $element->appendChild($iriElement);
         }
 
-        if (!empty($this->getLabels())) {
-            foreach ($this->getLabels() as $lang => $text) {
+        if (!empty($this->labels)) {
+            foreach ($this->labels as $lang => $text) {
                 $titleElement = $this->createElement($document, 'label', $text);
                 $titleElement->setAttribute('xml:lang', $lang);
                 $element->appendChild($titleElement);

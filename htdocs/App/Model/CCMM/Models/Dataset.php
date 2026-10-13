@@ -15,7 +15,6 @@ class Dataset implements XmlSerializable
 {
     use XmlSerializableTrait;
 
-    public protected(set) ?string $iri = null;
     public protected(set) ?MetadataIdentification $metadataIdentification = null;
     public protected(set) array $identifiers = [];
     public protected(set) ?string $version = null;
@@ -41,12 +40,10 @@ class Dataset implements XmlSerializable
     public protected(set) array $distributions = [];
     public protected(set) ?ValidationResult $validationResult = null;
     public protected(set) ?Provenance $provenance = null;
+    public protected(set) ?AccessRights $accessRights = null;
 
-    public function setIri(?string $iri): self
+    public function __construct(public protected(set) string $iri)
     {
-        $this->iri = $iri;
-
-        return $this;
     }
 
     public function setMetadataIdentification(?MetadataIdentification $metadataIdentification): self
@@ -285,11 +282,18 @@ class Dataset implements XmlSerializable
         return $this;
     }
 
+    public function setAccessRights(?AccessRights $accessRights): self
+    {
+        $this->accessRights = $accessRights;
+
+        return $this;
+    }
+
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         // Create the root element with namespaces
-        $element = $document->createElementNS(CcmmFormat::XML_SCHEMA, 'ccmm:dataset');
-        $element->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation', CcmmFormat::XML_NAMESPACE.' https://raw.githubusercontent.com/techlib/CCMM/refs/heads/main/dataset/schema.xsd');
+        $element = $document->createElementNS(CcmmFormat::XML_NAMESPACE, 'ccmm:dataset');
+        $element->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation', CcmmFormat::XML_SCHEMA.' https://raw.githubusercontent.com/techlib/CCMM/refs/heads/main/dataset/schema.xsd');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:gml', 'http://www.opengis.net/gml/3.2');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
@@ -313,11 +317,6 @@ class Dataset implements XmlSerializable
         if (null !== $this->title) {
             $titleElement = $this->createElement($document, 'title', $this->title);
             $element->appendChild($titleElement);
-        }
-
-        if (null !== $this->keyword) {
-            $keywordElement = $this->keyword->toXml($document);
-            $element->appendChild($keywordElement);
         }
 
         foreach ($this->alternateTitles as $alternateTitle) {
@@ -356,11 +355,16 @@ class Dataset implements XmlSerializable
             $element->appendChild($otherLangElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->termsOfUse, 'terms_of_use');
+        $this->appendChildIfNotNull($element, $this->accessRights, 'access_rights');
 
         foreach ($this->subjects as $subject) {
             $subjectElement = $subject->toXml($document);
             $element->appendChild($subjectElement);
+        }
+
+        if (null !== $this->keyword) {
+            $keywordElement = $this->keyword->toXml($document);
+            $element->appendChild($keywordElement);
         }
 
         foreach ($this->descriptions as $description) {
@@ -401,14 +405,6 @@ class Dataset implements XmlSerializable
         } else {
             $validationElement = $this->createElement($document, 'validation_result');
             $element->appendChild($validationElement);
-        }
-
-        if (null !== $this->provenance) {
-            $provenanceElement = $this->provenance->toXml($document, 'provenance');
-            $element->appendChild($provenanceElement);
-        } else {
-            $provenanceElement = $this->createElement($document, 'provenance');
-            $element->appendChild($provenanceElement);
         }
 
         return $element;

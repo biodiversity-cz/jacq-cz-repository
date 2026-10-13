@@ -197,14 +197,18 @@ class Herbaria
         return $this;
     }
 
-    public function setGRSciCollInstitutionID(?string $GRSciCollInstitutionID): void
+    public function setGRSciCollInstitutionID(?string $GRSciCollInstitutionID): Herbaria
     {
         $this->GRSciCollInstitutionID = $GRSciCollInstitutionID;
+
+        return $this;
     }
 
-    public function setGRSciCollCollectionID(?string $GRSciCollCollectionID): void
+    public function setGRSciCollCollectionID(?string $GRSciCollCollectionID): Herbaria
     {
         $this->GRSciCollCollectionID = $GRSciCollCollectionID;
+
+        return $this;
     }
 
     public function setMinimalFileSize(int $minimalFileSize): Herbaria

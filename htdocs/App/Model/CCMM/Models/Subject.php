@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\CCMM\Models;
 
+use App\Model\CCMM\Enum\Language;
 use App\Model\CCMM\Traits\XmlSerializableTrait;
 use App\Model\CCMM\XmlSerializable;
 
@@ -15,36 +16,13 @@ class Subject implements XmlSerializable
     use XmlSerializableTrait;
 
     public protected(set) ?string $iri = null;
-    public protected(set) ?Title $title = null;
     public protected(set) ?string $classificationCode = null;
-    public protected(set) ?SubjectScheme $subjectScheme = null;
+    public protected(set) array $labels = [];
 
-    public function __construct()
+    public function __construct(public protected(set) SubjectScheme $subjectScheme)
     {
     }
 
-    // Getters
-    public function getIri(): ?string
-    {
-        return $this->iri;
-    }
-
-    public function getTitle(): ?Title
-    {
-        return $this->title;
-    }
-
-    public function getClassificationCode(): ?string
-    {
-        return $this->classificationCode;
-    }
-
-    public function getSubjectScheme(): ?SubjectScheme
-    {
-        return $this->subjectScheme;
-    }
-
-    // Setters
     public function setIri(?string $iri): self
     {
         $this->iri = $iri;
@@ -52,9 +30,9 @@ class Subject implements XmlSerializable
         return $this;
     }
 
-    public function setTitle(?Title $title): self
+    public function addLabel(string $label, Language $lang = Language::CS): self
     {
-        $this->title = $title;
+        $this->labels[$lang->value] = $label;
 
         return $this;
     }
@@ -66,33 +44,29 @@ class Subject implements XmlSerializable
         return $this;
     }
 
-    public function setSubjectScheme(?SubjectScheme $subjectScheme): self
-    {
-        $this->subjectScheme = $subjectScheme;
-
-        return $this;
-    }
-
     public function toXml(\DOMDocument $document, ?string $elementName = null): \DOMElement
     {
         $element = $this->createElement($document, $elementName ?? 'subject');
 
-        if (null !== $this->getIri()) {
-            $iriElement = $this->createElement($document, 'iri', $this->getIri());
+        if (null !== $this->iri) {
+            $iriElement = $this->createElement($document, 'iri', $this->iri);
             $element->appendChild($iriElement);
         }
 
-        if (null !== $this->getTitle()) {
-            $titleElement = $this->getTitle()->toXml($document);
-            $element->appendChild($titleElement);
+        if (!empty($this->labels)) {
+            foreach ($this->labels as $lang => $text) {
+                $labelElement = $this->createElement($document, 'label', $text);
+                $labelElement->setAttribute('xml:lang', $lang);
+                $element->appendChild($labelElement);
+            }
         }
 
-        if (null !== $this->getClassificationCode()) {
-            $codeElement = $this->createElement($document, 'classification_code', $this->getClassificationCode());
+        if (null !== $this->classificationCode) {
+            $codeElement = $this->createElement($document, 'classification_code', $this->classificationCode);
             $element->appendChild($codeElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->getSubjectScheme(), 'subject_scheme');
+        $element->appendChild($this->subjectScheme->toXml($document));
 
         return $element;
     }
