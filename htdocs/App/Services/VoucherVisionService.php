@@ -56,6 +56,7 @@ class VoucherVisionService
                 'observation' => 'string',
                 'handwritten' => 'string',
                 'specimenPID' => 'string',
+                'Fundort_aggregated' => 'string',
             ];
             $writer->writeSheetHeader('Export', $headers);
 
@@ -87,7 +88,7 @@ class VoucherVisionService
                     $photo->transcription->stateProvince,
                     null,
                     $photo->transcription->locality,
-                    null,
+                    $photo->transcription->habitat,
                     null,
                     $photo->transcription->occurrenceRemarks,
                     ...$photo->transcription->getLatitudeDMS(),
@@ -102,6 +103,7 @@ class VoucherVisionService
                     (string) $photo->transcription,
                     $photo->transcription->handwritten,
                     $photo->specimenPid,
+                    $photo->transcription->locality.' '.$photo->transcription->habitat,
                 ];
                 $writer->writeSheetRow('Export', $row);
             }

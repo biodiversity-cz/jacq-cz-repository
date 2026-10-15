@@ -25,6 +25,7 @@ class FixtureFakeDatabotViews extends FixtureBase
             'country_value' AS country,
             'county_value' AS county,
             'locality_value' AS locality,
+            'habitat' AS habitat,
             'continent_value' AS continent,
             'identifiedBy_value' AS identified_by,
             'dateIdentified_value' AS date_identified,
