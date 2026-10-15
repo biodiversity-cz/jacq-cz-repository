@@ -32,6 +32,8 @@ class VoucherVisionTranscription
 
     #[Column(name: 'locality', type: 'string', nullable: true)]
     public protected(set) ?string $locality = null;
+    #[Column(name: 'habitat', type: 'string', nullable: true)]
+    public protected(set) ?string $habitat = null;
 
     #[Column(name: 'continent', type: 'string', nullable: true)]
     public protected(set) ?string $continent = null;
@@ -143,6 +145,7 @@ class VoucherVisionTranscription
             'country' => $this->country,
             'county' => $this->county,
             'locality' => $this->locality,
+            'habitat' => $this->habitat,
             'continent' => $this->continent,
             'identifiedBy' => $this->identifiedBy,
             'dateIdentified' => $this->dateIdentified,

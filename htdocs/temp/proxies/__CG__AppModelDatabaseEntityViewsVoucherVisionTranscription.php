@@ -31,6 +31,7 @@ class VoucherVisionTranscription extends \App\Model\Database\Entity\Views\Vouche
         'decimalLongitude' => [parent::class, 'decimalLongitude', null, 8196],
         'eventDate' => [parent::class, 'eventDate', null, 8196],
         'genus' => [parent::class, 'genus', null, 8196],
+        'habitat' => [parent::class, 'habitat', null, 8196],
         'handwritten' => [parent::class, 'handwritten', null, 8196],
         'identifiedBy' => [parent::class, 'identifiedBy', null, 8196],
         'locality' => [parent::class, 'locality', null, 8196],
