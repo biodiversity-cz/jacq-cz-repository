@@ -117,7 +117,15 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setValue($photo->herbarium->GRSciCollInstitutionID)
             ->setScheme($scheme);
 
-        $herbarium = new Organization()->setIri($photo->herbarium->GRSciCollCollectionID)->setName($photo->herbarium->fullname)->setIdentifier($herbariumID);
+        $herbariumROR = new Identifier();
+        $scheme = new IdentifierScheme();
+        $scheme->setIri('https://ror.org/')
+            ->addLabel('ROR');
+        $herbariumROR->setIri('https://ror.org/'.$photo->herbarium->rorID)
+            ->setValue($photo->herbarium->rorID)
+            ->setScheme($scheme);
+
+        $herbarium = new Organization()->setIri($photo->herbarium->GRSciCollCollectionID)->setName($photo->herbarium->fullname)->addIdentifier($herbariumID)->addIdentifier($herbariumROR);
         $qa = new QualifiedAttribution();
         if ($asCreator) {
             $qa->setRole(new Role()
@@ -146,7 +154,7 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setValue('024d6js02')
             ->setScheme($scheme);
 
-        $publisher = new Organization()->setName('Charles University')->setIdentifier($cuniID);
+        $publisher = new Organization()->setName('Charles University')->addIdentifier($cuniID);
         $qa = new QualifiedAttribution();
         $qa->setRole(new Role()
             ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Publisher')

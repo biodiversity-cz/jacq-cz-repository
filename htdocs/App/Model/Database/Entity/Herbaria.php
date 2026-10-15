@@ -85,6 +85,9 @@ class Herbaria
     #[Column(unique: false, nullable: false, options: ['comment' => 'Digits count is applied on a substring of the specimenId', 'default' => false])]
     public protected(set) bool $digitsCountOnSubstring = false;
 
+    #[Column(name: 'ror', nullable: true, options: ['comment' => 'Research Organization Registry (ROR)'])]
+    public protected(set) ?string $rorID = null;
+
     public function __construct()
     {
         $this->photos = new ArrayCollection();
@@ -221,6 +224,13 @@ class Herbaria
     public function setDigitsCountOnSubstring(bool $digitsCountOnSubstring): Herbaria
     {
         $this->digitsCountOnSubstring = $digitsCountOnSubstring;
+
+        return $this;
+    }
+
+    public function setRorID(?string $rorID): Herbaria
+    {
+        $this->rorID = $rorID;
 
         return $this;
     }
