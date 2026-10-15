@@ -33,7 +33,8 @@ class FixtureHerbaria extends FixtureBase
             ->setMinimalFileSize(5)
             ->setFullname('Testovací herbář')
             ->setGRSciCollCollectionID('GRSciCollInstitutinUIID')
-            ->setGRSciCollInstitutionID('GRSciCollCollection-UUID');
+            ->setGRSciCollInstitutionID('GRSciCollCollection-UUID')
+            ->setRorID('ROR-UUID');
 
         $herbariumPrc = new Herbaria()
             ->setAcronym('PRC')

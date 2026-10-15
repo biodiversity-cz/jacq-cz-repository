@@ -15,7 +15,7 @@ class Organization implements XmlSerializable
     use XmlSerializableTrait;
 
     public protected(set) ?string $iri = null;
-    public protected(set) ?Identifier $identifier = null;
+    public protected(set) array $identifiers = [];
     public protected(set) ?string $name = null;
 
     public function setIri(?string $iri): self
@@ -25,9 +25,9 @@ class Organization implements XmlSerializable
         return $this;
     }
 
-    public function setIdentifier(?Identifier $identifier): self
+    public function addIdentifier(?Identifier $identifier): self
     {
-        $this->identifier = $identifier;
+        $this->identifiers[] = $identifier;
 
         return $this;
     }
@@ -48,7 +48,9 @@ class Organization implements XmlSerializable
             $element->appendChild($iriElement);
         }
 
-        $this->appendChildIfNotNull($element, $this->identifier);
+        foreach ($this->identifiers as $identifier) {
+            $this->appendChildIfNotNull($element, $identifier);
+        }
 
         if (null !== $this->name) {
             $nameElement = $this->createElement($document, 'name', $this->name);
