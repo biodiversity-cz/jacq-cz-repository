@@ -89,6 +89,9 @@ class VoucherVisionTranscription
     #[Column(name: 'typus', type: 'string', nullable: true)]
     public protected(set) ?string $typus = null;
 
+    #[Column(name: 'computed_warning', type: 'string', nullable: true)]
+    public protected(set) ?string $warning = null;
+
     private function convertCoordinateToDMS(float $decimal, string $positiveDirection, string $negativeDirection): array
     {
         $direction = $decimal >= 0 ? $positiveDirection : $negativeDirection;
@@ -164,6 +167,7 @@ class VoucherVisionTranscription
             'scientificNameAuthorship' => $this->scientificNameAuthorship,
             'handwritten' => $this->handwritten,
             'typus' => $this->typus,
+            'vv_warning' => $this->warning,
         ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?: '';
     }
 }

@@ -57,6 +57,9 @@ class VoucherVisionService
                 'handwritten' => 'string',
                 'specimenPID' => 'string',
                 'Fundort_aggregated' => 'string',
+                'link to image' => 'string',
+                'hespi_warning' => 'string',
+                'vv_warning' => 'string'
             ];
             $writer->writeSheetHeader('Export', $headers);
 
@@ -104,6 +107,9 @@ class VoucherVisionService
                     $photo->transcription->handwritten,
                     $photo->specimenPid,
                     $photo->transcription->locality.' '.$photo->transcription->habitat,
+                    'https://herbarium.biodiversity.cz/admin/repository/photo/'.$photo->id,
+                    'not implemented',
+                    'not implemented'
                 ];
                 $writer->writeSheetRow('Export', $row);
             }
@@ -111,4 +117,5 @@ class VoucherVisionService
 
         return $writer;
     }
+
 }

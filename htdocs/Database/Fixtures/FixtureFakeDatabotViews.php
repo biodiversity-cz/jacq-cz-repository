@@ -43,7 +43,8 @@ class FixtureFakeDatabotViews extends FixtureBase
             'specificEpithet_value' AS specific_epithet,
             'scientificNameAuthorship_value' AS scientific_name_authorship,
             'handwritten' AS handwritten,
-            'typus' AS typus
+            'typus' AS typus,
+            'vv_warning value' AS computed_warning
            FROM photos p;
         ";
         $manager->getConnection()->executeQuery($sql);
