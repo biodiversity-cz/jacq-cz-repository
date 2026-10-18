@@ -107,6 +107,9 @@ class Photos
     #[OneToOne(targetEntity: VoucherVisionTranscription::class, mappedBy: 'photo')]
     public protected(set) ?VoucherVisionTranscription $transcription = null;
 
+    #[OneToOne(targetEntity: HespiTranscription::class, mappedBy: 'photo')]
+    public protected(set) ?HespiTranscription $transcriptionHespi = null;
+
     #[OneToOne(targetEntity: CetafHarvest::class, mappedBy: 'photo')]
     public protected(set) ?CetafHarvest $cetafHarvest = null;
 

@@ -108,8 +108,8 @@ class VoucherVisionService
                     $photo->specimenPid,
                     $photo->transcription->locality.' '.$photo->transcription->habitat,
                     'https://herbarium.biodiversity.cz/admin/repository/photo/'.$photo->id,
-                    'not implemented',
-                    'not implemented'
+                    $photo->transcriptionHespi->warning,
+                    $photo->transcription->warning,
                 ];
                 $writer->writeSheetRow('Export', $row);
             }
