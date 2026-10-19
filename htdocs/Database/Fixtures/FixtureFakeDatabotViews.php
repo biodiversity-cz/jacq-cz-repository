@@ -12,6 +12,7 @@ class FixtureFakeDatabotViews extends FixtureBase
     public function load(ObjectManager $manager): void
     {
         $this->vv_view($manager);
+        $this->hespi_view($manager);
         $this->cetaf_view($manager);
     }
 

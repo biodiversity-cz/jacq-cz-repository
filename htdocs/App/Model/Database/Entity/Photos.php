@@ -10,6 +10,7 @@ use App\Model\Database\Entity\Attributes\TIssuedAt;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
 use App\Model\Database\Entity\Attributes\TOriginalFileAt;
 use App\Model\Database\Entity\Views\CetafHarvest;
+use App\Model\Database\Entity\Views\HespiTranscription;
 use App\Model\Database\Entity\Views\VoucherVisionTranscription;
 use App\Model\Database\Repository\PhotosRepository;
 use App\Services\Exceptions\RiskOfPidOverwritten;

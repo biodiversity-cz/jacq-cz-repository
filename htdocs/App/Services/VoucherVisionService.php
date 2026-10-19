@@ -59,7 +59,7 @@ class VoucherVisionService
                 'Fundort_aggregated' => 'string',
                 'link to image' => 'string',
                 'hespi_warning' => 'string',
-                'vv_warning' => 'string'
+                'vv_warning' => 'string',
             ];
             $writer->writeSheetHeader('Export', $headers);
 
@@ -117,5 +117,4 @@ class VoucherVisionService
 
         return $writer;
     }
-
 }
