@@ -81,7 +81,7 @@ class PhotoService extends BaseEntityService
         return $this->entityManager->getReference($this->entityName, $id);
     }
 
-    public function getPhoto(User $user, int $id): ?Photos
+    public function getPhotoIncludingPublished(User $user, int $id): ?Photos
     {
         if ($user->isLoggedIn()) {
             $photoIncludingPrivate = $this->repository->getPhoto($user, $id);
@@ -91,6 +91,15 @@ class PhotoService extends BaseEntityService
         }
 
         return $this->repository->getPublicPhoto($id);
+    }
+
+    public function getPhoto(User $user, int $id): ?Photos
+    {
+        if ($user->isLoggedIn()) {
+            return $this->repository->getPhoto($user, $id);
+        }
+
+        return null;
     }
 
     public function getPublicPhoto(int $id): ?Photos

@@ -119,7 +119,7 @@ test('PhotoService: getPhoto returns private photo if logged in and found', func
 
     $service = new PhotoService($em);
 
-    Assert::same($photo, $service->getPhoto($user, 5));
+    Assert::same($photo, $service->getPhotoIncludingPublished($user, 5));
 });
 
 test('PhotoService: getPhoto falls back to public if not logged in or private not found', function (): void {
@@ -137,7 +137,7 @@ test('PhotoService: getPhoto falls back to public if not logged in or private no
 
     $service = new PhotoService($em);
 
-    Assert::same($photo, $service->getPhoto($user, 7));
+    Assert::same($photo, $service->getPhotoIncludingPublished($user, 7));
 });
 
 test('PhotoService: getPublicPhoto delegates to repository', function (): void {

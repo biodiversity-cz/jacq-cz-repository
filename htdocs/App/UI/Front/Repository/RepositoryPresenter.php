@@ -147,7 +147,7 @@ final class RepositoryPresenter extends UnsecuredPresenter
                 throw new ImageIdException();
             }
             /** @var Photos $photo */
-            $photo = $this->photoService->getPhoto($this->getUser(), $id);
+            $photo = $this->photoService->getPhotoIncludingPublished($this->getUser(), $id);
             if (null === $photo) {
                 throw new ImageIdException('Unknown image ID');
             }
