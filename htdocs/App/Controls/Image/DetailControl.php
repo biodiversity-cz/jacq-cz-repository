@@ -18,7 +18,7 @@ class DetailControl extends Control
 
     public function __construct(private int $id, private PhotoService $photoService, private CuratorFacade $curatorFacade, private readonly User $user, protected DatabotsResultService $databotsService)
     {
-        $this->photo = $this->photoService->getPhoto($this->user, $this->id);
+        $this->photo = $this->photoService->getPhotoIncludingPublished($this->user, $this->id);
     }
 
     public function create(): self

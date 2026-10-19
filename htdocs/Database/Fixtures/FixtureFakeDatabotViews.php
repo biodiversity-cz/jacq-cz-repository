@@ -12,6 +12,7 @@ class FixtureFakeDatabotViews extends FixtureBase
     public function load(ObjectManager $manager): void
     {
         $this->vv_view($manager);
+        $this->hespi_view($manager);
         $this->cetaf_view($manager);
     }
 
@@ -43,7 +44,8 @@ class FixtureFakeDatabotViews extends FixtureBase
             'specificEpithet_value' AS specific_epithet,
             'scientificNameAuthorship_value' AS scientific_name_authorship,
             'handwritten' AS handwritten,
-            'typus' AS typus
+            'typus' AS typus,
+            'vv_warning value' AS computed_warning
            FROM photos p;
         ";
         $manager->getConnection()->executeQuery($sql);
@@ -58,6 +60,32 @@ class FixtureFakeDatabotViews extends FixtureBase
         $manager->getConnection()->executeQuery($sql);
         $sql = '
         GRANT ALL ON TABLE databots.vv_transcription TO herbarium_app;
+
+        ';
+        $manager->getConnection()->executeQuery($sql);
+    }
+
+    private function hespi_view(ObjectManager $manager): void
+    {
+        $sql = "
+        CREATE OR REPLACE VIEW databots.hespi_transcription
+         AS
+         SELECT p.id as photo_id,
+            'hespi_warning value' AS computed_warning
+           FROM photos p;
+        ";
+        $manager->getConnection()->executeQuery($sql);
+        $sql = '
+        ALTER TABLE databots.hespi_transcription
+            OWNER TO herbarium_app;
+        ';
+        $manager->getConnection()->executeQuery($sql);
+        $sql = '
+        GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE databots.hespi_transcription TO herbarium_databot;
+        ';
+        $manager->getConnection()->executeQuery($sql);
+        $sql = '
+        GRANT ALL ON TABLE databots.hespi_transcription TO herbarium_app;
 
         ';
         $manager->getConnection()->executeQuery($sql);

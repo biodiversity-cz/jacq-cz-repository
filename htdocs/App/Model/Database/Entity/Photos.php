@@ -10,6 +10,7 @@ use App\Model\Database\Entity\Attributes\TIssuedAt;
 use App\Model\Database\Entity\Attributes\TLastEditAt;
 use App\Model\Database\Entity\Attributes\TOriginalFileAt;
 use App\Model\Database\Entity\Views\CetafHarvest;
+use App\Model\Database\Entity\Views\HespiTranscription;
 use App\Model\Database\Entity\Views\VoucherVisionTranscription;
 use App\Model\Database\Repository\PhotosRepository;
 use App\Services\Exceptions\RiskOfPidOverwritten;
@@ -106,6 +107,9 @@ class Photos
 
     #[OneToOne(targetEntity: VoucherVisionTranscription::class, mappedBy: 'photo')]
     public protected(set) ?VoucherVisionTranscription $transcription = null;
+
+    #[OneToOne(targetEntity: HespiTranscription::class, mappedBy: 'photo')]
+    public protected(set) ?HespiTranscription $transcriptionHespi = null;
 
     #[OneToOne(targetEntity: CetafHarvest::class, mappedBy: 'photo')]
     public protected(set) ?CetafHarvest $cetafHarvest = null;
