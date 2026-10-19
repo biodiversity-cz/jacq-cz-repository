@@ -46,6 +46,7 @@ class VoucherVisionTranscription extends \App\Model\Database\Entity\Views\Vouche
         'typus' => [parent::class, 'typus', null, 8196],
         'verbatimCoordinates' => [parent::class, 'verbatimCoordinates', null, 8196],
         'verbatimEventDate' => [parent::class, 'verbatimEventDate', null, 8196],
+        'warning' => [parent::class, 'warning', null, 8196],
     ];
 
     public function __isInitialized(): bool

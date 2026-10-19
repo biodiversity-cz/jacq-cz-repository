@@ -50,6 +50,7 @@ class Photos extends \App\Model\Database\Entity\Photos implements \Doctrine\ORM\
         'specimenPid' => [parent::class, 'specimenPid', null, 8196],
         'status' => [parent::class, 'status', null, 8196],
         'transcription' => [parent::class, 'transcription', null, 8196],
+        'transcriptionHespi' => [parent::class, 'transcriptionHespi', null, 8196],
         'type' => [parent::class, 'type', null, 8196],
         'width' => [parent::class, 'width', null, 8196],
     ];
