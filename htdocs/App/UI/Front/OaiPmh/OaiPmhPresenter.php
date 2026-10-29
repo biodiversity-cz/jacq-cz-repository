@@ -6,6 +6,7 @@ namespace App\UI\Front\OaiPmh;
 
 use App\Model\Database\Entity\Photos;
 use App\Services\AppConfiguration;
+use App\Services\AppDir;
 use App\Services\OaiPmh\MetadataFormat\CcmmFormat;
 use App\Services\OaiPmh\MetadataFormat\DublinCoreFormat;
 use App\Services\OaiPmh\MetadataFormat\MetadataFormatInterface;
@@ -13,6 +14,8 @@ use App\Services\OaiPmh\OaiPmhRecordProviderInterface;
 use App\UI\Base\UnsecuredPresenter;
 use Nette\Application\AbortException;
 use Nette\Application\BadRequestException;
+use Nette\Utils\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * OAI-PMH v2.0 presenter implementing all mandatory verbs.
@@ -37,6 +40,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         private readonly OaiPmhRecordProviderInterface $recordProvider,
         private readonly DublinCoreFormat $dublinCoreFormat,
         private readonly CcmmFormat $ccmmFormat,
+        private readonly AppDir $appDir
     ) {
         parent::__construct($appConfiguration);
 
@@ -48,7 +52,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
     public function actionDefault(?string $verb = null): void
     {
-        $this->getHttpResponse()->setContentType('text/xml', 'utf-8');
+        $this->getHttpResponse()->setContentType('text/xml', 'UTF-8');
         $this->getHttpResponse()->setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         $this->getHttpResponse()->setHeader('Pragma', 'no-cache');
         $this->getHttpResponse()->setHeader('Expires', '0');
@@ -65,7 +69,9 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             };
             $writer->endElement(); // OAI-PMH
             $writer->endDocument();
-            echo $writer->outputMemory();
+            $xml = $writer->outputMemory();
+            $xml = $this->transformXml($xml);
+            echo $xml;
             $this->terminate();
         } catch (BadRequestException $e) {
             //                        $this->error($e->getMessage());
@@ -448,5 +454,60 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             503 => 'badResumptionToken',
             default => 'badArgument',
         };
+    }
+
+    private function transformXml(string $xml): string
+    {
+        $stylesheet = $this->appDir->getPath('Resources')
+            . '/ccmm-2.0.0-to-1.1.0.xslt';
+
+        $inputFile = tempnam(sys_get_temp_dir(), 'oai-in-');
+        $outputFile = tempnam(sys_get_temp_dir(), 'oai-out-');
+
+        if ($inputFile === false || $outputFile === false) {
+            throw new \RuntimeException('Could not create temporary XML files.');
+        }
+
+        try {
+            if (file_put_contents($inputFile, $xml) === false) {
+                throw new \RuntimeException('Could not write input XML.');
+            }
+
+            $process = new Process([
+                'java',
+                '-cp',
+                '/opt/saxon/*',
+                'net.sf.saxon.Transform',
+                '-s:' . $inputFile,
+                '-xsl:' . $stylesheet,
+                '-o:' . $outputFile,
+
+                'licence-strategy=most-frequent',
+                'fallback-licence-iri=',
+                'emit-terms-notes=true',
+                'placeholder=:unkn',
+                'schema-location=https://model.ccmm.cz/research-data/1.1.0/dataset/schema.xsd',
+            ]);
+
+            $process->setTimeout(120);
+            $process->mustRun();
+
+            $result = file_get_contents($outputFile);
+
+            if ($result === false) {
+                throw new \RuntimeException('Could not read transformed XML.');
+            }
+
+            return $result;
+        } catch (ProcessFailedException $e) {
+            throw new \RuntimeException(
+                'Saxon XML transformation failed: '
+                . $e->getProcess()->getErrorOutput(),
+                previous: $e,
+            );
+        } finally {
+            @unlink($inputFile);
+            @unlink($outputFile);
+        }
     }
 }
