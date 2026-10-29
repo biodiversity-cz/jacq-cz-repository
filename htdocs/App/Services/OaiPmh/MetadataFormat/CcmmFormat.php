@@ -93,7 +93,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataset->setRawFundingReference($this->addFunding($item));
         $dataset->addIdentifier($this->getIdentifier($item));
         $dataset
-            ->setKeyword(new Keyword($item->cetafHarvest?->title, Language::LA))
+            ->setKeyword(new Keyword($item->cetafHarvest?->title ?? '', Language::LA))
             ->setDescriptions($this->addDescriptions($item))
             ->setTitle('Image associated with a preserved herbarium specimen '.$item->getFullSpecimenId())
             ->setTimeReferences($this->getDates($item))

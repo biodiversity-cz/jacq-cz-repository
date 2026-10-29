@@ -4,6 +4,7 @@ services:
     - App\Security\OpenIDAuthenticator
     - App\Services\WebDir(%wwwDir%)
     - App\Services\TempDir(%tempDir%)
+    - App\Services\AppDir(%appDir%)
     - App\Services\RepositoryConfiguration(%storage%)
     - App\Services\AppConfiguration(@container::getParameters())
     - Symfony\Component\EventDispatcher\EventDispatcher
