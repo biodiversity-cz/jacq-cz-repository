@@ -8,7 +8,7 @@ use Aws\Api\DateTimeResult;
 
 class FileInsideCuratorBucket
 {
-    public const int MAX_FILESIZE = 650 * 1024 * 1024;
+    public const int MAX_FILESIZE = 800 * 1024 * 1024;
 
     public const array EXTENSION = ['tif', 'tiff'];
     public const string MIME_TYPE = 'image/tiff';
