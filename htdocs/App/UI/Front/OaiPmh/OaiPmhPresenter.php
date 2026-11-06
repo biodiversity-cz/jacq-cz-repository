@@ -40,7 +40,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         private readonly OaiPmhRecordProviderInterface $recordProvider,
         private readonly DublinCoreFormat $dublinCoreFormat,
         private readonly CcmmFormat $ccmmFormat,
-        private readonly AppDir $appDir
+        private readonly AppDir $appDir,
     ) {
         parent::__construct($appConfiguration);
 
@@ -70,7 +70,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             $writer->endElement(); // OAI-PMH
             $writer->endDocument();
             $xml = $writer->outputMemory();
-//             $xml = $this->transformXml($xml);
+            //             $xml = $this->transformXml($xml);
             echo $xml;
             $this->terminate();
         } catch (BadRequestException $e) {
@@ -459,17 +459,17 @@ final class OaiPmhPresenter extends UnsecuredPresenter
     private function transformXml(string $xml): string
     {
         $stylesheet = $this->appDir->getPath('Resources')
-            . '/ccmm-2.0.0-to-1.1.0.xslt';
+            .'/ccmm-2.0.0-to-1.1.0.xslt';
 
         $inputFile = tempnam(sys_get_temp_dir(), 'oai-in-');
         $outputFile = tempnam(sys_get_temp_dir(), 'oai-out-');
 
-        if ($inputFile === false || $outputFile === false) {
+        if (false === $inputFile || false === $outputFile) {
             throw new \RuntimeException('Could not create temporary XML files.');
         }
 
         try {
-            if (file_put_contents($inputFile, $xml) === false) {
+            if (false === file_put_contents($inputFile, $xml)) {
                 throw new \RuntimeException('Could not write input XML.');
             }
 
@@ -478,9 +478,9 @@ final class OaiPmhPresenter extends UnsecuredPresenter
                 '-cp',
                 '/opt/saxon/*',
                 'net.sf.saxon.Transform',
-                '-s:' . $inputFile,
-                '-xsl:' . $stylesheet,
-                '-o:' . $outputFile,
+                '-s:'.$inputFile,
+                '-xsl:'.$stylesheet,
+                '-o:'.$outputFile,
 
                 'licence-strategy=most-frequent',
                 'fallback-licence-iri=',
@@ -494,17 +494,13 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
             $result = file_get_contents($outputFile);
 
-            if ($result === false) {
+            if (false === $result) {
                 throw new \RuntimeException('Could not read transformed XML.');
             }
 
             return $result;
         } catch (ProcessFailedException $e) {
-            throw new \RuntimeException(
-                'Saxon XML transformation failed: '
-                . $e->getProcess()->getErrorOutput(),
-                previous: $e,
-            );
+            throw new \RuntimeException('Saxon XML transformation failed: '.$e->getProcess()->getErrorOutput(), previous: $e);
         } finally {
             @unlink($inputFile);
             @unlink($outputFile);
