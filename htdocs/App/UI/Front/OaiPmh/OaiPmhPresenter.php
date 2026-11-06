@@ -70,7 +70,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             $writer->endElement(); // OAI-PMH
             $writer->endDocument();
             $xml = $writer->outputMemory();
-            $xml = $this->transformXml($xml);
+//             $xml = $this->transformXml($xml);
             echo $xml;
             $this->terminate();
         } catch (BadRequestException $e) {
