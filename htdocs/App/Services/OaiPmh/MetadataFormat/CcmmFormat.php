@@ -265,22 +265,22 @@ final class CcmmFormat implements MetadataFormatInterface
     {
         $formatTif = new Format()
             ->addLabel('TIFF', Language::EN)
-            ->setIri('https://www.iana.org/assignments/media-types/image/tiff');
+            ->setIri('http://www.iana.org/assignments/media-types/image/tiff');
         $mediaTypeTif = new MediaType()
             ->addLabel('TIFF', Language::EN)
-            ->setIri('https://www.iana.org/assignments/media-types/image/tiff');
+            ->setIri('http://www.iana.org/assignments/media-types/image/tiff');
         $formatJP2 = new Format()
             ->addLabel('JPEG 2000', Language::EN)
-            ->setIri('https://www.iana.org/assignments/media-types/image/jp2');
+            ->setIri('http://www.iana.org/assignments/media-types/image/jp2');
         $mediaTypeJP2 = new MediaType()
             ->addLabel('JPEG 2000', Language::EN)
-            ->setIri('https://www.iana.org/assignments/media-types/image/jp2');
+            ->setIri('http://www.iana.org/assignments/media-types/image/jp2');
         $formatPng = new Format()
             ->addLabel('PNG', Language::EN)
-            ->setIri('https://www.iana.org/assignments/media-types/image/png');
+            ->setIri('http://www.iana.org/assignments/media-types/image/png');
         $mediaTypePng = new MediaType()
             ->addLabel('PNG', Language::EN)
-            ->setIri('https://www.iana.org/assignments/media-types/image/png');
+            ->setIri('http://www.iana.org/assignments/media-types/image/png');
 
         $checksumMaster = new Checksum()
             ->setChecksumValue($photo->archiveFileChecksum)
