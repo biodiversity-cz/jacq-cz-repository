@@ -240,10 +240,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         // <error code="noRecordsMatch"/> instead of an empty container element
         // (which would also be invalid according to the OAI-PMH XML schema).
         if ([] === $bufferedRecords) {
-            throw new BadRequestException(
-                'The combination of the values of the from, until, and set parameters of the request results in an empty list.',
-                409,
-            );
+            throw new BadRequestException('The combination of the values of the from, until, and set parameters of the request results in an empty list.', 409);
         }
 
         $verb = $includeMetadata ? 'ListRecords' : 'ListIdentifiers';
