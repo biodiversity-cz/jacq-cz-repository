@@ -75,8 +75,11 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             $this->terminate();
         } catch (BadRequestException $e) {
             //                        $this->error($e->getMessage());
-            $writer = $this->createErrorResponse($e->getMessage(),
-                $this->mapHttpCodeToOaiError($e->getCode()));
+            $writer = $this->createErrorResponse(
+                $this->getValidRequestVerb($verb),
+                $e->getMessage(),
+                $this->mapHttpCodeToOaiError($e->getCode()),
+            );
             $writer->endElement(); // OAI-PMH
             $writer->endDocument();
             echo $writer->outputMemory();
@@ -85,7 +88,11 @@ final class OaiPmhPresenter extends UnsecuredPresenter
             throw $e;
         } catch (\Throwable $e) {
             //            throw $e;
-            $writer = $this->createErrorResponse('Internal repository error', 'badArgument');
+            $writer = $this->createErrorResponse(
+                $this->getValidRequestVerb($verb),
+                'Internal repository error',
+                'badArgument',
+            );
             $writer->endElement(); // OAI-PMH
             $writer->endDocument();
             echo $writer->outputMemory();
@@ -162,7 +169,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
 
     private function verbListSets(): \XMLWriter
     {
-        $writer = $this->createXMLWriter('ListMetadataFormats');
+        $writer = $this->createXMLWriter('ListSets');
 
         $writer->startElement('ListSets');
         foreach ($this->recordProvider->getAvailableSets() as $setSpec => $setName) {
@@ -216,23 +223,38 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         $limit = self::DEFAULT_PAGE_SIZE;
         $records = $this->recordProvider->getRecords($fromDate, $untilDate, $set, $offset, $limit + 1);
 
+        // Buffer at most limit+1 records, so that an empty result set can be
+        // detected before the <ListRecords>/<ListIdentifiers> container is opened.
+        // (iterator_to_array() must not be used here, the provider generator
+        // iterates the whole result set regardless of the limit.)
+        $bufferedRecords = [];
+        foreach ($records as $photo) {
+            $bufferedRecords[] = $photo;
+
+            if (count($bufferedRecords) > $limit) {
+                break;
+            }
+        }
+
+        // OAI-PMH 2.0, section 3.6: an empty list must be reported as an
+        // <error code="noRecordsMatch"/> instead of an empty container element
+        // (which would also be invalid according to the OAI-PMH XML schema).
+        if ([] === $bufferedRecords) {
+            throw new BadRequestException(
+                'The combination of the values of the from, until, and set parameters of the request results in an empty list.',
+                409,
+            );
+        }
+
         $verb = $includeMetadata ? 'ListRecords' : 'ListIdentifiers';
         $writer = $this->createXMLWriter($verb);
 
         $writer->startElement($verb);
 
         $format = $this->metadataFormats[$metadataPrefix];
-        $recordsCount = 0;
-        $hasMore = false;
+        $hasMore = count($bufferedRecords) > $limit;
 
-        foreach ($records as $photo) {
-            ++$recordsCount;
-
-            if ($recordsCount > $limit) {
-                $hasMore = true;
-                break;
-            }
-
+        foreach (array_slice($bufferedRecords, 0, $limit) as $photo) {
             $this->writeRecordElement($writer, $photo, $format, $includeMetadata);
         }
 
@@ -361,9 +383,28 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         return $writer;
     }
 
-    private function createErrorResponse(string $message, string $code): \XMLWriter
+    /**
+     * Return the verb if it is one of the six valid OAI-PMH verbs, null otherwise.
+     * Error responses echo the verb in the <request> element only when valid,
+     * since the OAI-PMH XML schema defines the verb attribute as an enumeration.
+     */
+    private function getValidRequestVerb(?string $verb): ?string
     {
-        $writer = $this->createXMLWriter(null);
+        $validVerbs = [
+            'Identify',
+            'ListMetadataFormats',
+            'ListSets',
+            'ListIdentifiers',
+            'ListRecords',
+            'GetRecord',
+        ];
+
+        return in_array($verb, $validVerbs, true) ? $verb : null;
+    }
+
+    private function createErrorResponse(?string $verb, string $message, string $code): \XMLWriter
+    {
+        $writer = $this->createXMLWriter($verb);
         $writer->startElement('error');
         $writer->writeAttribute('code', $code);
         $writer->text($message);
@@ -404,12 +445,12 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         if ($token) {
             $decoded = base64_decode($token, true);
             if (false === $decoded) {
-                throw new BadRequestException('Invalid resumption token', 400);
+                throw new BadRequestException('Invalid resumption token', 503);
             }
 
             $data = json_decode($decoded, true);
             if (!is_array($data)) {
-                throw new BadRequestException('Invalid resumption token', 400);
+                throw new BadRequestException('Invalid resumption token', 503);
             }
 
             return [
@@ -450,6 +491,7 @@ final class OaiPmhPresenter extends UnsecuredPresenter
         return match ($code) {
             400 => 'badArgument',
             404 => 'idDoesNotExist',
+            409 => 'noRecordsMatch',
             422 => 'cannotDisseminateFormat',
             503 => 'badResumptionToken',
             default => 'badArgument',
