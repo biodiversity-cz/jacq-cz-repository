@@ -93,7 +93,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $dataset->setRawFundingReference($this->addFunding($item));
         $dataset->addIdentifier($this->getIdentifier($item));
         $dataset
-            ->setKeyword(new Keyword($item->cetafHarvest?->title ?? '', Language::LA))
+            ->setKeyword(new Keyword($item->cetafHarvest?->title ?? 'species ignota', Language::LA))
             ->setDescriptions($this->addDescriptions($item))
             ->setTitle('Image associated with a preserved herbarium specimen '.$item->getFullSpecimenId())
             ->setTimeReferences($this->getDates($item))
@@ -129,7 +129,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $qa = new QualifiedAttribution();
         if ($asCreator) {
             $qa->setRole(new Role()
-                ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Contributor/Creator')
+                ->setIri('https://vocabs.ccmm.cz/registry/codelist/AgentRole/Creator')
                 ->addLabel('Creator', Language::EN)
                 ->addLabel('Autor', Language::CS));
         } else {
@@ -194,10 +194,10 @@ final class CcmmFormat implements MetadataFormatInterface
             ->setDescriptionType($descriptionType);
         if (null !== $photo->cetafHarvest) {
             $text = $photo->cetafHarvest?->title.
-                ' '.$photo->cetafHarvest?->locality.
-                ' '.$photo->cetafHarvest?->eventDate.
+                '. '.rtrim($photo->cetafHarvest?->locality, '.').
+                '. '.rtrim($photo->cetafHarvest?->eventDate, '.').
                 ' [Botanical description of material sample harvested from '.$photo->specimenPid.
-                '; last updated on '.$photo->cetafHarvest?->lastEdit->format('Y-m-d').']';
+                '; last update on '.$photo->cetafHarvest?->lastEdit->format('Y-m-d').']';
         } else {
             $text = 'Photo documenting herbarium specimen '.$photo->specimenPid.'.';
         }
@@ -254,22 +254,22 @@ final class CcmmFormat implements MetadataFormatInterface
     {
         $formatTif = new Format()
             ->addLabel('TIFF', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
+            ->setIri('https://www.iana.org/assignments/media-types/image/tiff');
         $mediaTypeTif = new MediaType()
             ->addLabel('TIFF', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/TIFF');
+            ->setIri('https://www.iana.org/assignments/media-types/image/tiff');
         $formatJP2 = new Format()
             ->addLabel('JPEG 2000', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/JPEG2000');
+            ->setIri('https://www.iana.org/assignments/media-types/image/jp2');
         $mediaTypeJP2 = new MediaType()
             ->addLabel('JPEG 2000', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/JPEG2000');
+            ->setIri('https://www.iana.org/assignments/media-types/image/jp2');
         $formatPng = new Format()
             ->addLabel('PNG', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/PNG');
+            ->setIri('https://www.iana.org/assignments/media-types/image/png');
         $mediaTypePng = new MediaType()
             ->addLabel('PNG', Language::EN)
-            ->setIri('https://op.europa.eu/en/web/eu-vocabularies/concept/-/resource?uri=http://publications.europa.eu/resource/authority/file-type/PNG');
+            ->setIri('https://www.iana.org/assignments/media-types/image/png');
 
         $checksumMaster = new Checksum()
             ->setChecksumValue($photo->archiveFileChecksum)
@@ -403,7 +403,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $time = new TimeInstant()->setDateTime($photo->lastEdit);
         $issued->setTimeInstant($time);
         $dateType = new DateType()
-            ->setIri('https://vocabs.ccmm.cz/TimeReference/en/page/Issued')
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/TimeReference/Issued')
             ->addLabel('Date Issued', Language::EN)
             ->addLabel('Datum vydání', Language::CS);
         $issued->setDateType($dateType);
@@ -412,7 +412,7 @@ final class CcmmFormat implements MetadataFormatInterface
         $time = new TimeInstant()->setDateTime($photo->lastEdit);
         $updated->setTimeInstant($time);
         $dateType = new DateType()
-            ->setIri('https://vocabs.ccmm.cz/TimeReference/en/page/Updated')
+            ->setIri('https://vocabs.ccmm.cz/registry/codelist/TimeReference/Updated')
             ->addLabel('Date Updated', Language::EN)
             ->addLabel('Datum aktualizace', Language::CS);
         $updated->setDateType($dateType);
