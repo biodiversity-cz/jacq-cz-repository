@@ -45,8 +45,8 @@ class Description implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? 'description');
 
-        $this->appendChildIfNotNull($element, $this->getDescriptionType(), 'description_type');
         $this->appendChildIfNotNull($element, $this->getDescriptionText(), 'description_text');
+        $this->appendChildIfNotNull($element, $this->getDescriptionType(), 'description_type');
 
         return $element;
     }

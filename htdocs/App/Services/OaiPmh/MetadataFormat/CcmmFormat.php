@@ -193,11 +193,22 @@ final class CcmmFormat implements MetadataFormatInterface
         $description = new Description()
             ->setDescriptionType($descriptionType);
         if (null !== $photo->cetafHarvest) {
-            $text = $photo->cetafHarvest?->title.
-                '. '.rtrim($photo->cetafHarvest?->locality, '.').
-                '. '.rtrim($photo->cetafHarvest?->eventDate, '.').
-                ' [Botanical description of material sample harvested from '.$photo->specimenPid.
-                '; last update on '.$photo->cetafHarvest?->lastEdit->format('Y-m-d').']';
+            $harvest = $photo->cetafHarvest;
+
+            $parts = array_filter([
+                $harvest?->title,
+                $harvest?->locality,
+                $harvest?->eventDate,
+            ], fn ($value) => null !== $value && '' !== $value);
+
+            $text = implode('. ', array_map(
+                fn ($value) => rtrim($value, '.'),
+                $parts
+            ));
+
+            $text .= ' [Botanical description of material sample harvested from '.$photo->specimenPid.
+                ($harvest?->lastEdit ? '; last update on '.$harvest->lastEdit->format('Y-m-d') : '').
+                ']';
         } else {
             $text = 'Photo documenting herbarium specimen '.$photo->specimenPid.'.';
         }
