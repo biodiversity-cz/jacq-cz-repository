@@ -22,6 +22,7 @@ abstract class TextWithLangBase implements XmlSerializable
     {
         $element = $this->createElement($document, $elementName ?? static::elementName());
         $element->setAttribute('xml:lang', $this->language->value);
+        $element->textContent = $this->text;
 
         return $element;
     }
