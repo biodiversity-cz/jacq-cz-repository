@@ -265,19 +265,19 @@ final class CcmmFormat implements MetadataFormatInterface
     {
         $formatTif = new Format()
             ->addLabel('TIFF', Language::EN)
-            ->setIri('http://www.iana.org/assignments/media-types/image/tiff');
+            ->setIri('https://publications.europa.eu/resource/authority/file-type/TIFF');
         $mediaTypeTif = new MediaType()
             ->addLabel('TIFF', Language::EN)
             ->setIri('http://www.iana.org/assignments/media-types/image/tiff');
         $formatJP2 = new Format()
             ->addLabel('JPEG 2000', Language::EN)
-            ->setIri('http://www.iana.org/assignments/media-types/image/jp2');
+            ->setIri('https://publications.europa.eu/resource/authority/file-type/JPEG2000');
         $mediaTypeJP2 = new MediaType()
             ->addLabel('JPEG 2000', Language::EN)
             ->setIri('http://www.iana.org/assignments/media-types/image/jp2');
         $formatPng = new Format()
             ->addLabel('PNG', Language::EN)
-            ->setIri('http://www.iana.org/assignments/media-types/image/png');
+            ->setIri('https://publications.europa.eu/resource/authority/file-type/PNG');
         $mediaTypePng = new MediaType()
             ->addLabel('PNG', Language::EN)
             ->setIri('http://www.iana.org/assignments/media-types/image/png');
