@@ -201,8 +201,14 @@ class ImportedPhotosGrid extends Control
             ->setClass('btn btn-xs btn-info')
             ->setIcon('file-excel');
 
-        $this->grid->addExportCallback('Export VoucherVision for JACQ XLSX (filtered)', function ($data): void {
+        $this->grid->addExportCallback('VV for JACQ (filtered)', function ($data): void {
             $this->exportVouvisToJACQXlsx($data);
+        }, true)
+            ->setClass('btn btn-xs btn-warning')
+            ->setIcon('file-excel');
+
+        $this->grid->addExportCallback('VV for Museion (filtered)', function ($data): void {
+            $this->exportVouvisToMuseionXlsx($data);
         }, true)
             ->setClass('btn btn-xs btn-warning')
             ->setIcon('file-excel');
@@ -267,13 +273,25 @@ class ImportedPhotosGrid extends Control
 
     private function exportVouvisToJACQXlsx(iterable $data): void
     {
-        $filename = tempnam(sys_get_temp_dir(), 'vouchervision_export_').'.xlsx';
-        $writer = $this->voucherVisionService->prepareExcel($data);
+        $filename = tempnam(sys_get_temp_dir(), 'vv_export_').'.xlsx';
+        $writer = $this->voucherVisionService->prepareExcelJACQ($data);
         $writer->writeToFile($filename);
 
         $this->getPresenter()->sendResponse(new FileResponse(
             $filename,
-            'vouchervision_jacq_export.xlsx',
+            'vv_jacq_export.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ));
+    }
+
+    private function exportVouvisToMuseionXlsx(iterable $data): void
+    {
+        $filename = tempnam(sys_get_temp_dir(), 'vv_export_').'.xlsx';
+        $this->voucherVisionService->prepareExcelMuseion($data, $filename);
+
+        $this->getPresenter()->sendResponse(new FileResponse(
+            $filename,
+            'vv_museion_export.xlsx',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         ));
     }
