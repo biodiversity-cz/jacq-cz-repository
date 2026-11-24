@@ -25,7 +25,7 @@ final class Version20250206084851 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN herbaria.regex_barcode IS \'RegEx for barcode on the specimen\'');
         $this->addSql('COMMENT ON COLUMN herbaria.regex_filename IS \'RegEx for image filenames\'');
         $this->addSql('ALTER TABLE photos ADD use_barcode BOOLEAN DEFAULT true NOT NULL');
-        $this->addSql('ALTER TABLE photos ALTER original_file_timestamp TYPE TIMESTAMP(0) WITHOUT TIME ZONE');
+        $this->addSql('ALTER TABLE photos ALTER original_file_timestamp TYPE TIMESTAMP(0) WITH TIME ZONE');
         $this->addSql('ALTER TABLE photos ALTER lastedit_timestamp SET DEFAULT CURRENT_TIMESTAMP');
         $this->addSql('COMMENT ON COLUMN photos.use_barcode IS \'If true, the import pipeline will use the barcode detection. If false, the filename will be used to detect specimen id\'');
         $this->addSql('COMMENT ON COLUMN photos.message IS \'Result of import into the repository\'');
@@ -42,7 +42,7 @@ final class Version20250206084851 extends AbstractMigration
         $this->addSql('ALTER TABLE users ALTER lastedit_timestamp DROP DEFAULT');
         $this->addSql('ALTER TABLE photos DROP use_barcode');
         $this->addSql('ALTER TABLE photos ALTER lastedit_timestamp SET DEFAULT \'2024-09-09 08:04:15.480519\'');
-        $this->addSql('ALTER TABLE photos ALTER original_file_timestamp TYPE TIMESTAMP(0) WITHOUT TIME ZONE');
+        $this->addSql('ALTER TABLE photos ALTER original_file_timestamp TYPE TIMESTAMP(0) WITH TIME ZONE');
         $this->addSql('COMMENT ON COLUMN photos.message IS \'Result of migration\'');
         $this->addSql('COMMENT ON COLUMN photos.exif IS \'Imagick -verbose identify metadata output from the Archive Master file\'');
         $this->addSql('COMMENT ON COLUMN photos.identify IS NULL');

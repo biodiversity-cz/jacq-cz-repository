@@ -19,7 +19,7 @@ final class Version20251118125704 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE photos ADD embargo_timeout TIMESTAMP(0) WITHOUT TIME ZONE');
+        $this->addSql('ALTER TABLE photos ADD embargo_timeout TIMESTAMP(0) WITH TIME ZONE');
     }
 
     public function down(Schema $schema): void
