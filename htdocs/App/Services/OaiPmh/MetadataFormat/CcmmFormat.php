@@ -231,7 +231,7 @@ final class CcmmFormat implements MetadataFormatInterface
             ->addLabel('dokumentuje (co)', Language::CS);
         $specimen = new RelatedResource()
             ->setIri($photo->specimenPid)
-            ->setTitle('Digital representation of the physical specimen')
+            ->setTitle('Herbarium specimen '.$photo->getFullSpecimenId())
             ->setResourceUrl($photo->specimenPid)
             ->setResourceType($resourceType)
             ->setResourceRelationType($relationType);
