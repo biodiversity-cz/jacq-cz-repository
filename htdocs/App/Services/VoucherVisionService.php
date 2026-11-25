@@ -73,8 +73,8 @@ class VoucherVisionService
                     continue;
                 }
 
-                $taxonAlt ='';
-                if(empty($photo->transcription->identifiedBy) && (!empty($photo->transcription->recordedBy) && !empty($photo->transcription->scientificName))){
+                $taxonAlt = '';
+                if (empty($photo->transcription->identifiedBy) && (!empty($photo->transcription->recordedBy) && !empty($photo->transcription->scientificName))) {
                     $taxonAlt = 'orig.: '.$photo->transcription->scientificName.';';
                 }
                 /** @var Photos $photo */
