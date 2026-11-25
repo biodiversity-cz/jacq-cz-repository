@@ -31,8 +31,8 @@ final class Version20240903131737 extends AbstractMigration
         $this->addSql('ALTER TABLE photos ALTER COLUMN status_id SET NOT NULL');
         $this->addSql('ALTER TABLE IF EXISTS public.photos ALTER COLUMN archive_filename DROP NOT NULL;');
         $this->addSql('ALTER TABLE IF EXISTS public.photos ALTER COLUMN jp2filename DROP NOT NULL;');
-        $this->addSql('ALTER TABLE photos ADD original_file_timestamp TIMESTAMP(0) WITHOUT TIME ZONE');
-        $this->addSql('ALTER TABLE photos ADD lastedit_timestamp TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL default now()');
+        $this->addSql('ALTER TABLE photos ADD original_file_timestamp TIMESTAMP(0) WITH TIME ZONE');
+        $this->addSql('ALTER TABLE photos ADD lastedit_timestamp TIMESTAMP(0) WITH TIME ZONE NOT NULL default now()');
         $this->addSql('ALTER TABLE photos ADD original_filename VARCHAR(255) DEFAULT NULL');
 
         $this->addSql('COMMENT ON COLUMN photos.original_filename IS \'Filename that was provided during curator upload, could make sense or completely missing semantical content\'');

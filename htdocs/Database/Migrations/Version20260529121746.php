@@ -19,7 +19,7 @@ final class Version20260529121746 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE databots.databot_results ADD lastedit_timestamp TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL');
+        $this->addSql('ALTER TABLE databots.databot_results ADD lastedit_timestamp TIMESTAMP(0) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL');
     }
 
     public function down(Schema $schema): void
