@@ -73,6 +73,10 @@ class VoucherVisionService
                     continue;
                 }
 
+                $taxonAlt ='';
+                if(empty($photo->transcription->identifiedBy) && (!empty($photo->transcription->recordedBy) && !empty($photo->transcription->scientificName))){
+                    $taxonAlt = 'orig.: '.$photo->transcription->scientificName.';';
+                }
                 /** @var Photos $photo */
                 $row = [
                     null,
@@ -91,7 +95,7 @@ class VoucherVisionService
                     $photo->transcription->identifiedBy,
                     null,
                     $photo->transcription->typus,
-                    null,
+                    $taxonAlt,
                     $photo->transcription->country,
                     $photo->transcription->stateProvince,
                     null,
